@@ -111,6 +111,10 @@
         <directory>src/main/resources/meta</directory>
         <filtering>true</filtering>
       </resource>
+      <resource>
+        <directory>doc/helpjar</directory>
+        <filtering>false</filtering>
+      </resource>
     </resources>
   </build>
   <dependencies>
@@ -281,12 +285,6 @@
       <groupId>xerces</groupId>
       <artifactId>xercesImpl</artifactId>
       <version>2.12.2</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.fribok</groupId>
-      <artifactId>help</artifactId>
-      <version>0.1</version>
       <scope>compile</scope>
     </dependency>
     <!-- test dependencies -->
