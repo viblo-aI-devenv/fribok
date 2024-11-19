@@ -6,7 +6,7 @@ Build requirements:
 
 The preferred way of building Fribok is using the Maven POM-file.
 
-$ mvn assembly:assembly
+$ mvn package assembly:single
 [output...]
 
 And to run it:
