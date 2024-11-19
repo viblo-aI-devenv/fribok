@@ -2,7 +2,10 @@ package se.swedsoft.bookkeeping.print;
 
 
 import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.type.WhenNoDataTypeEnum;
+import net.sf.jasperreports.engine.type.HorizontalTextAlignEnum;
 import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -186,7 +189,7 @@ public class SSReport {
      * @throws SSException
      */
     private void compileDesign() throws SSException {
-        List<JRReportFont>    theFonts = new LinkedList<JRReportFont>();
+        List<JRStyle>    theStyles = new LinkedList<JRStyle>();
 
         // Contains the fields from all subreports
         List<JRField>     theFields = new LinkedList<JRField>();
@@ -202,14 +205,14 @@ public class SSReport {
         // Page header
         if (iFields.containsKey(ReportField.PAGE_HEADER)) {
             iPageHeader = getField(ReportField.PAGE_HEADER, theFields, theParameters,
-                    theVariables, theGroups, theFonts);
+                    theVariables, theGroups, theStyles);
         }
         // Page footer
         JRBand iPageFooter = null;
 
         if (iFields.containsKey(ReportField.PAGE_FOOTER)) {
             iPageFooter = getField(ReportField.PAGE_FOOTER, theFields, theParameters,
-                    theVariables, theGroups, theFonts);
+                    theVariables, theGroups, theStyles);
         }
 
         // Column header
@@ -217,22 +220,22 @@ public class SSReport {
 
         if (iFields.containsKey(ReportField.COLUMN_HEADER)) {
             iColumnHeader = getField(ReportField.COLUMN_HEADER, theFields, theParameters,
-                    theVariables, theGroups, theFonts);
+                    theVariables, theGroups, theStyles);
         }
         // Column footer
         JRBand iColumnFooter = null;
 
         if (iFields.containsKey(ReportField.COLUMN_FOOTER)) {
             iColumnFooter = getField(ReportField.COLUMN_FOOTER, theFields, theParameters,
-                    theVariables, theGroups, theFonts);
+                    theVariables, theGroups, theStyles);
         }
 
         // Detail
-        JRBand iDetail = null;
+        JRSection iDetail = null;
 
         if (iFields.containsKey(ReportField.DETAIL)) {
-            iDetail = getField(ReportField.DETAIL, theFields, theParameters, theVariables,
-                    theGroups, theFonts);
+            iDetail = getDetailField(theFields, theParameters, theVariables,
+                    theGroups, theStyles);
         }
 
         // Summary
@@ -240,7 +243,7 @@ public class SSReport {
 
         if (iFields.containsKey(ReportField.SUMMARY)) {
             iSummary = getField(ReportField.SUMMARY, theFields, theParameters,
-                    theVariables, theGroups, theFonts);
+                    theVariables, theGroups, theStyles);
         }
 
         // Background
@@ -248,20 +251,20 @@ public class SSReport {
 
         if (iFields.containsKey(ReportField.BACKGROUND)) {
             iBackground = getField(ReportField.BACKGROUND, theFields, theParameters,
-                    theVariables, theGroups, theFonts);
+                    theVariables, theGroups, theStyles);
         }
         // Last page footer
         JRBand iLastPageFooter = null;
 
         if (iFields.containsKey(ReportField.LAST_PAGE_FOOTER)) {
             iLastPageFooter = getField(ReportField.LAST_PAGE_FOOTER, theFields,
-                    theParameters, theVariables, theGroups, theFonts);
+                    theParameters, theVariables, theGroups, theStyles);
         }
 
         iDesign = new JasperDesign();
         iDesign.setResourceBundle("book");
         iDesign.setName("JasperDocument");
-        iDesign.setWhenNoDataType(JRReport.WHEN_NO_DATA_TYPE_ALL_SECTIONS_NO_DETAIL); // JRReport.WHEN_NO_DATA_TYPE_NO_PAGES
+        iDesign.setWhenNoDataType(WhenNoDataTypeEnum.ALL_SECTIONS_NO_DETAIL); // JRReport.WHEN_NO_DATA_TYPE_NO_PAGES
 
         iDesign.setTopMargin(iMargins.top);
         iDesign.setBottomMargin(iMargins.bottom);
@@ -279,7 +282,26 @@ public class SSReport {
         iDesign.setPageFooter(iPageFooter);
         iDesign.setColumnHeader(iColumnHeader);
         iDesign.setColumnFooter(iColumnFooter);
-        iDesign.setDetail(iDetail);
+        if (iDetail != null) {
+            for (JRBand band: iDetail.getBands()) {
+                JRDesignBand b = new JRDesignBand();
+                b.setSplitType(band.getSplitTypeValue());
+                b.setHeight(band.getHeight());
+                b.setPrintWhenExpression(band.getPrintWhenExpression());
+                if (band.getReturnValues() != null) {
+                    for (ExpressionReturnValue val: band.getReturnValues()) {
+                        b.addReturnValue(val);
+                    }
+                }
+                JRElement[] elems = band.getElements();
+                if (elems != null) {
+                    for (JRElement e: elems) {
+                        b.addElement(e);
+                    }
+                }
+                ((JRDesignSection)iDesign.getDetailSection()).addBand(b);
+            }
+	}
         iDesign.setSummary(iSummary);
         iDesign.setBackground(iBackground);
         iDesign.setLastPageFooter(iLastPageFooter);
@@ -303,8 +325,16 @@ public class SSReport {
         System.out.println(
                 "  ColumnFooter  : "
                         + (iColumnFooter == null ? 0 : iColumnFooter.getHeight()));
-        System.out.println(
-                "  Detail        : " + (iDetail == null ? 0 : iDetail.getHeight()));
+        if (iDetail != null) {
+            int detailHeight = 0;
+            for (JRBand band: iDetail.getBands()) {
+                detailHeight += band.getHeight();
+            }
+            System.out.println(
+                    "  Detail       : " + detailHeight);
+	} else {
+            System.out.println("  Detail        : 0");
+        }
         System.out.println(
                 "  Summary       : " + (iSummary == null ? 0 : iSummary.getHeight()));
         System.out.println(
@@ -316,9 +346,9 @@ public class SSReport {
         try {
 
             // Add all fields to the design
-            for (JRReportFont iFont: theFonts) {
+            for (JRStyle iStyle: theStyles) {
                 try {
-                    iDesign.addFont(iFont);
+                    iDesign.addStyle(iStyle);
                 } catch (JRException ignored) {}
             }
 
@@ -379,11 +409,11 @@ public class SSReport {
      * @param pParameters
      * @param pVariables
      * @param pGroups
-     * @param pFonts
+     * @param pStyles
      * @return
      * @throws SSException
      */
-    private JRBand getField(ReportField pField, List<JRField> pFields, List<JRParameter> pParameters, List<JRVariable> pVariables, List<JRGroup> pGroups, List<JRReportFont> pFonts) throws SSException {
+    private JRBand getField(ReportField pField, List<JRField> pFields, List<JRParameter> pParameters, List<JRVariable> pVariables, List<JRGroup> pGroups, List<JRStyle> pStyles) throws SSException {
 
         String pReportName = iFields.get(pField);
 
@@ -413,9 +443,9 @@ public class SSReport {
             }
 
             // Add all fonts
-            if (iReport.getFonts() != null) {
+            if (iReport.getStyles() != null) {
 
-                pFonts.addAll(Arrays.asList(iReport.getFonts()));
+                pStyles.addAll(Arrays.asList(iReport.getStyles()));
             }
 
             switch (pField) {
@@ -430,9 +460,6 @@ public class SSReport {
 
             case COLUMN_FOOTER:
                 return iReport.getColumnFooter();
-
-            case DETAIL:
-                return iReport.getDetail();
 
             case SUMMARY:
                 return iReport.getSummary();
@@ -455,6 +482,61 @@ public class SSReport {
     }
 
     /**
+     *
+     * @param pField
+     * @param pFields
+     * @param pParameters
+     * @param pVariables
+     * @param pGroups
+     * @param pStyles
+     * @return
+     * @throws SSException
+     */
+    private JRSection getDetailField(List<JRField> pFields, List<JRParameter> pParameters, List<JRVariable> pVariables, List<JRGroup> pGroups, List<JRStyle> pStyles) throws SSException {
+        String pReportName = iFields.get(ReportField.DETAIL);
+
+        try {
+            // Get the report
+            JasperReport iReport = cReportCache.getReport(pReportName);
+
+            // Add all parameters
+            if (iReport.getParameters() != null) {
+                pParameters.addAll(Arrays.asList(iReport.getParameters()));
+            }
+
+            // Add all fields
+            if (iReport.getFields() != null) {
+                pFields.addAll(Arrays.asList(iReport.getFields()));
+            }
+
+            // Add all variables
+            if (iReport.getVariables() != null) {
+                pVariables.addAll(Arrays.asList(iReport.getVariables()));
+            }
+
+            // Add all groups
+            if (iReport.getGroups() != null) {
+
+                pGroups.addAll(Arrays.asList(iReport.getGroups()));
+            }
+
+            // Add all fonts
+            if (iReport.getStyles() != null) {
+
+                pStyles.addAll(Arrays.asList(iReport.getStyles()));
+            }
+
+
+            return iReport.getDetailSection();
+        } catch (SSException ex) {
+            throw ex;
+        } catch (Throwable ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
      * Generates a default report to show when no pages are avaiable
      *
      * @return The report
@@ -464,7 +546,7 @@ public class SSReport {
 
         iDesign.setResourceBundle("book");
         iDesign.setName("NoPages");
-        iDesign.setWhenNoDataType(JRReport.WHEN_NO_DATA_TYPE_ALL_SECTIONS_NO_DETAIL);
+        iDesign.setWhenNoDataType(WhenNoDataTypeEnum.ALL_SECTIONS_NO_DETAIL);
 
         JRDesignBand iTitle = new JRDesignBand();
 
@@ -478,13 +560,12 @@ public class SSReport {
         iTextField.setHeight(25);
         iTextField.setForecolor(new Color(255, 0, 0));
 
-        iTextField.setHorizontalAlignment(JRAlignment.HORIZONTAL_ALIGN_LEFT);
-        iTextField.setFontSize(12);
+        iTextField.setHorizontalTextAlign(HorizontalTextAlignEnum.LEFT);
+        iTextField.setFontSize(12.f);
         iTextField.setItalic(true);
 
         JRDesignExpression iEpression = new JRDesignExpression();
 
-        iEpression.setValueClass(String.class);
         iEpression.setText("$R{report.nopages}");
 
         iTextField.setExpression(iEpression);
@@ -513,7 +594,7 @@ public class SSReport {
 
         iDesign.setResourceBundle("book");
         iDesign.setName("Empty");
-        iDesign.setWhenNoDataType(JRReport.WHEN_NO_DATA_TYPE_ALL_SECTIONS_NO_DETAIL);
+        iDesign.setWhenNoDataType(WhenNoDataTypeEnum.ALL_SECTIONS_NO_DETAIL);
 
         try {
             iReport = JasperCompileManager.compileReport(iDesign);
