@@ -428,6 +428,7 @@
                   <goal>jpackage</goal>
                 </goals>
                 <configuration>
+                  <type>MSI</type>
                   <winMenu>true</winMenu>
                   <winShortcut>true</winShortcut>
                 </configuration>
@@ -459,6 +460,9 @@
                 <goals>
                   <goal>jpackage</goal>
                 </goals>
+                <configuration>
+                  <type>DMG</type>
+                </configuration>
               </execution>
             </executions>
           </plugin>
