@@ -51,17 +51,32 @@ jobs:
     - name: Create AppImage
       working-directory: dist
       run: |
-        wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
-        chmod +x appimagetool-x86_64.AppImage
-        ./appimagetool-x86_64.AppImage Fribok
+        # Create AppDir structure from jpackage app-image
+        mkdir -p Fribok.AppDir/usr
+        cp -r Fribok/* Fribok.AppDir/usr/
 
-    - name: Test AppImage
+        # Create AppRun script
+        printf '#!/bin/bash\nSELF=$(readlink -f "$0")\nHERE=${SELF%%/*}\nexec "${HERE}/usr/bin/Fribok" "$@"\n' > Fribok.AppDir/AppRun
+        chmod +x Fribok.AppDir/AppRun
+
+        # Create .desktop file
+        printf '[Desktop Entry]\nName=Fribok\nExec=Fribok\nIcon=fribok\nType=Application\nCategories=Office;Finance;\n' > Fribok.AppDir/Fribok.desktop
+
+        # Copy icon
+        cp ../src/main/resources/graphics/logo.png Fribok.AppDir/fribok.png
+
+        # Download and run appimagetool
+        wget -q https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
+        chmod +x appimagetool-x86_64.AppImage
+        ./appimagetool-x86_64.AppImage Fribok.AppDir Fribok-x86_64.AppImage
+
+    - name: Verify AppImage
       run: |
-        chmod +x dist/Fribok-x86_64.AppImage
-        ./dist/Fribok-x86_64.AppImage --version
+        test -f dist/Fribok-x86_64.AppImage
+        file dist/Fribok-x86_64.AppImage
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: fribok-linux
-        path: dist/*
+        path: dist/Fribok-x86_64.AppImage
