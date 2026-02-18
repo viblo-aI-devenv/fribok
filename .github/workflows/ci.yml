@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch:
 
 jobs:
   build_and_test:
@@ -25,11 +26,8 @@ jobs:
       run: mvn clean install
 
   build_and_publish:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
@@ -45,46 +43,25 @@ jobs:
       shell: bash
       run: mvn clean package -Djpackage.profile=true
 
-    - name: Install libfuse2 (Linux)
-      if: runner.os == 'Linux'
+    - name: Install libfuse2
       run: |
         sudo apt-get update
         sudo apt-get install -y libfuse2
 
-    - name: Create AppImage (Linux)
-      if: runner.os == 'Linux'
+    - name: Create AppImage
       working-directory: target/dist
       run: |
         wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
         chmod +x appimagetool-x86_64.AppImage
         ./appimagetool-x86_64.AppImage Fribok
 
-    - name: Test Installer (Linux)
-      if: runner.os == 'Linux'
+    - name: Test AppImage
       run: |
         chmod +x target/dist/Fribok-x86_64.AppImage
         ./target/dist/Fribok-x86_64.AppImage --version
 
-    - name: Test Installer (Windows)
-      if: runner.os == 'Windows'
-      shell: pwsh
-      run: |
-        $msi = Get-ChildItem target/dist/Fribok-*.msi | Select-Object -First 1
-        Write-Host "Installing $($msi.FullName)"
-        Start-Process msiexec -ArgumentList "/i", $msi.FullName, "/qn" -Wait
-        & "C:/Program Files/Fribok/Fribok.exe" --version
-
-    - name: Test Installer (macOS)
-      if: runner.os == 'macOS'
-      run: |
-        DMG=$(ls target/dist/Fribok-*.dmg | head -1)
-        echo "Mounting $DMG"
-        sudo hdiutil attach "$DMG"
-        /Volumes/Fribok/Fribok.app/Contents/MacOS/Fribok --version
-        sudo hdiutil detach /Volumes/Fribok
-
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: fribok-${{ matrix.os }}
+        name: fribok-linux
         path: target/dist/*

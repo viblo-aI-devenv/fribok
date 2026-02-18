@@ -396,9 +396,7 @@
                   <goal>jpackage</goal>
                 </goals>
                 <configuration>
-                  <type>app-image</type>
-                  <linuxShortcut>true</linuxShortcut>
-                  <linuxMenuGroup>"Office;Finance"</linuxMenuGroup>
+                  <type>APP_IMAGE</type>
                 </configuration>
               </execution>
             </executions>
