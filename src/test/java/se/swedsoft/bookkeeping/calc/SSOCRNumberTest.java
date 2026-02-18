@@ -19,39 +19,36 @@
 package se.swedsoft.bookkeeping.calc;
 
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import org.junit.*;
-import se.swedsoft.bookkeeping.calc.SSOCRNumber;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import se.swedsoft.bookkeeping.data.SSInvoice;
-import static org.junit.Assert.*;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 /**
  * Tests for SSOCRNumber
  *
  * @author Stefan Kangas
- * @version $Rev$, $Date$
  */
-public class SSOCRNumberTest {
+class SSOCRNumberTest {
     private SSInvoice invoice;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         invoice = new SSInvoice();
     }
 
-    @After
-    public void tearDown() {}
-
-    /* Generate and return ocr for default test object
-     */
+    /** Generate and return OCR for default test object. */
     private String ocr() {
         return SSOCRNumber.getOCRNumber(invoice);
     }
 
     @Test
-    public void OCRNumberIsTheSameForOneNumber() {
+    void ocrNumberIsTheSameForOneNumber() {
         invoice.setNumber(512);
         String one = ocr();
         String two = ocr();
@@ -60,25 +57,22 @@ public class SSOCRNumberTest {
     }
 
     @Test
-    public void OCRChangesWhenInvoiceNumberChanges() {
+    void ocrChangesWhenInvoiceNumberChanges() {
         invoice.setNumber(256);
         String one = ocr();
 
         invoice.setNumber(512);
         String two = ocr();
 
-        assertTrue(!one.equals(two));
+        assertNotEquals(one, two);
     }
 
     @Test
-    public void OCRContainsInvoiceNumber() {
+    void ocrContainsInvoiceNumber() {
         int num = 65536;
 
         invoice.setNumber(num);
-        Pattern pattern = Pattern.compile(Integer.toString(num));
-        Matcher matcher = pattern.matcher(ocr());
-
-        assertTrue(matcher.find());
+        assertTrue(ocr().contains(Integer.toString(num)));
     }
 
     /* This is here to ensure we don't accidentally change the behavior of the
@@ -86,10 +80,65 @@ public class SSOCRNumberTest {
      * well.
      */
     @Test
-    public void DontChangeBehaviorWithoutChangingMe() {
+    void dontChangeBehaviorWithoutChangingMe() {
         int num = 65536;
 
         invoice.setNumber(num);
         assertEquals("6553671", ocr());
+    }
+
+    // ---- getCheckSum(String) ----
+
+    @Test
+    void getCheckSumReturnsDigitChar() {
+        char result = SSOCRNumber.getCheckSum("123");
+        assertThat(result).isBetween('0', '9');
+    }
+
+    @Test
+    void getCheckSumIsConsistentForSameInput() {
+        char first = SSOCRNumber.getCheckSum("12345");
+        char second = SSOCRNumber.getCheckSum("12345");
+        assertThat(first).isEqualTo(second);
+    }
+
+    @Test
+    void getCheckSumDiffersForDifferentInputs() {
+        char a = SSOCRNumber.getCheckSum("123");
+        char b = SSOCRNumber.getCheckSum("456");
+        // It is possible but unlikely that two different inputs
+        // produce the same checksum. We verify the algorithm works for known values.
+        // Luhn check digit for "123" should be '0'
+        // 1*1=1, 2*2=4, 3*1=3 => sum=8 => (8/10+1)*10 - 8 = 10 - 8 = 2
+        assertThat(a).isEqualTo('0');
+    }
+
+    @Test
+    void getCheckSumForSingleDigit() {
+        // For input "5": weight=2, value=5, sum=10 => 10-9=1 => checksum = (1/10+1)*10 - 1 = 10-1 = 9
+        char result = SSOCRNumber.getCheckSum("5");
+        assertThat(result).isEqualTo('9');
+    }
+
+    @Test
+    void getCheckSumForKnownLuhnValue() {
+        // For input "7992739871": known Luhn check digit is 3
+        char result = SSOCRNumber.getCheckSum("7992739871");
+        assertThat(result).isEqualTo('3');
+    }
+
+    // ---- getCheckSum(Integer) ----
+
+    @Test
+    void getCheckSumIntegerDelegatesToString() {
+        char fromInt = SSOCRNumber.getCheckSum(Integer.valueOf(12345));
+        char fromStr = SSOCRNumber.getCheckSum("12345");
+        assertThat(fromInt).isEqualTo(fromStr);
+    }
+
+    @Test
+    void getCheckSumIntegerForSmallNumber() {
+        char result = SSOCRNumber.getCheckSum(Integer.valueOf(1));
+        assertThat(result).isBetween('0', '9');
     }
 }

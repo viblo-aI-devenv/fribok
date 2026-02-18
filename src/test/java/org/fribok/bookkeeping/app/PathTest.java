@@ -19,22 +19,21 @@
 package org.fribok.bookkeeping.app;
 
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.fribok.bookkeeping.app.Path;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 /**
  * Tests for Path
  *
  * @author Stefan Kangas
- * @version $Id$
  */
 public class PathTest {
     @Test
-    public void ValuesNotNull() {
+    void valuesNotNull() {
         for (Path path : Path.values()) {
-            Assert.assertNotNull(Path.get(path));
+            assertNotNull(Path.get(path));
         }
     }
 }
