@@ -19,78 +19,78 @@
 package se.swedsoft.bookkeeping.calc.util;
 
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import junit.framework.*;
-import se.swedsoft.bookkeeping.calc.util.SSAutoIncrement;
-import static org.junit.Assert.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 /**
  * Tests for SSAutoIncrement
  *
  * @author Stefan Kangas
- * @version $Rev$, $Date$
  */
-public class SSAutoIncrementTest {
+class SSAutoIncrementTest {
 
     private SSAutoIncrement ainc;
-    String key;
-    int value;
+    private String key;
+    private int value;
 
-    @org.junit.Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         ainc = new SSAutoIncrement();
         key = "KEY";
         value = 3141593;
     }
 
-    @org.junit.After
-    public void tearDown() {}
-
-    @org.junit.Test
-    public void GetNumberIsZero() {
-        assertEquals(ainc.getNumber(key), 0);
+    @Test
+    void getNumberIsZero() {
+        assertEquals(0, ainc.getNumber(key));
     }
 
-    @org.junit.Test
-    public void IncrementAndGet() {
+    @Test
+    void incrementAndGet() {
         ainc.doAutoIncrement(key);
-        assertEquals(ainc.getNumber(key), 1);
+        assertEquals(1, ainc.getNumber(key));
     }
 
-    @org.junit.Test
-    public void SetAndGet() {
+    @Test
+    void setAndGet() {
         ainc.setNumber(key, value);
-        assertEquals(ainc.getNumber(key), value);
+        assertEquals(value, ainc.getNumber(key));
     }
 
-    @org.junit.Test
-    public void SetIncrementAndGet() {
+    @Test
+    void setIncrementAndGet() {
         ainc.setNumber(key, value);
         ainc.doAutoIncrement(key);
-        assertEquals(ainc.getNumber(key), value + 1);
+        assertEquals(value + 1, ainc.getNumber(key));
     }
 
-    @org.junit.Test
-    public void IncrementSetAndGet() {
+    @Test
+    void incrementSetAndGet() {
         ainc.doAutoIncrement(key);
         ainc.setNumber(key, value);
-        assertEquals(ainc.getNumber(key), value);
+        assertEquals(value, ainc.getNumber(key));
     }
 
-    @org.junit.Test
-    public void SetAndGetThreeDifferent() {
+    @Test
+    void setAndGetThreeDifferent() {
         ainc.setNumber(key + "a", value + 1);
         ainc.setNumber(key + "b", value + 2);
         ainc.setNumber(key + "c", value + 3);
-        assertEquals(ainc.getNumber(key + "a"), value + 1);
-        assertEquals(ainc.getNumber(key + "b"), value + 2);
-        assertEquals(ainc.getNumber(key + "c"), value + 3);
+        assertEquals(value + 1, ainc.getNumber(key + "a"));
+        assertEquals(value + 2, ainc.getNumber(key + "b"));
+        assertEquals(value + 3, ainc.getNumber(key + "c"));
     }
 
-    @org.junit.Test
-    public void StringValueMatchesWhatWePutIn() {
+    @Test
+    void stringValueMatchesWhatWePutIn() {
         ainc.setNumber(key + "a", value + 1);
         ainc.setNumber(key + "b", value + 2);
         ainc.setNumber(key + "c", value + 3);
@@ -106,7 +106,7 @@ public class SSAutoIncrementTest {
         assertTrue(matcher.find());
     }
 
-    @org.junit.Ignore
-    public void WhatAboutNegativeNumbers() {// TODO: Decide what to do if passed negative numbers and test it
-    }
+    @Disabled("TODO: Decide what to do if passed negative numbers and test it")
+    @Test
+    void whatAboutNegativeNumbers() {}
 }
