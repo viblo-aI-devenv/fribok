@@ -44,7 +44,12 @@ jobs:
 
     - name: Build
       shell: bash
-      run: mvn clean package -Djpackage.profile=true
+      run: |
+        # Sanitize version for jpackage: strip -SNAPSHOT, ensure 3 numeric components
+        RAW=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        VERSION="${RAW%-SNAPSHOT}"
+        [[ "$VERSION" != *.*.* ]] && VERSION="${VERSION}.0"
+        mvn clean package -Djpackage.profile=true -Djpackage.appVersion="$VERSION"
 
     # --- Linux steps ---
     - name: Install libfuse2

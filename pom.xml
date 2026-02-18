@@ -75,7 +75,7 @@
         <version>1.6.0</version>
         <configuration>
           <name>Fribok</name>
-          <appVersion>${project.version}</appVersion>
+          <appVersion>${jpackage.appVersion}</appVersion>
           <vendor>Fribok</vendor>
           <destination>${project.basedir}/dist</destination>
           <input>${project.build.directory}</input>
@@ -371,6 +371,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <timestamp>${maven.build.timestamp}</timestamp>
     <!--maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format-->
+    <jpackage.appVersion>${project.version}</jpackage.appVersion>
   </properties>
   <profiles>
     <profile>
