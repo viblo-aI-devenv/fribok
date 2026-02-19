@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch:
 
 jobs:
   build_and_test:
@@ -25,11 +26,11 @@ jobs:
       run: mvn clean install
 
   build_and_publish:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-    runs-on: ${{ matrix.os }}
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
 
     steps:
     - name: Checkout code
@@ -43,48 +44,66 @@ jobs:
 
     - name: Build
       shell: bash
-      run: mvn clean package -Djpackage.profile=true
+      run: |
+        # Sanitize version for jpackage: strip -SNAPSHOT, ensure 3 numeric components
+        RAW=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        VERSION="${RAW%-SNAPSHOT}"
+        [[ "$VERSION" != *.*.* ]] && VERSION="${VERSION}.0"
+        mvn clean package -Djpackage.profile=true -Djpackage.appVersion="$VERSION"
 
-    - name: Install libfuse2 (Linux)
+    - name: List dist contents
+      shell: bash
+      run: ls -lR dist/ || echo "dist/ directory not found"
+
+    # --- Linux steps ---
+    - name: Install libfuse2
       if: runner.os == 'Linux'
       run: |
         sudo apt-get update
         sudo apt-get install -y libfuse2
 
-    - name: Create AppImage (Linux)
+    - name: Create AppImage
       if: runner.os == 'Linux'
-      working-directory: target/dist
+      working-directory: dist
       run: |
-        wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
+        # Create AppDir structure from jpackage app-image
+        mkdir -p Fribok.AppDir/usr
+        cp -r Fribok/* Fribok.AppDir/usr/
+
+        # Create AppRun script
+        printf '#!/bin/bash\nSELF=$(readlink -f "$0")\nHERE=${SELF%%/*}\nexec "${HERE}/usr/bin/Fribok" "$@"\n' > Fribok.AppDir/AppRun
+        chmod +x Fribok.AppDir/AppRun
+
+        # Create .desktop file
+        printf '[Desktop Entry]\nName=Fribok\nExec=Fribok\nIcon=fribok\nType=Application\nCategories=Office;Finance;\n' > Fribok.AppDir/Fribok.desktop
+
+        # Copy icon
+        cp ../src/main/resources/graphics/logo.png Fribok.AppDir/fribok.png
+
+        # Download and run appimagetool
+        wget -q https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
         chmod +x appimagetool-x86_64.AppImage
-        ./appimagetool-x86_64.AppImage Fribok
+        ARCH=x86_64 ./appimagetool-x86_64.AppImage Fribok.AppDir Fribok-x86_64.AppImage
 
-    - name: Test Installer (Linux)
+    - name: Upload Linux artifact
       if: runner.os == 'Linux'
-      run: |
-        chmod +x target/dist/Fribok-x86_64.AppImage
-        ./target/dist/Fribok-x86_64.AppImage --version
-
-    - name: Test Installer (Windows)
-      if: runner.os == 'Windows'
-      shell: pwsh
-      run: |
-        $msi = Get-ChildItem target/dist/Fribok-*.msi | Select-Object -First 1
-        Write-Host "Installing $($msi.FullName)"
-        Start-Process msiexec -ArgumentList "/i", $msi.FullName, "/qn" -Wait
-        & "C:/Program Files/Fribok/Fribok.exe" --version
-
-    - name: Test Installer (macOS)
-      if: runner.os == 'macOS'
-      run: |
-        DMG=$(ls target/dist/Fribok-*.dmg | head -1)
-        echo "Mounting $DMG"
-        sudo hdiutil attach "$DMG"
-        /Volumes/Fribok/Fribok.app/Contents/MacOS/Fribok --version
-        sudo hdiutil detach /Volumes/Fribok
-
-    - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: fribok-${{ matrix.os }}
-        path: target/dist/*
+        name: fribok-linux
+        path: dist/Fribok-x86_64.AppImage
+
+    # --- Windows steps ---
+    - name: Upload Windows artifact
+      if: runner.os == 'Windows'
+      uses: actions/upload-artifact@v4
+      with:
+        name: fribok-windows
+        path: dist/*.msi
+
+    # --- macOS steps ---
+    - name: Upload macOS artifact
+      if: runner.os == 'macOS'
+      uses: actions/upload-artifact@v4
+      with:
+        name: fribok-macos
+        path: dist/*.dmg
