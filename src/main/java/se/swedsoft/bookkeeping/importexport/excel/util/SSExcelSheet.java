@@ -28,7 +28,7 @@ public class SSExcelSheet {
      * @return
      */
     public List<SSExcelRow> getRows() {
-        List<SSExcelRow> iList = new LinkedList<SSExcelRow>();
+        List<SSExcelRow> iList = new LinkedList<>();
 
         for (int i = 0; i < iSheet.getRows(); i++) {
             iList.add(new SSExcelRow(iSheet, i));

@@ -123,8 +123,8 @@ public class SSNewCompany implements Serializable {
         iId = 0;
         iAddress = new SSAddress();
         iDeliveryAddress = new SSAddress();
-        iStandardTexts = new HashMap<SSStandardText, String>();
-        iDefaultAccounts = new HashMap<SSDefaultAccount, Integer>();
+        iStandardTexts = new HashMap<>();
+        iDefaultAccounts = new HashMap<>();
 
         iAutoIncrement = new SSAutoIncrement();
         iRoundingOff = false;
@@ -232,7 +232,7 @@ public class SSNewCompany implements Serializable {
      */
     public Map<SSStandardText, String> getStandardTexts() {
         if (iStandardTexts == null) {
-            iStandardTexts = new HashMap<SSStandardText, String>();
+            iStandardTexts = new HashMap<>();
         }
         return iStandardTexts;
     }
@@ -275,7 +275,7 @@ public class SSNewCompany implements Serializable {
      */
     public Map<SSDefaultAccount, Integer> getDefaultAccounts() {
         if (iDefaultAccounts == null) {
-            iDefaultAccounts = new HashMap<SSDefaultAccount, Integer>();
+            iDefaultAccounts = new HashMap<>();
         }
         return iDefaultAccounts;
     }

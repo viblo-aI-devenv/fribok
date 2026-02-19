@@ -51,30 +51,22 @@ public class SSInpaymentListDialog extends SSDialog {
 
         setPanel(iPanel);
 
-        iButtonPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setModalResult(JOptionPane.CANCEL_OPTION, true);
-            }
-        });
-        iButtonPanel.addOkActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setModalResult(JOptionPane.OK_OPTION, true);
-            }
-        });
+        iButtonPanel.addCancelActionListener(e -> setModalResult(JOptionPane.CANCEL_OPTION, true));
+        iButtonPanel.addOkActionListener(e -> setModalResult(JOptionPane.OK_OPTION, true));
 
 	getRootPane().setDefaultButton(iButtonPanel.getOkButton());
 
         iInvoice.setModel(SSInvoiceTableModel.getDropDownModel());
         iInvoice.setSearchColumns(0);
 
-        ChangeListener iChangeListener = new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
+        ChangeListener iChangeListener = e -> {
+
                 iInvoice.setEnabled(iCheckInvoice.isSelected());
 
                 iFromDate.setEnabled(iCheckDate.isSelected());
                 iToDate.setEnabled(iCheckDate.isSelected());
-            }
-        };
+
+            };
 
         iCheckDate.addChangeListener(iChangeListener);
         iCheckInvoice.addChangeListener(iChangeListener);
@@ -98,14 +90,14 @@ public class SSInpaymentListDialog extends SSDialog {
     public List<SSInpayment> getElementsToPrint() {
         List<SSInpayment> iInpayments = SSDB.getInstance().getInpayments();
 
-        SSFilterFactory<SSInpayment> iFactory = new SSFilterFactory<SSInpayment>(
+        SSFilterFactory<SSInpayment> iFactory = new SSFilterFactory<>(
                 iInpayments);
 
         // Filter by a customer
         if (iCheckInvoice.isSelected() && iInvoice.getSelected() != null) {
             final SSInvoice iInvoice = this.iInvoice.getSelected();
 
-            iFactory.applyFilter(new SSFilter<SSInpayment>() {
+            iFactory.applyFilter(new SSFilter<>() {
                 public boolean applyFilter(SSInpayment iInpayment) {
                     return SSInpaymentMath.hasInvoice(iInpayment, iInvoice);
                 }
@@ -117,7 +109,7 @@ public class SSInpaymentListDialog extends SSDialog {
             final Date iDateFrom = iFromDate.getDate();
             final Date iDateTo = iToDate.getDate();
 
-            iFactory.applyFilter(new SSFilter<SSInpayment>() {
+            iFactory.applyFilter(new SSFilter<>() {
                 public boolean applyFilter(SSInpayment iInpayment) {
                     return SSInpaymentMath.inPeriod(iInpayment, iDateFrom, iDateTo);
                 }

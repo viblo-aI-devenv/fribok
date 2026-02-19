@@ -53,7 +53,7 @@ public class SSCustomerImporter {
      */
     public SSCustomerImporter(File iFile) {
         this.iFile = iFile;
-        iColumns = new HashMap<String, Integer>();
+        iColumns = new HashMap<>();
     }
 
     /**
@@ -191,7 +191,7 @@ public class SSCustomerImporter {
 
         getColumnIndexes(iRows.get(0));
 
-        List<SSCustomer> iCustomers = new LinkedList<SSCustomer>();
+        List<SSCustomer> iCustomers = new LinkedList<>();
 
         for (int row = 1; row < iRows.size(); row++) {
             SSExcelRow iRow = iRows.get(row);
@@ -423,7 +423,7 @@ public class SSCustomerImporter {
     }
 
     public void doImport() throws SSImportException {
-        List<SSCustomer> iCustomers = new LinkedList<SSCustomer>();
+        List<SSCustomer> iCustomers = new LinkedList<>();
 
         try {
             DocumentBuilderFactory iDocBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -921,8 +921,8 @@ public class SSCustomerImporter {
             BufferedReader br = new BufferedReader(
                     new InputStreamReader(new FileInputStream(iFile), "Windows-1252"));
             String text = null;
-            Collection<String> al = new ArrayList<String>();
-            Collection<String> iBadCustomers = new ArrayList<String>();
+            Collection<String> al = new ArrayList<>();
+            Collection<String> iBadCustomers = new ArrayList<>();
 
             while ((text = br.readLine()) != null) {
                 al.add(text);

@@ -25,7 +25,7 @@ public class SSAccountPlanTypeModel extends SSTableModel<SSAccountPlanType> {
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSAccountPlanType.class;
     }
 
@@ -44,7 +44,7 @@ public class SSAccountPlanTypeModel extends SSTableModel<SSAccountPlanType> {
     /**
      * Namn
      */
-    public static SSTableColumn<SSAccountPlanType> COLUMN_NAME = new SSTableColumn<SSAccountPlanType>(
+    public static SSTableColumn<SSAccountPlanType> COLUMN_NAME = new SSTableColumn<>(
             "") {
         @Override
         public Object getValue(SSAccountPlanType iAccountPlanType) {

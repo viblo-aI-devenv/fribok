@@ -40,7 +40,7 @@ public class SSBudget implements Serializable {
         iFrom = new Date();
         iTo = new Date();
         iAccountingYear = null;
-        iBudget = new HashMap<SSMonth, Map<SSAccount, BigDecimal>>();
+        iBudget = new HashMap<>();
     }
 
     /**
@@ -51,12 +51,12 @@ public class SSBudget implements Serializable {
         iFrom = pSource.iFrom;
         iTo = pSource.iTo;
         iAccountingYear = pSource.iAccountingYear;
-        iBudget = new HashMap<SSMonth, Map<SSAccount, BigDecimal>>();
+        iBudget = new HashMap<>();
 
         Map<SSMonth, Map<SSAccount, BigDecimal>> iSource = pSource.getBudget();
 
         for (Map.Entry<SSMonth, Map<SSAccount, BigDecimal>> ssMonthMapEntry : iSource.entrySet()) {
-            Map<SSAccount, BigDecimal> iMonthlyBudget = new HashMap<SSAccount, BigDecimal>();
+            Map<SSAccount, BigDecimal> iMonthlyBudget = new HashMap<>();
 
             iMonthlyBudget.putAll(ssMonthMapEntry.getValue());
 
@@ -114,17 +114,13 @@ public class SSBudget implements Serializable {
         if (iBudget == null) {
             iBudget = createBudgetForYear();
         }
-        List<SSMonth> iMonths = new LinkedList<SSMonth>();
+        List<SSMonth> iMonths = new LinkedList<>();
 
         for (SSMonth iMonth: iBudget.keySet()) {
             iMonths.add(iMonth);
         }
 
-        Collections.sort(iMonths, new Comparator<SSMonth>() {
-            public int compare(SSMonth o1, SSMonth o2) {
-                return o1.getDate().compareTo(o2.getDate());
-            }
-        });
+        Collections.sort(iMonths, (o1, o2) -> o1.getDate().compareTo(o2.getDate()));
 
         return iMonths;
     }
@@ -293,7 +289,7 @@ public class SSBudget implements Serializable {
      * @return The sum
      */
     public Map<SSAccount, BigDecimal> getSumForAccounts() {
-        Map<SSAccount, BigDecimal> sum = new HashMap<SSAccount, BigDecimal>();
+        Map<SSAccount, BigDecimal> sum = new HashMap<>();
 
         for (SSAccount account: getAccounts()) {
             sum.put(account, getSumForAccount(account));
@@ -309,7 +305,7 @@ public class SSBudget implements Serializable {
      * @return The sum
      */
     public Map<SSAccount, BigDecimal> getSumForAccounts(Date pFrom, Date pTo) {
-        Map<SSAccount, BigDecimal> sum = new HashMap<SSAccount, BigDecimal>();
+        Map<SSAccount, BigDecimal> sum = new HashMap<>();
 
         for (SSAccount account: getAccounts()) {
             sum.put(account, getSumForAccount(account, pFrom, pTo));
@@ -361,14 +357,14 @@ public class SSBudget implements Serializable {
      * @return the new map
      */
     private Map <SSMonth, Map<SSAccount, BigDecimal>> createBudgetForYear() {
-        Map<SSMonth, Map<SSAccount, BigDecimal>> iNewBudget = new HashMap<SSMonth, Map<SSAccount, BigDecimal>>();
+        Map<SSMonth, Map<SSAccount, BigDecimal>> iNewBudget = new HashMap<>();
 
         Map<SSAccount, BigDecimal> iSum = getSumForAccounts();
 
         List<SSMonth> iMonths = SSMonth.splitYearIntoMonths(iAccountingYear);
 
         for (SSMonth iMonth: iMonths) {
-            Map<SSAccount, BigDecimal> iMontlyBudget = new HashMap<SSAccount, BigDecimal>();
+            Map<SSAccount, BigDecimal> iMontlyBudget = new HashMap<>();
 
             iNewBudget.put(iMonth, iMontlyBudget);
         }
@@ -421,7 +417,7 @@ public class SSBudget implements Serializable {
         iObjectInputStream.defaultReadObject();
 
         if (iBudget == null) {
-            iBudget = new HashMap<SSMonth, Map<SSAccount, BigDecimal>>();
+            iBudget = new HashMap<>();
         }
 
         if (iBudget.isEmpty() && !iFrom.equals(iTo)) {

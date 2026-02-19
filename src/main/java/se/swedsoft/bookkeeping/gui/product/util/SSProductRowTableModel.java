@@ -30,7 +30,7 @@ public class SSProductRowTableModel extends SSDefaultTableModel<SSProductRow> {
      * Default constructor.
      */
     public SSProductRowTableModel() {
-        this(new LinkedList<SSProductRow>());
+        this(new LinkedList<>());
     }
 
     /**
@@ -50,7 +50,7 @@ public class SSProductRowTableModel extends SSDefaultTableModel<SSProductRow> {
     }
 
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSProduct.class;
     }
 
@@ -228,7 +228,7 @@ public class SSProductRowTableModel extends SSDefaultTableModel<SSProductRow> {
          * @param iExcluded
          */
         public SSProductEditor(List<SSProduct> iProducts, SSProduct iExcluded) {
-            List<SSProduct> iFiltered = new LinkedList<SSProduct>();
+            List<SSProduct> iFiltered = new LinkedList<>();
 
             for (SSProduct iProduct : iProducts) {
 
@@ -238,11 +238,11 @@ public class SSProductRowTableModel extends SSDefaultTableModel<SSProductRow> {
 
             }
 
-            SSDefaultTableModel< SSProduct> model = new SSDefaultTableModel<SSProduct>(
+            SSDefaultTableModel< SSProduct> model = new SSDefaultTableModel<>(
                     iFiltered) {
 
                 @Override
-                public Class getType() {
+                public Class<?> getType() {
                     return SSProduct.class;
                 }
 

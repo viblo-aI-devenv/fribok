@@ -68,27 +68,27 @@ public class SSBudgetFrame extends SSDefaultTableFrame {
         iAccountingYear = SSDB.getInstance().getCurrentYear();
         // iBudgetMainPanel.setBudget(iAccountingYear.getBudget());
         addCloseListener(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (cInstance != null) {
-                    SSQueryDialog iDialog = new SSQueryDialog(getMainFrame(),
-                            SSBundle.getBundle(), "budgetframe.saveonclose");
-                    int iResponce = iDialog.getResponce();
+                e -> {
 
-                    if (iResponce != JOptionPane.YES_OPTION) {
-                        SSPostLock.removeLock(
-                                "budget" + SSDB.getInstance().getCurrentCompany().getId()
-                                + SSDB.getInstance().getCurrentYear().getId());
-                        return;
-                    }
-                    iAccountingYear.setBudget(iBudgetMainPanel.getBudget());
-                    SSDB.getInstance().updateAccountingYear(iAccountingYear);
-                    SSPostLock.removeLock(
-                            "budget" + SSDB.getInstance().getCurrentCompany().getId()
-                            + SSDB.getInstance().getCurrentYear().getId());
-                }
-            }
-        });
+                        if (cInstance != null) {
+                            SSQueryDialog iDialog = new SSQueryDialog(getMainFrame(),
+                                    SSBundle.getBundle(), "budgetframe.saveonclose");
+                            int iResponce = iDialog.getResponce();
+
+                            if (iResponce != JOptionPane.YES_OPTION) {
+                                SSPostLock.removeLock(
+                                        "budget" + SSDB.getInstance().getCurrentCompany().getId()
+                                        + SSDB.getInstance().getCurrentYear().getId());
+                                return;
+                            }
+                            iAccountingYear.setBudget(iBudgetMainPanel.getBudget());
+                            SSDB.getInstance().updateAccountingYear(iAccountingYear);
+                            SSPostLock.removeLock(
+                                    "budget" + SSDB.getInstance().getCurrentCompany().getId()
+                                    + SSDB.getInstance().getCurrentYear().getId());
+                        }
+
+                    });
     }
 
     /**
@@ -104,55 +104,55 @@ public class SSBudgetFrame extends SSDefaultTableFrame {
         // Save
         // ***************************
         SSButton iButton = new SSButton("ICON_SAVEITEM", "budgetframe.savebutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iAccountingYear.setBudget(iBudgetMainPanel.getBudget());
-                SSDB.getInstance().updateAccountingYear(iAccountingYear);
-                SSPostLock.removeLock(
-                        "budget" + SSDB.getInstance().getCurrentCompany().getId()
-                        + SSDB.getInstance().getCurrentYear().getId());
+                e -> {
 
-                cInstance = null;
-                setVisible(false);
-            }
-        });
+                        iAccountingYear.setBudget(iBudgetMainPanel.getBudget());
+                        SSDB.getInstance().updateAccountingYear(iAccountingYear);
+                        SSPostLock.removeLock(
+                                "budget" + SSDB.getInstance().getCurrentCompany().getId()
+                                + SSDB.getInstance().getCurrentYear().getId());
+
+                        cInstance = null;
+                        setVisible(false);
+
+                    });
 
         toolBar.add(iButton);
 
         // Cancel
         // ***************************
         iButton = new SSButton("ICON_CANCELITEM", "budgetframe.cancelbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSPostLock.removeLock(
-                        "budget" + SSDB.getInstance().getCurrentCompany().getId()
-                        + SSDB.getInstance().getCurrentYear().getId());
-                cInstance = null;
-                setVisible(false);
-            }
-        });
+                e -> {
+
+                        SSPostLock.removeLock(
+                                "budget" + SSDB.getInstance().getCurrentCompany().getId()
+                                + SSDB.getInstance().getCurrentYear().getId());
+                        cInstance = null;
+                        setVisible(false);
+
+                    });
         toolBar.add(iButton);
         toolBar.addSeparator();
 
         // Print
         // ******************
         iButton = new SSButton("ICON_PRINT", "budgetframe.printbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                final SSMainFrame iMainFrame = getMainFrame();
+                e -> {
 
-                final Date iFrom = SSDB.getInstance().getCurrentYear().getFrom();
-                final Date iTo = SSDB.getInstance().getCurrentYear().getTo();
+                        final SSMainFrame iMainFrame = getMainFrame();
 
-                SSProgressDialog.runProgress(iMainFrame, new Runnable() {
-                    public void run() {
-                        SSBudgetPrinter iPrinter = new SSBudgetPrinter(iFrom, iTo);
+                        final Date iFrom = SSDB.getInstance().getCurrentYear().getFrom();
+                        final Date iTo = SSDB.getInstance().getCurrentYear().getTo();
 
-                        iPrinter.preview(iMainFrame);
-                    }
-                });
-            }
-        });
+                        SSProgressDialog.runProgress(iMainFrame, () -> {
+
+                                SSBudgetPrinter iPrinter = new SSBudgetPrinter(iFrom, iTo);
+
+                                iPrinter.preview(iMainFrame);
+
+                            });
+
+                    });
         toolBar.add(iButton);
 
         return toolBar;

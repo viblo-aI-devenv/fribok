@@ -89,34 +89,30 @@ public class SSOutpaymentFrame extends SSDefaultTableFrame {
         // New
         // ***************************
         SSButton iButton = new SSButton("ICON_NEWITEM", "outpaymentframe.newbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSOutpaymentDialog.newDialog(getMainFrame(), iModel);
-            }
-        });
+                e -> SSOutpaymentDialog.newDialog(getMainFrame(), iModel));
 
         toolBar.add(iButton);
 
         // Edit
         // ***************************
         iButton = new SSButton("ICON_EDITITEM", "outpaymentframe.editbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSOutpayment iSelected = iModel.getSelectedRow(iTable);
-                Integer iNumber = null;
+                e -> {
 
-                if (iSelected != null) {
-                    iNumber = iSelected.getNumber();
-                    iSelected = getOutpayment(iSelected);
-                }
-                if (iSelected != null) {
-                    SSOutpaymentDialog.editDialog(getMainFrame(), iSelected, iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "outpaymentframe.outpaymentgone",
-                            iNumber);
-                }
-            }
-        });
+                        SSOutpayment iSelected = iModel.getSelectedRow(iTable);
+                        Integer iNumber = null;
+
+                        if (iSelected != null) {
+                            iNumber = iSelected.getNumber();
+                            iSelected = getOutpayment(iSelected);
+                        }
+                        if (iSelected != null) {
+                            SSOutpaymentDialog.editDialog(getMainFrame(), iSelected, iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "outpaymentframe.outpaymentgone",
+                                    iNumber);
+                        }
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         toolBar.add(iButton);
         toolBar.addSeparator();
@@ -124,27 +120,23 @@ public class SSOutpaymentFrame extends SSDefaultTableFrame {
         // Delete
         // ***************************
         iButton = new SSButton("ICON_DELETEITEM", "outpaymentframe.deletebutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                int[] selected = iTable.getSelectedRows();
-                List<SSOutpayment> toDelete = iModel.getObjects(selected);
+                e -> {
 
-                deleteSelected(toDelete);
-            }
-        });
+                        int[] selected = iTable.getSelectedRows();
+                        List<SSOutpayment> toDelete = iModel.getObjects(selected);
+
+                        deleteSelected(toDelete);
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         toolBar.add(iButton);
 
         // Print
         // ***************************
-        SSMenuButton<SSButton> iMenuButton = new SSMenuButton<SSButton>("ICON_PRINT",
+        SSMenuButton<SSButton> iMenuButton = new SSMenuButton<>("ICON_PRINT",
                 "outpaymentframe.printbutton");
 
-        iMenuButton.add("outpaymentframe.print.outaymentlist", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSReportFactory.OutpaymentList(getMainFrame());
-            }
-        });
+        iMenuButton.add("outpaymentframe.print.outaymentlist", e -> SSReportFactory.OutpaymentList(getMainFrame()));
         toolBar.add(iMenuButton);
 
         return toolBar;
@@ -168,25 +160,25 @@ public class SSOutpaymentFrame extends SSDefaultTableFrame {
         iModel.setupTable(iTable);
 
         iTable.addDblClickListener(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSOutpayment iSelected = iModel.getSelectedRow(iTable);
-                Integer iNumber;
+                e -> {
 
-                if (iSelected != null) {
-                    iNumber = iSelected.getNumber();
-                    iSelected = getOutpayment(iSelected);
-                } else {
-                    return;
-                }
-                if (iSelected != null) {
-                    SSOutpaymentDialog.editDialog(getMainFrame(), iSelected, iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "outpaymentframe.outpaymentgone",
-                            iNumber);
-                }
-            }
-        });
+                        SSOutpayment iSelected = iModel.getSelectedRow(iTable);
+                        Integer iNumber;
+
+                        if (iSelected != null) {
+                            iNumber = iSelected.getNumber();
+                            iSelected = getOutpayment(iSelected);
+                        } else {
+                            return;
+                        }
+                        if (iSelected != null) {
+                            SSOutpaymentDialog.editDialog(getMainFrame(), iSelected, iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "outpaymentframe.outpaymentgone",
+                                    iNumber);
+                        }
+
+                    });
 
         JPanel iPanel = new JPanel();
 

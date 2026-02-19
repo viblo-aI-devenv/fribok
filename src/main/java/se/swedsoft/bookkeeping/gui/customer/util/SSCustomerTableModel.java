@@ -43,14 +43,14 @@ public class SSCustomerTableModel extends SSTableModel<SSCustomer> {
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSCustomer.class;
     }
 
     /**
      * Number column
      */
-    public static SSTableColumn<SSCustomer> COLUMN_NUMBER = new SSTableColumn<SSCustomer>(
+    public static SSTableColumn<SSCustomer> COLUMN_NUMBER = new SSTableColumn<>(
             SSBundle.getBundle().getString("customertable.column.1")) {
         @Override
         public Object getValue(SSCustomer iObject) {
@@ -74,7 +74,7 @@ public class SSCustomerTableModel extends SSTableModel<SSCustomer> {
     /**
      * Name
      */
-    public static SSTableColumn<SSCustomer> COLUMN_NAME = new SSTableColumn<SSCustomer>(
+    public static SSTableColumn<SSCustomer> COLUMN_NAME = new SSTableColumn<>(
             SSBundle.getBundle().getString("customertable.column.2")) {
         @Override
         public Object getValue(SSCustomer iObject) {
@@ -98,7 +98,7 @@ public class SSCustomerTableModel extends SSTableModel<SSCustomer> {
     /**
      * Your contact
      */
-    public static SSTableColumn<SSCustomer> COLUMN_YOUR_CONTACT = new SSTableColumn<SSCustomer>(
+    public static SSTableColumn<SSCustomer> COLUMN_YOUR_CONTACT = new SSTableColumn<>(
             SSBundle.getBundle().getString("customertable.column.3")) {
         @Override
         public Object getValue(SSCustomer iObject) {
@@ -124,7 +124,7 @@ public class SSCustomerTableModel extends SSTableModel<SSCustomer> {
     /**
      * Date column
      */
-    public static SSTableColumn<SSCustomer> COLUMN_REGISTRATION_NUMBER = new SSTableColumn<SSCustomer>(
+    public static SSTableColumn<SSCustomer> COLUMN_REGISTRATION_NUMBER = new SSTableColumn<>(
             SSBundle.getBundle().getString("customertable.column.4")) {
         @Override
         public Object getValue(SSCustomer iObject) {
@@ -151,7 +151,7 @@ public class SSCustomerTableModel extends SSTableModel<SSCustomer> {
     /**
      * Our customer nr
      */
-    public static SSTableColumn<SSCustomer> COLUMN_PHONE = new SSTableColumn<SSCustomer>(
+    public static SSTableColumn<SSCustomer> COLUMN_PHONE = new SSTableColumn<>(
             SSBundle.getBundle().getString("customertable.column.5")) {
         @Override
         public Object getValue(SSCustomer iObject) {
@@ -178,7 +178,7 @@ public class SSCustomerTableModel extends SSTableModel<SSCustomer> {
     /**
      * Customer claim
      */
-    public static SSTableColumn<SSCustomer> COLUMN_CUSTOMER_CLAIM = new SSTableColumn<SSCustomer>(
+    public static SSTableColumn<SSCustomer> COLUMN_CUSTOMER_CLAIM = new SSTableColumn<>(
             SSBundle.getBundle().getString("customertable.column.6")) {
         @Override
         public Object getValue(SSCustomer iCustomer) {
@@ -220,7 +220,7 @@ public class SSCustomerTableModel extends SSTableModel<SSCustomer> {
     /**
      * Supplier debt
      */
-    public static SSTableColumn<SSCustomer> COLUMN_CREDIT_LIMIT = new SSTableColumn<SSCustomer>(
+    public static SSTableColumn<SSCustomer> COLUMN_CREDIT_LIMIT = new SSTableColumn<>(
             SSBundle.getBundle().getString("customertable.column.7")) {
         @Override
         public Object getValue(SSCustomer iCustomer) {

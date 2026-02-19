@@ -55,7 +55,7 @@ public class SSProductImporter {
      */
     public SSProductImporter(File iFile) {
         this.iFile = iFile;
-        iColumns = new HashMap<String, Integer>();
+        iColumns = new HashMap<>();
     }
 
     /**
@@ -86,23 +86,23 @@ public class SSProductImporter {
         } catch (BiffException e) {
             throw new SSImportException(e.getLocalizedMessage());
         }
-        final List<SSProduct> iNewProducts = new LinkedList<SSProduct>(iProducts);
+        final List<SSProduct> iNewProducts = new LinkedList<>(iProducts);
         final boolean iResult = showImportReport(iProducts);
 
         SSInitDialog.runProgress(SSMainFrame.getInstance(), "Importerar produkter",
-                new Runnable() {
-            public void run() {
-                if (iNewProducts != null && iResult) {
-                    List<SSProduct> iExistingProducts = SSDB.getInstance().getProducts();
+                () -> {
 
-                    for (SSProduct iProduct : iNewProducts) {
-                        if (!iExistingProducts.contains(iProduct)) {
-                            SSDB.getInstance().addProduct(iProduct);
+                        if (iNewProducts != null && iResult) {
+                            List<SSProduct> iExistingProducts = SSDB.getInstance().getProducts();
+
+                            for (SSProduct iProduct : iNewProducts) {
+                                if (!iExistingProducts.contains(iProduct)) {
+                                    SSDB.getInstance().addProduct(iProduct);
+                                }
+                            }
                         }
-                    }
-                }
-            }
-        });
+
+                    });
 
     }
 
@@ -177,7 +177,7 @@ public class SSProductImporter {
 
         getColumnIndexes(iRows.get(0));
 
-        List<SSProduct> iProducts = new LinkedList<SSProduct>();
+        List<SSProduct> iProducts = new LinkedList<>();
 
         for (int row = 1; row < iRows.size(); row++) {
             SSExcelRow iRow = iRows.get(row);
@@ -358,7 +358,7 @@ public class SSProductImporter {
     }
 
     public void doXMLImport() throws SSImportException {
-        List<SSProduct> iProducts = new LinkedList<SSProduct>();
+        List<SSProduct> iProducts = new LinkedList<>();
 
         try {
             DocumentBuilderFactory iDocBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -612,7 +612,7 @@ public class SSProductImporter {
 
                     NodeList iRowList = iFirstProductAttElement.getElementsByTagName(
                             "ParcelRow");
-                    List<SSProductRow> iRows = new LinkedList<SSProductRow>();
+                    List<SSProductRow> iRows = new LinkedList<>();
 
                     for (int j = 0; j < iRowList.getLength(); j++) {
                         SSProductRow iRow = new SSProductRow();

@@ -26,7 +26,7 @@ public class SSPeriodicInvoiceMath {
     public static Map<SSPeriodicInvoice, List<SSInvoice>> getPeriodicInvoices() {
         List<SSPeriodicInvoice> iPeriodicInvoices = SSDB.getInstance().getPeriodicInvoices();
 
-        Map<SSPeriodicInvoice, List<SSInvoice>> iResult = new HashMap<SSPeriodicInvoice, List<SSInvoice>>();
+        Map<SSPeriodicInvoice, List<SSInvoice>> iResult = new HashMap<>();
 
         Date iNow = new Date();
 

@@ -103,7 +103,7 @@ public class SSDeliveryWay implements Serializable, SSTableSearchable {
      * @return
      */
     public static List<SSDeliveryWay> getDefaultDeliveryWays() {
-        List<SSDeliveryWay> iDeliveryWays = new LinkedList<SSDeliveryWay>();
+        List<SSDeliveryWay> iDeliveryWays = new LinkedList<>();
 
         iDeliveryWays.add(new SSDeliveryWay("P", "Post"));
         iDeliveryWays.add(new SSDeliveryWay("HÄM", "Hämtas"));

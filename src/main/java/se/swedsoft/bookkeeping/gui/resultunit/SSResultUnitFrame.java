@@ -89,34 +89,30 @@ public class SSResultUnitFrame extends SSDefaultTableFrame {
         // Ny resultatenhet
         // ***************************
         SSButton iButton = new SSButton("ICON_NEWITEM", "resultunitframe.newbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSResultUnitDialog.newDialog(getMainFrame(), iModel);
-            }
-        });
+                e -> SSResultUnitDialog.newDialog(getMainFrame(), iModel));
 
         iToolBar.add(iButton);
 
         // Ändra resultatenhet
         // ***************************
         iButton = new SSButton("ICON_EDITITEM", "resultunitframe.editbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSNewResultUnit iSelected = getSelected();
-                String iNumber = null;
+                e -> {
 
-                if (iSelected != null) {
-                    iNumber = iSelected.getNumber();
-                    iSelected = getResultUnit(iSelected);
-                }
-                if (iSelected != null) {
-                    SSResultUnitDialog.editDialog(getMainFrame(), iSelected, iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "resultunitframe.resultunitgone",
-                            iNumber);
-                }
-            }
-        });
+                        SSNewResultUnit iSelected = getSelected();
+                        String iNumber = null;
+
+                        if (iSelected != null) {
+                            iNumber = iSelected.getNumber();
+                            iSelected = getResultUnit(iSelected);
+                        }
+                        if (iSelected != null) {
+                            SSResultUnitDialog.editDialog(getMainFrame(), iSelected, iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "resultunitframe.resultunitgone",
+                                    iNumber);
+                        }
+
+                    });
         iToolBar.add(iButton);
         iToolBar.addSeparator();
         iTable.addSelectionDependentComponent(iButton);
@@ -124,14 +120,14 @@ public class SSResultUnitFrame extends SSDefaultTableFrame {
         // Ta bort resultatenhet
         // ***************************
         iButton = new SSButton("ICON_DELETEITEM", "resultunitframe.deletebutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                int[] selected = iTable.getSelectedRows();
-                List<SSNewResultUnit> toDelete = iModel.getObjects(selected);
+                e -> {
 
-                deleteSelectedResultUnits(toDelete);
-            }
-        });
+                        int[] selected = iTable.getSelectedRows();
+                        List<SSNewResultUnit> toDelete = iModel.getObjects(selected);
+
+                        deleteSelectedResultUnits(toDelete);
+
+                    });
         iToolBar.add(iButton);
         iToolBar.addSeparator();
         iTable.addSelectionDependentComponent(iButton);
@@ -141,16 +137,8 @@ public class SSResultUnitFrame extends SSDefaultTableFrame {
         SSMenuButton iButton2 = new SSMenuButton("ICON_PRINT",
                 "resultunitframe.printbutton");
 
-        iButton2.add("resultunitframe.print.resultunitrevenue", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                ResultUnitRevenueReport();
-            }
-        });
-        iButton2.add("resultunitframe.print.resultunitlist", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                printResultUnits();
-            }
-        });
+        iButton2.add("resultunitframe.print.resultunitrevenue", e -> ResultUnitRevenueReport());
+        iButton2.add("resultunitframe.print.resultunitlist", e -> printResultUnits());
         iToolBar.add(iButton2);
 
         return iToolBar;
@@ -173,25 +161,25 @@ public class SSResultUnitFrame extends SSDefaultTableFrame {
         iModel.setupTable(iTable);
 
         iTable.addDblClickListener(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSNewResultUnit iSelected = getSelected();
+                e -> {
 
-                if (iSelected == null) {
-                    return;
-                }
+                        SSNewResultUnit iSelected = getSelected();
 
-                String iNumber = iSelected.getNumber();
+                        if (iSelected == null) {
+                            return;
+                        }
 
-                iSelected = getResultUnit(iSelected);
-                if (iSelected != null) {
-                    SSResultUnitDialog.editDialog(getMainFrame(), iSelected, iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "resultunitframe.resultunitgone",
-                            iNumber);
-                }
-            }
-        });
+                        String iNumber = iSelected.getNumber();
+
+                        iSelected = getResultUnit(iSelected);
+                        if (iSelected != null) {
+                            SSResultUnitDialog.editDialog(getMainFrame(), iSelected, iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "resultunitframe.resultunitgone",
+                                    iNumber);
+                        }
+
+                    });
 
         JPanel iPanel = new JPanel();
 
@@ -320,11 +308,7 @@ public class SSResultUnitFrame extends SSDefaultTableFrame {
         final SSResultUnitRevenuePrinter iPrinter = new SSResultUnitRevenuePrinter(
                 iResultUnits, iFrom, iTo);
 
-        SSProgressDialog.runProgress(getMainFrame(), new Runnable() {
-            public void run() {
-                iPrinter.preview(getMainFrame());
-            }
-        });
+        SSProgressDialog.runProgress(getMainFrame(), () -> iPrinter.preview(getMainFrame()));
     }
 
     /**
@@ -358,11 +342,7 @@ public class SSResultUnitFrame extends SSDefaultTableFrame {
             iResultUnits = getResultUnits(iModel.getObjects(iTable.getSelectedRows()));
             iPrinter = new SSResultUnitPrinter(iResultUnits);
         }
-        SSProgressDialog.runProgress(getMainFrame(), new Runnable() {
-            public void run() {
-                iPrinter.preview(getMainFrame());
-            }
-        });
+        SSProgressDialog.runProgress(getMainFrame(), () -> iPrinter.preview(getMainFrame()));
 
     }
 

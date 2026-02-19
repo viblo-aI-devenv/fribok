@@ -41,7 +41,7 @@ public class SSAutoDist implements SSTableSearchable, Serializable {
      * Default constructor
      */
     public SSAutoDist() {
-        iRows = new LinkedList<SSAutoDistRow>();
+        iRows = new LinkedList<>();
         iAmount = new BigDecimal(0);
     }
 
@@ -50,7 +50,7 @@ public class SSAutoDist implements SSTableSearchable, Serializable {
      * @param iAccount
      */
     public SSAutoDist(SSAccount iAccount) {
-        iRows = new LinkedList<SSAutoDistRow>();
+        iRows = new LinkedList<>();
         iAmount = new BigDecimal(0);
         this.iAccount = iAccount;
         iAccountNumber = iAccount.getNumber();
@@ -88,7 +88,7 @@ public class SSAutoDist implements SSTableSearchable, Serializable {
         iAccount = iAutoDist.iAccount;
         iDescription = iAutoDist.iDescription;
         iAmount = iAutoDist.iAmount;
-        iRows = new LinkedList<SSAutoDistRow>();
+        iRows = new LinkedList<>();
 
         // Copy all rows
         for (SSAutoDistRow iRow : iAutoDist.iRows) {
@@ -139,7 +139,7 @@ public class SSAutoDist implements SSTableSearchable, Serializable {
      */
     public List<SSAutoDistRow> getRows() {
         if (iRows == null) {
-            iRows = new LinkedList<SSAutoDistRow>();
+            iRows = new LinkedList<>();
         }
         return iRows;
     }

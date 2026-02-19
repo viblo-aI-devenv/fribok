@@ -131,10 +131,10 @@ public class SSPickingslipPrinter extends SSPrinter {
         addParameter("subreport.parameters", iPrinter.getParameters());
         addParameter("subreport.datasource", iPrinter.getDataSource());
 
-        SSDefaultTableModel<SSOrder> iModel = new SSDefaultTableModel<SSOrder>() {
+        SSDefaultTableModel<SSOrder> iModel = new SSDefaultTableModel<>() {
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSOrder.class;
             }
 
@@ -179,10 +179,10 @@ public class SSPickingslipPrinter extends SSPrinter {
         protected SSDefaultTableModel getModel() {
             final List<SSProduct> iProducts = SSDB.getInstance().getProducts();
 
-            SSDefaultTableModel<SSSaleRow> iModel = new SSDefaultTableModel<SSSaleRow>() {
+            SSDefaultTableModel<SSSaleRow> iModel = new SSDefaultTableModel<>() {
 
                 @Override
-                public Class getType() {
+                public Class<?> getType() {
                     return SSSaleRow.class;
                 }
 
@@ -246,42 +246,39 @@ public class SSPickingslipPrinter extends SSPrinter {
             iModel.addColumn("product.weight");
             iModel.addColumn("product.volume");
 
-            List<SSSaleRow> iRows = new LinkedList<SSSaleRow>(iOrder.getRows());
+            List<SSSaleRow> iRows = new LinkedList<>(iOrder.getRows());
 
             Collections.sort(iRows,
-                    new Comparator() {
-                public int compare(Object iRow1, Object iRow2) {
-                    SSSaleRow iSaleRow1 = (SSSaleRow) iRow1;
-                    SSSaleRow iSaleRow2 = (SSSaleRow) iRow2;
+                    (iSaleRow1, iSaleRow2) -> {
 
-                    SSProduct iProduct1 = SSDB.getInstance().getProduct(
-                            iSaleRow1.getProductNr());
-                    SSProduct iProduct2 = SSDB.getInstance().getProduct(
-                            iSaleRow2.getProductNr());
+                            SSProduct iProduct1 = SSDB.getInstance().getProduct(
+                                    iSaleRow1.getProductNr());
+                            SSProduct iProduct2 = SSDB.getInstance().getProduct(
+                                    iSaleRow2.getProductNr());
 
-                    if (iProduct1 != null && iProduct2 != null) {
-                        if (iProduct1.getWarehouseLocation() == null
-                                && iProduct2.getWarehouseLocation() == null) {
-                            return 0;
-                        } else if (iProduct1.getWarehouseLocation() != null
-                                && iProduct2.getWarehouseLocation() == null) {
-                            return 1;
-                        } else if (iProduct1.getWarehouseLocation() == null
-                                && iProduct2.getWarehouseLocation() != null) {
-                            return -1;
-                        } else {
-                            return iProduct1.getWarehouseLocation().compareTo(
-                                    iProduct2.getWarehouseLocation());
-                        }
-                    } else if (iProduct1 == null && iProduct2 == null) {
-                        return 0;
-                    } else if (iProduct1 != null) {
-                        return -1;
-                    } else {
-                        return 1;
-                    }
-                }
-            });
+                            if (iProduct1 != null && iProduct2 != null) {
+                                if (iProduct1.getWarehouseLocation() == null
+                                        && iProduct2.getWarehouseLocation() == null) {
+                                    return 0;
+                                } else if (iProduct1.getWarehouseLocation() != null
+                                        && iProduct2.getWarehouseLocation() == null) {
+                                    return 1;
+                                } else if (iProduct1.getWarehouseLocation() == null
+                                        && iProduct2.getWarehouseLocation() != null) {
+                                    return -1;
+                                } else {
+                                    return iProduct1.getWarehouseLocation().compareTo(
+                                            iProduct2.getWarehouseLocation());
+                                }
+                            } else if (iProduct1 == null && iProduct2 == null) {
+                                return 0;
+                            } else if (iProduct1 != null) {
+                                return -1;
+                            } else {
+                                return 1;
+                            }
+
+                        });
             iModel.setObjects(iRows);
 
             return iModel;

@@ -60,7 +60,7 @@ public class SSPurchaseOrderMath {
      * @return the order or null
      */
     public static List<SSPurchaseOrder> getOrdersForInvoice(List<SSPurchaseOrder> iOrders, SSSupplierInvoice iInvoice) {
-        List<SSPurchaseOrder> iFiltered = new LinkedList<SSPurchaseOrder>();
+        List<SSPurchaseOrder> iFiltered = new LinkedList<>();
 
         for (SSPurchaseOrder iOrder : iOrders) {
             if (iOrder.hasInvoice(iInvoice)) {
@@ -79,7 +79,7 @@ public class SSPurchaseOrderMath {
      */
     public static List<SSPurchaseOrder> getOrdersBySupplierNr(List<SSPurchaseOrder> iOrders, String iSupplierNr) {
 
-        List<SSPurchaseOrder> iFiltered = new LinkedList<SSPurchaseOrder>();
+        List<SSPurchaseOrder> iFiltered = new LinkedList<>();
 
         for (SSPurchaseOrder iOrder : iOrders) {
             if (iSupplierNr.equals(iOrder.getSupplierNr())) {
@@ -129,7 +129,7 @@ public class SSPurchaseOrderMath {
      */
     public static List<SSPurchaseOrder> getOrdersWithoutInvoice(List<SSPurchaseOrder> iPurchaseOrders) {
 
-        List<SSPurchaseOrder> iFiltered = new LinkedList<SSPurchaseOrder>();
+        List<SSPurchaseOrder> iFiltered = new LinkedList<>();
 
         for (SSPurchaseOrder iOrder : iPurchaseOrders) {
             if (!iOrder.hasInvoice()) {
@@ -179,9 +179,9 @@ public class SSPurchaseOrderMath {
     }
 
     public static Map<String, Integer> getStockInfluencing(List<SSPurchaseOrder> iPurchaseOrders) {
-        Map<String, Integer> iPurchaseOrderCount = new HashMap<String, Integer>();
-        List<String> iParcelProducts = new LinkedList<String>();
-        List<SSProduct> iProducts = new LinkedList<SSProduct>(
+        Map<String, Integer> iPurchaseOrderCount = new HashMap<>();
+        List<String> iParcelProducts = new LinkedList<>();
+        List<SSProduct> iProducts = new LinkedList<>(
                 SSDB.getInstance().getProducts());
 
         for (SSProduct iProduct : iProducts) {

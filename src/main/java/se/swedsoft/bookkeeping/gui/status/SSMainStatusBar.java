@@ -43,22 +43,22 @@ public class SSMainStatusBar {
         setYearText(/* SSDB.getInstance().getCurrentYear()*/null);
 
         SSDB.getInstance().addPropertyChangeListener("COMPANY",
-                new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent evt) {
-                SSNewCompany iCompany = (SSNewCompany) evt.getNewValue();
+                evt -> {
 
-                setCompanyText(iCompany);
+                        SSNewCompany iCompany = (SSNewCompany) evt.getNewValue();
 
-            }
-        });
+                        setCompanyText(iCompany);
+
+
+                    });
         SSDB.getInstance().addPropertyChangeListener("YEAR",
-                new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent evt) {
-                SSNewAccountingYear iAccountingYear = (SSNewAccountingYear) evt.getNewValue();
+                evt -> {
 
-                setYearText(iAccountingYear);
-            }
-        });
+                        SSNewAccountingYear iAccountingYear = (SSNewAccountingYear) evt.getNewValue();
+
+                        setYearText(iAccountingYear);
+
+                    });
 
         /* SSMemoryWarning.setPercentageUsageThreshold(0.80);
 
@@ -69,28 +69,28 @@ public class SSMainStatusBar {
          //SSBackup iBackup = SSBackupFactory.createBackup(iFile.getAbsolutePath());
          //SSBackupDatabase.getInstance().getBackups().add(iBackup);
          SSBackupDatabase.getInstance().notifyUpdated();
-         Thread blink = new Thread(new Runnable(){
-         public void run() {
-         while (true) {
+         Thread blink = new Thread(() -> {
 
-         iMemLabel.setText("<html><b>Minnesanvändning hög. Starta om programmet!</b></html>");
+                 while (true) {
 
-         iMemLabel.setForeground(Color.RED);
-         iMemLabel.setVisible(true);
-         try {
-         Thread.sleep(1000);
-         } catch (InterruptedException e) {
-         e.printStackTrace();
-         }
-         iMemLabel.setVisible(false);
-         try {
-         Thread.sleep(1000);
-         } catch (InterruptedException e) {
-         e.printStackTrace();
-         }
-         }
-         }
-         });
+                 iMemLabel.setText("<html><b>Minnesanvändning hög. Starta om programmet!</b></html>");
+
+                 iMemLabel.setForeground(Color.RED);
+                 iMemLabel.setVisible(true);
+                 try {
+                 Thread.sleep(1000);
+                 } catch (InterruptedException e) {
+                 e.printStackTrace();
+                 }
+                 iMemLabel.setVisible(false);
+                 try {
+                 Thread.sleep(1000);
+                 } catch (InterruptedException e) {
+                 e.printStackTrace();
+                 }
+                 }
+
+             });
          blink.start();
 
          /*iMemLabel.setText("Minnesanvändning hög. Starta om programmet!");

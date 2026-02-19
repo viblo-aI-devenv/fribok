@@ -55,8 +55,8 @@ public class SSInvoiceDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        final ActionListener iSaveAction = e -> {
+
                 SSInvoice iInvoice = iPanel.getInvoice();
 
                 SSDB.getInstance().addInvoice(iInvoice);
@@ -71,17 +71,17 @@ public class SSInvoiceDialog {
 
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        });
+
+            });
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override
@@ -127,13 +127,13 @@ public class SSInvoiceDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSInvoice iInvoice = iPanel.getInvoice();
+        final ActionListener iSaveAction = e -> {
 
-                SSDB.getInstance().updateInvoice(iInvoice);
+                SSInvoice iInvoice1 = iPanel.getInvoice();
+
+                SSDB.getInstance().updateInvoice(iInvoice1);
                 if (iPanel.doSaveCustomerAndProducts()) {
-                    SSInvoiceMath.addCustomerAndProducts(iInvoice);
+                    SSInvoiceMath.addCustomerAndProducts(iInvoice1);
                 }
 
                 if (pModel != null) {
@@ -143,18 +143,18 @@ public class SSInvoiceDialog {
                 SSPostLock.removeLock(lockString);
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 SSPostLock.removeLock(lockString);
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        });
+
+            });
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override
@@ -210,14 +210,14 @@ public class SSInvoiceDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSInvoice iInvoice = iPanel.getInvoice();
+        final ActionListener iSaveAction = e -> {
 
-                SSDB.getInstance().addInvoice(iInvoice);
+                SSInvoice iInvoice1 = iPanel.getInvoice();
+
+                SSDB.getInstance().addInvoice(iInvoice1);
 
                 if (iPanel.doSaveCustomerAndProducts()) {
-                    SSInvoiceMath.addCustomerAndProducts(iInvoice);
+                    SSInvoiceMath.addCustomerAndProducts(iInvoice1);
                 }
 
                 if (pModel != null) {
@@ -226,21 +226,21 @@ public class SSInvoiceDialog {
 
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 // SSInvoice iInvoice = iPanel.getInvoice();
                 // remove all references for the sales
                 // SSOrderMath.removeReference(iInvoice);
 
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        });
+
+            });
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override
@@ -295,22 +295,22 @@ public class SSInvoiceDialog {
         // iPanel.setOrderNumbers(iOrders);
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSInvoice iInvoice = iPanel.getInvoice();
+        final ActionListener iSaveAction = e -> {
 
-                SSDB.getInstance().addInvoice(iInvoice);
+                SSInvoice iInvoice1 = iPanel.getInvoice();
+
+                SSDB.getInstance().addInvoice(iInvoice1);
 
                 for (SSOrder iOrder : iOrders) {
                     // Set the invoice for the order
                     if (SSDB.getInstance().getOrders().contains(iOrder)) {
-                        iOrder.setInvoice(iInvoice);
+                        iOrder.setInvoice(iInvoice1);
                         SSDB.getInstance().updateOrder(iOrder);
                     }
                 }
 
                 if (iPanel.doSaveCustomerAndProducts()) {
-                    SSInvoiceMath.addCustomerAndProducts(iInvoice);
+                    SSInvoiceMath.addCustomerAndProducts(iInvoice1);
                 }
 
                 // if (pModel != null) pModel.fireTableDataChanged();
@@ -318,13 +318,13 @@ public class SSInvoiceDialog {
                 iPanel.dispose();
                 SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 iDialog.closeDialog();
                 // SSInvoice iInvoice = iPanel.getInvoice();
                 // remove all references for the sales
@@ -333,8 +333,8 @@ public class SSInvoiceDialog {
                 SSPostLock.removeLock(lockString);
 
                 iPanel.dispose();
-            }
-        });
+
+            });
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override

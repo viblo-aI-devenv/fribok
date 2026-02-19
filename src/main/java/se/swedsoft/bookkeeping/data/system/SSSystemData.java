@@ -27,8 +27,8 @@ public class SSSystemData implements Serializable {
      *
      */
     public SSSystemData() {
-        iCompanies = new LinkedList<SSSystemCompany>();
-        iAccountPlans = new LinkedList<SSAccountPlan>();
+        iCompanies = new LinkedList<>();
+        iAccountPlans = new LinkedList<>();
 
     }
 

@@ -80,12 +80,12 @@ public class SSInventoryBasisPrinter extends SSPrinter {
     protected SSDefaultTableModel getModel() {
         addParameter("image.check", SSImage.getImage("CHECK"));
 
-        SSDefaultTableModel<SSProduct> iModel = new SSDefaultTableModel<SSProduct>() {
+        SSDefaultTableModel<SSProduct> iModel = new SSDefaultTableModel<>() {
 
             DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSAccount.class;
             }
 
@@ -136,30 +136,26 @@ public class SSInventoryBasisPrinter extends SSPrinter {
         iModel.addColumn("product.stockquantity");
         iModel.addColumn("product.warehouselocation");
 
-        /* Collections.sort(iProducts, new Comparator<SSProduct>() {
-         public int compare(SSProduct o1, SSProduct o2) {
-         return o1.getNumber().compareTo( o2.getNumber() );
-         }
-         });*/
+        /* Collections.sort(iProducts, (o1, o2) -> o1.getNumber().compareTo( o2.getNumber() ));*/
 
         Collections.sort(iProducts,
-                new Comparator<SSProduct>() {
-            public int compare(SSProduct iProduct1, SSProduct iProduct2) {
-                if (iProduct1.getWarehouseLocation() == null
-                        && iProduct2.getWarehouseLocation() == null) {
-                    return 0;
-                } else if (iProduct1.getWarehouseLocation() != null
-                        && iProduct2.getWarehouseLocation() == null) {
-                    return 1;
-                } else if (iProduct1.getWarehouseLocation() == null
-                        && iProduct2.getWarehouseLocation() != null) {
-                    return -1;
-                } else {
-                    return iProduct1.getWarehouseLocation().compareTo(
-                            iProduct2.getWarehouseLocation());
-                }
-            }
-        });
+                (iProduct1, iProduct2) -> {
+
+                        if (iProduct1.getWarehouseLocation() == null
+                                && iProduct2.getWarehouseLocation() == null) {
+                            return 0;
+                        } else if (iProduct1.getWarehouseLocation() != null
+                                && iProduct2.getWarehouseLocation() == null) {
+                            return 1;
+                        } else if (iProduct1.getWarehouseLocation() == null
+                                && iProduct2.getWarehouseLocation() != null) {
+                            return -1;
+                        } else {
+                            return iProduct1.getWarehouseLocation().compareTo(
+                                    iProduct2.getWarehouseLocation());
+                        }
+
+                    });
 
         iModel.setObjects(iProducts);
 

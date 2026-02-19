@@ -44,14 +44,14 @@ public class SSPurchaseOrderTableModel extends SSTableModel<SSPurchaseOrder> {
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSPurchaseOrder.class;
     }
 
     /**
      *  Utskriven
      */
-    public static SSTableColumn<SSPurchaseOrder> COLUMN_PRINTED = new SSTableColumn<SSPurchaseOrder>(
+    public static SSTableColumn<SSPurchaseOrder> COLUMN_PRINTED = new SSTableColumn<>(
             "") {
         @Override
         public Object getValue(SSPurchaseOrder iPurchaseOrder) {
@@ -77,7 +77,7 @@ public class SSPurchaseOrderTableModel extends SSTableModel<SSPurchaseOrder> {
     /**
      * Number column
      */
-    public static SSTableColumn<SSPurchaseOrder> COLUMN_NUMBER = new SSTableColumn<SSPurchaseOrder>(
+    public static SSTableColumn<SSPurchaseOrder> COLUMN_NUMBER = new SSTableColumn<>(
             "Ordernr") {
         @Override
         public Object getValue(SSPurchaseOrder iObject) {
@@ -101,7 +101,7 @@ public class SSPurchaseOrderTableModel extends SSTableModel<SSPurchaseOrder> {
     /**
      * Supplier nr
      */
-    public static SSTableColumn<SSPurchaseOrder> COLUMN_SUPPLIER_NR = new SSTableColumn<SSPurchaseOrder>(
+    public static SSTableColumn<SSPurchaseOrder> COLUMN_SUPPLIER_NR = new SSTableColumn<>(
             "Leverantörsnummer") {
         @Override
         public Object getValue(SSPurchaseOrder iObject) {
@@ -125,7 +125,7 @@ public class SSPurchaseOrderTableModel extends SSTableModel<SSPurchaseOrder> {
     /**
      * Supplier name
      */
-    public static SSTableColumn<SSPurchaseOrder> COLUMN_SUPPLIER_NAME = new SSTableColumn<SSPurchaseOrder>(
+    public static SSTableColumn<SSPurchaseOrder> COLUMN_SUPPLIER_NAME = new SSTableColumn<>(
             "Leverantörsnamn") {
         @Override
         public Object getValue(SSPurchaseOrder iObject) {
@@ -151,7 +151,7 @@ public class SSPurchaseOrderTableModel extends SSTableModel<SSPurchaseOrder> {
     /**
      * Date column
      */
-    public static SSTableColumn<SSPurchaseOrder> COLUMN_DATE = new SSTableColumn<SSPurchaseOrder>(
+    public static SSTableColumn<SSPurchaseOrder> COLUMN_DATE = new SSTableColumn<>(
             "Inköpsdatum") {
         @Override
         public Object getValue(SSPurchaseOrder iObject) {
@@ -176,7 +176,7 @@ public class SSPurchaseOrderTableModel extends SSTableModel<SSPurchaseOrder> {
     /**
      * Sum column
      */
-    public static SSTableColumn<SSPurchaseOrder> COLUMN_SUM = new SSTableColumn<SSPurchaseOrder>(
+    public static SSTableColumn<SSPurchaseOrder> COLUMN_SUM = new SSTableColumn<>(
             "Belopp") {
         @Override
         public Object getValue(SSPurchaseOrder iObject) {
@@ -201,7 +201,7 @@ public class SSPurchaseOrderTableModel extends SSTableModel<SSPurchaseOrder> {
     /**
      * Currency column
      */
-    public static SSTableColumn<SSPurchaseOrder> COLUMN_CURRENCY = new SSTableColumn<SSPurchaseOrder>(
+    public static SSTableColumn<SSPurchaseOrder> COLUMN_CURRENCY = new SSTableColumn<>(
             "Valuta") {
         @Override
         public Object getValue(SSPurchaseOrder iObject) {
@@ -225,7 +225,7 @@ public class SSPurchaseOrderTableModel extends SSTableModel<SSPurchaseOrder> {
 
     /** * EstimatedDelivery column
      */
-    public static SSTableColumn<SSPurchaseOrder> COLUMN_ESTIMATED_DELIVERY = new SSTableColumn<SSPurchaseOrder>(
+    public static SSTableColumn<SSPurchaseOrder> COLUMN_ESTIMATED_DELIVERY = new SSTableColumn<>(
             "Beräknad leverans") {
         @Override
         public Object getValue(SSPurchaseOrder iObject) {
@@ -250,7 +250,7 @@ public class SSPurchaseOrderTableModel extends SSTableModel<SSPurchaseOrder> {
     /**
      * Faktura
      */
-    public static SSTableColumn<SSPurchaseOrder> COLUMN_INVOICE = new SSTableColumn<SSPurchaseOrder>(
+    public static SSTableColumn<SSPurchaseOrder> COLUMN_INVOICE = new SSTableColumn<>(
             SSBundle.getBundle().getString("purchaseordertable.column.8")) {
         @Override
         public Object getValue(SSPurchaseOrder iOrder) {

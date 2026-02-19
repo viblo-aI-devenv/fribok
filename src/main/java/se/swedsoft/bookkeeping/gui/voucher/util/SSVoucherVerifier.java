@@ -50,7 +50,7 @@ public class SSVoucherVerifier  implements PropertyChangeListener, TableModelLis
      */
     public SSVoucherVerifier(JComponent... pComponents) {
         iVoucher = null;
-        iComponents = new LinkedList<JComponent>();
+        iComponents = new LinkedList<>();
         iError = null;
         iOnUpdate = null;
         iValid = false;
@@ -65,7 +65,7 @@ public class SSVoucherVerifier  implements PropertyChangeListener, TableModelLis
      */
     public SSVoucherVerifier(SSVoucher pVoucher, JComponent... pComponents) {
         iVoucher = pVoucher;
-        iComponents = new LinkedList<JComponent>();
+        iComponents = new LinkedList<>();
         iError = null;
         iOnUpdate = null;
 

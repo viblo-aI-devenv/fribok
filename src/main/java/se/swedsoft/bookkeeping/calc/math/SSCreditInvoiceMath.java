@@ -7,6 +7,7 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -39,7 +40,7 @@ public class SSCreditInvoiceMath extends SSInvoiceMath {
     }
 
     public static HashMap<Integer, BigDecimal> getSumsForInvoices() {
-        HashMap<Integer, BigDecimal> iSums = new HashMap<Integer, BigDecimal>();
+        HashMap<Integer, BigDecimal> iSums = new HashMap<>();
 
         List<SSCreditInvoice> iCreditInvoices = SSDB.getInstance().getCreditInvoices();
 
@@ -59,7 +60,7 @@ public class SSCreditInvoiceMath extends SSInvoiceMath {
     }
 
     public static HashMap<Integer, BigDecimal> getSumsForInvoices(Date iDate) {
-        HashMap<Integer, BigDecimal> iSums = new HashMap<Integer, BigDecimal>();
+        HashMap<Integer, BigDecimal> iSums = new HashMap<>();
 
         List<SSCreditInvoice> iCreditInvoices = SSDB.getInstance().getCreditInvoices();
 
@@ -125,15 +126,9 @@ public class SSCreditInvoiceMath extends SSInvoiceMath {
      * @return list of credit invoices
      */
     public static List<SSCreditInvoice> getCreditInvoicesForInvoice(List<SSCreditInvoice> iCreditInvoices, SSInvoice iInvoice) {
-        List<SSCreditInvoice> iFiltered = new LinkedList<SSCreditInvoice>();
-
-        for (SSCreditInvoice iCreditInvoice : iCreditInvoices) {
-            if (iCreditInvoice.isCrediting(iInvoice)) {
-                iFiltered.add(iCreditInvoice);
-            }
-
-        }
-        return iFiltered;
+        return iCreditInvoices.stream()
+                .filter(iCreditInvoice -> iCreditInvoice.isCrediting(iInvoice))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -156,27 +151,21 @@ public class SSCreditInvoiceMath extends SSInvoiceMath {
      * @return the credit invoices for the customer
      */
     public static List<SSCreditInvoice> getCreditInvoicesForCustomer(List<SSCreditInvoice> iCreditInvoices, SSCustomer iCustomer) {
-        List<SSCreditInvoice> iFiltered = new LinkedList<SSCreditInvoice>();
-
-        for (SSCreditInvoice iCreditInvoice : iCreditInvoices) {
-            if (iCreditInvoice.hasCustomer(iCustomer)) {
-                iFiltered.add(iCreditInvoice);
-            }
-
-        }
-        return iFiltered;
+        return iCreditInvoices.stream()
+                .filter(iCreditInvoice -> iCreditInvoice.hasCustomer(iCustomer))
+                .collect(Collectors.toList());
     }
 
     public static Map<String, List<SSCreditInvoice>> getCreditInvoicesforCustomers() {
         List<SSCreditInvoice> iCreditInvoices = SSDB.getInstance().getCreditInvoices();
-        Map<String, List<SSCreditInvoice>> iMap = new HashMap<String, List<SSCreditInvoice>>();
+        Map<String, List<SSCreditInvoice>> iMap = new HashMap<>();
 
         for (SSCreditInvoice iCreditInvoice : iCreditInvoices) {
             if (iCreditInvoice.getCustomerNr() != null) {
                 if (iMap.containsKey(iCreditInvoice.getCustomerNr())) {
                     iMap.get(iCreditInvoice.getCustomerNr()).add(iCreditInvoice);
                 } else {
-                    List<SSCreditInvoice> iTemp = new LinkedList<SSCreditInvoice>();
+                    List<SSCreditInvoice> iTemp = new LinkedList<>();
 
                     iTemp.add(iCreditInvoice);
                     iMap.put(iCreditInvoice.getCustomerNr(), iTemp);

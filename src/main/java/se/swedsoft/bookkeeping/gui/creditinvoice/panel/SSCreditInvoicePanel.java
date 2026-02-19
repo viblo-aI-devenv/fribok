@@ -163,11 +163,7 @@ public class SSCreditInvoicePanel {
         iModel.addColumn(SSInvoiceRowTableModel.COLUMN_RESULTUNIT, true);
         iModel.setupTable(iTable);
 
-        iModel.addTableModelListener(new TableModelListener() {
-            public void tableChanged(TableModelEvent e) {
-                updateSumFields();
-            }
-        });
+        iModel.addTableModelListener(e -> updateSumFields());
         iVoucherTableModel = new SSVoucherRowTableModelOld(false, true);
 
         iVoucherTable.setModel(iVoucherTableModel);
@@ -179,7 +175,7 @@ public class SSCreditInvoicePanel {
         iCustomer.setAllowCustomValues(true);
 
         iCustomer.addSelectionListener(
-                new SSSelectionListener<SSCustomer>() {
+                new SSSelectionListener<>() {
             public void selected(SSCustomer selected) {
                 if (selected != null) {
                     iModel.setCustomer(selected);
@@ -256,49 +252,49 @@ public class SSCreditInvoicePanel {
         iPaymentTerm.getComboBox().setSearchColumns(0);
         iPaymentTerm.setEditingFactory(SSPaymentTermTableModel.getEditingFactory(iOwner));
 
-        iTaxRate1.addPropertyChangeListener("value", new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent evt) {
+        iTaxRate1.addPropertyChangeListener("value", evt -> {
+
                 // Momssats 1
                 iCreditInvoice.setTaxRate1(iTaxRate1.getValue());
 
                 updateTaxTexts();
                 updateSumFields();
-            }
-        });
-        iTaxRate2.addPropertyChangeListener("value", new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent evt) {
+
+            });
+        iTaxRate2.addPropertyChangeListener("value", evt -> {
+
                 // Momssats 2
                 iCreditInvoice.setTaxRate2(iTaxRate2.getValue());
 
                 updateTaxTexts();
                 updateSumFields();
-            }
-        });
-        iTaxRate3.addPropertyChangeListener("value", new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent evt) {
+
+            });
+        iTaxRate3.addPropertyChangeListener("value", evt -> {
+
                 // Momssats
                 iCreditInvoice.setTaxRate3(iTaxRate3.getValue());
 
                 updateTaxTexts();
                 updateSumFields();
-            }
-        });
-        iTaxFree.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+
+            });
+        iTaxFree.addActionListener(e -> {
+
                 // Momsfritt
                 iCreditInvoice.setTaxFree(iTaxFree.isSelected());
 
                 updateSumFields();
-            }
-        });
 
-        iRefreshVoucher.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            });
+
+        iRefreshVoucher.addActionListener(e -> {
+
                 SSVoucher iVoucher = iCreditInvoice.generateVoucher();
 
                 iVoucherTableModel.setVoucher(iVoucher);
-            }
-        });
+
+            });
 
         iInputVerifier = new SSInputVerifier();
 
@@ -595,21 +591,13 @@ public class SSCreditInvoicePanel {
 
     public void addKeyListeners() {
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                iCustomerName.requestFocusInWindow();
-            }
-        });
+        SwingUtilities.invokeLater(() -> iCustomerName.requestFocusInWindow());
 
         iCustomerName.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iOurContactPerson.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iOurContactPerson.requestFocusInWindow());
                 }
             }
         });
@@ -618,11 +606,7 @@ public class SSCreditInvoicePanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iYourContactPerson.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iYourContactPerson.requestFocusInWindow());
                 }
             }
         });
@@ -631,11 +615,7 @@ public class SSCreditInvoicePanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iDate.getEditor().getComponent(0).requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iDate.getEditor().getComponent(0).requestFocusInWindow());
                 }
             }
         });
@@ -645,11 +625,7 @@ public class SSCreditInvoicePanel {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     SwingUtilities.invokeLater(
-                            new Runnable() {
-                        public void run() {
-                            iDeliveryTerm.getComboBox().getComponent(0).requestFocusInWindow();
-                        }
-                    });
+                            () -> iDeliveryTerm.getComboBox().getComponent(0).requestFocusInWindow());
                 }
             }
         });
@@ -659,11 +635,7 @@ public class SSCreditInvoicePanel {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     SwingUtilities.invokeLater(
-                            new Runnable() {
-                        public void run() {
-                            iPaymentTerm.getComboBox().getComponent(0).requestFocusInWindow();
-                        }
-                    });
+                            () -> iPaymentTerm.getComboBox().getComponent(0).requestFocusInWindow());
                 }
             }
         });
@@ -673,11 +645,7 @@ public class SSCreditInvoicePanel {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     SwingUtilities.invokeLater(
-                            new Runnable() {
-                        public void run() {
-                            iDeliveryWay.getComboBox().getComponent(0).requestFocusInWindow();
-                        }
-                    });
+                            () -> iDeliveryWay.getComboBox().getComponent(0).requestFocusInWindow());
                 }
             }
         });
@@ -686,12 +654,12 @@ public class SSCreditInvoicePanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
+                    SwingUtilities.invokeLater(() -> {
+
                             iTable.requestFocusInWindow();
                             iTable.changeSelection(0, 0, false, false);
-                        }
-                    });
+
+                        });
                 }
             }
         });
@@ -700,11 +668,7 @@ public class SSCreditInvoicePanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iButtonPanel.getCancelButton().requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iButtonPanel.getCancelButton().requestFocusInWindow());
                 }
             }
         });
@@ -713,11 +677,7 @@ public class SSCreditInvoicePanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iButtonPanel.getOkButton().requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iButtonPanel.getOkButton().requestFocusInWindow());
                 }
             }
         });
@@ -725,11 +685,7 @@ public class SSCreditInvoicePanel {
         iNumber.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
-                        iCustomerName.requestFocusInWindow();
-                    }
-                });
+                SwingUtilities.invokeLater(() -> iCustomerName.requestFocusInWindow());
             }
         });
 

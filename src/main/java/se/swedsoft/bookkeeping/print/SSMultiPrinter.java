@@ -51,7 +51,7 @@ public class SSMultiPrinter extends SSPrinter {
      *
      */
     public SSMultiPrinter() {
-        iSubReports = new LinkedList<SSSubReport>();
+        iSubReports = new LinkedList<>();
 
         setMargins(0, 0, 0, 0);
         setDetail("multireport.jrxml");
@@ -79,9 +79,9 @@ public class SSMultiPrinter extends SSPrinter {
     @Override
     protected SSDefaultTableModel getModel() {
 
-        SSDefaultTableModel <SSSubReport>iModel = new SSDefaultTableModel<SSSubReport>() {
+        SSDefaultTableModel <SSSubReport>iModel = new SSDefaultTableModel<>() {
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return String.class;
             }
 

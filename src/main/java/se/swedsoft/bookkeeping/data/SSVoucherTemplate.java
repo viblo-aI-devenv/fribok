@@ -40,7 +40,7 @@ public class SSVoucherTemplate implements Serializable, SSTableSearchable {
      * Default constructor.
      */
     public SSVoucherTemplate() {
-        iRows = new LinkedList<SSVoucherTemplateRow>();
+        iRows = new LinkedList<>();
         iDescription = null;
         iDate = new Date();
     }
@@ -54,7 +54,7 @@ public class SSVoucherTemplate implements Serializable, SSTableSearchable {
         iDescription = pVoucher.getDescription();
         iDate = new Date();
 
-        iRows = new LinkedList<SSVoucherTemplateRow>();
+        iRows = new LinkedList<>();
 
         for (SSVoucherRow iVoucherRow: pVoucher.getRows()) {
             SSVoucherTemplateRow iTemplateRow = new SSVoucherTemplateRow();

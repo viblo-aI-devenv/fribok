@@ -34,14 +34,14 @@ public class SSPeriodicInvoiceTableModel extends SSTableModel<SSPeriodicInvoice>
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSPeriodicInvoice.class;
     }
 
     /**
      * Number column
      */
-    public static SSTableColumn<SSPeriodicInvoice> COLUMN_NUMBER = new SSTableColumn<SSPeriodicInvoice>(
+    public static SSTableColumn<SSPeriodicInvoice> COLUMN_NUMBER = new SSTableColumn<>(
             SSBundle.getBundle().getString("periodicinvoicetable.column.1")) {
         @Override
         public Object getValue(SSPeriodicInvoice iObject) {
@@ -68,7 +68,7 @@ public class SSPeriodicInvoiceTableModel extends SSTableModel<SSPeriodicInvoice>
     /**
      * Description column
      */
-    public static SSTableColumn<SSPeriodicInvoice> COLUMN_DESCRIPTION = new SSTableColumn<SSPeriodicInvoice>(
+    public static SSTableColumn<SSPeriodicInvoice> COLUMN_DESCRIPTION = new SSTableColumn<>(
             SSBundle.getBundle().getString("periodicinvoicetable.column.2")) {
         @Override
         public Object getValue(SSPeriodicInvoice iObject) {
@@ -95,7 +95,7 @@ public class SSPeriodicInvoiceTableModel extends SSTableModel<SSPeriodicInvoice>
     /**
      * Date column
      */
-    public static SSTableColumn<SSPeriodicInvoice> COLUMN_DATE = new SSTableColumn<SSPeriodicInvoice>(
+    public static SSTableColumn<SSPeriodicInvoice> COLUMN_DATE = new SSTableColumn<>(
             SSBundle.getBundle().getString("periodicinvoicetable.column.3")) {
         @Override
         public Object getValue(SSPeriodicInvoice iObject) {
@@ -122,7 +122,7 @@ public class SSPeriodicInvoiceTableModel extends SSTableModel<SSPeriodicInvoice>
     /**
      * Date column
      */
-    public static SSTableColumn<SSPeriodicInvoice> COLUMN_NEXT = new SSTableColumn<SSPeriodicInvoice>(
+    public static SSTableColumn<SSPeriodicInvoice> COLUMN_NEXT = new SSTableColumn<>(
             SSBundle.getBundle().getString("periodicinvoicetable.column.4")) {
         @Override
         public Object getValue(SSPeriodicInvoice iObject) {
@@ -152,7 +152,7 @@ public class SSPeriodicInvoiceTableModel extends SSTableModel<SSPeriodicInvoice>
     /**
      *  Kund nummer
      */
-    public static SSTableColumn<SSPeriodicInvoice> COLUMN_CUSTOMER_NR = new SSTableColumn<SSPeriodicInvoice>(
+    public static SSTableColumn<SSPeriodicInvoice> COLUMN_CUSTOMER_NR = new SSTableColumn<>(
             SSBundle.getBundle().getString("invoicetable.column.3")) {
         @Override
         public Object getValue(SSPeriodicInvoice iInvoice) {
@@ -176,7 +176,7 @@ public class SSPeriodicInvoiceTableModel extends SSTableModel<SSPeriodicInvoice>
     /**
      *  Kund namn
      */
-    public static SSTableColumn<SSPeriodicInvoice> COLUMN_CUSTOMER_NAME = new SSTableColumn<SSPeriodicInvoice>(
+    public static SSTableColumn<SSPeriodicInvoice> COLUMN_CUSTOMER_NAME = new SSTableColumn<>(
             SSBundle.getBundle().getString("invoicetable.column.4")) {
         @Override
         public Object getValue(SSPeriodicInvoice iInvoice) {
@@ -200,7 +200,7 @@ public class SSPeriodicInvoiceTableModel extends SSTableModel<SSPeriodicInvoice>
     /**
      * Total summa
      */
-    public static SSTableColumn<SSPeriodicInvoice> COLUMN_TOTAL_SUM = new SSTableColumn<SSPeriodicInvoice>(
+    public static SSTableColumn<SSPeriodicInvoice> COLUMN_TOTAL_SUM = new SSTableColumn<>(
             SSBundle.getBundle().getString("invoicetable.column.10")) {
         @Override
         public Object getValue(SSPeriodicInvoice iInvoice) {
@@ -224,7 +224,7 @@ public class SSPeriodicInvoiceTableModel extends SSTableModel<SSPeriodicInvoice>
     /**
      * Valuta
      */
-    public static SSTableColumn<SSPeriodicInvoice> COLUMN_CURRENCY = new SSTableColumn<SSPeriodicInvoice>(
+    public static SSTableColumn<SSPeriodicInvoice> COLUMN_CURRENCY = new SSTableColumn<>(
             SSBundle.getBundle().getString("invoicetable.column.8")) {
         @Override
         public Object getValue(SSPeriodicInvoice iInvoice) {

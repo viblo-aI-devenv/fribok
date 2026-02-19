@@ -60,17 +60,9 @@ public class SSExportBGCAdmissionDialog extends SSDialog {
         iOurBankGiroNumber.setText(
                 SSDB.getInstance().getCurrentCompany().getBankGiroNumber());
 
-        iButtonPanel.addOkActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                closeDialog(JOptionPane.OK_OPTION);
-            }
-        });
+        iButtonPanel.addOkActionListener(e -> closeDialog(JOptionPane.OK_OPTION));
 
-        iButtonPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                closeDialog();
-            }
-        });
+        iButtonPanel.addCancelActionListener(e -> closeDialog());
 
 	getRootPane().setDefaultButton(iButtonPanel.getOkButton());
 

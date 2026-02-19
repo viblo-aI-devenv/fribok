@@ -45,7 +45,7 @@ public class SIEIterator implements Iterator<String> {
      */
     public SIEIterator(String... pValues) {
         iIndex = -1;
-        iValues = new LinkedList<String>();
+        iValues = new LinkedList<>();
         iValues.addAll(Arrays.asList(pValues));
     }
 
@@ -188,7 +188,7 @@ public class SIEIterator implements Iterator<String> {
     public List<String> nextArray() {
         String pLine = next();
 
-        List<String> iObjects = new LinkedList<String>();
+        List<String> iObjects = new LinkedList<>();
 
         for (int iIndex = 0; iIndex < pLine.length(); iIndex++) {
             char c = pLine.charAt(iIndex);
@@ -228,7 +228,7 @@ public class SIEIterator implements Iterator<String> {
             Integer iNumber = null;
 
             if (s.length() > 0) {
-                iNumber = new Integer(s);
+                iNumber = Integer.valueOf(s);
             }
             return iNumber;
         } catch (NumberFormatException e) {
@@ -243,7 +243,7 @@ public class SIEIterator implements Iterator<String> {
     public Float nextFloat() {
         Double iValue = nextDouble();
 
-        return new Float(iValue);
+        return iValue.floatValue();
     }
 
     /**
@@ -371,7 +371,7 @@ public class SIEIterator implements Iterator<String> {
      * @return
      */
     private List<String> parseLine(String pLine) {
-        List<String> iValues = new LinkedList<String>();
+        List<String> iValues = new LinkedList<>();
 
         for (int iIndex = 0; iIndex < pLine.length(); iIndex++) {
             char c = pLine.charAt(iIndex);

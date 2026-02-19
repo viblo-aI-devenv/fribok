@@ -44,14 +44,14 @@ public class SSOrderTableModel extends SSTableModel<SSOrder> {
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSOrder.class;
     }
 
     /**
      *  Utskriven
      */
-    public static SSTableColumn<SSOrder> COLUMN_PRINTED = new SSTableColumn<SSOrder>("") {
+    public static SSTableColumn<SSOrder> COLUMN_PRINTED = new SSTableColumn<>("") {
         @Override
         public Object getValue(SSOrder iOrder) {
             return iOrder.isPrinted()
@@ -76,7 +76,7 @@ public class SSOrderTableModel extends SSTableModel<SSOrder> {
     /**
      *  Ordernummer
      */
-    public static SSTableColumn<SSOrder> COLUMN_NUMBER = new SSTableColumn<SSOrder>(
+    public static SSTableColumn<SSOrder> COLUMN_NUMBER = new SSTableColumn<>(
             SSBundle.getBundle().getString("ordertable.column.1")) {
         @Override
         public Object getValue(SSOrder iOrder) {
@@ -103,7 +103,7 @@ public class SSOrderTableModel extends SSTableModel<SSOrder> {
     /**
      *  Kund nummer
      */
-    public static SSTableColumn<SSOrder> COLUMN_CUSTOMER_NR = new SSTableColumn<SSOrder>(
+    public static SSTableColumn<SSOrder> COLUMN_CUSTOMER_NR = new SSTableColumn<>(
             SSBundle.getBundle().getString("ordertable.column.2")) {
         @Override
         public Object getValue(SSOrder iInvoice) {
@@ -129,7 +129,7 @@ public class SSOrderTableModel extends SSTableModel<SSOrder> {
     /**
      *  Kund namn
      */
-    public static SSTableColumn<SSOrder> COLUMN_CUSTOMER_NAME = new SSTableColumn<SSOrder>(
+    public static SSTableColumn<SSOrder> COLUMN_CUSTOMER_NAME = new SSTableColumn<>(
             SSBundle.getBundle().getString("ordertable.column.3")) {
         @Override
         public Object getValue(SSOrder iInvoice) {
@@ -155,7 +155,7 @@ public class SSOrderTableModel extends SSTableModel<SSOrder> {
     /**
      * Datum
      */
-    public static SSTableColumn<SSOrder> COLUMN_DATE = new SSTableColumn<SSOrder>(
+    public static SSTableColumn<SSOrder> COLUMN_DATE = new SSTableColumn<>(
             SSBundle.getBundle().getString("ordertable.column.4")) {
         @Override
         public Object getValue(SSOrder iOrder) {
@@ -181,7 +181,7 @@ public class SSOrderTableModel extends SSTableModel<SSOrder> {
     /**
      * Nettosyumma
      */
-    public static SSTableColumn<SSOrder> COLUMN_NET_SUM = new SSTableColumn<SSOrder>(
+    public static SSTableColumn<SSOrder> COLUMN_NET_SUM = new SSTableColumn<>(
             SSBundle.getBundle().getString("ordertable.column.5")) {
         @Override
         public Object getValue(SSOrder iOrder) {
@@ -205,7 +205,7 @@ public class SSOrderTableModel extends SSTableModel<SSOrder> {
     /**
      * Valuta
      */
-    public static SSTableColumn<SSOrder> COLUMN_CURRENCY = new SSTableColumn<SSOrder>(
+    public static SSTableColumn<SSOrder> COLUMN_CURRENCY = new SSTableColumn<>(
             SSBundle.getBundle().getString("ordertable.column.6")) {
         @Override
         public Object getValue(SSOrder iOrder) {
@@ -231,7 +231,7 @@ public class SSOrderTableModel extends SSTableModel<SSOrder> {
     /**
      * Beräknad leverans
      */
-    public static SSTableColumn<SSOrder> COLUMN_ESTIMATED_DELIVERY = new SSTableColumn<SSOrder>(
+    public static SSTableColumn<SSOrder> COLUMN_ESTIMATED_DELIVERY = new SSTableColumn<>(
             SSBundle.getBundle().getString("ordertable.column.7")) {
         @Override
         public Object getValue(SSOrder iOrder) {
@@ -257,7 +257,7 @@ public class SSOrderTableModel extends SSTableModel<SSOrder> {
     /**
      * Faktura
      */
-    public static SSTableColumn<SSOrder> COLUMN_INVOICE = new SSTableColumn<SSOrder>(
+    public static SSTableColumn<SSOrder> COLUMN_INVOICE = new SSTableColumn<>(
             SSBundle.getBundle().getString("ordertable.column.8")) {
         @Override
         public Object getValue(SSOrder iOrder) {
@@ -288,7 +288,7 @@ public class SSOrderTableModel extends SSTableModel<SSOrder> {
     /**
      * Inköpsorder
      */
-    public static SSTableColumn<SSOrder> COLUMN_PURCHASEORDER = new SSTableColumn<SSOrder>(
+    public static SSTableColumn<SSOrder> COLUMN_PURCHASEORDER = new SSTableColumn<>(
             SSBundle.getBundle().getString("ordertable.column.9")) {
         @Override
         public Object getValue(SSOrder iOrder) {

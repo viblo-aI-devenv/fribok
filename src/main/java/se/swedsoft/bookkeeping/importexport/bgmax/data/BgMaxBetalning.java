@@ -39,7 +39,7 @@ public class BgMaxBetalning {
      *
      */
     public BgMaxBetalning() {
-        iReferenser = new LinkedList<BgMaxReferens>();
+        iReferenser = new LinkedList<>();
     }
 
     /**

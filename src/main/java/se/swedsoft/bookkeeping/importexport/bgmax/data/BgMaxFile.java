@@ -37,7 +37,7 @@ public class BgMaxFile {
      *
      */
     public BgMaxFile() {
-        iAvsnitts = new LinkedList<BgMaxAvsnitt>();
+        iAvsnitts = new LinkedList<>();
     }
 
     /**
@@ -49,7 +49,7 @@ public class BgMaxFile {
      * @throws SSImportException
      */
     public void parse(List<String> iLines) throws SSImportException {
-        iAvsnitts = new LinkedList<BgMaxAvsnitt>();
+        iAvsnitts = new LinkedList<>();
 
         if (iLines.size() < 1 || !isValid(iLines.get(0))) {
             throw new SSImportException(SSBundle.getBundle(),

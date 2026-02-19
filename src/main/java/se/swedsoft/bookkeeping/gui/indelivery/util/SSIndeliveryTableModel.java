@@ -40,14 +40,14 @@ public class SSIndeliveryTableModel extends SSTableModel<SSIndelivery> {
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSIndelivery.class;
     }
 
     /**
      *  Inventerings nummer
      */
-    public static SSTableColumn<SSIndelivery> COLUMN_NUMBER = new SSTableColumn<SSIndelivery>(
+    public static SSTableColumn<SSIndelivery> COLUMN_NUMBER = new SSTableColumn<>(
             SSBundle.getBundle().getString("indeliverytable.column.1")) {
         @Override
         public Object getValue(SSIndelivery iIndelivery) {
@@ -73,7 +73,7 @@ public class SSIndeliveryTableModel extends SSTableModel<SSIndelivery> {
     /**
      * Datum
      */
-    public static SSTableColumn<SSIndelivery> COLUMN_DATE = new SSTableColumn<SSIndelivery>(
+    public static SSTableColumn<SSIndelivery> COLUMN_DATE = new SSTableColumn<>(
             SSBundle.getBundle().getString("indeliverytable.column.2")) {
         @Override
         public Object getValue(SSIndelivery iIndelivery) {
@@ -99,7 +99,7 @@ public class SSIndeliveryTableModel extends SSTableModel<SSIndelivery> {
     /**
      * Text
      */
-    public static SSTableColumn<SSIndelivery> COLUMN_TEXT = new SSTableColumn<SSIndelivery>(
+    public static SSTableColumn<SSIndelivery> COLUMN_TEXT = new SSTableColumn<>(
             SSBundle.getBundle().getString("indeliverytable.column.3")) {
         @Override
         public Object getValue(SSIndelivery iIndelivery) {
@@ -125,7 +125,7 @@ public class SSIndeliveryTableModel extends SSTableModel<SSIndelivery> {
     /**
      * Totalt antal
      */
-    public static SSTableColumn<SSIndelivery> COLUMN_TOTALCOUNT = new SSTableColumn<SSIndelivery>(
+    public static SSTableColumn<SSIndelivery> COLUMN_TOTALCOUNT = new SSTableColumn<>(
             SSBundle.getBundle().getString("indeliverytable.column.4")) {
         @Override
         public Object getValue(SSIndelivery iIndelivery) {

@@ -56,19 +56,19 @@ public class SSPendingPeriodicInvoiceDialog extends SSDialog {
         iModel.setupTable(iTable);
         iModel.selectAll();
 
-        iButtonPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iButtonPanel.addCancelActionListener(e -> {
+
                 setModalResult(JOptionPane.CANCEL_OPTION);
                 setVisible(false);
-            }
-        });
 
-        iButtonPanel.addOkActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            });
+
+        iButtonPanel.addOkActionListener(e -> {
+
                 setModalResult(JOptionPane.OK_OPTION);
                 setVisible(false);
-            }
-        });
+
+            });
         iButtonPanel.getOkButton().setEnabled(!iInvoices.isEmpty());
 
         setPanel(iPanel);

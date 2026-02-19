@@ -45,25 +45,21 @@ public class SSOutdeliveryDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        iPanel.addOkActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSOutdelivery iOutdelivery = iPanel.getoutdelivery();
+        iPanel.addOkActionListener(e -> {
 
-                SSDB.getInstance().addOutdelivery(iOutdelivery);
+                SSOutdelivery iOutdelivery1 = iPanel.getoutdelivery();
+
+                SSDB.getInstance().addOutdelivery(iOutdelivery1);
 
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
                 }
 
                 iDialog.closeDialog();
-            }
-        });
 
-        iPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iDialog.closeDialog();
-            }
-        });
+            });
+
+        iPanel.addCancelActionListener(e -> iDialog.closeDialog());
 
         iDialog.addWindowListener(
                 new WindowAdapter() {
@@ -74,9 +70,9 @@ public class SSOutdeliveryDialog {
                         != JOptionPane.OK_OPTION) {
                     return;
                 }
-                SSOutdelivery iOutdelivery = iPanel.getoutdelivery();
+                SSOutdelivery iOutdelivery1 = iPanel.getoutdelivery();
 
-                SSDB.getInstance().addOutdelivery(iOutdelivery);
+                SSDB.getInstance().addOutdelivery(iOutdelivery1);
 
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
@@ -114,26 +110,26 @@ public class SSOutdeliveryDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        iPanel.addOkActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSOutdelivery iOutdelivery = iPanel.getoutdelivery();
+        iPanel.addOkActionListener(e -> {
 
-                SSDB.getInstance().updateOutdelivery(iOutdelivery);
+                SSOutdelivery iOutdelivery1 = iPanel.getoutdelivery();
+
+                SSDB.getInstance().updateOutdelivery(iOutdelivery1);
 
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
                 }
                 SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
-            }
-        });
 
-        iPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            });
+
+        iPanel.addCancelActionListener(e -> {
+
                 SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
-            }
-        });
+
+            });
 
         iDialog.addWindowListener(
                 new WindowAdapter() {
@@ -145,9 +141,9 @@ public class SSOutdeliveryDialog {
                     SSPostLock.removeLock(lockString);
                     return;
                 }
-                SSOutdelivery iOutdelivery = iPanel.getoutdelivery();
+                SSOutdelivery iOutdelivery1 = iPanel.getoutdelivery();
 
-                SSDB.getInstance().updateOutdelivery(iOutdelivery);
+                SSDB.getInstance().updateOutdelivery(iOutdelivery1);
 
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
@@ -188,25 +184,21 @@ public class SSOutdeliveryDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        iPanel.addOkActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSOutdelivery iOutdelivery = iPanel.getoutdelivery();
+        iPanel.addOkActionListener(e -> {
 
-                SSDB.getInstance().addOutdelivery(iOutdelivery);
+                SSOutdelivery iOutdelivery1 = iPanel.getoutdelivery();
+
+                SSDB.getInstance().addOutdelivery(iOutdelivery1);
 
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
                 }
 
                 iDialog.closeDialog();
-            }
-        });
 
-        iPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iDialog.closeDialog();
-            }
-        });
+            });
+
+        iPanel.addCancelActionListener(e -> iDialog.closeDialog());
 
         iDialog.addWindowListener(
                 new WindowAdapter() {
@@ -217,9 +209,9 @@ public class SSOutdeliveryDialog {
                         != JOptionPane.OK_OPTION) {
                     return;
                 }
-                SSOutdelivery iOutdelivery = iPanel.getoutdelivery();
+                SSOutdelivery iOutdelivery1 = iPanel.getoutdelivery();
 
-                SSDB.getInstance().addOutdelivery(iOutdelivery);
+                SSDB.getInstance().addOutdelivery(iOutdelivery1);
 
                 if (pModel != null) {
                     pModel.fireTableDataChanged();

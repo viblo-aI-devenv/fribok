@@ -171,10 +171,10 @@ public class SSVoucherEditors {
     }
 
     public static TableCellEditor createAccountEditor() {
-        SSDefaultTableModel<SSAccount> model = new SSDefaultTableModel<SSAccount>(
+        SSDefaultTableModel<SSAccount> model = new SSDefaultTableModel<>(
                 SSDB.getInstance().getCurrentYear().getActiveAccounts()) {
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSAccount.class;
             }
 
@@ -211,11 +211,11 @@ public class SSVoucherEditors {
 
     public static TableCellEditor createProjectEditor() {
 
-        SSDefaultTableModel<SSNewProject> model = new SSDefaultTableModel<SSNewProject>(
+        SSDefaultTableModel<SSNewProject> model = new SSDefaultTableModel<>(
                 SSDB.getInstance().getProjects()) {
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSNewProject.class;
             }
 
@@ -255,10 +255,10 @@ public class SSVoucherEditors {
     }
 
     public static TableCellEditor createResultUnitEditor() {
-        SSDefaultTableModel<SSNewResultUnit> model = new SSDefaultTableModel<SSNewResultUnit>(
+        SSDefaultTableModel<SSNewResultUnit> model = new SSDefaultTableModel<>(
                 SSDB.getInstance().getResultUnits()) {
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSNewResultUnit.class;
             }
 
@@ -356,7 +356,7 @@ public class SSVoucherEditors {
                 pTable.getColumnModel().getColumn(SSVoucherRowTableModelOld.COL_DESCRIPTION).setPreferredWidth(
                         376);
             }
-        } catch (Exception ignored) {}
+        } catch (ArrayIndexOutOfBoundsException ignored) {}
     }
 }
 

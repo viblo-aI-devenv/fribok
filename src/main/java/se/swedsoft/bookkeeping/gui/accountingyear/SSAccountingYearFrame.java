@@ -73,11 +73,7 @@ public class SSAccountingYearFrame extends SSDefaultTableFrame {
 
         if (pShowNewDialog) {
             SwingUtilities.invokeLater(
-                    new Runnable() {
-                public void run() {
-                    SSNewAccountingYearDialog.showDialog(pMainFrame, cInstance.getModel());
-                }
-            });
+                    () -> SSNewAccountingYearDialog.showDialog(pMainFrame, cInstance.getModel()));
         }
 
     }
@@ -125,11 +121,7 @@ public class SSAccountingYearFrame extends SSDefaultTableFrame {
         // Open
         // ***************************
         SSButton iButton = new SSButton("ICON_OPENITEM", "accountingyearframe.openbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                openSelectedAccountingYear();
-            }
-        });
+                e -> openSelectedAccountingYear());
 
         toolBar.add(iButton);
         toolBar.addSeparator();
@@ -138,34 +130,26 @@ public class SSAccountingYearFrame extends SSDefaultTableFrame {
         // New
         // ***************************
         iButton = new SSButton("ICON_NEWITEM", "accountingyearframe.newbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                updateFrame();
-                SSNewAccountingYearDialog.showDialog(getMainFrame(), iModel);
-                updateFrame();
-            }
-        });
+                e -> {
+
+                        updateFrame();
+                        SSNewAccountingYearDialog.showDialog(getMainFrame(), iModel);
+                        updateFrame();
+
+                    });
         iButton.setEnabled(true);
         toolBar.add(iButton);
         // Edit
         // ***************************
         iButton = new SSButton("ICON_EDITITEM", "accountingyearframe.editbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                editSelectedAccountingYear();
-            }
-        });
+                e -> editSelectedAccountingYear());
         toolBar.add(iButton);
         iTable.addSelectionDependentComponent(iButton);
 
         // Delete
         // ***************************
         iButton = new SSButton("ICON_DELETEITEM", "accountingyearframe.deletebutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                deleteSelectedAccountingYear();
-            }
-        });
+                e -> deleteSelectedAccountingYear());
         toolBar.add(iButton);
         iTable.addSelectionDependentComponent(iButton);
 
@@ -185,11 +169,7 @@ public class SSAccountingYearFrame extends SSDefaultTableFrame {
         // Get the objects.
         List<SSNewAccountingYear> iYears = SSDB.getInstance().getYears();
 
-        Collections.sort(iYears, new Comparator<SSNewAccountingYear>() {
-            public int compare(SSNewAccountingYear o1, SSNewAccountingYear o2) {
-                return o1.getFrom().compareTo(o2.getFrom());
-            }
-        });
+        Collections.sort(iYears, (o1, o2) -> o1.getFrom().compareTo(o2.getFrom()));
         iModel.setObjects(iYears);
 
         iTable = new SSTable();
@@ -204,11 +184,7 @@ public class SSAccountingYearFrame extends SSDefaultTableFrame {
         iTable.getColumnModel().getColumn(2).setPreferredWidth(70);
         iTable.getColumnModel().getColumn(3).setPreferredWidth(200);
 
-        iTable.addDblClickListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                openSelectedAccountingYear();
-            }
-        });
+        iTable.addDblClickListener(e -> openSelectedAccountingYear());
 
         JPanel iPanel = new JPanel();
 

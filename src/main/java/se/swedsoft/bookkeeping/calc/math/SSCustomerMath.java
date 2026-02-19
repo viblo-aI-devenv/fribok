@@ -45,14 +45,14 @@ public class SSCustomerMath {
 
     public static void getInvoicesForCustomers() {
         if (iInvoicesForCustomers == null) {
-            iInvoicesForCustomers = new HashMap<String, List<SSInvoice>>();
+            iInvoicesForCustomers = new HashMap<>();
         }
 
         List<SSCustomer> iCustomers = SSDB.getInstance().getCustomers();
 
         for (SSCustomer iCustomer:iCustomers) {
             List<SSInvoice> iInvoices = SSInvoiceMath.getInvoicesForCustomer(iCustomer);
-            List<SSInvoice> iInvoiceNumbers = new LinkedList<SSInvoice>();
+            List<SSInvoice> iInvoiceNumbers = new LinkedList<>();
 
             for (SSInvoice iInvoice:iInvoices) {
                 iInvoiceNumbers.add(iInvoice);

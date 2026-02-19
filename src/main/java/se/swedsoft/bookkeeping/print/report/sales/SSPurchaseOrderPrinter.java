@@ -132,10 +132,10 @@ public class SSPurchaseOrderPrinter extends SSPrinter {
         addParameter("subreport.parameters", iPrinter.getParameters());
         addParameter("subreport.datasource", iPrinter.getDataSource());
 
-        SSDefaultTableModel<SSPurchaseOrder> iModel = new SSDefaultTableModel<SSPurchaseOrder>() {
+        SSDefaultTableModel<SSPurchaseOrder> iModel = new SSDefaultTableModel<>() {
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSPurchaseOrder.class;
             }
 
@@ -178,10 +178,10 @@ public class SSPurchaseOrderPrinter extends SSPrinter {
          */
         @Override
         protected SSDefaultTableModel getModel() {
-            SSDefaultTableModel<SSPurchaseOrderRow> iModel = new SSDefaultTableModel<SSPurchaseOrderRow>() {
+            SSDefaultTableModel<SSPurchaseOrderRow> iModel = new SSDefaultTableModel<>() {
 
                 @Override
-                public Class getType() {
+                public Class<?> getType() {
                     return SSPurchaseOrderRow.class;
                 }
 

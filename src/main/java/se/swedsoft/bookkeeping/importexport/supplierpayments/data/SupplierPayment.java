@@ -235,7 +235,7 @@ public class SupplierPayment {
      * @return
      */
     public static List<SupplierPayment> getPayments(List<SupplierPayment> iPayments, String iCurrency) {
-        List<SupplierPayment> iFiltered = new LinkedList<SupplierPayment>();
+        List<SupplierPayment> iFiltered = new LinkedList<>();
 
         for (SupplierPayment iPayment : iPayments) {
             if (iCurrency.equals(iPayment.iCurrency)) {

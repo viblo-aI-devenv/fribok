@@ -28,7 +28,7 @@ public class SSOwnReportRow implements SSTableSearchable, Serializable {
     public SSOwnReportRow() {
         iType = null;
         iHeading = null;
-        iAccounts = new LinkedList<SSOwnReportAccountRow>();
+        iAccounts = new LinkedList<>();
     }
 
     public SSOwnReportRow(SSOwnReportRow iRow) {

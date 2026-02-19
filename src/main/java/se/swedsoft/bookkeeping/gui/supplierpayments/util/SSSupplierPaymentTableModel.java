@@ -23,6 +23,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -38,23 +39,21 @@ public class SSSupplierPaymentTableModel extends SSTableModel<SupplierPayment> {
      * @param iSupplierInvoices The data for the table model.
      */
     public SSSupplierPaymentTableModel(List<SSSupplierInvoice> iSupplierInvoices) {
-        List<SupplierPayment> iPayments = new LinkedList<SupplierPayment>();
-
-        for (SSSupplierInvoice iSupplierInvoice : iSupplierInvoices) {
-            iPayments.add(new SupplierPayment(iSupplierInvoice));
-        }
+        List<SupplierPayment> iPayments = iSupplierInvoices.stream()
+                .map(SupplierPayment::new)
+                .collect(Collectors.toList());
         setObjects(iPayments);
     }
 
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SupplierPayment.class;
     }
 
     /**
      * Number
      */
-    public static SSTableColumn<SupplierPayment> COLUMN_NUMBER = new SSTableColumn<SupplierPayment>(
+    public static SSTableColumn<SupplierPayment> COLUMN_NUMBER = new SSTableColumn<>(
             SSBundle.getBundle().getString("supplierpaymenttable.column.1")) {
         @Override
         public Object getValue(SupplierPayment iPayment) {
@@ -80,7 +79,7 @@ public class SSSupplierPaymentTableModel extends SSTableModel<SupplierPayment> {
     /**
      * Supplier nr
      */
-    public static SSTableColumn<SupplierPayment> COLUMN_SUPPLIER_NUMBER = new SSTableColumn<SupplierPayment>(
+    public static SSTableColumn<SupplierPayment> COLUMN_SUPPLIER_NUMBER = new SSTableColumn<>(
             SSBundle.getBundle().getString("supplierpaymenttable.column.2")) {
         @Override
         public Object getValue(SupplierPayment iPayment) {
@@ -106,7 +105,7 @@ public class SSSupplierPaymentTableModel extends SSTableModel<SupplierPayment> {
     /**
      * Supplier name
      */
-    public static SSTableColumn<SupplierPayment> COLUMN_SUPPLIER_NAME = new SSTableColumn<SupplierPayment>(
+    public static SSTableColumn<SupplierPayment> COLUMN_SUPPLIER_NAME = new SSTableColumn<>(
             SSBundle.getBundle().getString("supplierpaymenttable.column.3")) {
         @Override
         public Object getValue(SupplierPayment iPayment) {
@@ -132,7 +131,7 @@ public class SSSupplierPaymentTableModel extends SSTableModel<SupplierPayment> {
     /**
      * Supplier name
      */
-    public static SSTableColumn<SupplierPayment> COLUMN_DATE = new SSTableColumn<SupplierPayment>(
+    public static SSTableColumn<SupplierPayment> COLUMN_DATE = new SSTableColumn<>(
             SSBundle.getBundle().getString("supplierpaymenttable.column.4")) {
         @Override
         public Object getValue(SupplierPayment iPayment) {
@@ -158,7 +157,7 @@ public class SSSupplierPaymentTableModel extends SSTableModel<SupplierPayment> {
     /**
      * Value
      */
-    public static SSTableColumn<SupplierPayment> COLUMN_VALUE = new SSTableColumn<SupplierPayment>(
+    public static SSTableColumn<SupplierPayment> COLUMN_VALUE = new SSTableColumn<>(
             SSBundle.getBundle().getString("supplierpaymenttable.column.5")) {
         @Override
         public Object getValue(SupplierPayment iPayment) {
@@ -185,7 +184,7 @@ public class SSSupplierPaymentTableModel extends SSTableModel<SupplierPayment> {
     /**
      *
      */
-    public static SSTableColumn<SupplierPayment> COLUMN_CURRENCY = new SSTableColumn<SupplierPayment>(
+    public static SSTableColumn<SupplierPayment> COLUMN_CURRENCY = new SSTableColumn<>(
             SSBundle.getBundle().getString("supplierpaymenttable.column.6")) {
         @Override
         public Object getValue(SupplierPayment iPayment) {
@@ -211,7 +210,7 @@ public class SSSupplierPaymentTableModel extends SSTableModel<SupplierPayment> {
     /**
      * Payment method
      */
-    public static SSTableColumn<SupplierPayment> COLUMN_PAYMENT_METHOD = new SSTableColumn<SupplierPayment>(
+    public static SSTableColumn<SupplierPayment> COLUMN_PAYMENT_METHOD = new SSTableColumn<>(
             SSBundle.getBundle().getString("supplierpaymenttable.column.7")) {
         @Override
         public Object getValue(SupplierPayment iPayment) {
@@ -249,7 +248,7 @@ public class SSSupplierPaymentTableModel extends SSTableModel<SupplierPayment> {
     /**
      * Account
      */
-    public static SSTableColumn<SupplierPayment> COLUMN_ACCOUNT = new SSTableColumn<SupplierPayment>(
+    public static SSTableColumn<SupplierPayment> COLUMN_ACCOUNT = new SSTableColumn<>(
             SSBundle.getBundle().getString("supplierpaymenttable.column.8")) {
         @Override
         public Object getValue(SupplierPayment iPayment) {
@@ -280,7 +279,7 @@ public class SSSupplierPaymentTableModel extends SSTableModel<SupplierPayment> {
     /**
      * Edit Supplier
      */
-    public static SSTableColumn<SupplierPayment> COLUMN_EDIT_SUPPLIER = new SSTableColumn<SupplierPayment>(
+    public static SSTableColumn<SupplierPayment> COLUMN_EDIT_SUPPLIER = new SSTableColumn<>(
             "") {
         @Override
         public Object getValue(SupplierPayment iPayment) {
@@ -418,17 +417,17 @@ public class SSSupplierPaymentTableModel extends SSTableModel<SupplierPayment> {
             JButton iButton = new JButton("..");
 
             iButton.addActionListener(
-                    new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    SSSupplierDialog.editDialog(SSMainFrame.getInstance(), iSupplier, null);
+                    e -> {
 
-                    TableModel iModel = iTable.getModel();
+                            SSSupplierDialog.editDialog(SSMainFrame.getInstance(), iSupplier, null);
 
-                    if (iModel instanceof AbstractTableModel) {
-                        ((AbstractTableModel) iModel).fireTableDataChanged();
-                    }
-                }
-            });
+                            TableModel iModel = iTable.getModel();
+
+                            if (iModel instanceof AbstractTableModel) {
+                                ((AbstractTableModel) iModel).fireTableDataChanged();
+                            }
+
+                        });
 
             return iButton;
         }

@@ -48,8 +48,8 @@ public class SSAccountPlanDialog {
         iPanel.setShowBase(false);
         // iPanel.setShowImport(false);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        final ActionListener iSaveAction = e -> {
+
                 SSAccountPlan iAccountPlan = iPanel.getAccountPlan();
 
                 List<SSAccountPlan> iPlans = SSDB.getInstance().getAccountPlans();
@@ -69,16 +69,12 @@ public class SSAccountPlanDialog {
                 }
 
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iDialog.closeDialog();
-            }
-        });
+        iPanel.addCancelAction(e -> iDialog.closeDialog());
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override
@@ -127,22 +123,22 @@ public class SSAccountPlanDialog {
         iPanel.setShowBase(false);
         // iPanel.setShowImport(false);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSAccountPlan iAccountPlan = iPanel.getAccountPlan();
+        final ActionListener iSaveAction = e -> {
+
+                SSAccountPlan iAccountPlan1 = iPanel.getAccountPlan();
 
                 List<SSAccountPlan> iPlans = SSDB.getInstance().getAccountPlans();
 
                 for (SSAccountPlan pAccountPlan : iPlans) {
-                    if (iAccountPlan.getName().equals(pAccountPlan.getName())
-                            && !iAccountPlan.getName().equals(iName)) {
+                    if (iAccountPlan1.getName().equals(pAccountPlan.getName())
+                            && !iAccountPlan1.getName().equals(iName)) {
                         new SSErrorDialog(iMainFrame, "accountplanframe.duplicate",
-                                iAccountPlan.getName());
+                                iAccountPlan1.getName());
                         return;
                     }
                 }
 
-                iOriginal.copyFrom(iAccountPlan);
+                iOriginal.copyFrom(iAccountPlan1);
                 SSDB.getInstance().updateAccountPlan(iOriginal);
 
                 if (iModel != null) {
@@ -150,17 +146,17 @@ public class SSAccountPlanDialog {
                 }
                 SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
-            }
-        });
+
+            });
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override
@@ -209,37 +205,33 @@ public class SSAccountPlanDialog {
         iPanel.setShowBase(false);
         // iPanel.setShowImport(false);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSAccountPlan iAccountPlan = iPanel.getAccountPlan();
+        final ActionListener iSaveAction = e -> {
+
+                SSAccountPlan iAccountPlan1 = iPanel.getAccountPlan();
 
                 List<SSAccountPlan> iPlans = SSDB.getInstance().getAccountPlans();
 
                 for (SSAccountPlan pAccountPlan : iPlans) {
-                    if (iAccountPlan.getName().equals(pAccountPlan.getName())) {
+                    if (iAccountPlan1.getName().equals(pAccountPlan.getName())) {
                         new SSErrorDialog(iMainFrame, "accountplanframe.duplicate",
-                                iAccountPlan.getName());
+                                iAccountPlan1.getName());
                         return;
                     }
                 }
 
-                SSDB.getInstance().addAccountPlan(iAccountPlan);
+                SSDB.getInstance().addAccountPlan(iAccountPlan1);
 
                 if (iModel != null) {
                     iModel.fireTableDataChanged();
                 }
 
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iDialog.closeDialog();
-            }
-        });
+        iPanel.addCancelAction(e -> iDialog.closeDialog());
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override
@@ -287,13 +279,13 @@ public class SSAccountPlanDialog {
         iPanel.setShowBase(true);
         // iPanel.setShowImport(true);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSAccountPlan iAccountPlan = iPanel.getAccountPlan();
+        final ActionListener iSaveAction = e -> {
+
+                SSAccountPlan iAccountPlan1 = iPanel.getAccountPlan();
 
                 SSNewAccountingYear iCurrentYear = SSDB.getInstance().getCurrentYear();
 
-                iCurrentYear.setAccountPlan(iAccountPlan);
+                iCurrentYear.setAccountPlan(iAccountPlan1);
                 SSDB.getInstance().updateAccountingYear(iCurrentYear);
 
                 if (iModel != null) {
@@ -301,17 +293,17 @@ public class SSAccountPlanDialog {
                 }
                 SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
-            }
-        });
+
+            });
 
         iDialog.addWindowListener(
                 new WindowAdapter() {

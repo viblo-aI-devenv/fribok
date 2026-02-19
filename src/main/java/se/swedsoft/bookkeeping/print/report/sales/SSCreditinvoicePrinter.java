@@ -218,10 +218,10 @@ public class SSCreditinvoicePrinter extends SSPrinter {
         addParameter("subreport.parameters", iPrinter.getParameters());
         addParameter("subreport.datasource", iPrinter.getDataSource());
 
-        SSDefaultTableModel<SSInvoice> iModel = new SSDefaultTableModel<SSInvoice>() {
+        SSDefaultTableModel<SSInvoice> iModel = new SSDefaultTableModel<>() {
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSInvoice.class;
             }
 
@@ -264,10 +264,10 @@ public class SSCreditinvoicePrinter extends SSPrinter {
          */
         @Override
         protected SSDefaultTableModel getModel() {
-            SSDefaultTableModel<SSSaleRow> iModel = new SSDefaultTableModel<SSSaleRow>() {
+            SSDefaultTableModel<SSSaleRow> iModel = new SSDefaultTableModel<>() {
 
                 @Override
-                public Class getType() {
+                public Class<?> getType() {
                     return SSSaleRow.class;
                 }
 

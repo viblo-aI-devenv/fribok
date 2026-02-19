@@ -52,16 +52,8 @@ public class SSInventoryListDialog extends SSDialog {
 
         setPanel(iPanel);
 
-        iButtonPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setModalResult(JOptionPane.CANCEL_OPTION, true);
-            }
-        });
-        iButtonPanel.addOkActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setModalResult(JOptionPane.OK_OPTION, true);
-            }
-        });
+        iButtonPanel.addCancelActionListener(e -> setModalResult(JOptionPane.CANCEL_OPTION, true));
+        iButtonPanel.addOkActionListener(e -> setModalResult(JOptionPane.OK_OPTION, true));
 
 	getRootPane().setDefaultButton(iButtonPanel.getOkButton());
 
@@ -70,14 +62,14 @@ public class SSInventoryListDialog extends SSDialog {
         iProduct.setSearchColumns(0);
         iProduct.setSelected(iProduct.getFirst());
 
-        ChangeListener iChangeListener = new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
+        ChangeListener iChangeListener = e -> {
+
                 iProduct.setEnabled(iCheckProduct.isSelected());
 
                 iFromDate.setEnabled(iCheckDate.isSelected());
                 iToDate.setEnabled(iCheckDate.isSelected());
-            }
-        };
+
+            };
 
         iCheckDate.addChangeListener(iChangeListener);
         iCheckProduct.addChangeListener(iChangeListener);
@@ -106,7 +98,7 @@ public class SSInventoryListDialog extends SSDialog {
             final SSProduct iProduct = this.iProduct.getSelected();
 
             iInventories = SSFilterFactory.doFilter(iInventories,
-                    new SSFilter<SSInventory>() {
+                    new SSFilter<>() {
                 public boolean applyFilter(SSInventory iInventory) {
                     return  SSInventoryMath.hasProduct(iInventory, iProduct);
                 }
@@ -119,7 +111,7 @@ public class SSInventoryListDialog extends SSDialog {
             final Date iDateTo = iToDate.getDate();
 
             iInventories = SSFilterFactory.doFilter(iInventories,
-                    new SSFilter<SSInventory>() {
+                    new SSFilter<>() {
                 public boolean applyFilter(SSInventory iInventory) {
                     return SSInventoryMath.inPeriod(iInventory, iDateFrom, iDateTo);
                 }

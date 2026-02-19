@@ -94,10 +94,10 @@ public class SSSaleReportPrinter extends SSPrinter {
 
         calculate();
 
-        SSDefaultTableModel<SSProduct> iModel = new SSDefaultTableModel<SSProduct>() {
+        SSDefaultTableModel<SSProduct> iModel = new SSDefaultTableModel<>() {
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSProduct.class;
             }
 
@@ -188,8 +188,8 @@ public class SSSaleReportPrinter extends SSPrinter {
         iModel.addColumn("product.averagesellingprice");
 
         if (iSortingMode == SortingMode.Product) {
-            Collections.sort(iProducts, new Comparator<SSProduct>() {
-                public int compare(SSProduct iProduct1, SSProduct iProduct2) {
+            Collections.sort(iProducts, (iProduct1, iProduct2) -> {
+
                     String iNumber1 = iProduct1.getNumber();
                     String iNumber2 = iProduct2.getNumber();
 
@@ -202,13 +202,13 @@ public class SSSaleReportPrinter extends SSPrinter {
                     } else {
                         return iNumber2.compareTo(iNumber1);
                     }
-                }
-            });
+
+                });
         }
 
         if (iSortingMode == SortingMode.Period) {
-            Collections.sort(iProducts, new Comparator<SSProduct>() {
-                public int compare(SSProduct iProduct1, SSProduct iProduct2) {
+            Collections.sort(iProducts, (iProduct1, iProduct2) -> {
+
                     Integer iCount1 = iCount.get(iProduct1.getNumber());
                     Integer iCount2 = iCount.get(iProduct2.getNumber());
 
@@ -224,60 +224,60 @@ public class SSSaleReportPrinter extends SSPrinter {
                     } else {
                         return iCount2 - iCount1;
                     }
-                }
-            });
+
+                });
         }
 
         if (iSortingMode == SortingMode.ContributionRate) {
             Collections.sort(iProducts,
-                    new Comparator<SSProduct>() {
-                public int compare(SSProduct iProduct1, SSProduct iProduct2) {
-                    BigDecimal iContributionRate1 = iContributionRate.get(
-                            iProduct1.getNumber());
-                    BigDecimal iContributionRate2 = iContributionRate.get(
-                            iProduct2.getNumber());
+                    (iProduct1, iProduct2) -> {
 
-                    if (iContributionRate1 == null) {
-                        iContributionRate1 = new BigDecimal(0);
-                    }
-                    if (iContributionRate2 == null) {
-                        iContributionRate2 = new BigDecimal(0);
-                    }
+                            BigDecimal iContributionRate1 = iContributionRate.get(
+                                    iProduct1.getNumber());
+                            BigDecimal iContributionRate2 = iContributionRate.get(
+                                    iProduct2.getNumber());
 
-                    if (iAscending) {
-                        return iContributionRate1.compareTo(iContributionRate2);
-                    } else {
-                        return iContributionRate2.compareTo(iContributionRate1);
-                    }
+                            if (iContributionRate1 == null) {
+                                iContributionRate1 = new BigDecimal(0);
+                            }
+                            if (iContributionRate2 == null) {
+                                iContributionRate2 = new BigDecimal(0);
+                            }
 
-                }
-            });
+                            if (iAscending) {
+                                return iContributionRate1.compareTo(iContributionRate2);
+                            } else {
+                                return iContributionRate2.compareTo(iContributionRate1);
+                            }
+
+
+                        });
         }
 
         // Lite udda. Sorterar på Totalt Täckningsbidrag. Är felbenämt.
         if (iSortingMode == SortingMode.AverageSellingPrice) {
             Collections.sort(iProducts,
-                    new Comparator<SSProduct>() {
-                public int compare(SSProduct iProduct1, SSProduct iProduct2) {
-                    BigDecimal iAverageSellingPrice1 = iContribution.get(
-                            iProduct1.getNumber());
-                    BigDecimal iAverageSellingPrice2 = iContribution.get(
-                            iProduct2.getNumber());
+                    (iProduct1, iProduct2) -> {
 
-                    if (iAverageSellingPrice1 == null) {
-                        iAverageSellingPrice1 = new BigDecimal(0);
-                    }
-                    if (iAverageSellingPrice2 == null) {
-                        iAverageSellingPrice2 = new BigDecimal(0);
-                    }
+                            BigDecimal iAverageSellingPrice1 = iContribution.get(
+                                    iProduct1.getNumber());
+                            BigDecimal iAverageSellingPrice2 = iContribution.get(
+                                    iProduct2.getNumber());
 
-                    if (iAscending) {
-                        return iAverageSellingPrice1.compareTo(iAverageSellingPrice2);
-                    } else {
-                        return iAverageSellingPrice2.compareTo(iAverageSellingPrice1);
-                    }
-                }
-            });
+                            if (iAverageSellingPrice1 == null) {
+                                iAverageSellingPrice1 = new BigDecimal(0);
+                            }
+                            if (iAverageSellingPrice2 == null) {
+                                iAverageSellingPrice2 = new BigDecimal(0);
+                            }
+
+                            if (iAscending) {
+                                return iAverageSellingPrice1.compareTo(iAverageSellingPrice2);
+                            } else {
+                                return iAverageSellingPrice2.compareTo(iAverageSellingPrice1);
+                            }
+
+                        });
         }
         iModel.setObjects(iProducts);
 
@@ -289,20 +289,16 @@ public class SSSaleReportPrinter extends SSPrinter {
      */
     private void calculate() {
         iDays = SSDateMath.getDaysBetween(iFrom, iTo);
-        iCount = new HashMap<String, Integer>();
-        iContribution = new HashMap<String, BigDecimal>();
-        iContributionRate = new HashMap<String, BigDecimal>();
-        iAverageSellingPrice = new HashMap<String, BigDecimal>();
-        iInprices = new HashMap<String, BigDecimal>();
+        iCount = new HashMap<>();
+        iContribution = new HashMap<>();
+        iContributionRate = new HashMap<>();
+        iAverageSellingPrice = new HashMap<>();
+        iInprices = new HashMap<>();
 
-        List<SSSupplierInvoice> iSupplierInvoices = new LinkedList<SSSupplierInvoice>(
+        List<SSSupplierInvoice> iSupplierInvoices = new LinkedList<>(
                 SSDB.getInstance().getSupplierInvoices());
 
-        Collections.sort(iSupplierInvoices, new Comparator<SSSupplierInvoice>() {
-            public int compare(SSSupplierInvoice o1, SSSupplierInvoice o2) {
-                return o2.getDate().compareTo(o1.getDate());
-            }
-        });
+        Collections.sort(iSupplierInvoices, (o1, o2) -> o2.getDate().compareTo(o1.getDate()));
 
         for (SSSupplierInvoice iSupplierInvoice : iSupplierInvoices) {
             if (SSSupplierInvoiceMath.inPeriod(iSupplierInvoice, iTo)) {

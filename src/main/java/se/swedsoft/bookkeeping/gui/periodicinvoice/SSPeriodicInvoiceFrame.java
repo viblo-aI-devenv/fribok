@@ -93,57 +93,53 @@ public class SSPeriodicInvoiceFrame extends SSDefaultTableFrame {
         // New
         // ***************************
         SSButton iButton = new SSButton("ICON_NEWITEM", "periodicinvoiceframe.newbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSPeriodicInvoiceDialog.newDialog(getMainFrame(), iModel);
-            }
-        });
+                e -> SSPeriodicInvoiceDialog.newDialog(getMainFrame(), iModel));
 
         toolBar.add(iButton);
 
         // Edit
         // ***************************
         iButton = new SSButton("ICON_EDITITEM", "periodicinvoiceframe.editbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSPeriodicInvoice iSelected = iModel.getSelectedRow(iTable);
-                Integer iNumber = null;
+                e -> {
 
-                if (iSelected != null) {
-                    iNumber = iSelected.getNumber();
-                    iSelected = getPeriodicInvoice(iSelected);
-                }
-                if (iSelected != null) {
-                    SSPeriodicInvoiceDialog.editDialog(getMainFrame(), iSelected, iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "periodicinvoiceframe.invoicegone",
-                            iNumber);
-                }
-            }
-        });
+                        SSPeriodicInvoice iSelected = iModel.getSelectedRow(iTable);
+                        Integer iNumber = null;
+
+                        if (iSelected != null) {
+                            iNumber = iSelected.getNumber();
+                            iSelected = getPeriodicInvoice(iSelected);
+                        }
+                        if (iSelected != null) {
+                            SSPeriodicInvoiceDialog.editDialog(getMainFrame(), iSelected, iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "periodicinvoiceframe.invoicegone",
+                                    iNumber);
+                        }
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         toolBar.add(iButton);
 
         // Copy
         // ***************************
         iButton = new SSButton("ICON_COPYITEM", "periodicinvoiceframe.copybutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSPeriodicInvoice iSelected = iModel.getSelectedRow(iTable);
-                Integer iNumber = null;
+                e -> {
 
-                if (iSelected != null) {
-                    iNumber = iSelected.getNumber();
-                    iSelected = getPeriodicInvoice(iSelected);
-                }
-                if (iSelected != null) {
-                    SSPeriodicInvoiceDialog.copyDialog(getMainFrame(), iSelected, iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "periodicinvoiceframe.invoicegone",
-                            iNumber);
-                }
-            }
-        });
+                        SSPeriodicInvoice iSelected = iModel.getSelectedRow(iTable);
+                        Integer iNumber = null;
+
+                        if (iSelected != null) {
+                            iNumber = iSelected.getNumber();
+                            iSelected = getPeriodicInvoice(iSelected);
+                        }
+                        if (iSelected != null) {
+                            SSPeriodicInvoiceDialog.copyDialog(getMainFrame(), iSelected, iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "periodicinvoiceframe.invoicegone",
+                                    iNumber);
+                        }
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         toolBar.add(iButton);
         toolBar.addSeparator();
@@ -151,14 +147,14 @@ public class SSPeriodicInvoiceFrame extends SSDefaultTableFrame {
         // Delete
         // ***************************
         iButton = new SSButton("ICON_DELETEITEM", "periodicinvoiceframe.deletebutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                int[] selected = iTable.getSelectedRows();
-                List<SSPeriodicInvoice> toDelete = iModel.getObjects(selected);
+                e -> {
 
-                deleteSelectedInvoice(toDelete);
-            }
-        });
+                        int[] selected = iTable.getSelectedRows();
+                        List<SSPeriodicInvoice> toDelete = iModel.getObjects(selected);
+
+                        deleteSelectedInvoice(toDelete);
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         toolBar.add(iButton);
         toolBar.addSeparator();
@@ -166,23 +162,23 @@ public class SSPeriodicInvoiceFrame extends SSDefaultTableFrame {
         // List the invoices for this periodic invoice
         // ***************************
         iButton = new SSButton("ICON_TASKLIST24", "periodicinvoiceframe.invoicelistbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSPeriodicInvoice iSelected = iModel.getSelectedRow(iTable);
-                Integer iNumber = null;
+                e -> {
 
-                if (iSelected != null) {
-                    iNumber = iSelected.getNumber();
-                    iSelected = getPeriodicInvoice(iSelected);
-                }
-                if (iSelected != null) {
-                    SSListInvoicesPanel.showDialog(getMainFrame(), iSelected);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "periodicinvoiceframe.invoicegone",
-                            iNumber);
-                }
-            }
-        });
+                        SSPeriodicInvoice iSelected = iModel.getSelectedRow(iTable);
+                        Integer iNumber = null;
+
+                        if (iSelected != null) {
+                            iNumber = iSelected.getNumber();
+                            iSelected = getPeriodicInvoice(iSelected);
+                        }
+                        if (iSelected != null) {
+                            SSListInvoicesPanel.showDialog(getMainFrame(), iSelected);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "periodicinvoiceframe.invoicegone",
+                                    iNumber);
+                        }
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         toolBar.add(iButton);
         toolBar.addSeparator();
@@ -190,15 +186,15 @@ public class SSPeriodicInvoiceFrame extends SSDefaultTableFrame {
         // Create PeriodicInvoice for sales
         // ***************************
         iButton = new SSButton("ICON_CREATECHANGE", "periodicinvoiceframe.invoicebutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (SSPeriodicInvoiceDialog.pendingPeriodicInvoicesDialog(getMainFrame())) {
-                    SSPostLock.removeLock(
-                            "periodicinvoicepending"
-                                    + SSDB.getInstance().getCurrentCompany().getId());
-                }
-            }
-        });
+                e -> {
+
+                        if (SSPeriodicInvoiceDialog.pendingPeriodicInvoicesDialog(getMainFrame())) {
+                            SSPostLock.removeLock(
+                                    "periodicinvoicepending"
+                                            + SSDB.getInstance().getCurrentCompany().getId());
+                        }
+
+                    });
         toolBar.add(iButton);
 
         return toolBar;
@@ -227,25 +223,25 @@ public class SSPeriodicInvoiceFrame extends SSDefaultTableFrame {
         iModel.setupTable(iTable);
 
         iTable.addDblClickListener(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSPeriodicInvoice iSelected = iModel.getSelectedRow(iTable);
-                Integer iNumber;
+                e -> {
 
-                if (iSelected != null) {
-                    iNumber = iSelected.getNumber();
-                    iSelected = getPeriodicInvoice(iSelected);
-                } else {
-                    return;
-                }
-                if (iSelected != null) {
-                    SSPeriodicInvoiceDialog.editDialog(getMainFrame(), iSelected, iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "periodicinvoiceframe.invoicegone",
-                            iNumber);
-                }
-            }
-        });
+                        SSPeriodicInvoice iSelected = iModel.getSelectedRow(iTable);
+                        Integer iNumber;
+
+                        if (iSelected != null) {
+                            iNumber = iSelected.getNumber();
+                            iSelected = getPeriodicInvoice(iSelected);
+                        } else {
+                            return;
+                        }
+                        if (iSelected != null) {
+                            SSPeriodicInvoiceDialog.editDialog(getMainFrame(), iSelected, iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "periodicinvoiceframe.invoicegone",
+                                    iNumber);
+                        }
+
+                    });
 
         JPanel iPanel = new JPanel();
 
@@ -318,7 +314,7 @@ public class SSPeriodicInvoiceFrame extends SSDefaultTableFrame {
                             "periodicinvoiceframe.periodicinvoiceopen",
                             iPeriodicInvoice.getNumber());
                 } else {
-                    List<SSOrder> iOrdersToUpdate = new LinkedList<SSOrder>();
+                    List<SSOrder> iOrdersToUpdate = new LinkedList<>();
 
                     for (SSOrder iOrder : SSDB.getInstance().getOrders()) {
                         if (iOrder.hasPeriodicInvoice(iPeriodicInvoice)) {

@@ -46,8 +46,8 @@ public class SSTable extends JTable {
      * Default constructor.
      */
     public SSTable() {
-        iDblClickListeners = new LinkedList<ActionListener>();
-        iSelectionDependentComponents = new LinkedList<JComponent>();
+        iDblClickListeners = new LinkedList<>();
+        iSelectionDependentComponents = new LinkedList<>();
 
         // Show the lines.
         setShowHorizontalLines(true);
@@ -69,12 +69,7 @@ public class SSTable extends JTable {
                 }
             }
         });
-        addSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                updateSelectionDependentComponents();
-            }
-
-        });
+        addSelectionListener(e -> updateSelectionDependentComponents());
 
     }
 
@@ -212,9 +207,7 @@ public class SSTable extends JTable {
      *
      */
     private void notifyDblClickListeners() {
-        for (ActionListener iListener : iDblClickListeners) {
-            iListener.actionPerformed(null);
-        }
+        iDblClickListeners.forEach(iListener -> iListener.actionPerformed(null));
     }
 
     /**

@@ -34,7 +34,7 @@ public class SSWritableExcelSheet {
      * @return
      */
     public List<SSWritableExcelRow> getRows(int pCount) {
-        List<SSWritableExcelRow> iList = new LinkedList<SSWritableExcelRow>();
+        List<SSWritableExcelRow> iList = new LinkedList<>();
 
         for (int iRow = 0; iRow < pCount; iRow++) {
             iList.add(new SSWritableExcelRow(iSheet, iRow));

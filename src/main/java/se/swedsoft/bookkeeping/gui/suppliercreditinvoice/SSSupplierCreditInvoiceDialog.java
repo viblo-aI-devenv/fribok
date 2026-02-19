@@ -69,11 +69,11 @@ public class SSSupplierCreditInvoiceDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSSupplierCreditInvoice iSupplierCreditInvoice = iPanel.getSupplierCreditInvoice();
+        final ActionListener iSaveAction = e -> {
 
-                SSDB.getInstance().addSupplierCreditInvoice(iSupplierCreditInvoice);
+                SSSupplierCreditInvoice iSupplierCreditInvoice1 = iPanel.getSupplierCreditInvoice();
+
+                SSDB.getInstance().addSupplierCreditInvoice(iSupplierCreditInvoice1);
 
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
@@ -81,17 +81,17 @@ public class SSSupplierCreditInvoiceDialog {
 
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        });
+
+            });
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override
@@ -150,11 +150,11 @@ public class SSSupplierCreditInvoiceDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSSupplierCreditInvoice iSupplierCreditInvoice = iPanel.getSupplierCreditInvoice();
+        final ActionListener iSaveAction = e -> {
 
-                SSDB.getInstance().addSupplierCreditInvoice(iSupplierCreditInvoice);
+                SSSupplierCreditInvoice iSupplierCreditInvoice1 = iPanel.getSupplierCreditInvoice();
+
+                SSDB.getInstance().addSupplierCreditInvoice(iSupplierCreditInvoice1);
 
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
@@ -162,17 +162,17 @@ public class SSSupplierCreditInvoiceDialog {
 
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        });
+
+            });
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override
@@ -222,11 +222,11 @@ public class SSSupplierCreditInvoiceDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSSupplierCreditInvoice iSupplierCreditInvoice = iPanel.getSupplierCreditInvoice();
+        final ActionListener iSaveAction = e -> {
 
-                SSDB.getInstance().updateSupplierCreditInvoice(iSupplierCreditInvoice);
+                SSSupplierCreditInvoice iSupplierCreditInvoice1 = iPanel.getSupplierCreditInvoice();
+
+                SSDB.getInstance().updateSupplierCreditInvoice(iSupplierCreditInvoice1);
 
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
@@ -235,18 +235,18 @@ public class SSSupplierCreditInvoiceDialog {
                 SSPostLock.removeLock(lockString);
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 SSPostLock.removeLock(lockString);
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        });
+
+            });
 
         iDialog.addWindowListener(
                 new WindowAdapter() {
@@ -308,11 +308,11 @@ public class SSSupplierCreditInvoiceDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSSupplierCreditInvoice iSupplierCreditInvoice = iPanel.getSupplierCreditInvoice();
+        final ActionListener iSaveAction = e -> {
 
-                SSDB.getInstance().addSupplierCreditInvoice(iSupplierCreditInvoice);
+                SSSupplierCreditInvoice iSupplierCreditInvoice1 = iPanel.getSupplierCreditInvoice();
+
+                SSDB.getInstance().addSupplierCreditInvoice(iSupplierCreditInvoice1);
 
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
@@ -320,17 +320,17 @@ public class SSSupplierCreditInvoiceDialog {
 
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        });
+
+            });
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override

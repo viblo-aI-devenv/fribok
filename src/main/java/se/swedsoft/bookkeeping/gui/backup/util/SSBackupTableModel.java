@@ -33,14 +33,14 @@ public class SSBackupTableModel extends SSTableModel<SSBackup> {
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSBackup.class;
     }
 
     /**
      *  Date
      */
-    public static SSTableColumn<SSBackup> COLUMN_DATE = new SSTableColumn<SSBackup>(
+    public static SSTableColumn<SSBackup> COLUMN_DATE = new SSTableColumn<>(
             SSBundle.getBundle().getString("backuptable.column.1")) {
         @Override
         public Object getValue(SSBackup iBackup) {
@@ -73,7 +73,7 @@ public class SSBackupTableModel extends SSTableModel<SSBackup> {
     /**
      *  Date
      */
-    public static SSTableColumn<SSBackup> COLUMN_FILENAME = new SSTableColumn<SSBackup>(
+    public static SSTableColumn<SSBackup> COLUMN_FILENAME = new SSTableColumn<>(
             SSBundle.getBundle().getString("backuptable.column.2")) {
         @Override
         public Object getValue(SSBackup iBackup) {
@@ -97,7 +97,7 @@ public class SSBackupTableModel extends SSTableModel<SSBackup> {
     /**
      *  Type
      */
-    public static SSTableColumn<SSBackup> COLUMN_TYPE = new SSTableColumn<SSBackup>(
+    public static SSTableColumn<SSBackup> COLUMN_TYPE = new SSTableColumn<>(
             SSBundle.getBundle().getString("backuptable.column.3")) {
         @Override
         public Object getValue(SSBackup iBackup) {

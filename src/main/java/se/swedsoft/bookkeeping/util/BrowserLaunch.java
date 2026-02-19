@@ -63,7 +63,7 @@ public class BrowserLaunch {
                 Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + url);
             } else { // assume Unix
                 // hone BROWSER variable
-                List<String> browsers = new ArrayList<String>(10);
+                List<String> browsers = new ArrayList<>(10);
                 String env = System.getenv("BROWSER");
 
                 if (env != null) {

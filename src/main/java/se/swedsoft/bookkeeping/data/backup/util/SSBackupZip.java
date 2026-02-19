@@ -117,7 +117,7 @@ public class SSBackupZip {
         // Create an enumeration of the entries in the zip file
         Enumeration iEntries = zipFile.entries();
 
-        List<String> iFiles = new LinkedList<String>();
+        List<String> iFiles = new LinkedList<>();
 
         // Process each entry
         while (iEntries.hasMoreElements()) {

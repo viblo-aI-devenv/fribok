@@ -85,34 +85,30 @@ public class SSOutdeliveryFrame extends SSDefaultTableFrame {
         // New
         // ***************************
         SSButton iButton = new SSButton("ICON_NEWITEM", "outdeliveryframe.newbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSOutdeliveryDialog.newDialog(getMainFrame(), iModel);
-            }
-        });
+                e -> SSOutdeliveryDialog.newDialog(getMainFrame(), iModel));
 
         toolBar.add(iButton);
 
         // Edit
         // ***************************
         iButton = new SSButton("ICON_EDITITEM", "outdeliveryframe.editbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSOutdelivery iOutdelivery = iModel.getSelectedRow(iTable);
-                Integer iNumber = null;
+                e -> {
 
-                if (iOutdelivery != null) {
-                    iNumber = iOutdelivery.getNumber();
-                    iOutdelivery = getOutdelivery(iOutdelivery);
-                }
-                if (iOutdelivery != null) {
-                    SSOutdeliveryDialog.editDialog(getMainFrame(), iOutdelivery, iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "outdeliveryframe.outdeliverygone",
-                            iNumber);
-                }
-            }
-        });
+                        SSOutdelivery iOutdelivery = iModel.getSelectedRow(iTable);
+                        Integer iNumber = null;
+
+                        if (iOutdelivery != null) {
+                            iNumber = iOutdelivery.getNumber();
+                            iOutdelivery = getOutdelivery(iOutdelivery);
+                        }
+                        if (iOutdelivery != null) {
+                            SSOutdeliveryDialog.editDialog(getMainFrame(), iOutdelivery, iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "outdeliveryframe.outdeliverygone",
+                                    iNumber);
+                        }
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         toolBar.add(iButton);
         toolBar.addSeparator();
@@ -120,23 +116,23 @@ public class SSOutdeliveryFrame extends SSDefaultTableFrame {
         // Copy
         // ***************************
         iButton = new SSButton("ICON_COPYITEM", "outdeliveryframe.copybutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSOutdelivery iOutdelivery = iModel.getSelectedRow(iTable);
-                Integer iNumber = null;
+                e -> {
 
-                if (iOutdelivery != null) {
-                    iNumber = iOutdelivery.getNumber();
-                    iOutdelivery = getOutdelivery(iOutdelivery);
-                }
-                if (iOutdelivery != null) {
-                    SSOutdeliveryDialog.copyDialog(getMainFrame(), iOutdelivery, iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "outdeliveryframe.outdeliverygone",
-                            iNumber);
-                }
-            }
-        });
+                        SSOutdelivery iOutdelivery = iModel.getSelectedRow(iTable);
+                        Integer iNumber = null;
+
+                        if (iOutdelivery != null) {
+                            iNumber = iOutdelivery.getNumber();
+                            iOutdelivery = getOutdelivery(iOutdelivery);
+                        }
+                        if (iOutdelivery != null) {
+                            SSOutdeliveryDialog.copyDialog(getMainFrame(), iOutdelivery, iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "outdeliveryframe.outdeliverygone",
+                                    iNumber);
+                        }
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         toolBar.add(iButton);
         toolBar.addSeparator();
@@ -144,28 +140,24 @@ public class SSOutdeliveryFrame extends SSDefaultTableFrame {
         // Delete
         // ***************************
         iButton = new SSButton("ICON_DELETEITEM", "outdeliveryframe.deletebutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                int[] selected = iTable.getSelectedRows();
-                List<SSOutdelivery> toDelete = iModel.getObjects(selected);
+                e -> {
 
-                deleteSelected(toDelete);
-            }
-        });
+                        int[] selected = iTable.getSelectedRows();
+                        List<SSOutdelivery> toDelete = iModel.getObjects(selected);
+
+                        deleteSelected(toDelete);
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         toolBar.add(iButton);
         toolBar.addSeparator();
 
         // Print
         // ***************************
-        SSMenuButton<SSButton> iMenuButton = new SSMenuButton<SSButton>("ICON_PRINT",
+        SSMenuButton<SSButton> iMenuButton = new SSMenuButton<>("ICON_PRINT",
                 "outdeliveryframe.printbutton");
 
-        iMenuButton.add("outdeliveryframe.print.list", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSReportFactory.OutdeliveryList(getMainFrame());
-            }
-        });
+        iMenuButton.add("outdeliveryframe.print.list", e -> SSReportFactory.OutdeliveryList(getMainFrame()));
         toolBar.add(iMenuButton);
 
         return toolBar;
@@ -190,25 +182,25 @@ public class SSOutdeliveryFrame extends SSDefaultTableFrame {
         iModel.setupTable(iTable);
 
         iTable.addDblClickListener(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSOutdelivery iOutdelivery = iModel.getSelectedRow(iTable);
-                Integer iNumber;
+                e -> {
 
-                if (iOutdelivery != null) {
-                    iNumber = iOutdelivery.getNumber();
-                    iOutdelivery = getOutdelivery(iOutdelivery);
-                } else {
-                    return;
-                }
-                if (iOutdelivery != null) {
-                    SSOutdeliveryDialog.editDialog(getMainFrame(), iOutdelivery, iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "outdeliveryframe.outdeliverygone",
-                            iNumber);
-                }
-            }
-        });
+                        SSOutdelivery iOutdelivery = iModel.getSelectedRow(iTable);
+                        Integer iNumber;
+
+                        if (iOutdelivery != null) {
+                            iNumber = iOutdelivery.getNumber();
+                            iOutdelivery = getOutdelivery(iOutdelivery);
+                        } else {
+                            return;
+                        }
+                        if (iOutdelivery != null) {
+                            SSOutdeliveryDialog.editDialog(getMainFrame(), iOutdelivery, iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "outdeliveryframe.outdeliverygone",
+                                    iNumber);
+                        }
+
+                    });
 
         JPanel iPanel = new JPanel();
 

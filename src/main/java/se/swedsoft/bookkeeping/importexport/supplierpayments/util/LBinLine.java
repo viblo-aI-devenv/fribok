@@ -248,7 +248,7 @@ public class LBinLine {
         String iValue = readString(iStart, iEnd);
 
         try {
-            return new Integer(iValue);
+            return Integer.valueOf(iValue);
         } catch (NumberFormatException e) {
             return 0;
         }

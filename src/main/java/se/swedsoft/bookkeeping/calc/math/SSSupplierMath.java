@@ -46,7 +46,7 @@ public class SSSupplierMath {
 
     public static void getInvoicesForSuppliers() {
         if (iInvoicesForSuppliers == null) {
-            iInvoicesForSuppliers = new HashMap<String, List<SSSupplierInvoice>>();
+            iInvoicesForSuppliers = new HashMap<>();
         }
 
         List<SSSupplier> iSuppliers = SSDB.getInstance().getSuppliers();
@@ -54,7 +54,7 @@ public class SSSupplierMath {
         for (SSSupplier iSupplier:iSuppliers) {
             List<SSSupplierInvoice> iSupplierInvoices = SSSupplierInvoiceMath.getInvoicesForSupplier(
                     iSupplier);
-            List<SSSupplierInvoice> iInvoices = new LinkedList<SSSupplierInvoice>();
+            List<SSSupplierInvoice> iInvoices = new LinkedList<>();
 
             for (SSSupplierInvoice iSupplierInvoice:iSupplierInvoices) {
                 iInvoices.add(iSupplierInvoice);

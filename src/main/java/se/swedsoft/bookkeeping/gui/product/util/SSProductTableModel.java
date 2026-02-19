@@ -46,7 +46,7 @@ public class SSProductTableModel extends SSTableModel<SSProduct> {
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSProduct.class;
     }
 
@@ -98,7 +98,7 @@ public class SSProductTableModel extends SSTableModel<SSProduct> {
     /**
      *  Utskriven
      */
-    public static SSTableColumn<SSProduct> COLUMN_PARCEL = new SSTableColumn<SSProduct>("") {
+    public static SSTableColumn<SSProduct> COLUMN_PARCEL = new SSTableColumn<>("") {
         @Override
         public Object getValue(SSProduct iProduct) {
             return iProduct.isParcel()
@@ -123,7 +123,7 @@ public class SSProductTableModel extends SSTableModel<SSProduct> {
     /**
      *  Produkt nr
      */
-    public static SSTableColumn<SSProduct> COLUMN_NUMBER = new SSTableColumn<SSProduct>(
+    public static SSTableColumn<SSProduct> COLUMN_NUMBER = new SSTableColumn<>(
             SSBundle.getBundle().getString("producttable.column.1")) {
         @Override
         public Object getValue(SSProduct iProduct) {
@@ -150,7 +150,7 @@ public class SSProductTableModel extends SSTableModel<SSProduct> {
     /**
      *  Produkt nr
      */
-    public static SSTableColumn<SSProduct> COLUMN_DESCRIPTION = new SSTableColumn<SSProduct>(
+    public static SSTableColumn<SSProduct> COLUMN_DESCRIPTION = new SSTableColumn<>(
             SSBundle.getBundle().getString("producttable.column.2")) {
         @Override
         public Object getValue(SSProduct iProduct) {
@@ -177,7 +177,7 @@ public class SSProductTableModel extends SSTableModel<SSProduct> {
     /**
      *  Enhetspris
      */
-    public static SSTableColumn<SSProduct> COLUMN_PRICE = new SSTableColumn<SSProduct>(
+    public static SSTableColumn<SSProduct> COLUMN_PRICE = new SSTableColumn<>(
             SSBundle.getBundle().getString("producttable.column.3")) {
         @Override
         public Object getValue(SSProduct iProduct) {
@@ -204,7 +204,7 @@ public class SSProductTableModel extends SSTableModel<SSProduct> {
     /**
      *  Enhet
      */
-    public static SSTableColumn<SSProduct> COLUMN_UNIT = new SSTableColumn<SSProduct>(
+    public static SSTableColumn<SSProduct> COLUMN_UNIT = new SSTableColumn<>(
             SSBundle.getBundle().getString("producttable.column.4")) {
         @Override
         public Object getValue(SSProduct iProduct) {
@@ -231,7 +231,7 @@ public class SSProductTableModel extends SSTableModel<SSProduct> {
     /**
      *  Enhet
      */
-    public static SSTableColumn<SSProduct> COLUMN_WAREHOUSE_LOCATION = new SSTableColumn<SSProduct>(
+    public static SSTableColumn<SSProduct> COLUMN_WAREHOUSE_LOCATION = new SSTableColumn<>(
             SSBundle.getBundle().getString("producttable.column.5")) {
         @Override
         public Object getValue(SSProduct iProduct) {
@@ -261,7 +261,7 @@ public class SSProductTableModel extends SSTableModel<SSProduct> {
      * @return
      */
     public static SSTableColumn<SSProduct> getStockQuantityColumn(final SSStock iStock) {
-        return new SSTableColumn<SSProduct>(
+        return new SSTableColumn<>(
                 SSBundle.getBundle().getString("producttable.column.6")) {
             @Override
             public Object getValue(SSProduct iProduct) {
@@ -289,7 +289,7 @@ public class SSProductTableModel extends SSTableModel<SSProduct> {
     }
 
     public static SSTableColumn<SSProduct> getStockAvaiableColumn(final SSStock iStock) {
-        return new SSTableColumn<SSProduct>(
+        return new SSTableColumn<>(
                 SSBundle.getBundle().getString("producttable.column.7")) {
             @Override
             public Object getValue(SSProduct iProduct) {

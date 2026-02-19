@@ -124,10 +124,10 @@ public class SSMainBookPrinter extends SSPrinter {
         final Map<SSAccount, BigDecimal> iInBalance = iCalculator.getInBalance();
         final Map<SSAccount, BigDecimal> iInSaldo = iCalculator.getInSaldo();
 
-        SSDefaultTableModel<SSMainBookRow> iModel = new SSDefaultTableModel<SSMainBookRow>() {
+        SSDefaultTableModel<SSMainBookRow> iModel = new SSDefaultTableModel<>() {
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSAccount.class;
 
             }
@@ -230,11 +230,7 @@ public class SSMainBookPrinter extends SSPrinter {
         iModel.addColumn("voucherrow.credit");
         iModel.addColumn("voucherrow.sum");
 
-        Collections.sort(iRows, new Comparator<SSMainBookRow>() {
-            public int compare(SSMainBookRow o1, SSMainBookRow o2) {
-                return o1.getAccount().getNumber().compareTo(o2.getAccount().getNumber());
-            }
-        });
+        Collections.sort(iRows, (o1, o2) -> o1.getAccount().getNumber().compareTo(o2.getAccount().getNumber()));
 
         iModel.setObjects(iRows);
 

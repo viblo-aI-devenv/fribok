@@ -43,7 +43,7 @@ public class SSStatusBar extends JPanel {
      * and a flow layout.
      */
     public SSStatusBar() {
-        iPanels = new LinkedList<SSStatusBarPanel>();
+        iPanels = new LinkedList<>();
 
         Border iBorder = new StatusBorder();
 

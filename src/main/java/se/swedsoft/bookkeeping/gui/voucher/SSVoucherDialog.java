@@ -61,53 +61,53 @@ public class SSVoucherDialog {
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
         iPanel.addOkAction(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSVoucher iVoucher = iPanel.getVoucher();
+                e -> {
 
-                if (!iPanel.getDate().isInCurrentAccountYear()) {
-                    new SSErrorDialog(new JFrame(), "voucherpanel.badyear");
-                    iPanel.setVoucher(iVoucher, false, false);
-                    return;
-                }
+                        SSVoucher iVoucher = iPanel.getVoucher();
 
-                SSDB.getInstance().addVoucher(iVoucher, false);
+                        if (!iPanel.getDate().isInCurrentAccountYear()) {
+                            new SSErrorDialog(new JFrame(), "voucherpanel.badyear");
+                            iPanel.setVoucher(iVoucher, false, false);
+                            return;
+                        }
 
-                if (iPanel.isStoreAsTemplate()) {
-                    SSDB.getInstance().addVoucherTemplate(new SSVoucherTemplate(iVoucher));
-                }
+                        SSDB.getInstance().addVoucher(iVoucher, false);
 
-                if (pModel != null) {
-                    pModel.fireTableDataChanged();
-                }
+                        if (iPanel.isStoreAsTemplate()) {
+                            SSDB.getInstance().addVoucherTemplate(new SSVoucherTemplate(iVoucher));
+                        }
 
-                if (iPanel.doReopen()) {
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e1) {
-                        e1.printStackTrace();
-                    }
-                    iPanel.setVoucher(new SSVoucher(), false, false);
-                    return;
-                }
+                        if (pModel != null) {
+                            pModel.fireTableDataChanged();
+                        }
+
+                        if (iPanel.doReopen()) {
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException e1) {
+                                e1.printStackTrace();
+                            }
+                            iPanel.setVoucher(new SSVoucher(), false, false);
+                            return;
+                        }
+                        SSPostLock.removeLock(lockString);
+                        iDialog.closeDialog();
+
+                    });
+
+        iPanel.addCancelAction(e -> {
+
                 SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
-            }
-        });
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSPostLock.removeLock(lockString);
-                iDialog.closeDialog();
-            }
-        });
+            });
 
-        iPanel.addAddAccountAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addAddAccountAction(e -> {
+
                 SSAddAccountDialog.showDialog(iMainFrame);
                 iPanel.updateAccounts();
-            }
-        });
+
+            });
 
         iDialog.addWindowListener(
                 new WindowAdapter() {
@@ -170,52 +170,52 @@ public class SSVoucherDialog {
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
         iPanel.addOkAction(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSVoucher iVoucher = iPanel.getVoucher();
+                e -> {
 
-                if (!iPanel.getDate().isInCurrentAccountYear()) {
-                    new SSErrorDialog(new JFrame(), "voucherpanel.badyear");
-                    iPanel.setVoucher(iVoucher, true, true);
-                    return;
-                }
+                        SSVoucher iVoucher1 = iPanel.getVoucher();
 
-                SSDB.getInstance().updateVoucher(iVoucher);
+                        if (!iPanel.getDate().isInCurrentAccountYear()) {
+                            new SSErrorDialog(new JFrame(), "voucherpanel.badyear");
+                            iPanel.setVoucher(iVoucher1, true, true);
+                            return;
+                        }
 
-                if (iPanel.isStoreAsTemplate()) {
-                    SSDB.getInstance().addVoucherTemplate(new SSVoucherTemplate(iVoucher));
-                }
+                        SSDB.getInstance().updateVoucher(iVoucher1);
 
-                if (pModel != null) {
-                    pModel.fireTableDataChanged();
-                }
+                        if (iPanel.isStoreAsTemplate()) {
+                            SSDB.getInstance().addVoucherTemplate(new SSVoucherTemplate(iVoucher1));
+                        }
+
+                        if (pModel != null) {
+                            pModel.fireTableDataChanged();
+                        }
+                        SSPostLock.removeLock(lockString);
+                        iDialog.closeDialog();
+
+                        if (iPanel.doReopen()) {
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException e1) {
+                                e1.printStackTrace();
+                            }
+                            newDialog(iMainFrame, pModel);
+                        }
+
+                    });
+
+        iPanel.addCancelAction(e -> {
+
                 SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
 
-                if (iPanel.doReopen()) {
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e1) {
-                        e1.printStackTrace();
-                    }
-                    newDialog(iMainFrame, pModel);
-                }
-            }
-        });
+            });
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSPostLock.removeLock(lockString);
-                iDialog.closeDialog();
-            }
-        });
+        iPanel.addAddAccountAction(e -> {
 
-        iPanel.addAddAccountAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
                 SSAddAccountDialog.showDialog(iMainFrame);
                 iPanel.updateAccounts();
-            }
-        });
+
+            });
 
         iDialog.addWindowListener(
                 new WindowAdapter() {
@@ -294,7 +294,7 @@ public class SSVoucherDialog {
         if (iCopyReverse) {
             SSVoucherMath.copyRows(iVoucher, iNew, iCopyReverse);
         } else {
-            iNew.setVoucherRows(new LinkedList<SSVoucherRow>());
+            iNew.setVoucherRows(new LinkedList<>());
         }
 
         iNew.setDate(SSVoucherMath.getNextVoucherDate());
@@ -314,58 +314,58 @@ public class SSVoucherDialog {
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
         iPanel.addOkAction(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSVoucher iVoucher = iPanel.getVoucher();
+                e -> {
 
-                if (!iPanel.getDate().isInCurrentAccountYear()) {
-                    new SSErrorDialog(new JFrame(), "voucherpanel.badyear");
-                    iPanel.setVoucher(iVoucher, false, false);
-                    return;
-                }
+                        SSVoucher iVoucher1 = iPanel.getVoucher();
 
-                SSDB.getInstance().addVoucher(iVoucher, false);
+                        if (!iPanel.getDate().isInCurrentAccountYear()) {
+                            new SSErrorDialog(new JFrame(), "voucherpanel.badyear");
+                            iPanel.setVoucher(iVoucher1, false, false);
+                            return;
+                        }
 
-                if (iPanel.isStoreAsTemplate()) {
-                    SSDB.getInstance().addVoucherTemplate(new SSVoucherTemplate(iVoucher));
-                }
+                        SSDB.getInstance().addVoucher(iVoucher1, false);
 
-                iOriginal.setCorrectedBy(iVoucher);
+                        if (iPanel.isStoreAsTemplate()) {
+                            SSDB.getInstance().addVoucherTemplate(new SSVoucherTemplate(iVoucher1));
+                        }
 
-                SSDB.getInstance().updateVoucher(iOriginal);
+                        iOriginal.setCorrectedBy(iVoucher1);
 
-                if (pModel != null) {
-                    pModel.fireTableDataChanged();
-                }
+                        SSDB.getInstance().updateVoucher(iOriginal);
+
+                        if (pModel != null) {
+                            pModel.fireTableDataChanged();
+                        }
+                        SSPostLock.removeLock(lockString);
+                        SSPostLock.removeLock(lockString2);
+                        iDialog.closeDialog();
+
+                        if (iPanel.doReopen()) {
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException e1) {
+                                e1.printStackTrace();
+                            }
+                            newDialog(iMainFrame, pModel);
+                        }
+
+                    });
+
+        iPanel.addCancelAction(e -> {
+
                 SSPostLock.removeLock(lockString);
                 SSPostLock.removeLock(lockString2);
                 iDialog.closeDialog();
 
-                if (iPanel.doReopen()) {
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e1) {
-                        e1.printStackTrace();
-                    }
-                    newDialog(iMainFrame, pModel);
-                }
-            }
-        });
+            });
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSPostLock.removeLock(lockString);
-                SSPostLock.removeLock(lockString2);
-                iDialog.closeDialog();
-            }
-        });
+        iPanel.addAddAccountAction(e -> {
 
-        iPanel.addAddAccountAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
                 SSAddAccountDialog.showDialog(iMainFrame);
                 iPanel.updateAccounts();
-            }
-        });
+
+            });
 
         iDialog.addWindowListener(
                 new WindowAdapter() {

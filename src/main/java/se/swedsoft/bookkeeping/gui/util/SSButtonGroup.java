@@ -17,7 +17,7 @@ import java.util.List;
 public class SSButtonGroup implements ActionListener {
 
     // the list of buttons participating in this group
-    protected List<AbstractButton> iButtons = new LinkedList<AbstractButton>();
+    protected List<AbstractButton> iButtons = new LinkedList<>();
 
     protected boolean iAllowNoneSelected;
 

@@ -53,7 +53,7 @@ public class SSDefaultJasperDataSource implements JRRewindableDataSource {
 
         List<String> columns = iModel.getColumnNames();
 
-        iColumnIndices = new HashMap<String, Integer>(columns.size() << 1);
+        iColumnIndices = new HashMap<>(columns.size() << 1);
         for (int i = 0, size = columns.size(); i < size; i++) {
             iColumnIndices.put(columns.get(i), i);
         }

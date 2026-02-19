@@ -94,7 +94,7 @@ public class SSOwnReportAccountGroup {
      */
     public void addAccountGroup(SSOwnReportAccountGroup pAccountGroup) {
         if (iGroups == null) {
-            iGroups = new LinkedList<SSOwnReportAccountGroup>();
+            iGroups = new LinkedList<>();
         }
 
         iGroups.add(pAccountGroup);
@@ -144,7 +144,7 @@ public class SSOwnReportAccountGroup {
      */
 
     /* public List<SSAccount> getGroupAccounts(List<SSAccount> iAccounts){
-     List<SSAccount> iGroupAccounts = new LinkedList<SSAccount>();
+     List<SSAccount> iGroupAccounts = new LinkedList<>();
      for(SSAccount iAccount: iAccounts){
      if( iAccount.getNumber() >= getFromAccount() && iAccount.getNumber() <= getToAccount()  ){
      iGroupAccounts.add(iAccount);

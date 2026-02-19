@@ -62,14 +62,14 @@ public class SSTenderDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSTender iTender = iPanel.getTender();
+        final ActionListener iSaveAction = e -> {
 
-                SSDB.getInstance().addTender(iTender);
+                SSTender iTender1 = iPanel.getTender();
+
+                SSDB.getInstance().addTender(iTender1);
 
                 if (iPanel.doSaveCustomerAndProducts()) {
-                    SSTenderMath.addCustomerAndProducts(iTender);
+                    SSTenderMath.addCustomerAndProducts(iTender1);
                 }
 
                 if (pModel != null) {
@@ -77,17 +77,17 @@ public class SSTenderDialog {
                 }
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        });
+
+            });
 
         iDialog.addWindowListener(
                 new WindowAdapter() {
@@ -134,13 +134,13 @@ public class SSTenderDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSTender iTender = iPanel.getTender();
+        final ActionListener iSaveAction = e -> {
 
-                SSDB.getInstance().updateTender(iTender);
+                SSTender iTender1 = iPanel.getTender();
+
+                SSDB.getInstance().updateTender(iTender1);
                 if (iPanel.doSaveCustomerAndProducts()) {
-                    SSTenderMath.addCustomerAndProducts(iTender);
+                    SSTenderMath.addCustomerAndProducts(iTender1);
                 }
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
@@ -149,18 +149,18 @@ public class SSTenderDialog {
 
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 SSPostLock.removeLock(lockString);
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        });
+
+            });
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override
@@ -199,8 +199,8 @@ public class SSTenderDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        final ActionListener iSaveAction = e -> {
+
                 SSTender iTender = iPanel.getTender();
 
                 SSDB.getInstance().addTender(iTender);
@@ -211,17 +211,17 @@ public class SSTenderDialog {
 
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        });
+
+            });
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override

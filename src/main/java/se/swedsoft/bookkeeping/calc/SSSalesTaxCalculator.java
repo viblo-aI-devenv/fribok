@@ -244,7 +244,7 @@ public class SSSalesTaxCalculator {
      * @return
      */
     private List<SSVATReportGroup> createReportGroups() {
-        List<SSVATReportGroup> iReportGroups = new LinkedList<SSVATReportGroup>();
+        List<SSVATReportGroup> iReportGroups = new LinkedList<>();
 
         // Add the groups
         iReportGroups.add(new SSVATReportGroup(1, 11));
@@ -278,7 +278,7 @@ public class SSSalesTaxCalculator {
      * @return
      */
     private List<SSVATControlGroup> createControlGroups() {
-        List<SSVATControlGroup> iControlGroups = new LinkedList<SSVATControlGroup>();
+        List<SSVATControlGroup> iControlGroups = new LinkedList<>();
 
         // Add the three groups
         iControlGroups.add(new SSVATControlGroup(1));

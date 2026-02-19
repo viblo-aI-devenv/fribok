@@ -32,14 +32,14 @@ public class SSExportBGCAdmissionTableModel extends SSTableModel<SSCustomer> {
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSCustomer.class;
     }
 
     /**
      * customernumber
      */
-    public static SSTableColumn<SSCustomer> COLUMN_NUMBER = new SSTableColumn<SSCustomer>(
+    public static SSTableColumn<SSCustomer> COLUMN_NUMBER = new SSTableColumn<>(
             SSBundle.getBundle().getString("exportbgcadmission.column.1")) {
         @Override
         public Object getValue(SSCustomer iCustomer) {
@@ -63,7 +63,7 @@ public class SSExportBGCAdmissionTableModel extends SSTableModel<SSCustomer> {
     /**
      * Supplier nr
      */
-    public static SSTableColumn<SSCustomer> COLUMN_NAME = new SSTableColumn<SSCustomer>(
+    public static SSTableColumn<SSCustomer> COLUMN_NAME = new SSTableColumn<>(
             SSBundle.getBundle().getString("exportbgcadmission.column.2")) {
         @Override
         public Object getValue(SSCustomer iCustomer) {
@@ -87,7 +87,7 @@ public class SSExportBGCAdmissionTableModel extends SSTableModel<SSCustomer> {
     /**
      * Bankgiro
      */
-    public static SSTableColumn<SSCustomer> COLUMN_BANKGIRO = new SSTableColumn<SSCustomer>(
+    public static SSTableColumn<SSCustomer> COLUMN_BANKGIRO = new SSTableColumn<>(
             SSBundle.getBundle().getString("exportbgcadmission.column.3")) {
         @Override
         public Object getValue(SSCustomer iCustomer) {
@@ -111,7 +111,7 @@ public class SSExportBGCAdmissionTableModel extends SSTableModel<SSCustomer> {
     /**
      * Clearingnummer
      */
-    public static SSTableColumn<SSCustomer> COLUMN_CLEARINGNUMBER = new SSTableColumn<SSCustomer>(
+    public static SSTableColumn<SSCustomer> COLUMN_CLEARINGNUMBER = new SSTableColumn<>(
             SSBundle.getBundle().getString("exportbgcadmission.column.4")) {
         @Override
         public Object getValue(SSCustomer iCustomer) {
@@ -135,7 +135,7 @@ public class SSExportBGCAdmissionTableModel extends SSTableModel<SSCustomer> {
     /**
      * Kontonummer
      */
-    public static SSTableColumn<SSCustomer> COLUMN_ACCOUNTNR = new SSTableColumn<SSCustomer>(
+    public static SSTableColumn<SSCustomer> COLUMN_ACCOUNTNR = new SSTableColumn<>(
             SSBundle.getBundle().getString("exportbgcadmission.column.5")) {
         @Override
         public Object getValue(SSCustomer iCustomer) {

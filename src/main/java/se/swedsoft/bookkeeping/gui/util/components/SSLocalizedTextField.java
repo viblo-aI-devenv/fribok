@@ -29,11 +29,11 @@ public class SSLocalizedTextField extends JPanel {
      * and a flow layout.
      */
     public SSLocalizedTextField() {
-        iLocales = new LinkedList<Locale>();
-        iDescriptions = new HashMap<Locale, String>();
-        iValues = new HashMap<Locale, String>();
+        iLocales = new LinkedList<>();
+        iDescriptions = new HashMap<>();
+        iValues = new HashMap<>();
 
-        iTextFields = new HashMap<Locale, JTextField>();
+        iTextFields = new HashMap<>();
     }
 
     /**
@@ -119,7 +119,7 @@ public class SSLocalizedTextField extends JPanel {
      * @param iValues
      */
     public void setValues(Map<Locale, String> iValues) {
-        this.iValues = new HashMap<Locale, String>();
+        this.iValues = new HashMap<>();
         this.iValues.putAll(iValues);
 
         for (Locale iLocale : iLocales) {

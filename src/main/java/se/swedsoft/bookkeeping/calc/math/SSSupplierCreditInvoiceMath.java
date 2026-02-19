@@ -81,7 +81,7 @@ public class SSSupplierCreditInvoiceMath {
     }
 
     public static HashMap<Integer, BigDecimal> getSumsForSupplierInvoices() {
-        HashMap<Integer, BigDecimal> iSums = new HashMap<Integer, BigDecimal>();
+        HashMap<Integer, BigDecimal> iSums = new HashMap<>();
 
         List<SSSupplierCreditInvoice> iSupplierCreditInvoices = SSDB.getInstance().getSupplierCreditInvoices();
 
@@ -101,7 +101,7 @@ public class SSSupplierCreditInvoiceMath {
     }
 
     public static HashMap<Integer, BigDecimal> getSumsForSupplierInvoices(Date iDate) {
-        HashMap<Integer, BigDecimal> iSums = new HashMap<Integer, BigDecimal>();
+        HashMap<Integer, BigDecimal> iSums = new HashMap<>();
 
         List<SSSupplierCreditInvoice> iSupplierCreditInvoices = SSDB.getInstance().getSupplierCreditInvoices();
 
@@ -125,9 +125,9 @@ public class SSSupplierCreditInvoiceMath {
     }
 
     public static Map<String, Integer> getStockInfluencing(List<SSSupplierCreditInvoice> iSupplierCreditInvoices) {
-        Map<String, Integer> iSupplierCreditInvoiceCount = new HashMap<String, Integer>();
-        List<String> iParcelProducts = new LinkedList<String>();
-        List<SSProduct> iProducts = new LinkedList<SSProduct>(
+        Map<String, Integer> iSupplierCreditInvoiceCount = new HashMap<>();
+        List<String> iParcelProducts = new LinkedList<>();
+        List<SSProduct> iProducts = new LinkedList<>(
                 SSDB.getInstance().getProducts());
 
         for (SSProduct iProduct : iProducts) {

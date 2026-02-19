@@ -46,7 +46,7 @@ public class SSConfig implements Serializable {
      * Constructor
      */
     private SSConfig() {
-        iSettings = new HashMap<String, Object>();
+        iSettings = new HashMap<>();
     }
 
     // ////////////////////////////////////////////////////////////////////////////
@@ -96,24 +96,13 @@ public class SSConfig implements Serializable {
      *
      */
     private static synchronized void loadConfig() {
-        ObjectInputStream iObjectInputStream = null;
-
-        try {
-            iObjectInputStream = new ObjectInputStream(
-                    new BufferedInputStream(new FileInputStream(CONFIG_FILE)));
+        try (ObjectInputStream iObjectInputStream = new ObjectInputStream(
+                new BufferedInputStream(new FileInputStream(CONFIG_FILE)))) {
             cInstance = (SSConfig) iObjectInputStream.readObject();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        } finally {
-            if (iObjectInputStream != null) {
-                try {
-                    iObjectInputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 

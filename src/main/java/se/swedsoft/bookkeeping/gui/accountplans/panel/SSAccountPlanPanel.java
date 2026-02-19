@@ -144,57 +144,53 @@ public class SSAccountPlanPanel {
         iTable.getActionMap().put("ENTER_TRAVERSAL", iTraversal);
         iTable.getActionMap().put("DELETE_ROW", iDelete);
 
-        iModel.addTableModelListener(new TableModelListener() {
-            public void tableChanged(TableModelEvent e) {
+        iModel.addTableModelListener(e -> {
+
                 if (iTable.getSelectedColumn() == -1) {
                     iTable.setColumnSelectionInterval(1, 1);
                 }
-            }
-        });
+
+            });
 
         iDeleteRowButton.setEnabled(false);
-        iTable.addSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                iDeleteRowButton.setEnabled(iTable.getSelectedRowCount() > 0);
-            }
-        });
+        iTable.addSelectionListener(e -> iDeleteRowButton.setEnabled(iTable.getSelectedRowCount() > 0));
 
         iDeleteRowButton.addActionListener(iDelete);
 
         iType.setModel(SSAccountPlanTypeModel.getDropDownModel());
 
         iImportFields.addActionListener(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSImportAccountplanDialog iDialog = new SSImportAccountplanDialog(
-                        iMainFrame);
+                e -> {
 
-                iDialog.setLocationRelativeTo(iMainFrame);
-                iDialog.setVisible(true);
+                        SSImportAccountplanDialog iDialog = new SSImportAccountplanDialog(
+                                iMainFrame);
 
-                if (iDialog.getModalResult() != JOptionPane.OK_OPTION) {
-                    return;
-                }
+                        iDialog.setLocationRelativeTo(iMainFrame);
+                        iDialog.setVisible(true);
 
-                SSAccountPlan iSelected = iDialog.geAccountPlan();
+                        if (iDialog.getModalResult() != JOptionPane.OK_OPTION) {
+                            return;
+                        }
 
-                if (iSelected != null) {
-                    getAccountPlan();
+                        SSAccountPlan iSelected = iDialog.geAccountPlan();
 
-                    if (iDialog.isSRUSelected()) {
-                        iAccountPlan.importSRUCodesFrom(iSelected);
-                    }
-                    if (iDialog.isVATSelected()) {
-                        iAccountPlan.importVATCodesFrom(iSelected);
-                    }
-                    if (iDialog.isRECSelected()) {
-                        iAccountPlan.importReportCodesFrom(iSelected);
-                    }
+                        if (iSelected != null) {
+                            getAccountPlan();
 
-                    setAccountPlan(iAccountPlan);
-                }
-            }
-        });
+                            if (iDialog.isSRUSelected()) {
+                                iAccountPlan.importSRUCodesFrom(iSelected);
+                            }
+                            if (iDialog.isVATSelected()) {
+                                iAccountPlan.importVATCodesFrom(iSelected);
+                            }
+                            if (iDialog.isRECSelected()) {
+                                iAccountPlan.importReportCodesFrom(iSelected);
+                            }
+
+                            setAccountPlan(iAccountPlan);
+                        }
+
+                    });
 
         iInputVerifier = new SSInputVerifier();
         iInputVerifier.add(iName);
@@ -204,21 +200,13 @@ public class SSAccountPlanPanel {
             }
         });
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                iName.requestFocusInWindow();
-            }
-        });
+        SwingUtilities.invokeLater(() -> iName.requestFocusInWindow());
 
         iName.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iAssessementYear.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iAssessementYear.requestFocusInWindow());
                 }
             }
         });
@@ -227,11 +215,7 @@ public class SSAccountPlanPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iType.getComponent(0).requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iType.getComponent(0).requestFocusInWindow());
                 }
             }
         });
@@ -240,11 +224,7 @@ public class SSAccountPlanPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iButtonPanel.getCancelButton().requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iButtonPanel.getCancelButton().requestFocusInWindow());
                 }
             }
         });
@@ -253,11 +233,7 @@ public class SSAccountPlanPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iButtonPanel.getOkButton().requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iButtonPanel.getOkButton().requestFocusInWindow());
                 }
             }
         });
@@ -297,9 +273,9 @@ public class SSAccountPlanPanel {
         iAccountPlan.setType(iType.getSelected());
         iAccountPlan.setAssessementYear(iAssessementYear.getText());
 
-        Set<SSAccount> iAccounts = new HashSet<SSAccount>(iAccountPlan.getAccounts());
+        Set<SSAccount> iAccounts = new HashSet<>(iAccountPlan.getAccounts());
 
-        iAccountPlan.setAccounts(new LinkedList<SSAccount>(iAccounts));
+        iAccountPlan.setAccounts(new LinkedList<>(iAccounts));
 
         return iAccountPlan;
     }

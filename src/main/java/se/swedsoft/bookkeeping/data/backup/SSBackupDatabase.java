@@ -61,24 +61,13 @@ public class SSBackupDatabase {
      *
      */
     private void loadDatabase() {
-        ObjectInputStream iObjectInputStream = null;
-
-        try {
-            iObjectInputStream = new ObjectInputStream(
-                    new BufferedInputStream(new FileInputStream(iFile)));
+        try (ObjectInputStream iObjectInputStream = new ObjectInputStream(
+                new BufferedInputStream(new FileInputStream(iFile)))) {
             iData = (SSBackupData) iObjectInputStream.readObject();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        } finally {
-            if (iObjectInputStream != null) {
-                try {
-                    iObjectInputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 

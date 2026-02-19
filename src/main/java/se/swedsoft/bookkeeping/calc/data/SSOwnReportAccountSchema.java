@@ -24,7 +24,7 @@ public class SSOwnReportAccountSchema {
      *
      */
     private SSOwnReportAccountSchema() {
-        iResultGroups = new LinkedList<SSOwnReportAccountGroup>();
+        iResultGroups = new LinkedList<>();
     }
 
     /**
@@ -60,7 +60,7 @@ public class SSOwnReportAccountSchema {
 
                 iHeading2Group.setId(iId2);
                 iHeading2Group.setName(iOwnReportRow.getHeading());
-                List<SSAccount> iAccounts = new LinkedList<SSAccount>();
+                List<SSAccount> iAccounts = new LinkedList<>();
 
                 for (SSOwnReportAccountRow iAccountRow : iOwnReportRow.getAccountRows()) {
                     if (iAccountRow.getAccount() != null) {

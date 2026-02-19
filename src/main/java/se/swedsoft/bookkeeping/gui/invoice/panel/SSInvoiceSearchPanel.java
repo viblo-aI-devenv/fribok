@@ -42,7 +42,7 @@ public class SSInvoiceSearchPanel extends JPanel {
     }
 
     public void ApplyFilter(List<SSInvoice> iList) {
-        List<SSInvoice> iFiltered = new LinkedList<SSInvoice>();
+        List<SSInvoice> iFiltered = new LinkedList<>();
 
         String iText = iTextField.getText();
 

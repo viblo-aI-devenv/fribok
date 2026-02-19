@@ -30,7 +30,7 @@ public class SIEWriter {
      */
     public SIEWriter() {
         iStringBuilder = new StringBuilder();
-        iLines = new LinkedList<String>();
+        iLines = new LinkedList<>();
     }
 
     /**
@@ -226,7 +226,7 @@ public class SIEWriter {
      * @return
      */
     public List<String> getLines() {
-        // List<String> lines = new LinkedList<String>(iLines);
+        // List<String> lines = new LinkedList<>(iLines);
 
         // lines.add(iStringBuilder.toString());
 

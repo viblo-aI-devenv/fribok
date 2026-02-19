@@ -60,10 +60,10 @@ public class SSSalevaluesPrinter extends SSPrinter {
         addParameter("dateFrom", iFrom);
         addParameter("dateTo", iTo);
 
-        SSDefaultTableModel<SSMonth> iModel = new SSDefaultTableModel<SSMonth>() {
+        SSDefaultTableModel<SSMonth> iModel = new SSDefaultTableModel<>() {
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSProduct.class;
             }
 

@@ -75,10 +75,10 @@ public class SSPurchaseOrder implements SSTableSearchable, Serializable {
      * Default constructor
      */
     public SSPurchaseOrder() {
-        iRows = new LinkedList<SSPurchaseOrderRow>();
+        iRows = new LinkedList<>();
         iDeliveryAddress = new SSAddress();
         iSupplierAddress = new SSAddress();
-        iDefaultAccounts = new HashMap<SSDefaultAccount, Integer>();
+        iDefaultAccounts = new HashMap<>();
         iEstimatedDelivery = new Date();
         iStockInfluencing = true;
 
@@ -120,21 +120,21 @@ public class SSPurchaseOrder implements SSTableSearchable, Serializable {
         iCurrencyRate = iPurchaseOrder.iCurrencyRate;
         iDeliveryAddress = new SSAddress(iPurchaseOrder.iDeliveryAddress);
         iSupplierAddress = new SSAddress(iPurchaseOrder.iSupplierAddress);
-        iRows = new LinkedList<SSPurchaseOrderRow>();
+        iRows = new LinkedList<>();
 
         for (SSPurchaseOrderRow iRow : iPurchaseOrder.iRows) {
             iRows.add(new SSPurchaseOrderRow(iRow));
         }
         // Copy all default accounts
-        iDefaultAccounts = new HashMap<SSDefaultAccount, Integer>();
+        iDefaultAccounts = new HashMap<>();
         iDefaultAccounts.putAll(iPurchaseOrder.getDefaultAccounts());
 
     }
 
     public SSPurchaseOrder(List<SSProduct> iProducts, SSSupplier iSupplier) {
         setSupplier(iSupplier);
-        iRows = new LinkedList<SSPurchaseOrderRow>();
-        iDefaultAccounts = new HashMap<SSDefaultAccount, Integer>();
+        iRows = new LinkedList<>();
+        iDefaultAccounts = new HashMap<>();
         iStockInfluencing = true;
         iEstimatedDelivery = Calendar.getInstance().getTime();
         iDate = Calendar.getInstance().getTime();
@@ -527,7 +527,7 @@ public class SSPurchaseOrder implements SSTableSearchable, Serializable {
      */
     public Map<SSDefaultAccount, Integer> getDefaultAccounts() {
         if (iDefaultAccounts == null) {
-            iDefaultAccounts = new HashMap<SSDefaultAccount, Integer>();
+            iDefaultAccounts = new HashMap<>();
         }
         return iDefaultAccounts;
     }
@@ -537,7 +537,7 @@ public class SSPurchaseOrder implements SSTableSearchable, Serializable {
      * @param iDefaultAccounts
      */
     public void setDefaultAccounts(Map<SSDefaultAccount, Integer> iDefaultAccounts) {
-        this.iDefaultAccounts = new HashMap<SSDefaultAccount, Integer>();
+        this.iDefaultAccounts = new HashMap<>();
         this.iDefaultAccounts.putAll(iDefaultAccounts);
     }
 

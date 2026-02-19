@@ -82,8 +82,8 @@ public class SSProduct implements SSTableSearchable, Serializable {
      * Default constructor
      */
     public SSProduct() {
-        iProductRows = new LinkedList<SSProductRow>();
-        iDefaultAccounts = new HashMap<SSDefaultAccount, Integer>();
+        iProductRows = new LinkedList<>();
+        iDefaultAccounts = new HashMap<>();
         iUnitprice = new BigDecimal(0);
         iPurchasePrice = new BigDecimal(0);
         iStockPrice = new BigDecimal(0);
@@ -136,9 +136,9 @@ public class SSProduct implements SSTableSearchable, Serializable {
         iVolume = iProduct.iVolume;
         iSupplier = iProduct.iSupplier;
 
-        iDescriptions = new HashMap<Locale, String>();
-        iDefaultAccounts = new HashMap<SSDefaultAccount, Integer>();
-        iProductRows = new LinkedList<SSProductRow>();
+        iDescriptions = new HashMap<>();
+        iDefaultAccounts = new HashMap<>();
+        iProductRows = new LinkedList<>();
 
         iDefaultAccounts.put(SSDefaultAccount.Sales,
                 iProduct.iDefaultAccounts.get(SSDefaultAccount.Sales));
@@ -200,7 +200,7 @@ public class SSProduct implements SSTableSearchable, Serializable {
      */
     public String getDescription(Locale iLocale) {
         if (iDescriptions == null) {
-            iDescriptions = new HashMap<Locale, String>();
+            iDescriptions = new HashMap<>();
         }
 
         String iDescription = iDescriptions.get(iLocale);
@@ -219,7 +219,7 @@ public class SSProduct implements SSTableSearchable, Serializable {
      */
     public void setDescription(Locale iLocale, String iDescription) {
         if (iDescriptions == null) {
-            iDescriptions = new HashMap<Locale, String>();
+            iDescriptions = new HashMap<>();
         }
 
         iDescriptions.put(iLocale, iDescription);
@@ -294,7 +294,7 @@ public class SSProduct implements SSTableSearchable, Serializable {
      */
     public Map<Locale, String> getDescriptions() {
         if (iDescriptions == null) {
-            iDescriptions = new HashMap<Locale, String>();
+            iDescriptions = new HashMap<>();
         }
 
         return iDescriptions;
@@ -628,7 +628,7 @@ public class SSProduct implements SSTableSearchable, Serializable {
      */
     public Integer getDefaultAccount(SSDefaultAccount iDefaultAccount) {
         if (iDefaultAccounts == null) {
-            iDefaultAccounts = new HashMap<SSDefaultAccount, Integer>();
+            iDefaultAccounts = new HashMap<>();
         }
 
         if (iDefaultAccounts.containsKey(iDefaultAccount)) {
@@ -646,7 +646,7 @@ public class SSProduct implements SSTableSearchable, Serializable {
      */
     public Integer getDefaultAccount(SSDefaultAccount iDefaultAccount, Integer iDefault) {
         if (iDefaultAccounts == null) {
-            iDefaultAccounts = new HashMap<SSDefaultAccount, Integer>();
+            iDefaultAccounts = new HashMap<>();
         }
 
         if (iDefaultAccounts.containsKey(iDefaultAccount)) {
@@ -663,7 +663,7 @@ public class SSProduct implements SSTableSearchable, Serializable {
      */
     public void setDefaultAccount(SSDefaultAccount iDefaultAccount, Integer iAccount) {
         if (iDefaultAccounts == null) {
-            iDefaultAccounts = new HashMap<SSDefaultAccount, Integer>();
+            iDefaultAccounts = new HashMap<>();
         }
         iDefaultAccounts.put(iDefaultAccount, iAccount);
     }
@@ -687,7 +687,7 @@ public class SSProduct implements SSTableSearchable, Serializable {
      */
     public List<SSProductRow> getParcelRows() {
         if (iProductRows == null) {
-            iProductRows = new LinkedList<SSProductRow>();
+            iProductRows = new LinkedList<>();
         }
 
         return iProductRows;

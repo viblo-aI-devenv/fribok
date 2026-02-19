@@ -150,21 +150,13 @@ public class SSCompanyPageAutoIncrement extends SSCompanyPage implements ChangeL
     }
 
     public void addKeyListeners() {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                iTender.requestFocusInWindow();
-            }
-        });
+        SwingUtilities.invokeLater(() -> iTender.requestFocusInWindow());
 
         iTender.getEditor().getComponent(0).addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iOrder.getEditor().getComponent(0).requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iOrder.getEditor().getComponent(0).requestFocusInWindow());
                 }
             }
         });
@@ -173,11 +165,7 @@ public class SSCompanyPageAutoIncrement extends SSCompanyPage implements ChangeL
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iInvoice.getEditor().getComponent(0).requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iInvoice.getEditor().getComponent(0).requestFocusInWindow());
                 }
             }
         });
@@ -187,11 +175,7 @@ public class SSCompanyPageAutoIncrement extends SSCompanyPage implements ChangeL
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     SwingUtilities.invokeLater(
-                            new Runnable() {
-                        public void run() {
-                            iCreditInvoice.getEditor().getComponent(0).requestFocusInWindow();
-                        }
-                    });
+                            () -> iCreditInvoice.getEditor().getComponent(0).requestFocusInWindow());
                 }
             }
         });
@@ -200,11 +184,7 @@ public class SSCompanyPageAutoIncrement extends SSCompanyPage implements ChangeL
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iInpayment.getEditor().getComponent(0).requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iInpayment.getEditor().getComponent(0).requestFocusInWindow());
                 }
             }
         });
@@ -214,11 +194,7 @@ public class SSCompanyPageAutoIncrement extends SSCompanyPage implements ChangeL
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     SwingUtilities.invokeLater(
-                            new Runnable() {
-                        public void run() {
-                            iPurchaseOrder.getEditor().getComponent(0).requestFocusInWindow();
-                        }
-                    });
+                            () -> iPurchaseOrder.getEditor().getComponent(0).requestFocusInWindow());
                 }
             }
         });
@@ -228,11 +204,7 @@ public class SSCompanyPageAutoIncrement extends SSCompanyPage implements ChangeL
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     SwingUtilities.invokeLater(
-                            new Runnable() {
-                        public void run() {
-                            iSupplierInvoice.getEditor().getComponent(0).requestFocusInWindow();
-                        }
-                    });
+                            () -> iSupplierInvoice.getEditor().getComponent(0).requestFocusInWindow());
                 }
             }
         });
@@ -242,11 +214,7 @@ public class SSCompanyPageAutoIncrement extends SSCompanyPage implements ChangeL
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     SwingUtilities.invokeLater(
-                            new Runnable() {
-                        public void run() {
-                            iSupplierCreditInvoice.getEditor().getComponent(0).requestFocusInWindow();
-                        }
-                    });
+                            () -> iSupplierCreditInvoice.getEditor().getComponent(0).requestFocusInWindow());
                 }
             }
         });
@@ -257,11 +225,7 @@ public class SSCompanyPageAutoIncrement extends SSCompanyPage implements ChangeL
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     SwingUtilities.invokeLater(
-                            new Runnable() {
-                        public void run() {
-                            iOutpayment.getEditor().getComponent(0).requestFocusInWindow();
-                        }
-                    });
+                            () -> iOutpayment.getEditor().getComponent(0).requestFocusInWindow());
                 }
             }
         });

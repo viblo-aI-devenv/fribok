@@ -80,21 +80,13 @@ public class SSCompanyPageTax extends SSCompanyPage {
     }
 
     public void addKeyListeners() {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                iTaxRate1.requestFocusInWindow();
-            }
-        });
+        SwingUtilities.invokeLater(() -> iTaxRate1.requestFocusInWindow());
 
         iTaxRate1.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iTaxRate2.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iTaxRate2.requestFocusInWindow());
                 }
             }
         });
@@ -103,11 +95,7 @@ public class SSCompanyPageTax extends SSCompanyPage {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iTaxRate3.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iTaxRate3.requestFocusInWindow());
                 }
             }
         });

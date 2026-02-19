@@ -32,7 +32,7 @@ public class BgMaxAvsnitt {
      *
      */
     public BgMaxAvsnitt() {
-        iBetalningar = new LinkedList<BgMaxBetalning>();
+        iBetalningar = new LinkedList<>();
     }
 
     public String toString() {

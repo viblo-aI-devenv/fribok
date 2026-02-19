@@ -97,33 +97,29 @@ public class SSTenderFrame extends SSDefaultTableFrame {
         // New
         // ***************************
         SSButton iButton = new SSButton("ICON_NEWITEM", "tenderframe.newbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSTenderDialog.newDialog(getMainFrame(), iModel);
-            }
-        });
+                e -> SSTenderDialog.newDialog(getMainFrame(), iModel));
 
         iToolBar.add(iButton);
 
         // Edit
         // ***************************
         iButton = new SSButton("ICON_EDITITEM", "tenderframe.editbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSTender iSelected = iModel.getSelectedRow(iTable);
-                Integer iNumber = null;
+                e -> {
 
-                if (iSelected != null) {
-                    iNumber = iSelected.getNumber();
-                    iSelected = getTender(iSelected);
-                }
-                if (iSelected != null) {
-                    SSTenderDialog.editDialog(getMainFrame(), iSelected, iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "tenderframe.tendergone", iNumber);
-                }
-            }
-        });
+                        SSTender iSelected = iModel.getSelectedRow(iTable);
+                        Integer iNumber = null;
+
+                        if (iSelected != null) {
+                            iNumber = iSelected.getNumber();
+                            iSelected = getTender(iSelected);
+                        }
+                        if (iSelected != null) {
+                            SSTenderDialog.editDialog(getMainFrame(), iSelected, iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "tenderframe.tendergone", iNumber);
+                        }
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         iToolBar.add(iButton);
         iToolBar.addSeparator();
@@ -131,22 +127,22 @@ public class SSTenderFrame extends SSDefaultTableFrame {
         // Copy
         // ***************************
         iButton = new SSButton("ICON_COPYITEM", "tenderframe.copybutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSTender iSelected = iModel.getSelectedRow(iTable);
-                Integer iNumber = null;
+                e -> {
 
-                if (iSelected != null) {
-                    iNumber = iSelected.getNumber();
-                    iSelected = getTender(iSelected);
-                }
-                if (iSelected != null) {
-                    SSTenderDialog.copyDialog(getMainFrame(), iSelected, iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "tenderframe.tendergone", iNumber);
-                }
-            }
-        });
+                        SSTender iSelected = iModel.getSelectedRow(iTable);
+                        Integer iNumber = null;
+
+                        if (iSelected != null) {
+                            iNumber = iSelected.getNumber();
+                            iSelected = getTender(iSelected);
+                        }
+                        if (iSelected != null) {
+                            SSTenderDialog.copyDialog(getMainFrame(), iSelected, iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "tenderframe.tendergone", iNumber);
+                        }
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         iToolBar.add(iButton);
         iToolBar.addSeparator();
@@ -154,14 +150,14 @@ public class SSTenderFrame extends SSDefaultTableFrame {
         // Delete
         // ***************************
         iButton = new SSButton("ICON_DELETEITEM", "tenderframe.deletebutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                int[] selected = iTable.getSelectedRows();
-                List<SSTender> toDelete = iModel.getObjects(selected);
+                e -> {
 
-                deleteSelectedTender(toDelete);
-            }
-        });
+                        int[] selected = iTable.getSelectedRows();
+                        List<SSTender> toDelete = iModel.getObjects(selected);
+
+                        deleteSelectedTender(toDelete);
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         iToolBar.add(iButton);
         iToolBar.addSeparator();
@@ -169,35 +165,35 @@ public class SSTenderFrame extends SSDefaultTableFrame {
         // Create order
         // ***************************
         iButton = new SSButton("ICON_INVOICE24", "tenderframe.createorderbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSTender iSelected = iModel.getSelectedRow(iTable);
-                Integer iNumber = null;
+                e -> {
 
-                if (iSelected != null) {
-                    iNumber = iSelected.getNumber();
-                    iSelected = getTender(iSelected);
-                }
-                if (iSelected == null) {
-                    new SSErrorDialog(getMainFrame(), "tenderframe.tendergone", iNumber);
-                    return;
-                }
+                        SSTender iSelected = iModel.getSelectedRow(iTable);
+                        Integer iNumber = null;
 
-                // if the selected tender already has an order assosiated we can't create a new one
-                if (iSelected.getOrder() != null) {
-                    SSInformationDialog.showDialog(getMainFrame(),
-                            "tenderframe.tenderhasorder", iSelected.getNumber());
-                    return;
-                }
+                        if (iSelected != null) {
+                            iNumber = iSelected.getNumber();
+                            iSelected = getTender(iSelected);
+                        }
+                        if (iSelected == null) {
+                            new SSErrorDialog(getMainFrame(), "tenderframe.tendergone", iNumber);
+                            return;
+                        }
 
-                if (SSOrderFrame.getInstance() != null) {
-                    SSOrderDialog.newDialog(getMainFrame(), iSelected,
-                            SSOrderFrame.getInstance().getModel());
-                } else {
-                    SSOrderDialog.newDialog(getMainFrame(), iSelected, null);
-                }
-            }
-        });
+                        // if the selected tender already has an order assosiated we can't create a new one
+                        if (iSelected.getOrder() != null) {
+                            SSInformationDialog.showDialog(getMainFrame(),
+                                    "tenderframe.tenderhasorder", iSelected.getNumber());
+                            return;
+                        }
+
+                        if (SSOrderFrame.getInstance() != null) {
+                            SSOrderDialog.newDialog(getMainFrame(), iSelected,
+                                    SSOrderFrame.getInstance().getModel());
+                        } else {
+                            SSOrderDialog.newDialog(getMainFrame(), iSelected, null);
+                        }
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         iToolBar.add(iButton);
 
@@ -207,41 +203,37 @@ public class SSTenderFrame extends SSDefaultTableFrame {
         // ***************************
         SSMenuButton iButton2 = new SSMenuButton("ICON_PRINT", "tenderframe.printbutton");
         JMenuItem iMenuItem = iButton2.add("tenderframe.print.tenderreport",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                List<SSTender> iSelected = iModel.getSelectedRows(iTable);
+                e -> {
 
-                iSelected = getTenders(iSelected);
-                if (!iSelected.isEmpty()) {
-                    SSReportFactory.TenderReport(getMainFrame(), iSelected);
-                }
-            }
-        });
+                        List<SSTender> iSelected = iModel.getSelectedRows(iTable);
+
+                        iSelected = getTenders(iSelected);
+                        if (!iSelected.isEmpty()) {
+                            SSReportFactory.TenderReport(getMainFrame(), iSelected);
+                        }
+
+                    });
 
         iTable.addSelectionDependentComponent(iMenuItem);
         iMenuItem = iButton2.add("tenderframe.print.emailtenderreport",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSTender iSelected = iModel.getSelectedRow(iTable);
+                e -> {
 
-                iSelected = getTender(iSelected);
-                if (iSelected == null) {
-                    return;
-                }
+                        SSTender iSelected = iModel.getSelectedRow(iTable);
 
-                if (!SSMail.isOk(iSelected.getCustomer())) {
-                    return;
-                }
-                SSReportFactory.EmailTenderReport(getMainFrame(), iSelected);
-            }
-        });
+                        iSelected = getTender(iSelected);
+                        if (iSelected == null) {
+                            return;
+                        }
+
+                        if (!SSMail.isOk(iSelected.getCustomer())) {
+                            return;
+                        }
+                        SSReportFactory.EmailTenderReport(getMainFrame(), iSelected);
+
+                    });
         iTable.addSelectionDependentComponent(iMenuItem);
         iButton2.addSeparator();
-        iButton2.add("tenderframe.print.tenderlistreport", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSReportFactory.TenderListReport(getMainFrame());
-            }
-        });
+        iButton2.add("tenderframe.print.tenderlistreport", e -> SSReportFactory.TenderListReport(getMainFrame()));
         iToolBar.add(iButton2);
 
         return iToolBar;
@@ -269,8 +261,8 @@ public class SSTenderFrame extends SSDefaultTableFrame {
 
         iModel.setupTable(iTable);
 
-        iTable.addDblClickListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iTable.addDblClickListener(e -> {
+
                 SSTender iSelected = iModel.getSelectedRow(iTable);
                 Integer iNumber;
 
@@ -285,8 +277,8 @@ public class SSTenderFrame extends SSDefaultTableFrame {
                 } else {
                     new SSErrorDialog(getMainFrame(), "tenderframe.tendergone", iNumber);
                 }
-            }
-        });
+
+            });
         iTabbedPane = new JTabbedPane();
 
         iTabbedPane.add(SSBundle.getBundle().getString("tenderframe.filter.1"),
@@ -294,12 +286,12 @@ public class SSTenderFrame extends SSDefaultTableFrame {
         iTabbedPane.add(SSBundle.getBundle().getString("tenderframe.filter.2"),
                 new SSTabbedPanePanel());
 
-        iTabbedPane.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
+        iTabbedPane.addChangeListener(e -> {
+
                 // setFilterIndex( iTabbedPane.getSelectedIndex() );
                 updateFrame();
-            }
-        });
+
+            });
         // setFilterIndex(0);
 
         iSearchPanel = new SSTenderSearchPanel(iModel);
@@ -335,7 +327,7 @@ public class SSTenderFrame extends SSDefaultTableFrame {
 
         // Ordrar utan faktura
         case 1:
-            iFiltered = new LinkedList<SSTender>();
+            iFiltered = new LinkedList<>();
             for (SSTender iTender : iList) {
                 if (!iTender.isExpired()) {
                     iFiltered.add(iTender);

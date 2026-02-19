@@ -169,22 +169,22 @@ public class SSCompany implements Serializable {
         iId = new UID();
         iAddress = new SSAddress();
         iDeliveryAddress = new SSAddress();
-        iStandardTexts = new HashMap<SSStandardText, String>();
-        iDefaultAccounts = new HashMap<SSDefaultAccount, Integer>();
+        iStandardTexts = new HashMap<>();
+        iDefaultAccounts = new HashMap<>();
 
-        iProjects = new LinkedList<SSProject>();
-        iVoucherTemplates = new LinkedList<SSVoucherTemplate>();
-        iResultUnits = new LinkedList<SSResultUnit>();
+        iProjects = new LinkedList<>();
+        iVoucherTemplates = new LinkedList<>();
+        iResultUnits = new LinkedList<>();
 
-        iProducts = new LinkedList<SSProduct>();
-        iCustomers = new LinkedList<SSCustomer>();
-        iSuppliers = new LinkedList<SSSupplier>();
-        iAutoDists = new LinkedList<SSAutoDist>();
-        iTenders = new LinkedList<SSTender>();
-        iOrders = new LinkedList<SSOrder>();
-        iInvoices = new LinkedList<SSInvoice>();
-        iInpayments = new LinkedList<SSInpayment>();
-        iCreditInvoices = new LinkedList<SSCreditInvoice>();
+        iProducts = new LinkedList<>();
+        iCustomers = new LinkedList<>();
+        iSuppliers = new LinkedList<>();
+        iAutoDists = new LinkedList<>();
+        iTenders = new LinkedList<>();
+        iOrders = new LinkedList<>();
+        iInvoices = new LinkedList<>();
+        iInpayments = new LinkedList<>();
+        iCreditInvoices = new LinkedList<>();
 
         iAutoIncrement = new SSAutoIncrement();
 
@@ -238,7 +238,7 @@ public class SSCompany implements Serializable {
      */
     public Map<SSStandardText, String> getStandardTexts() {
         if (iStandardTexts == null) {
-            iStandardTexts = new HashMap<SSStandardText, String>();
+            iStandardTexts = new HashMap<>();
         }
         return iStandardTexts;
     }
@@ -273,7 +273,7 @@ public class SSCompany implements Serializable {
      */
     public Map<SSDefaultAccount, Integer> getDefaultAccounts() {
         if (iDefaultAccounts == null) {
-            iDefaultAccounts = new HashMap<SSDefaultAccount, Integer>();
+            iDefaultAccounts = new HashMap<>();
         }
         return iDefaultAccounts;
     }
@@ -1087,7 +1087,7 @@ public class SSCompany implements Serializable {
      */
     public List<SSProduct> getProducts() {
         if (iProducts == null) {
-            iProducts = new LinkedList<SSProduct>();
+            iProducts = new LinkedList<>();
         }
 
         return iProducts;
@@ -1120,7 +1120,7 @@ public class SSCompany implements Serializable {
      */
     public List<SSCustomer> getCustomers() {
         if (iCustomers == null) {
-            iCustomers = new LinkedList<SSCustomer>();
+            iCustomers = new LinkedList<>();
         }
         return iCustomers;
     }
@@ -1152,7 +1152,7 @@ public class SSCompany implements Serializable {
      */
     public List<SSSupplier> getSuppliers() {
         if (iSuppliers == null) {
-            iSuppliers = new LinkedList<SSSupplier>();
+            iSuppliers = new LinkedList<>();
         }
         return iSuppliers;
     }
@@ -1186,7 +1186,7 @@ public class SSCompany implements Serializable {
      */
     public List<SSAutoDist> getAutoDists() {
         if (iAutoDists == null) {
-            iAutoDists = new LinkedList<SSAutoDist>();
+            iAutoDists = new LinkedList<>();
         }
         return iAutoDists;
     }
@@ -1219,7 +1219,7 @@ public class SSCompany implements Serializable {
      */
     public List<SSTender> getTenders() {
         if (iTenders == null) {
-            iTenders = new LinkedList<SSTender>();
+            iTenders = new LinkedList<>();
         }
         return iTenders;
     }
@@ -1272,7 +1272,7 @@ public class SSCompany implements Serializable {
      */
     public List<SSOrder> getOrders() {
         if (iOrders == null) {
-            iOrders = new LinkedList<SSOrder>();
+            iOrders = new LinkedList<>();
         }
         return iOrders;
     }
@@ -1325,7 +1325,7 @@ public class SSCompany implements Serializable {
      */
     public List<SSInvoice> getInvoices() {
         if (iInvoices == null) {
-            iInvoices = new LinkedList<SSInvoice>();
+            iInvoices = new LinkedList<>();
         }
         return iInvoices;
     }
@@ -1392,7 +1392,7 @@ public class SSCompany implements Serializable {
      */
     public List<SSInpayment> getInpayments() {
         if (iInpayments == null) {
-            iInpayments = new LinkedList<SSInpayment>();
+            iInpayments = new LinkedList<>();
         }
         return iInpayments;
     }
@@ -1422,7 +1422,7 @@ public class SSCompany implements Serializable {
      */
     public List<SSOutpayment> getOutpayments() {
         if (iOutpayments == null) {
-            iOutpayments = new LinkedList<SSOutpayment>();
+            iOutpayments = new LinkedList<>();
         }
         return iOutpayments;
     }
@@ -1454,7 +1454,7 @@ public class SSCompany implements Serializable {
      */
     public List<SSCreditInvoice> getCreditInvoices() {
         if (iCreditInvoices == null) {
-            iCreditInvoices = new LinkedList<SSCreditInvoice>();
+            iCreditInvoices = new LinkedList<>();
         }
         return iCreditInvoices;
     }
@@ -1485,7 +1485,7 @@ public class SSCompany implements Serializable {
      */
     public List<SSPeriodicInvoice> getPeriodicInvoices() {
         if (iPeriodicInvoices == null) {
-            iPeriodicInvoices = new LinkedList<SSPeriodicInvoice>();
+            iPeriodicInvoices = new LinkedList<>();
         }
         return iPeriodicInvoices;
     }
@@ -1517,7 +1517,7 @@ public class SSCompany implements Serializable {
      */
     public List<SSPurchaseOrder> getPurchaseOrders() {
         if (iPurchaseOrders == null) {
-            iPurchaseOrders = new LinkedList<SSPurchaseOrder>();
+            iPurchaseOrders = new LinkedList<>();
         }
 
         return iPurchaseOrders;
@@ -1566,7 +1566,7 @@ public class SSCompany implements Serializable {
      */
     public List<SSSupplierInvoice> getSupplierInvoices() {
         if (iSupplierInvoices == null) {
-            iSupplierInvoices = new LinkedList<SSSupplierInvoice>();
+            iSupplierInvoices = new LinkedList<>();
         }
 
         return iSupplierInvoices;
@@ -1629,7 +1629,7 @@ public class SSCompany implements Serializable {
      */
     public List<SSSupplierCreditInvoice> getSupplierCreditinvoices() {
         if (iSupplierCreditinvoices == null) {
-            iSupplierCreditinvoices = new LinkedList<SSSupplierCreditInvoice>();
+            iSupplierCreditinvoices = new LinkedList<>();
         }
 
         return iSupplierCreditinvoices;
@@ -1663,7 +1663,7 @@ public class SSCompany implements Serializable {
      */
     public List<SSInventory> getInventories() {
         if (iInventories == null) {
-            iInventories = new LinkedList<SSInventory>();
+            iInventories = new LinkedList<>();
         }
 
         return iInventories;
@@ -1696,7 +1696,7 @@ public class SSCompany implements Serializable {
      */
     public List<SSIndelivery> getIndeliveries() {
         if (iIndeliveries == null) {
-            iIndeliveries = new LinkedList<SSIndelivery>();
+            iIndeliveries = new LinkedList<>();
         }
 
         return iIndeliveries;
@@ -1729,7 +1729,7 @@ public class SSCompany implements Serializable {
      */
     public List<SSOutdelivery> getOutdeliveries() {
         if (iOutdeliveries == null) {
-            iOutdeliveries = new LinkedList<SSOutdelivery>();
+            iOutdeliveries = new LinkedList<>();
         }
 
         return iOutdeliveries;

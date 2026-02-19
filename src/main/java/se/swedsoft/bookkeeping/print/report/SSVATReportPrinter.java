@@ -62,10 +62,10 @@ public class SSVATReportPrinter extends SSPrinter {
 
         List<SSVATReportGroup> iReportGroups = iCalculator.getReportGroups();
 
-        SSDefaultTableModel<SSVATReportGroup> iModel = new SSDefaultTableModel<SSVATReportGroup>() {
+        SSDefaultTableModel<SSVATReportGroup> iModel = new SSDefaultTableModel<>() {
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSVATReportGroup.class;
             }
 

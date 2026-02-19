@@ -32,7 +32,7 @@ public class SSOutdelivery implements Serializable {
     public SSOutdelivery() {
         iDate = new Date();
         iText = null;
-        iRows = new LinkedList<SSOutdeliveryRow>();
+        iRows = new LinkedList<>();
 
         doAutoIncrement();
     }
@@ -72,7 +72,7 @@ public class SSOutdelivery implements Serializable {
         iNumber = iOutdelivery.iNumber;
         iDate = iOutdelivery.iDate;
         iText = iOutdelivery.iText;
-        iRows = new LinkedList<SSOutdeliveryRow>();
+        iRows = new LinkedList<>();
 
         for (SSOutdeliveryRow iRow : iOutdelivery.iRows) {
             iRows.add(new SSOutdeliveryRow(iRow));

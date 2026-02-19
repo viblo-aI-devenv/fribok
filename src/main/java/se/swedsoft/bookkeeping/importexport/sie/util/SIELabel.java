@@ -271,7 +271,7 @@ public enum SIELabel {
      * @return
      */
     public static List<SIELabel> values(SIEType pFormat) {
-        List<SIELabel> iValues = new LinkedList<SIELabel>();
+        List<SIELabel> iValues = new LinkedList<>();
 
         for (SIELabel iLabel : values()) {
             for (SIEType iFormat: iLabel.iFormats) {

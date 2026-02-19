@@ -41,7 +41,7 @@ public class SSPaymentTermTableModel extends SSTableModel<SSPaymentTerm> {
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSPaymentTerm.class;
     }
 
@@ -67,7 +67,7 @@ public class SSPaymentTermTableModel extends SSTableModel<SSPaymentTerm> {
     /**
      *  Name
      */
-    public static SSTableColumn<SSPaymentTerm> COLUMN_NAME = new SSTableColumn<SSPaymentTerm>(
+    public static SSTableColumn<SSPaymentTerm> COLUMN_NAME = new SSTableColumn<>(
             SSBundle.getBundle().getString("currencytable.column.1")) {
         @Override
         public Object getValue(SSPaymentTerm iCurrency) {
@@ -91,7 +91,7 @@ public class SSPaymentTermTableModel extends SSTableModel<SSPaymentTerm> {
     /**
      *  Description
      */
-    public static SSTableColumn<SSPaymentTerm> COLUMN_DESCRIPTION = new SSTableColumn<SSPaymentTerm>(
+    public static SSTableColumn<SSPaymentTerm> COLUMN_DESCRIPTION = new SSTableColumn<>(
             SSBundle.getBundle().getString("currencytable.column.2")) {
         @Override
         public Object getValue(SSPaymentTerm iCurrency) {

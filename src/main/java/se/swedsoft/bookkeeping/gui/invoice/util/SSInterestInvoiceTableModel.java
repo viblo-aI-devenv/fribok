@@ -43,7 +43,7 @@ public class SSInterestInvoiceTableModel extends SSDefaultTableModel<SSInvoice> 
     public SSInterestInvoiceTableModel(List<SSInvoice> iInvoices) {
         super(iInvoices);
 
-        iActions = new HashMap<SSInvoice, InterestAction>();
+        iActions = new HashMap<>();
 
         for (SSInvoice iInvoice : iInvoices) {
             iActions.put(iInvoice, InterestAction.INVOICE);
@@ -62,7 +62,7 @@ public class SSInterestInvoiceTableModel extends SSDefaultTableModel<SSInvoice> 
     }
 
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSInvoice.class;
     }
 
@@ -201,7 +201,7 @@ public class SSInterestInvoiceTableModel extends SSDefaultTableModel<SSInvoice> 
      */
     public List<SSInvoice> getInterestInvoices(String iDescription, SSAccount iAccount) {
 
-        List<SSInvoice> iInvoices = new LinkedList<SSInvoice>();
+        List<SSInvoice> iInvoices = new LinkedList<>();
 
         for (SSInvoice iInvoice : getObjects()) {
 

@@ -48,8 +48,8 @@ public class SSCustomerDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        final ActionListener iSaveAction = e -> {
+
                 SSCustomer iCustomer = iPanel.getCustomer();
 
                 if (SSDB.getInstance().getCustomers().contains(iCustomer)) {
@@ -65,16 +65,12 @@ public class SSCustomerDialog {
                 }
 
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iDialog.closeDialog();
-            }
-        });
+        iPanel.addCancelAction(e -> iDialog.closeDialog());
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override
@@ -120,28 +116,28 @@ public class SSCustomerDialog {
         // iPanel.setEditPanel(true);
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSCustomer iCustomer = iPanel.getCustomer();
+        final ActionListener iSaveAction = e -> {
 
-                SSDB.getInstance().updateCustomer(iCustomer);
+                SSCustomer iCustomer1 = iPanel.getCustomer();
+
+                SSDB.getInstance().updateCustomer(iCustomer1);
 
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
                 }
                 SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
-            }
-        });
+
+            });
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override
@@ -191,32 +187,28 @@ public class SSCustomerDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSCustomer iCustomer = iPanel.getCustomer();
+        final ActionListener iSaveAction = e -> {
 
-                if (SSDB.getInstance().getCustomers().contains(iCustomer)) {
+                SSCustomer iCustomer1 = iPanel.getCustomer();
+
+                if (SSDB.getInstance().getCustomers().contains(iCustomer1)) {
                     new SSErrorDialog(iMainFrame, "customerframe.duplicate",
-                            iCustomer.getNumber());
+                            iCustomer1.getNumber());
                     return;
                 }
-                SSDB.getInstance().addCustomer(iCustomer);
+                SSDB.getInstance().addCustomer(iCustomer1);
 
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
                 }
 
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iDialog.closeDialog();
-            }
-        });
+        iPanel.addCancelAction(e -> iDialog.closeDialog());
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override

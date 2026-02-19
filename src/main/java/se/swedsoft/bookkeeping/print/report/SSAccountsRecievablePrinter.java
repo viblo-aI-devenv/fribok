@@ -61,10 +61,10 @@ public class SSAccountsRecievablePrinter extends SSPrinter {
 
         iCreditInvoiceSum = SSCreditInvoiceMath.getSumsForInvoices(iCeiledDate);
 
-        iCustomerInvoicesMap = new HashMap<String, List<SSInvoice>>();
+        iCustomerInvoicesMap = new HashMap<>();
 
         for (String iCustomerNumber : SSCustomerMath.iInvoicesForCustomers.keySet()) {
-            List<SSInvoice> iInvoicesForCustomer = new LinkedList<SSInvoice>();
+            List<SSInvoice> iInvoicesForCustomer = new LinkedList<>();
 
             for (SSInvoice iInvoice : SSCustomerMath.iInvoicesForCustomers.get(
                     iCustomerNumber)) {
@@ -110,10 +110,10 @@ public class SSAccountsRecievablePrinter extends SSPrinter {
 
         iDataSource = new SSDefaultJasperDataSource(iPrinter.getModel());
 
-        SSDefaultTableModel<SSCustomer> iModel = new SSDefaultTableModel<SSCustomer>() {
+        SSDefaultTableModel<SSCustomer> iModel = new SSDefaultTableModel<>() {
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSCustomer.class;
             }
 
@@ -172,11 +172,7 @@ public class SSAccountsRecievablePrinter extends SSPrinter {
         iModel.addColumn("customer.saldosum");
         iModel.addColumn("customer.invoices");
 
-        Collections.sort(iCustomers, new Comparator<SSCustomer>() {
-            public int compare(SSCustomer o1, SSCustomer o2) {
-                return o1.getNumber().compareTo(o2.getNumber());
-            }
-        });
+        Collections.sort(iCustomers, (o1, o2) -> o1.getNumber().compareTo(o2.getNumber()));
 
         iModel.setObjects(iCustomers);
 
@@ -196,12 +192,12 @@ public class SSAccountsRecievablePrinter extends SSPrinter {
             setDetail("accountsrecievable.row.jrxml");
             setSummary("accountsrecievable.row.jrxml");
 
-            iModel = new SSDefaultTableModel<SSInvoice>() {
+            iModel = new SSDefaultTableModel<>() {
 
                 DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
                 @Override
-                public Class getType() {
+                public Class<?> getType() {
                     return SSSaleRow.class;
                 }
 

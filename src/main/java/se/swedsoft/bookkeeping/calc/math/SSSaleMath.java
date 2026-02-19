@@ -97,7 +97,7 @@ public class SSSaleMath {
         BigDecimal iTaxRate2 = iSale.getNormalizedTaxRate2();
         BigDecimal iTaxRate3 = iSale.getNormalizedTaxRate3();
 
-        Map<SSTaxCode, BigDecimal> iTaxSum = new HashMap<SSTaxCode, BigDecimal>();
+        Map<SSTaxCode, BigDecimal> iTaxSum = new HashMap<>();
 
         iTaxSum.put(SSTaxCode.TAXRATE_0, new BigDecimal(0));
         iTaxSum.put(SSTaxCode.TAXRATE_1, new BigDecimal(0));
@@ -246,7 +246,7 @@ public class SSSaleMath {
      * @return the new products for the tender
      */
     public static List<SSProduct> getNewProducts(SSSale iSale) {
-        List<SSProduct> iProducts = new LinkedList<SSProduct>();
+        List<SSProduct> iProducts = new LinkedList<>();
 
         for (SSSaleRow iTenderRow: iSale.getRows()) {
 
@@ -361,7 +361,7 @@ public class SSSaleMath {
      * @return the rows for the product
      */
     public static List<SSSaleRow> getRowsForProduct(SSSale iSale, SSProduct iProduct) {
-        List<SSSaleRow> iRows = new LinkedList<SSSaleRow>();
+        List<SSSaleRow> iRows = new LinkedList<>();
 
         for (SSSaleRow iRow : iSale.getRows()) {
             if (iRow.hasProduct(iProduct)) {

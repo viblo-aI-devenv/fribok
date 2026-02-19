@@ -21,6 +21,7 @@ import se.swedsoft.bookkeeping.print.report.*;
 import se.swedsoft.bookkeeping.print.report.journals.*;
 import se.swedsoft.bookkeeping.print.report.sales.*;
 
+import javax.mail.MessagingException;
 import javax.swing.*;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
@@ -31,6 +32,7 @@ import java.io.File;
 import java.text.DateFormat;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -57,41 +59,41 @@ public class SSReportFactory {
             return;
         }
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                List<SSVoucher> iVouchers = iDialog.getElementsToPrint();
+                () -> {
 
-                DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+                        List<SSVoucher> iVouchers = iDialog.getElementsToPrint();
 
-                SSVoucherListPrinter iPrinter = new SSVoucherListPrinter(iVouchers);
+                        DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
-                if (iDialog.isDateSelected()) {
-                    Date iDateFrom = iDialog.getDateFrom();
-                    Date iDateTo = iDialog.getDateTo();
+                        SSVoucherListPrinter iPrinter = new SSVoucherListPrinter(iVouchers);
 
-                    iPrinter.addParameter("periodTitle",
-                            String.format(
-                            SSBundle.getBundle().getString("voucherlistreport.period.date"),
-                            iFormat.format(iDateFrom), iFormat.format(iDateTo)));
-                    iPrinter.addParameter("periodText", " ");
-                }
+                        if (iDialog.isDateSelected()) {
+                            Date iDateFrom = iDialog.getDateFrom();
+                            Date iDateTo = iDialog.getDateTo();
 
-                if (iDialog.isNumberSelected()) {
-                    Integer iNumberFrom = iDialog.getNumberFrom();
-                    Integer iNumberTo = iDialog.getNumberTo();
+                            iPrinter.addParameter("periodTitle",
+                                    String.format(
+                                    SSBundle.getBundle().getString("voucherlistreport.period.date"),
+                                    iFormat.format(iDateFrom), iFormat.format(iDateTo)));
+                            iPrinter.addParameter("periodText", " ");
+                        }
 
-                    iPrinter.addParameter("periodTitle",
-                            String.format(
-                            SSBundle.getBundle().getString(
-                                    "voucherlistreport.period.number"),
-                                    iNumberFrom,
-                                    iNumberTo));
-                    iPrinter.addParameter("periodText", " ");
-                }
+                        if (iDialog.isNumberSelected()) {
+                            Integer iNumberFrom = iDialog.getNumberFrom();
+                            Integer iNumberTo = iDialog.getNumberTo();
 
-                iPrinter.preview(iMainFrame);
-            }
-        });
+                            iPrinter.addParameter("periodTitle",
+                                    String.format(
+                                    SSBundle.getBundle().getString(
+                                            "voucherlistreport.period.number"),
+                                            iNumberFrom,
+                                            iNumberTo));
+                            iPrinter.addParameter("periodText", " ");
+                        }
+
+                        iPrinter.preview(iMainFrame);
+
+                    });
 
     }
 
@@ -106,8 +108,8 @@ public class SSReportFactory {
         iDialog.setDateFrom(pYearData.getFrom());
         iDialog.setDateTo(pYearData.getTo());
 
-        iDialog.addOkActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iDialog.addOkActionListener(e -> {
+
                 iDialog.closeDialog();
 
                 final Date       lDateFrom = iDialog.getDateFrom();
@@ -121,26 +123,22 @@ public class SSReportFactory {
                 final boolean      isResultUnitSelected = iDialog.isResultUnitSelected();
 
                 SSProgressDialog.runProgress(iMainFrame,
-                        new Runnable() {
-                    public void run() {
-                        SSMainBookPrinter iPrinter = new SSMainBookPrinter(pYearData,
-                                lAccountFrom, lAccountTo, lDateFrom, lDateTo, iProject,
-                                iResultUnit);
+                        () -> {
 
-                        if (isProjectSelected) {}
-                        if (isResultUnitSelected) {}
+                                SSMainBookPrinter iPrinter = new SSMainBookPrinter(pYearData,
+                                        lAccountFrom, lAccountTo, lDateFrom, lDateTo, iProject,
+                                        iResultUnit);
 
-                        iPrinter.preview(iMainFrame);
-                    }
-                });
+                                if (isProjectSelected) {}
+                                if (isResultUnitSelected) {}
 
-            }
-        });
-        iDialog.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iDialog.closeDialog();
-            }
-        });
+                                iPrinter.preview(iMainFrame);
+
+                            });
+
+
+            });
+        iDialog.addCancelActionListener(e -> iDialog.closeDialog());
         iDialog.pack();
         iDialog.setLocationRelativeTo(iMainFrame);
         iDialog.setVisible();
@@ -170,8 +168,8 @@ public class SSReportFactory {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        iPanel.addOkActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addOkActionListener(e -> {
+
                 final Date    lFrom = iPanel.getFrom();
                 final Date    lTo = iPanel.getTo();
                 final boolean lPrintBudget = iPanel.getPrintBudget();
@@ -180,22 +178,18 @@ public class SSReportFactory {
                 iDialog.closeDialog();
 
                 SSProgressDialog.runProgress(iMainFrame,
-                        new Runnable() {
-                    public void run() {
-                        SSResultPrinter iPrinter = new SSResultPrinter(lFrom, lTo,
-                                lPrintBudget, lPrintLastyear);
+                        () -> {
 
-                        iPrinter.preview(iMainFrame);
-                    }
-                });
+                                SSResultPrinter iPrinter = new SSResultPrinter(lFrom, lTo,
+                                        lPrintBudget, lPrintLastyear);
 
-            }
-        });
-        iPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iDialog.closeDialog();
-            }
-        });
+                                iPrinter.preview(iMainFrame);
+
+                            });
+
+
+            });
+        iPanel.addCancelActionListener(e -> iDialog.closeDialog());
 
 	iDialog.getRootPane().setDefaultButton(iPanel.getButtonPanel().getOkButton());
 
@@ -221,14 +215,14 @@ public class SSReportFactory {
         final Date iTo = iDateDialog.getTo();
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSOwnReportPrinter iPrinter = new SSOwnReportPrinter(iFrom, iTo,
-                        iOwnReport);
+                () -> {
 
-                iPrinter.preview(iMainFrame);
-            }
-        });
+                        SSOwnReportPrinter iPrinter = new SSOwnReportPrinter(iFrom, iTo,
+                                iOwnReport);
+
+                        iPrinter.preview(iMainFrame);
+
+                    });
 
     }
 
@@ -253,14 +247,14 @@ public class SSReportFactory {
         final SSNewProject iProject = iDialog.getProject();
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSProjectResultPrinter iPrinter = new SSProjectResultPrinter(iFrom, iTo,
-                        iProject);
+                () -> {
 
-                iPrinter.preview(iMainFrame);
-            }
-        });
+                        SSProjectResultPrinter iPrinter = new SSProjectResultPrinter(iFrom, iTo,
+                                iProject);
+
+                        iPrinter.preview(iMainFrame);
+
+                    });
     }
 
     /**
@@ -286,14 +280,14 @@ public class SSReportFactory {
         final SSNewResultUnit iResultUnit = iDialog.getSelectedResultUnit();
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSResultUnitResultPrinter iPrinter = new SSResultUnitResultPrinter(iFrom,
-                        iTo, iResultUnit);
+                () -> {
 
-                iPrinter.preview(iMainFrame);
-            }
-        });
+                        SSResultUnitResultPrinter iPrinter = new SSResultUnitResultPrinter(iFrom,
+                                iTo, iResultUnit);
+
+                        iPrinter.preview(iMainFrame);
+
+                    });
 
     }
 
@@ -317,13 +311,13 @@ public class SSReportFactory {
         final Date iFrom = iDialog.getFrom();
         final Date iTo = iDialog.getTo();
 
-        SSProgressDialog.runProgress(iMainFrame, new Runnable() {
-            public void run() {
+        SSProgressDialog.runProgress(iMainFrame, () -> {
+
                 SSBalancePrinter iPrinter = new SSBalancePrinter(iFrom, iTo);
 
                 iPrinter.preview(iMainFrame);
-            }
-        });
+
+            });
 
     }
 
@@ -347,13 +341,13 @@ public class SSReportFactory {
         final Date iFrom = iDialog.getFrom();
         final Date iTo = iDialog.getTo();
 
-        SSProgressDialog.runProgress(iMainFrame, new Runnable() {
-            public void run() {
+        SSProgressDialog.runProgress(iMainFrame, () -> {
+
                 SSBudgetPrinter iPrinter = new SSBudgetPrinter(iFrom, iTo);
 
                 iPrinter.preview(iMainFrame);
-            }
-        });
+
+            });
     }
 
     /**
@@ -424,42 +418,42 @@ public class SSReportFactory {
 
         // This runs the report generations with a progress iDialog
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
+                () -> {
 
-                SSVATReportPrinter  iPrinter1 = new SSVATReportPrinter(iAccountingYear,
-                        localFrom, localTo);
-                SSVATControlPrinter iPrinter2 = new SSVATControlPrinter(iAccountingYear,
-                        localFrom, localTo);
-                SSVoucherPrinter iPrinter3 = new SSVoucherPrinter(iVoucher,
-                        bundle.getString("vatbasisreport.title"), accountR1, accountR2,
-                        accountA);
 
-                SSMultiPrinter mPrinter = new SSMultiPrinter();
+                        SSVATReportPrinter  iPrinter1 = new SSVATReportPrinter(iAccountingYear,
+                                localFrom, localTo);
+                        SSVATControlPrinter iPrinter2 = new SSVATControlPrinter(iAccountingYear,
+                                localFrom, localTo);
+                        SSVoucherPrinter iPrinter3 = new SSVoucherPrinter(iVoucher,
+                                bundle.getString("vatbasisreport.title"), accountR1, accountR2,
+                                accountA);
 
-                mPrinter.addReport(iPrinter1);
-                mPrinter.addReport(iPrinter2);
-                mPrinter.addReport(iPrinter3);
+                        SSMultiPrinter mPrinter = new SSMultiPrinter();
 
-                mPrinter.preview(iMainFrame,
-                        new InternalFrameAdapter() {
+                        mPrinter.addReport(iPrinter1);
+                        mPrinter.addReport(iPrinter2);
+                        mPrinter.addReport(iPrinter3);
 
-                    /**
-                     * Invoked when an internal frame has been closed.
-                     */
-                    @Override
-                    public void internalFrameClosed(InternalFrameEvent e) {
-                        // Ask the user if he wants to generate a vatVoucher
-                        dialogVATVoucher(iMainFrame, iVoucher, iAccountingYear, localFrom,
-                                localTo);
+                        mPrinter.preview(iMainFrame,
+                                new InternalFrameAdapter() {
 
-                        // For some reason this event get called over and over, this is a "hack" to avoid it
-                        e.getInternalFrame().removeInternalFrameListener(this);
-                    }
-                });
+                            /**
+                             * Invoked when an internal frame has been closed.
+                             */
+                            @Override
+                            public void internalFrameClosed(InternalFrameEvent e) {
+                                // Ask the user if he wants to generate a vatVoucher
+                                dialogVATVoucher(iMainFrame, iVoucher, iAccountingYear, localFrom,
+                                        localTo);
 
-            }
-        });
+                                // For some reason this event get called over and over, this is a "hack" to avoid it
+                                e.getInternalFrame().removeInternalFrameListener(this);
+                            }
+                        });
+
+
+                    });
 
     }
 
@@ -492,51 +486,51 @@ public class SSReportFactory {
         final SSAccount iAccountA = iDialog.getAccountA();
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSMultiPrinter iPrinter = new SSMultiPrinter();
+                () -> {
 
-                SSVATReport2007Printer   iPrinter1 = new SSVATReport2007Printer(
-                        iAccountingYear, iFrom, iTo);
-                SSVATControl2007Printer  iPrinter2 = new SSVATControl2007Printer(
-                        iAccountingYear, iFrom, iTo);
+                        SSMultiPrinter iPrinter = new SSMultiPrinter();
 
-                final SSVoucher iVoucher = iPrinter2.getVoucher(iAccountR1, iAccountR2,
-                        iAccountA);
+                        SSVATReport2007Printer   iPrinter1 = new SSVATReport2007Printer(
+                                iAccountingYear, iFrom, iTo);
+                        SSVATControl2007Printer  iPrinter2 = new SSVATControl2007Printer(
+                                iAccountingYear, iFrom, iTo);
 
-                SSVoucherPrinter  iPrinter3 = new SSVoucherPrinter(iVoucher,
-                        bundle.getString("vatbasisreport.title"), iAccountR1, iAccountR2,
-                        iAccountA);
+                        final SSVoucher iVoucher = iPrinter2.getVoucher(iAccountR1, iAccountR2,
+                                iAccountA);
 
-                iPrinter.addReport(iPrinter1);
-                iPrinter.addReport(iPrinter2);
-                iPrinter.addReport(iPrinter3);
+                        SSVoucherPrinter  iPrinter3 = new SSVoucherPrinter(iVoucher,
+                                bundle.getString("vatbasisreport.title"), iAccountR1, iAccountR2,
+                                iAccountA);
 
-                iPrinter.preview(iMainFrame,
-                        new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
-                        SSQueryDialog iDialog = new SSQueryDialog(iMainFrame,
-                                SSBundle.getBundle(), "vatcontrol2007.voucherdialog",
-                                iFormat.format(iFrom), iFormat.format(iTo),
-                                iVoucher.getNumber());
+                        iPrinter.addReport(iPrinter1);
+                        iPrinter.addReport(iPrinter2);
+                        iPrinter.addReport(iPrinter3);
 
-                        int iResponce = iDialog.getResponce();
+                        iPrinter.preview(iMainFrame,
+                                e -> {
 
-                        if (iResponce != JOptionPane.OK_OPTION) {
-                            SSPostLock.removeLock(lockString);
-                            return;
-                        }
-                        SSDB.getInstance().addVoucher(iVoucher, false);
+                                        DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+                                        SSQueryDialog iDialog1 = new SSQueryDialog(iMainFrame,
+                                                SSBundle.getBundle(), "vatcontrol2007.voucherdialog",
+                                                iFormat.format(iFrom), iFormat.format(iTo),
+                                                iVoucher.getNumber());
 
-                        if (SSVoucherFrame.getInstance() != null) {
-                            SSVoucherFrame.getInstance().getModel().fireTableDataChanged();
-                        }
-                        SSPostLock.removeLock(lockString);
-                    }
-                });
-            }
-        });
+                                        int iResponce1 = iDialog1.getResponce();
+
+                                        if (iResponce1 != JOptionPane.OK_OPTION) {
+                                            SSPostLock.removeLock(lockString);
+                                            return;
+                                        }
+                                        SSDB.getInstance().addVoucher(iVoucher, false);
+
+                                        if (SSVoucherFrame.getInstance() != null) {
+                                            SSVoucherFrame.getInstance().getModel().fireTableDataChanged();
+                                        }
+                                        SSPostLock.removeLock(lockString);
+
+                                    });
+
+                    });
     }
 
     /**
@@ -570,51 +564,51 @@ public class SSReportFactory {
         final SSAccount iAccountA = iDialog.getAccountA();
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSMultiPrinter iPrinter = new SSMultiPrinter();
+                () -> {
 
-                SSVATReport2015Printer   iPrinter1 = new SSVATReport2015Printer(
-                        iAccountingYear, iFrom, iTo, iStartVoucher);
-                SSVATControl2015Printer  iPrinter2 = new SSVATControl2015Printer(
-                        iAccountingYear, iFrom, iTo, iStartVoucher);
+                        SSMultiPrinter iPrinter = new SSMultiPrinter();
 
-                final SSVoucher iVoucher = iPrinter2.getVoucher(iAccountR1, iAccountR2,
-                        iAccountA);
+                        SSVATReport2015Printer   iPrinter1 = new SSVATReport2015Printer(
+                                iAccountingYear, iFrom, iTo, iStartVoucher);
+                        SSVATControl2015Printer  iPrinter2 = new SSVATControl2015Printer(
+                                iAccountingYear, iFrom, iTo, iStartVoucher);
 
-                SSVoucherPrinter  iPrinter3 = new SSVoucherPrinter(iVoucher,
-                        bundle.getString("vatbasisreport.title"), iAccountR1, iAccountR2,
-                        iAccountA);
+                        final SSVoucher iVoucher = iPrinter2.getVoucher(iAccountR1, iAccountR2,
+                                iAccountA);
 
-                iPrinter.addReport(iPrinter1);
-                iPrinter.addReport(iPrinter2);
-                iPrinter.addReport(iPrinter3);
+                        SSVoucherPrinter  iPrinter3 = new SSVoucherPrinter(iVoucher,
+                                bundle.getString("vatbasisreport.title"), iAccountR1, iAccountR2,
+                                iAccountA);
 
-                iPrinter.preview(iMainFrame,
-                        new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
-                        SSQueryDialog iDialog = new SSQueryDialog(iMainFrame,
-                                SSBundle.getBundle(), "vatcontrol2015.voucherdialog",
-                                iFormat.format(iFrom), iFormat.format(iTo),
-                                iVoucher.getNumber());
+                        iPrinter.addReport(iPrinter1);
+                        iPrinter.addReport(iPrinter2);
+                        iPrinter.addReport(iPrinter3);
 
-                        int iResponce = iDialog.getResponce();
+                        iPrinter.preview(iMainFrame,
+                                e -> {
 
-                        if (iResponce != JOptionPane.OK_OPTION) {
-                            SSPostLock.removeLock(lockString);
-                            return;
-                        }
-                        SSDB.getInstance().addVoucher(iVoucher, false);
+                                        DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+                                        SSQueryDialog iDialog1 = new SSQueryDialog(iMainFrame,
+                                                SSBundle.getBundle(), "vatcontrol2015.voucherdialog",
+                                                iFormat.format(iFrom), iFormat.format(iTo),
+                                                iVoucher.getNumber());
 
-                        if (SSVoucherFrame.getInstance() != null) {
-                            SSVoucherFrame.getInstance().getModel().fireTableDataChanged();
-                        }
-                        SSPostLock.removeLock(lockString);
-                    }
-                });
-            }
-        });
+                                        int iResponce1 = iDialog1.getResponce();
+
+                                        if (iResponce1 != JOptionPane.OK_OPTION) {
+                                            SSPostLock.removeLock(lockString);
+                                            return;
+                                        }
+                                        SSDB.getInstance().addVoucher(iVoucher, false);
+
+                                        if (SSVoucherFrame.getInstance() != null) {
+                                            SSVoucherFrame.getInstance().getModel().fireTableDataChanged();
+                                        }
+                                        SSPostLock.removeLock(lockString);
+
+                                    });
+
+                    });
     }
 
     /**
@@ -636,14 +630,14 @@ public class SSReportFactory {
         final Date iTo = iDialog.getTo();
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSSimpleStatementPrinter iPrinter = new SSSimpleStatementPrinter(iFrom,
-                        iTo);
+                () -> {
 
-                iPrinter.preview(iMainFrame);
-            }
-        });
+                        SSSimpleStatementPrinter iPrinter = new SSSimpleStatementPrinter(iFrom,
+                                iTo);
+
+                        iPrinter.preview(iMainFrame);
+
+                    });
     }
 
     /**
@@ -693,13 +687,13 @@ public class SSReportFactory {
             new SSWarningDialog(iMainFrame, "accountdiagramreport.dialogmissingSRUCode");
         }
 
-        SSProgressDialog.runProgress(iMainFrame, new Runnable() {
-            public void run() {
+        SSProgressDialog.runProgress(iMainFrame, () -> {
+
                 SSAccountdiagramPrinter iPrinter = new SSAccountdiagramPrinter();
 
                 iPrinter.preview(iMainFrame);
-            }
-        });
+
+            });
 
     }
 
@@ -718,13 +712,13 @@ public class SSReportFactory {
 
         final List<SSOrder> iOrders = iDialog.getOrdersToPrint();
 
-        SSProgressDialog.runProgress(iMainFrame, new Runnable() {
-            public void run() {
+        SSProgressDialog.runProgress(iMainFrame, () -> {
+
                 SSOrderListPrinter iPrinter = new SSOrderListPrinter(iOrders);
 
                 iPrinter.preview(iMainFrame);
-            }
-        });
+
+            });
     }
 
     /**
@@ -742,13 +736,13 @@ public class SSReportFactory {
 
         final List<SSInvoice> iInvoices = iDialog.getInvoicesToPrint();
 
-        SSProgressDialog.runProgress(iMainFrame, new Runnable() {
-            public void run() {
+        SSProgressDialog.runProgress(iMainFrame, () -> {
+
                 SSInvoiceListPrinter iPrinter = new SSInvoiceListPrinter(iInvoices);
 
                 iPrinter.preview(iMainFrame);
-            }
-        });
+
+            });
     }
 
     /**
@@ -767,14 +761,14 @@ public class SSReportFactory {
         final List<SSCreditInvoice> iInvoices = iDialog.getInvoicesToPrint();
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSCreditInvoiceListPrinter iPrinter = new SSCreditInvoiceListPrinter(
-                        iInvoices);
+                () -> {
 
-                iPrinter.preview(iMainFrame);
-            }
-        });
+                        SSCreditInvoiceListPrinter iPrinter = new SSCreditInvoiceListPrinter(
+                                iInvoices);
+
+                        iPrinter.preview(iMainFrame);
+
+                    });
     }
 
     /**
@@ -792,13 +786,13 @@ public class SSReportFactory {
 
         final List<SSTender> iTenders = iDialog.getTendersToPrint();
 
-        SSProgressDialog.runProgress(iMainFrame, new Runnable() {
-            public void run() {
+        SSProgressDialog.runProgress(iMainFrame, () -> {
+
                 SSTenderListPrinter iPrinter = new SSTenderListPrinter(iTenders);
 
                 iPrinter.preview(iMainFrame);
-            }
-        });
+
+            });
     }
 
     /**
@@ -817,14 +811,14 @@ public class SSReportFactory {
         final List<SSPurchaseOrder> iOrders = iDialog.getElementsToPrint();
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSPurchaseOrderListPrinter iPrinter = new SSPurchaseOrderListPrinter(
-                        iOrders);
+                () -> {
 
-                iPrinter.preview(iMainFrame);
-            }
-        });
+                        SSPurchaseOrderListPrinter iPrinter = new SSPurchaseOrderListPrinter(
+                                iOrders);
+
+                        iPrinter.preview(iMainFrame);
+
+                    });
     }
 
     /**
@@ -843,14 +837,14 @@ public class SSReportFactory {
         final List<SSSupplierInvoice> iInvoices = iDialog.getElementsToPrint();
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSSupplierInvoiceListPrinter iPrinter = new SSSupplierInvoiceListPrinter(
-                        iInvoices);
+                () -> {
 
-                iPrinter.preview(iMainFrame);
-            }
-        });
+                        SSSupplierInvoiceListPrinter iPrinter = new SSSupplierInvoiceListPrinter(
+                                iInvoices);
+
+                        iPrinter.preview(iMainFrame);
+
+                    });
     }
 
     /**
@@ -870,14 +864,14 @@ public class SSReportFactory {
         final List<SSSupplierCreditInvoice> iInvoices = iDialog.getElementsToPrint();
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSSupplierCreditInvoiceListPrinter iPrinter = new SSSupplierCreditInvoiceListPrinter(
-                        iInvoices);
+                () -> {
 
-                iPrinter.preview(iMainFrame);
-            }
-        });
+                        SSSupplierCreditInvoiceListPrinter iPrinter = new SSSupplierCreditInvoiceListPrinter(
+                                iInvoices);
+
+                        iPrinter.preview(iMainFrame);
+
+                    });
     }
 
     /**
@@ -897,27 +891,27 @@ public class SSReportFactory {
         final boolean           isProductSelected = iDialog.isProductSelected();
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSInventoryListPrinter iPrinter = new SSInventoryListPrinter(iInventories);
+                () -> {
 
-                if (isDateSelected) {
-                    iPrinter.addParameter("dateFrom", iDialog.getDateFrom());
-                    iPrinter.addParameter("dateTo", iDialog.getDateTo());
-                }
-                if (isProductSelected) {
-                    SSProduct iProduct = iDialog.getProduct();
+                        SSInventoryListPrinter iPrinter = new SSInventoryListPrinter(iInventories);
 
-                    iPrinter.addParameter("periodTitle",
-                            SSBundle.getBundle().getString(
-                            "inventorylistreport.producttitle"));
-                    iPrinter.addParameter("periodText",
-                            iProduct == null ? null : iProduct.getNumber());
-                }
+                        if (isDateSelected) {
+                            iPrinter.addParameter("dateFrom", iDialog.getDateFrom());
+                            iPrinter.addParameter("dateTo", iDialog.getDateTo());
+                        }
+                        if (isProductSelected) {
+                            SSProduct iProduct = iDialog.getProduct();
 
-                iPrinter.preview(iMainFrame);
-            }
-        });
+                            iPrinter.addParameter("periodTitle",
+                                    SSBundle.getBundle().getString(
+                                    "inventorylistreport.producttitle"));
+                            iPrinter.addParameter("periodText",
+                                    iProduct == null ? null : iProduct.getNumber());
+                        }
+
+                        iPrinter.preview(iMainFrame);
+
+                    });
     }
 
     /**
@@ -937,27 +931,27 @@ public class SSReportFactory {
         final boolean            isProductSelected = iDialog.isProductSelected();
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSIndeliveryListPrinter iPrinter = new SSIndeliveryListPrinter(
-                        iIndeliveries);
+                () -> {
 
-                if (isDateSelected) {
-                    iPrinter.addParameter("dateFrom", iDialog.getDateFrom());
-                    iPrinter.addParameter("dateTo", iDialog.getDateTo());
-                }
-                if (isProductSelected) {
-                    SSProduct iProduct = iDialog.getProduct();
+                        SSIndeliveryListPrinter iPrinter = new SSIndeliveryListPrinter(
+                                iIndeliveries);
 
-                    iPrinter.addParameter("periodTitle",
-                            SSBundle.getBundle().getString(
-                            "indeliverylistreport.producttitle"));
-                    iPrinter.addParameter("periodText",
-                            iProduct == null ? null : iProduct.getNumber());
-                }
-                iPrinter.preview(iMainFrame);
-            }
-        });
+                        if (isDateSelected) {
+                            iPrinter.addParameter("dateFrom", iDialog.getDateFrom());
+                            iPrinter.addParameter("dateTo", iDialog.getDateTo());
+                        }
+                        if (isProductSelected) {
+                            SSProduct iProduct = iDialog.getProduct();
+
+                            iPrinter.addParameter("periodTitle",
+                                    SSBundle.getBundle().getString(
+                                    "indeliverylistreport.producttitle"));
+                            iPrinter.addParameter("periodText",
+                                    iProduct == null ? null : iProduct.getNumber());
+                        }
+                        iPrinter.preview(iMainFrame);
+
+                    });
     }
 
     /**
@@ -977,27 +971,27 @@ public class SSReportFactory {
         final boolean             isProductSelected = iDialog.isProductSelected();
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSOutdeliveryListPrinter iPrinter = new SSOutdeliveryListPrinter(
-                        iOutdeliveries);
+                () -> {
 
-                if (isDateSelected) {
-                    iPrinter.addParameter("dateFrom", iDialog.getDateFrom());
-                    iPrinter.addParameter("dateTo", iDialog.getDateTo());
-                }
-                if (isProductSelected) {
-                    SSProduct iProduct = iDialog.getProduct();
+                        SSOutdeliveryListPrinter iPrinter = new SSOutdeliveryListPrinter(
+                                iOutdeliveries);
 
-                    iPrinter.addParameter("periodTitle",
-                            SSBundle.getBundle().getString(
-                            "indeliverylistreport.producttitle"));
-                    iPrinter.addParameter("periodText",
-                            iProduct == null ? null : iProduct.getNumber());
-                }
-                iPrinter.preview(iMainFrame);
-            }
-        });
+                        if (isDateSelected) {
+                            iPrinter.addParameter("dateFrom", iDialog.getDateFrom());
+                            iPrinter.addParameter("dateTo", iDialog.getDateTo());
+                        }
+                        if (isProductSelected) {
+                            SSProduct iProduct = iDialog.getProduct();
+
+                            iPrinter.addParameter("periodTitle",
+                                    SSBundle.getBundle().getString(
+                                    "indeliverylistreport.producttitle"));
+                            iPrinter.addParameter("periodText",
+                                    iProduct == null ? null : iProduct.getNumber());
+                        }
+                        iPrinter.preview(iMainFrame);
+
+                    });
     }
 
     /**
@@ -1018,27 +1012,27 @@ public class SSReportFactory {
         final boolean           isInvoiceSelected = iDialog.isInvoiceSelected();
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSInpaymentListPrinter iPrinter = new SSInpaymentListPrinter(iInpayments);
+                () -> {
 
-                if (isDateSelected) {
-                    iPrinter.addParameter("dateFrom", iDialog.getDateFrom());
-                    iPrinter.addParameter("dateTo", iDialog.getDateTo());
-                }
-                if (isInvoiceSelected) {
-                    SSInvoice iInvoice = iDialog.getInvoice();
+                        SSInpaymentListPrinter iPrinter = new SSInpaymentListPrinter(iInpayments);
 
-                    iPrinter.addParameter("periodTitle",
-                            SSBundle.getBundle().getString(
-                            "inpaymentlistreport.invoicetitle"));
-                    iPrinter.addParameter("periodText",
-                            iInvoice == null ? null : iInvoice.getNumber().toString());
-                }
+                        if (isDateSelected) {
+                            iPrinter.addParameter("dateFrom", iDialog.getDateFrom());
+                            iPrinter.addParameter("dateTo", iDialog.getDateTo());
+                        }
+                        if (isInvoiceSelected) {
+                            SSInvoice iInvoice = iDialog.getInvoice();
 
-                iPrinter.preview(iMainFrame);
-            }
-        });
+                            iPrinter.addParameter("periodTitle",
+                                    SSBundle.getBundle().getString(
+                                    "inpaymentlistreport.invoicetitle"));
+                            iPrinter.addParameter("periodText",
+                                    iInvoice == null ? null : iInvoice.getNumber().toString());
+                        }
+
+                        iPrinter.preview(iMainFrame);
+
+                    });
     }
 
     /**
@@ -1059,27 +1053,27 @@ public class SSReportFactory {
         final boolean           isInvoiceSelected = iDialog.isInvoiceSelected();
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSOutpaymentListPrinter iPrinter = new SSOutpaymentListPrinter(iInpayments);
+                () -> {
 
-                if (isDateSelected) {
-                    iPrinter.addParameter("dateFrom", iDialog.getDateFrom());
-                    iPrinter.addParameter("dateTo", iDialog.getDateTo());
-                }
-                if (isInvoiceSelected) {
-                    SSSupplierInvoice iInvoice = iDialog.getInvoice();
+                        SSOutpaymentListPrinter iPrinter = new SSOutpaymentListPrinter(iInpayments);
 
-                    iPrinter.addParameter("periodTitle",
-                            SSBundle.getBundle().getString(
-                            "outpaymentlistreport.invoicetitle"));
-                    iPrinter.addParameter("periodText",
-                            iInvoice == null ? null : iInvoice.getNumber().toString());
-                }
+                        if (isDateSelected) {
+                            iPrinter.addParameter("dateFrom", iDialog.getDateFrom());
+                            iPrinter.addParameter("dateTo", iDialog.getDateTo());
+                        }
+                        if (isInvoiceSelected) {
+                            SSSupplierInvoice iInvoice = iDialog.getInvoice();
 
-                iPrinter.preview(iMainFrame);
-            }
-        });
+                            iPrinter.addParameter("periodTitle",
+                                    SSBundle.getBundle().getString(
+                                    "outpaymentlistreport.invoicetitle"));
+                            iPrinter.addParameter("periodText",
+                                    iInvoice == null ? null : iInvoice.getNumber().toString());
+                        }
+
+                        iPrinter.preview(iMainFrame);
+
+                    });
     }
 
     /**
@@ -1098,8 +1092,8 @@ public class SSReportFactory {
         final Date iDate = iDialog.getDate();
         final boolean isDateSelected = iDialog.isDateSelected();
 
-        SSProgressDialog.runProgress(iMainFrame, new Runnable() {
-            public void run() {
+        SSProgressDialog.runProgress(iMainFrame, () -> {
+
                 SSStockValuePrinter iPrinter;
 
                 if (isDateSelected) {
@@ -1111,8 +1105,8 @@ public class SSReportFactory {
                 if (isDateSelected) {}
 
                 iPrinter.preview(iMainFrame);
-            }
-        });
+
+            });
     }
 
     /**
@@ -1131,8 +1125,8 @@ public class SSReportFactory {
         final Date iDate = iDialog.getDate();
         final boolean iDateSelected = iDialog.isDateSelected();
 
-        SSProgressDialog.runProgress(iMainFrame, new Runnable() {
-            public void run() {
+        SSProgressDialog.runProgress(iMainFrame, () -> {
+
 
                 SSStockAccountPrinter iPrinter;
 
@@ -1142,8 +1136,8 @@ public class SSReportFactory {
                     iPrinter = new SSStockAccountPrinter();
                 }
                 iPrinter.preview(iMainFrame);
-            }
-        });
+
+            });
     }
 
     /**
@@ -1161,14 +1155,14 @@ public class SSReportFactory {
         final Date iDate = iDialog.getDate();
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSAccountsRecievablePrinter iPrinter = new SSAccountsRecievablePrinter(
-                        iDate);
+                () -> {
 
-                iPrinter.preview(iMainFrame);
-            }
-        });
+                        SSAccountsRecievablePrinter iPrinter = new SSAccountsRecievablePrinter(
+                                iDate);
+
+                        iPrinter.preview(iMainFrame);
+
+                    });
 
     }
 
@@ -1188,14 +1182,14 @@ public class SSReportFactory {
         final Date iDate = iDialog.getDate();
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSCustomerclaimPrinter iPrinter = new SSCustomerclaimPrinter(
-                        SSDateMath.ceil(iDate));
+                () -> {
 
-                iPrinter.preview(iMainFrame);
-            }
-        });
+                        SSCustomerclaimPrinter iPrinter = new SSCustomerclaimPrinter(
+                                SSDateMath.ceil(iDate));
+
+                        iPrinter.preview(iMainFrame);
+
+                    });
 
     }
 
@@ -1214,13 +1208,13 @@ public class SSReportFactory {
 
         final Date iDate = iDialog.getDate();
 
-        SSProgressDialog.runProgress(iMainFrame, new Runnable() {
-            public void run() {
+        SSProgressDialog.runProgress(iMainFrame, () -> {
+
                 SSAccountsPayablePrinter iPrinter = new SSAccountsPayablePrinter(iDate);
 
                 iPrinter.preview(iMainFrame);
-            }
-        });
+
+            });
 
     }
 
@@ -1238,13 +1232,13 @@ public class SSReportFactory {
         }
         final Date iDate = iDialog.getDate();
 
-        SSProgressDialog.runProgress(iMainFrame, new Runnable() {
-            public void run() {
+        SSProgressDialog.runProgress(iMainFrame, () -> {
+
                 SSSupplierdebtPrinter iPrinter = new SSSupplierdebtPrinter(iDate);
 
                 iPrinter.preview(iMainFrame);
-            }
-        });
+
+            });
 
     }
 
@@ -1268,14 +1262,14 @@ public class SSReportFactory {
 
         SSProgressDialog.runProgress(iMainFrame,
                 SSBundle.getBundle().getString("salereport.title"),
-                new Runnable() {
-            public void run() {
-                SSSaleReportPrinter iPrinter = new SSSaleReportPrinter(iFrom, iTo,
-                        iSortingMode, iAscending);
+                () -> {
 
-                iPrinter.preview(iMainFrame);
-            }
-        });
+                        SSSaleReportPrinter iPrinter = new SSSaleReportPrinter(iFrom, iTo,
+                                iSortingMode, iAscending);
+
+                        iPrinter.preview(iMainFrame);
+
+                    });
     }
 
     /**
@@ -1306,13 +1300,13 @@ public class SSReportFactory {
         final Date iFrom = iDialog.getFrom();
         final Date iTo = iDialog.getTo();
 
-        SSProgressDialog.runProgress(iMainFrame, new Runnable() {
-            public void run() {
+        SSProgressDialog.runProgress(iMainFrame, () -> {
+
                 SSSalevaluesPrinter iPrinter = new SSSalevaluesPrinter(iFrom, iTo);
 
                 iPrinter.preview(iMainFrame);
-            }
-        });
+
+            });
     }
 
     /**
@@ -1343,13 +1337,13 @@ public class SSReportFactory {
         final Date iFrom = iDialog.getFrom();
         final Date iTo = iDialog.getTo();
 
-        SSProgressDialog.runProgress(iMainFrame, new Runnable() {
-            public void run() {
+        SSProgressDialog.runProgress(iMainFrame, () -> {
+
                 SSPurchasevaluePrinter iPrinter = new SSPurchasevaluePrinter(iFrom, iTo);
 
                 iPrinter.preview(iMainFrame);
-            }
-        });
+
+            });
     }
 
     /**
@@ -1374,20 +1368,20 @@ public class SSReportFactory {
             SSDB.getInstance().updateInvoice(iInvoice);
         }
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSMultiPrinter iPrinter = new SSMultiPrinter();
+                () -> {
 
-                for (SSInvoice iInvoice : iInvoices) {
-                    SSInvoicePrinter iInvoicePrinter = new SSInvoicePrinter(iInvoice,
-                            iLanguage);
+                        SSMultiPrinter iPrinter = new SSMultiPrinter();
 
-                    iPrinter.addReport(iInvoicePrinter);
-                }
-                iPrinter.preview(iMainFrame);
+                        for (SSInvoice iInvoice : iInvoices) {
+                            SSInvoicePrinter iInvoicePrinter = new SSInvoicePrinter(iInvoice,
+                                    iLanguage);
 
-            }
-        });
+                            iPrinter.addReport(iInvoicePrinter);
+                        }
+                        iPrinter.preview(iMainFrame);
+
+
+                    });
     }
 
     public static void EmailInvoiceReport(final SSMainFrame iMainFrame, final SSInvoice iInvoice) {
@@ -1405,43 +1399,43 @@ public class SSReportFactory {
         iInvoice.setPrinted();
         SSDB.getInstance().updateInvoice(iInvoice);
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSMultiPrinter iPrinter = new SSMultiPrinter();
-                SSInvoicePrinter iInvoicePrinter = new SSInvoicePrinter(iInvoice,
-                        iLanguage);
+                () -> {
 
-                iPrinter.addReport(iInvoicePrinter);
+                                      SSMultiPrinter iPrinter = new SSMultiPrinter();
+                                      SSInvoicePrinter iInvoicePrinter = new SSInvoicePrinter(iInvoice,
+                                              iLanguage);
 
-                iPrinter.generateReport();
-                iPrinter.getPrinter();
-                String iFileName = "faktura.pdf";
-		if (!PDF_FILE_DIR.exists()) {
-		    PDF_FILE_DIR.mkdirs();
-		}
+                                      iPrinter.addReport(iInvoicePrinter);
 
-                try {
-                    JasperExportManager.exportReportToPdfFile(iPrinter.getPrinter(),
-                            new File(PDF_FILE_DIR, iFileName).getPath());
-                } catch (JRException e) {
-                    e.printStackTrace();
-                }
-                String iSubject = "Faktura " + iInvoice.getNumber() + " från "
-                        + SSDB.getInstance().getCurrentCompany().getName();
+                                      iPrinter.generateReport();
+                                      iPrinter.getPrinter();
+                                      String iFileName = "faktura.pdf";
+                        if (!PDF_FILE_DIR.exists()) {
+                            PDF_FILE_DIR.mkdirs();
+                        }
 
-                try {
-                    if (!SSMail.sendMail(iInvoice.getCustomer().getEMail(), iSubject,
-                            iFileName)) {
-                        return;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    new SSErrorDialog(SSMainFrame.getInstance(), "mail.somethingwrong");
-                    return;
-                }
-                SSInformationDialog.showDialog(SSMainFrame.getInstance(), "mail.success");
-            }
-        });
+                                      try {
+                                          JasperExportManager.exportReportToPdfFile(iPrinter.getPrinter(),
+                                                  new File(PDF_FILE_DIR, iFileName).getPath());
+                                      } catch (JRException e) {
+                                          e.printStackTrace();
+                                      }
+                                      String iSubject = "Faktura " + iInvoice.getNumber() + " från "
+                                              + SSDB.getInstance().getCurrentCompany().getName();
+
+                                      try {
+                                          if (!SSMail.sendMail(iInvoice.getCustomer().getEMail(), iSubject,
+                                                  iFileName)) {
+                                              return;
+                                          }
+                                      } catch (MessagingException e) {
+                                          e.printStackTrace();
+                                          new SSErrorDialog(SSMainFrame.getInstance(), "mail.somethingwrong");
+                                          return;
+                                      }
+                                      SSInformationDialog.showDialog(SSMainFrame.getInstance(), "mail.success");
+
+                    });
     }
 
     /**
@@ -1471,19 +1465,19 @@ public class SSReportFactory {
         }
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSMultiPrinter iPrinter = new SSMultiPrinter();
+                () -> {
 
-                for (SSInvoice iInvoice : iInvoices) {
-                    SSOCRInvoicePrinter iInvoicePrinter = new SSOCRInvoicePrinter(iInvoice,
-                            iLanguage, iShowBackground);
+                        SSMultiPrinter iPrinter = new SSMultiPrinter();
 
-                    iPrinter.addReport(iInvoicePrinter);
-                }
-                iPrinter.preview(iMainFrame);
-            }
-        });
+                        for (SSInvoice iInvoice : iInvoices) {
+                            SSOCRInvoicePrinter iInvoicePrinter = new SSOCRInvoicePrinter(iInvoice,
+                                    iLanguage, iShowBackground);
+
+                            iPrinter.addReport(iInvoicePrinter);
+                        }
+                        iPrinter.preview(iMainFrame);
+
+                    });
     }
 
     /**
@@ -1509,20 +1503,20 @@ public class SSReportFactory {
         }
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSMultiPrinter iPrinter = new SSMultiPrinter();
+                () -> {
 
-                for (SSCreditInvoice iCreditInvoice : iCreditInvoices) {
-                    SSCreditinvoicePrinter iCreditinvoicePrinter = new SSCreditinvoicePrinter(
-                            iCreditInvoice, iLanguage);
+                        SSMultiPrinter iPrinter = new SSMultiPrinter();
 
-                    iPrinter.addReport(iCreditinvoicePrinter);
-                }
-                iPrinter.preview(iMainFrame);
+                        for (SSCreditInvoice iCreditInvoice : iCreditInvoices) {
+                            SSCreditinvoicePrinter iCreditinvoicePrinter = new SSCreditinvoicePrinter(
+                                    iCreditInvoice, iLanguage);
 
-            }
-        });
+                            iPrinter.addReport(iCreditinvoicePrinter);
+                        }
+                        iPrinter.preview(iMainFrame);
+
+
+                    });
     }
 
     public static void EmailCreditInvoiceReport(final SSMainFrame iMainFrame, final SSCreditInvoice iCreditInvoice) {
@@ -1540,42 +1534,42 @@ public class SSReportFactory {
         iCreditInvoice.setPrinted();
         SSDB.getInstance().updateCreditInvoice(iCreditInvoice);
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSMultiPrinter iPrinter = new SSMultiPrinter();
-                SSCreditinvoicePrinter iCreditInvoicePrinter = new SSCreditinvoicePrinter(
-                        iCreditInvoice, iLanguage);
+                () -> {
 
-                iPrinter.addReport(iCreditInvoicePrinter);
+                                      SSMultiPrinter iPrinter = new SSMultiPrinter();
+                                      SSCreditinvoicePrinter iCreditInvoicePrinter = new SSCreditinvoicePrinter(
+                                              iCreditInvoice, iLanguage);
 
-                iPrinter.generateReport();
-                iPrinter.getPrinter();
-                String iFileName = "kreditfaktura.pdf";
-		if (!PDF_FILE_DIR.exists()) {
-		    PDF_FILE_DIR.mkdirs();
-		}
-                try {
-                    JasperExportManager.exportReportToPdfFile(iPrinter.getPrinter(),
-                            new File(PDF_FILE_DIR, iFileName).getPath());
-                } catch (JRException e) {
-                    e.printStackTrace();
-                }
-                String iSubject = "Kreditfaktura " + iCreditInvoice.getNumber()
-                        + " från " + SSDB.getInstance().getCurrentCompany().getName();
+                                      iPrinter.addReport(iCreditInvoicePrinter);
 
-                try {
-                    if (!SSMail.sendMail(iCreditInvoice.getCustomer().getEMail(), iSubject,
-                            iFileName)) {
-                        return;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    new SSErrorDialog(SSMainFrame.getInstance(), "mail.somethingwrong");
-                    return;
-                }
-                SSInformationDialog.showDialog(SSMainFrame.getInstance(), "mail.success");
-            }
-        });
+                                      iPrinter.generateReport();
+                                      iPrinter.getPrinter();
+                                      String iFileName = "kreditfaktura.pdf";
+                        if (!PDF_FILE_DIR.exists()) {
+                            PDF_FILE_DIR.mkdirs();
+                        }
+                                      try {
+                                          JasperExportManager.exportReportToPdfFile(iPrinter.getPrinter(),
+                                                  new File(PDF_FILE_DIR, iFileName).getPath());
+                                      } catch (JRException e) {
+                                          e.printStackTrace();
+                                      }
+                                      String iSubject = "Kreditfaktura " + iCreditInvoice.getNumber()
+                                              + " från " + SSDB.getInstance().getCurrentCompany().getName();
+
+                                      try {
+                                          if (!SSMail.sendMail(iCreditInvoice.getCustomer().getEMail(), iSubject,
+                                                  iFileName)) {
+                                              return;
+                                          }
+                                      } catch (MessagingException e) {
+                                          e.printStackTrace();
+                                          new SSErrorDialog(SSMainFrame.getInstance(), "mail.somethingwrong");
+                                          return;
+                                      }
+                                      SSInformationDialog.showDialog(SSMainFrame.getInstance(), "mail.success");
+
+                    });
     }
 
     /**
@@ -1600,8 +1594,8 @@ public class SSReportFactory {
             SSDB.getInstance().updateOrder(iOrder);
         }
 
-        SSProgressDialog.runProgress(iMainFrame, new Runnable() {
-            public void run() {
+        SSProgressDialog.runProgress(iMainFrame, () -> {
+
                 SSMultiPrinter iPrinter = new SSMultiPrinter();
 
                 for (SSOrder iOrder : iOrders) {
@@ -1610,8 +1604,8 @@ public class SSReportFactory {
                     iPrinter.addReport(iOrderPrinter);
                 }
                 iPrinter.preview(iMainFrame);
-            }
-        });
+
+            });
     }
 
     /**
@@ -1634,44 +1628,44 @@ public class SSReportFactory {
         iOrder.setPrinted();
         SSDB.getInstance().updateOrder(iOrder);
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSMultiPrinter iPrinter = new SSMultiPrinter();
-                SSOrderPrinter iOrderPrinter = new SSOrderPrinter(iOrder, iLanguage);
+                () -> {
 
-                iPrinter.addReport(iOrderPrinter);
+                                      SSMultiPrinter iPrinter = new SSMultiPrinter();
+                                      SSOrderPrinter iOrderPrinter = new SSOrderPrinter(iOrder, iLanguage);
 
-                iPrinter.generateReport();
-                iPrinter.getPrinter();
-                String iFileName = "order.pdf";
-		if (!PDF_FILE_DIR.exists()) {
-		    PDF_FILE_DIR.mkdirs();
-		}
+                                      iPrinter.addReport(iOrderPrinter);
 
-                try {
-                    JasperExportManager.exportReportToPdfFile(iPrinter.getPrinter(),
-                            new File(PDF_FILE_DIR, iFileName).getPath());
-                } catch (JRException e) {
-                    e.printStackTrace();
-                }
-                String iSubject = "Order " + iOrder.getNumber() + " från "
-                        + SSDB.getInstance().getCurrentCompany().getName();
-
-                try {
-                    if (iOrder.getCustomer() != null) {
-                        if (!SSMail.sendMail(iOrder.getCustomer().getEMail(), iSubject,
-                                iFileName)) {
-                            return;
+                                      iPrinter.generateReport();
+                                      iPrinter.getPrinter();
+                                      String iFileName = "order.pdf";
+                        if (!PDF_FILE_DIR.exists()) {
+                            PDF_FILE_DIR.mkdirs();
                         }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    new SSErrorDialog(SSMainFrame.getInstance(), "mail.somethingwrong");
-                    return;
-                }
-                SSInformationDialog.showDialog(SSMainFrame.getInstance(), "mail.success");
-            }
-        });
+
+                                      try {
+                                          JasperExportManager.exportReportToPdfFile(iPrinter.getPrinter(),
+                                                  new File(PDF_FILE_DIR, iFileName).getPath());
+                                      } catch (JRException e) {
+                                          e.printStackTrace();
+                                      }
+                                      String iSubject = "Order " + iOrder.getNumber() + " från "
+                                              + SSDB.getInstance().getCurrentCompany().getName();
+
+                                      try {
+                                          if (iOrder.getCustomer() != null) {
+                                              if (!SSMail.sendMail(iOrder.getCustomer().getEMail(), iSubject,
+                                                      iFileName)) {
+                                                  return;
+                                              }
+                                          }
+                                      } catch (MessagingException e) {
+                                          e.printStackTrace();
+                                          new SSErrorDialog(SSMainFrame.getInstance(), "mail.somethingwrong");
+                                          return;
+                                      }
+                                      SSInformationDialog.showDialog(SSMainFrame.getInstance(), "mail.success");
+
+                    });
     }
 
     /**
@@ -1696,19 +1690,19 @@ public class SSReportFactory {
             SSDB.getInstance().updateTender(iTender);
         }
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSMultiPrinter iPrinter = new SSMultiPrinter();
+                () -> {
 
-                for (SSTender iTender : iTenders) {
-                    SSTenderPrinter iTenderPrinter = new SSTenderPrinter(iTender,
-                            iLanguage);
+                        SSMultiPrinter iPrinter = new SSMultiPrinter();
 
-                    iPrinter.addReport(iTenderPrinter);
-                }
-                iPrinter.preview(iMainFrame);
-            }
-        });
+                        for (SSTender iTender : iTenders) {
+                            SSTenderPrinter iTenderPrinter = new SSTenderPrinter(iTender,
+                                    iLanguage);
+
+                            iPrinter.addReport(iTenderPrinter);
+                        }
+                        iPrinter.preview(iMainFrame);
+
+                    });
     }
 
     /**
@@ -1732,44 +1726,44 @@ public class SSReportFactory {
         SSDB.getInstance().updateTender(iTender);
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSMultiPrinter iPrinter = new SSMultiPrinter();
-                SSTenderPrinter iTenderPrinter = new SSTenderPrinter(iTender, iLanguage);
+                () -> {
 
-                iPrinter.addReport(iTenderPrinter);
+                                      SSMultiPrinter iPrinter = new SSMultiPrinter();
+                                      SSTenderPrinter iTenderPrinter = new SSTenderPrinter(iTender, iLanguage);
 
-                iPrinter.generateReport();
-                iPrinter.getPrinter();
-                String iFileName = "offert.pdf";
-		if (!PDF_FILE_DIR.exists()) {
-		    PDF_FILE_DIR.mkdirs();
-		}
+                                      iPrinter.addReport(iTenderPrinter);
 
-                try {
-                    JasperExportManager.exportReportToPdfFile(iPrinter.getPrinter(),
-                            new File(PDF_FILE_DIR, iFileName).getPath());
-                } catch (JRException e) {
-                    e.printStackTrace();
-                }
-                String iSubject = "Offert " + iTender.getNumber() + " från "
-                        + SSDB.getInstance().getCurrentCompany().getName();
-
-                try {
-                    if (iTender.getCustomer() != null) {
-                        if (!SSMail.sendMail(iTender.getCustomer().getEMail(), iSubject,
-                                iFileName)) {
-                            return;
+                                      iPrinter.generateReport();
+                                      iPrinter.getPrinter();
+                                      String iFileName = "offert.pdf";
+                        if (!PDF_FILE_DIR.exists()) {
+                            PDF_FILE_DIR.mkdirs();
                         }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    new SSErrorDialog(SSMainFrame.getInstance(), "mail.somethingwrong");
-                    return;
-                }
-                SSInformationDialog.showDialog(SSMainFrame.getInstance(), "mail.success");
-            }
-        });
+
+                                      try {
+                                          JasperExportManager.exportReportToPdfFile(iPrinter.getPrinter(),
+                                                  new File(PDF_FILE_DIR, iFileName).getPath());
+                                      } catch (JRException e) {
+                                          e.printStackTrace();
+                                      }
+                                      String iSubject = "Offert " + iTender.getNumber() + " från "
+                                              + SSDB.getInstance().getCurrentCompany().getName();
+
+                                      try {
+                                          if (iTender.getCustomer() != null) {
+                                              if (!SSMail.sendMail(iTender.getCustomer().getEMail(), iSubject,
+                                                      iFileName)) {
+                                                  return;
+                                              }
+                                          }
+                                      } catch (MessagingException e) {
+                                          e.printStackTrace();
+                                          new SSErrorDialog(SSMainFrame.getInstance(), "mail.somethingwrong");
+                                          return;
+                                      }
+                                      SSInformationDialog.showDialog(SSMainFrame.getInstance(), "mail.success");
+
+                    });
     }
 
     /**
@@ -1790,19 +1784,19 @@ public class SSReportFactory {
         final Locale iLanguage = iDialog.getLanguage();
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSMultiPrinter iPrinter = new SSMultiPrinter();
+                () -> {
 
-                for (SSOrder iOrder : iOrders) {
-                    SSPickingslipPrinter iPickingslipPrinter = new SSPickingslipPrinter(
-                            iOrder, iLanguage);
+                        SSMultiPrinter iPrinter = new SSMultiPrinter();
 
-                    iPrinter.addReport(iPickingslipPrinter);
-                }
-                iPrinter.preview(iMainFrame);
-            }
-        });
+                        for (SSOrder iOrder : iOrders) {
+                            SSPickingslipPrinter iPickingslipPrinter = new SSPickingslipPrinter(
+                                    iOrder, iLanguage);
+
+                            iPrinter.addReport(iPickingslipPrinter);
+                        }
+                        iPrinter.preview(iMainFrame);
+
+                    });
 
     }
 
@@ -1824,20 +1818,20 @@ public class SSReportFactory {
         final Locale iLanguage = iDialog.getLanguage();
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSMultiPrinter iPrinter = new SSMultiPrinter();
+                () -> {
 
-                for (SSOrder iOrder : iOrders) {
-                    SSDeliverynotePrinter iDeliverynotePrinter = new SSDeliverynotePrinter(
-                            iOrder, iLanguage);
+                        SSMultiPrinter iPrinter = new SSMultiPrinter();
 
-                    iPrinter.addReport(iDeliverynotePrinter);
-                }
-                iPrinter.preview(iMainFrame);
+                        for (SSOrder iOrder : iOrders) {
+                            SSDeliverynotePrinter iDeliverynotePrinter = new SSDeliverynotePrinter(
+                                    iOrder, iLanguage);
 
-            }
-        });
+                            iPrinter.addReport(iDeliverynotePrinter);
+                        }
+                        iPrinter.preview(iMainFrame);
+
+
+                    });
 
     }
 
@@ -1862,20 +1856,20 @@ public class SSReportFactory {
         final Locale iLanguage = iDialog.getLanguage();
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSMultiPrinter iPrinter = new SSMultiPrinter();
+                () -> {
 
-                for (SSPurchaseOrder iPurchaseOrder : iPurchaseOrders) {
-                    SSPurchaseOrderPrinter iPurchaseOrderPrinter = new SSPurchaseOrderPrinter(
-                            iPurchaseOrder, iLanguage);
+                        SSMultiPrinter iPrinter = new SSMultiPrinter();
 
-                    iPrinter.addReport(iPurchaseOrderPrinter);
-                }
-                iPrinter.preview(iMainFrame);
+                        for (SSPurchaseOrder iPurchaseOrder : iPurchaseOrders) {
+                            SSPurchaseOrderPrinter iPurchaseOrderPrinter = new SSPurchaseOrderPrinter(
+                                    iPurchaseOrder, iLanguage);
 
-            }
-        });
+                            iPrinter.addReport(iPurchaseOrderPrinter);
+                        }
+                        iPrinter.preview(iMainFrame);
+
+
+                    });
     }
 
     public static void EmailPurchaseOrderReport(final SSMainFrame iMainFrame, final SSPurchaseOrder iPurchaseOrder) {
@@ -1894,43 +1888,43 @@ public class SSReportFactory {
         SSDB.getInstance().updatePurchaseOrder(iPurchaseOrder);
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSMultiPrinter iPrinter = new SSMultiPrinter();
-                SSPurchaseOrderPrinter iPurchaseOrderPrinter = new SSPurchaseOrderPrinter(
-                        iPurchaseOrder, iLanguage);
+                () -> {
 
-                iPrinter.addReport(iPurchaseOrderPrinter);
+                                      SSMultiPrinter iPrinter = new SSMultiPrinter();
+                                      SSPurchaseOrderPrinter iPurchaseOrderPrinter = new SSPurchaseOrderPrinter(
+                                              iPurchaseOrder, iLanguage);
 
-                iPrinter.generateReport();
-                iPrinter.getPrinter();
-                String iFileName = "inkopsorder.pdf";
-		if (!PDF_FILE_DIR.exists()) {
-		    PDF_FILE_DIR.mkdirs();
-		}
+                                      iPrinter.addReport(iPurchaseOrderPrinter);
 
-                try {
-                    JasperExportManager.exportReportToPdfFile(iPrinter.getPrinter(),
-                            new File(PDF_FILE_DIR, iFileName).getPath());
-                } catch (JRException e) {
-                    e.printStackTrace();
-                }
-                String iSubject = "Inköpsorder " + iPurchaseOrder.getNumber() + " från "
-                        + SSDB.getInstance().getCurrentCompany().getName();
+                                      iPrinter.generateReport();
+                                      iPrinter.getPrinter();
+                                      String iFileName = "inkopsorder.pdf";
+                        if (!PDF_FILE_DIR.exists()) {
+                            PDF_FILE_DIR.mkdirs();
+                        }
 
-                try {
-                    if (!SSMail.sendMail(iPurchaseOrder.getSupplier().getEMail(), iSubject,
-                            iFileName)) {
-                        return;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    new SSErrorDialog(SSMainFrame.getInstance(), "mail.somethingwrong");
-                    return;
-                }
-                SSInformationDialog.showDialog(SSMainFrame.getInstance(), "mail.success");
-            }
-        });
+                                      try {
+                                          JasperExportManager.exportReportToPdfFile(iPrinter.getPrinter(),
+                                                  new File(PDF_FILE_DIR, iFileName).getPath());
+                                      } catch (JRException e) {
+                                          e.printStackTrace();
+                                      }
+                                      String iSubject = "Inköpsorder " + iPurchaseOrder.getNumber() + " från "
+                                              + SSDB.getInstance().getCurrentCompany().getName();
+
+                                      try {
+                                          if (!SSMail.sendMail(iPurchaseOrder.getSupplier().getEMail(), iSubject,
+                                                  iFileName)) {
+                                              return;
+                                          }
+                                      } catch (MessagingException e) {
+                                          e.printStackTrace();
+                                          new SSErrorDialog(SSMainFrame.getInstance(), "mail.somethingwrong");
+                                          return;
+                                      }
+                                      SSInformationDialog.showDialog(SSMainFrame.getInstance(), "mail.success");
+
+                    });
     }
 
     /**
@@ -1950,20 +1944,20 @@ public class SSReportFactory {
         final Locale iLanguage = iDialog.getLanguage();
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSMultiPrinter iPrinter = new SSMultiPrinter();
+                () -> {
 
-                for (SSPurchaseOrder iPurchaseOrder : iPurchaseOrders) {
-                    SSInquiryPrinter iInquiryPrinter = new SSInquiryPrinter(iPurchaseOrder,
-                            iLanguage);
+                        SSMultiPrinter iPrinter = new SSMultiPrinter();
 
-                    iPrinter.addReport(iInquiryPrinter);
-                }
-                iPrinter.preview(iMainFrame);
+                        for (SSPurchaseOrder iPurchaseOrder : iPurchaseOrders) {
+                            SSInquiryPrinter iInquiryPrinter = new SSInquiryPrinter(iPurchaseOrder,
+                                    iLanguage);
 
-            }
-        });
+                            iPrinter.addReport(iInquiryPrinter);
+                        }
+                        iPrinter.preview(iMainFrame);
+
+
+                    });
     }
 
     public static void EmailInquiryReport(final SSMainFrame iMainFrame, final  SSPurchaseOrder iPurchaseOrder) {
@@ -1978,43 +1972,43 @@ public class SSReportFactory {
         final Locale iLanguage = iDialog.getLanguage();
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSMultiPrinter iPrinter = new SSMultiPrinter();
-                SSInquiryPrinter iInquiryPrinter = new SSInquiryPrinter(iPurchaseOrder,
-                        iLanguage);
+                () -> {
 
-                iPrinter.addReport(iInquiryPrinter);
-                iPrinter.generateReport();
-                iPrinter.getPrinter();
-                String iFileName = "forfragan.pdf";
-		if (!PDF_FILE_DIR.exists()) {
-		    PDF_FILE_DIR.mkdirs();
-		}
+                                      SSMultiPrinter iPrinter = new SSMultiPrinter();
+                                      SSInquiryPrinter iInquiryPrinter = new SSInquiryPrinter(iPurchaseOrder,
+                                              iLanguage);
 
-                try {
-                    JasperExportManager.exportReportToPdfFile(iPrinter.getPrinter(),
-                            new File(PDF_FILE_DIR, iFileName).getPath());
-                } catch (JRException e) {
-                    e.printStackTrace();
-                }
-                String iSubject = "Förfrågan från "
-                        + SSDB.getInstance().getCurrentCompany().getName();
+                                      iPrinter.addReport(iInquiryPrinter);
+                                      iPrinter.generateReport();
+                                      iPrinter.getPrinter();
+                                      String iFileName = "forfragan.pdf";
+                        if (!PDF_FILE_DIR.exists()) {
+                            PDF_FILE_DIR.mkdirs();
+                        }
 
-                try {
-                    if (!SSMail.sendMail(iPurchaseOrder.getSupplier().getEMail(), iSubject,
-                            iFileName)) {
-                        return;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    new SSErrorDialog(SSMainFrame.getInstance(), "mail.somethingwrong");
-                    return;
-                }
-                SSInformationDialog.showDialog(SSMainFrame.getInstance(), "mail.success");
+                                      try {
+                                          JasperExportManager.exportReportToPdfFile(iPrinter.getPrinter(),
+                                                  new File(PDF_FILE_DIR, iFileName).getPath());
+                                      } catch (JRException e) {
+                                          e.printStackTrace();
+                                      }
+                                      String iSubject = "Förfrågan från "
+                                              + SSDB.getInstance().getCurrentCompany().getName();
 
-            }
-        });
+                                      try {
+                                          if (!SSMail.sendMail(iPurchaseOrder.getSupplier().getEMail(), iSubject,
+                                                  iFileName)) {
+                                              return;
+                                          }
+                                      } catch (MessagingException e) {
+                                          e.printStackTrace();
+                                          new SSErrorDialog(SSMainFrame.getInstance(), "mail.somethingwrong");
+                                          return;
+                                      }
+                                      SSInformationDialog.showDialog(SSMainFrame.getInstance(), "mail.success");
+
+
+                    });
     }
 
     /**
@@ -2054,38 +2048,38 @@ public class SSReportFactory {
         };
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                Map<SSCustomer, List<SSInvoice>> iInvoicesPerCustomer = new HashMap<SSCustomer, List<SSInvoice>>();
+                () -> {
 
-                for (SSInvoice iInvoice : iInvoices) {
-                    SSCustomer iCustomer = iInvoice.getCustomer();
+                        Map<SSCustomer, List<SSInvoice>> iInvoicesPerCustomer = new HashMap<>();
 
-                    List<SSInvoice> iInvoicesForCustomer = iInvoicesPerCustomer.get(
-                            iCustomer);
+                        for (SSInvoice iInvoice : iInvoices) {
+                            SSCustomer iCustomer = iInvoice.getCustomer();
 
-                    if (iInvoicesForCustomer == null) {
-                        iInvoicesForCustomer = new LinkedList<SSInvoice>();
+                            List<SSInvoice> iInvoicesForCustomer = iInvoicesPerCustomer.get(
+                                    iCustomer);
 
-                        iInvoicesPerCustomer.put(iCustomer, iInvoicesForCustomer);
-                    }
-                    iInvoicesForCustomer.add(iInvoice);
-                }
-                // Create the multi report
-                SSMultiPrinter iMultiPrinter = new SSMultiPrinter();
+                            if (iInvoicesForCustomer == null) {
+                                iInvoicesForCustomer = new LinkedList<>();
 
-                // Get the invoices for the customer
-                for (Map.Entry<SSCustomer, List<SSInvoice>> ssCustomerListEntry : iInvoicesPerCustomer.entrySet()) {
-                    List<SSInvoice> iInvoicesForCustomer = ssCustomerListEntry.getValue();
+                                iInvoicesPerCustomer.put(iCustomer, iInvoicesForCustomer);
+                            }
+                            iInvoicesForCustomer.add(iInvoice);
+                        }
+                        // Create the multi report
+                        SSMultiPrinter iMultiPrinter = new SSMultiPrinter();
 
-                    SSReminderPrinter iPrinter = new SSReminderPrinter(
-                            iInvoicesForCustomer, ssCustomerListEntry.getKey(), iLanguage);
+                        // Get the invoices for the customer
+                        for (Map.Entry<SSCustomer, List<SSInvoice>> ssCustomerListEntry : iInvoicesPerCustomer.entrySet()) {
+                            List<SSInvoice> iInvoicesForCustomer = ssCustomerListEntry.getValue();
 
-                    iMultiPrinter.addReport(iPrinter);
-                }
-                iMultiPrinter.preview(iMainFrame, iRegisterAdapter);
-            }
-        });
+                            SSReminderPrinter iPrinter = new SSReminderPrinter(
+                                    iInvoicesForCustomer, ssCustomerListEntry.getKey(), iLanguage);
+
+                            iMultiPrinter.addReport(iPrinter);
+                        }
+                        iMultiPrinter.preview(iMainFrame, iRegisterAdapter);
+
+                    });
     }
 
     /**
@@ -2105,14 +2099,14 @@ public class SSReportFactory {
         final Date iEndDate = iDialog.getEndDate();
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSQuarterReportPrinter iPrinter = new SSQuarterReportPrinter(
-                        Locale.getDefault(), iDate, iEndDate);
+                () -> {
 
-                iPrinter.preview(iMainFrame);
-            }
-        });
+                        SSQuarterReportPrinter iPrinter = new SSQuarterReportPrinter(
+                                Locale.getDefault(), iDate, iEndDate);
+
+                        iPrinter.preview(iMainFrame);
+
+                    });
     }
 
     // Journals
@@ -2159,13 +2153,9 @@ public class SSReportFactory {
         final Date iFrom = iDialog.getFrom();
         final Date iTo = iDialog.getTo();
 
-        final List<SSInvoice> iFiltered = new LinkedList<SSInvoice>();
-
-        for (SSInvoice iInvoice : iInvoices) {
-            if (!iInvoice.isEntered() && SSInvoiceMath.inPeriod(iInvoice, iFrom, iTo)) {
-                iFiltered.add(iInvoice);
-            }
-        }
+        final List<SSInvoice> iFiltered = iInvoices.stream()
+                .filter(iInvoice -> !iInvoice.isEntered() && SSInvoiceMath.inPeriod(iInvoice, iFrom, iTo))
+                .collect(Collectors.toList());
         if (iFiltered.isEmpty()) {
             SSPostLock.removeLock(lockString);
             new SSInformationDialog(iMainFrame, "invoicejournal.dialog.norows");
@@ -2192,12 +2182,12 @@ public class SSReportFactory {
         }
         final SSVoucher iVoucher1 = SSVoucherMath.compress(iVoucher);
 
-        final ActionListener iCloseListener = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSQueryDialog iDialog = new SSQueryDialog(iMainFrame, SSBundle.getBundle(),
+        final ActionListener iCloseListener = e -> {
+
+                SSQueryDialog iDialog1 = new SSQueryDialog(iMainFrame, SSBundle.getBundle(),
                         "invoicejournal.dialog.register", iNumber, iVoucher1.getNumber());
 
-                if (iDialog.getResponce() != JOptionPane.YES_NO_OPTION) {
+                if (iDialog1.getResponce() != JOptionPane.YES_NO_OPTION) {
                     SSPostLock.removeLock(lockString);
                     return;
                 }
@@ -2219,26 +2209,26 @@ public class SSReportFactory {
                     SSVoucherFrame.getInstance().getModel().fireTableDataChanged();
                 }
                 SSPostLock.removeLock(lockString);
-            }
-        };
+
+            };
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSInvoicejournalPrinter iPrinter1 = new SSInvoicejournalPrinter(iFiltered,
-                        iNumber, iTo);
+                () -> {
 
-                SSVoucherPrinter iPrinter2 = new SSVoucherPrinter(iVoucher1,
-                        iPrinter1.getTitle());
+                        SSInvoicejournalPrinter iPrinter1 = new SSInvoicejournalPrinter(iFiltered,
+                                iNumber, iTo);
 
-                SSMultiPrinter iPrinter = new SSMultiPrinter();
+                        SSVoucherPrinter iPrinter2 = new SSVoucherPrinter(iVoucher1,
+                                iPrinter1.getTitle());
 
-                iPrinter.addReport(iPrinter1);
-                iPrinter.addReport(iPrinter2);
+                        SSMultiPrinter iPrinter = new SSMultiPrinter();
 
-                iPrinter.preview(iMainFrame, iCloseListener);
-            }
-        });
+                        iPrinter.addReport(iPrinter1);
+                        iPrinter.addReport(iPrinter2);
+
+                        iPrinter.preview(iMainFrame, iCloseListener);
+
+                    });
     }
 
     /**
@@ -2285,14 +2275,10 @@ public class SSReportFactory {
         final Date iFrom = iDialog.getFrom();
         final Date iTo = iDialog.getTo();
 
-        final List<SSCreditInvoice> iFiltered = new LinkedList<SSCreditInvoice>();
-
-        for (SSCreditInvoice iCreditInvoice : iCreditInvoices) {
-            if (!iCreditInvoice.isEntered()
-                    && SSInvoiceMath.inPeriod(iCreditInvoice, iFrom, iTo)) {
-                iFiltered.add(iCreditInvoice);
-            }
-        }
+        final List<SSCreditInvoice> iFiltered = iCreditInvoices.stream()
+                .filter(iCreditInvoice -> !iCreditInvoice.isEntered()
+                        && SSInvoiceMath.inPeriod(iCreditInvoice, iFrom, iTo))
+                .collect(Collectors.toList());
         if (iFiltered.isEmpty()) {
             SSPostLock.removeLock(lockString);
             new SSInformationDialog(iMainFrame, "creditinvoicejournal.dialog.norows");
@@ -2319,13 +2305,13 @@ public class SSReportFactory {
         }
         final SSVoucher iVoucher1 = SSVoucherMath.compress(iVoucher);
 
-        final ActionListener iCloseListener = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSQueryDialog iDialog = new SSQueryDialog(iMainFrame, SSBundle.getBundle(),
+        final ActionListener iCloseListener = e -> {
+
+                SSQueryDialog iDialog1 = new SSQueryDialog(iMainFrame, SSBundle.getBundle(),
                         "creditinvoicejournal.dialog.register", iNumber,
                         iVoucher1.getNumber());
 
-                if (iDialog.getResponce() != JOptionPane.YES_NO_OPTION) {
+                if (iDialog1.getResponce() != JOptionPane.YES_NO_OPTION) {
                     SSPostLock.removeLock(lockString);
                     return;
                 }
@@ -2347,26 +2333,26 @@ public class SSReportFactory {
                     SSVoucherFrame.getInstance().getModel().fireTableDataChanged();
                 }
                 SSPostLock.removeLock(lockString);
-            }
-        };
+
+            };
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSCreditinvoicejournalPrinter iPrinter1 = new SSCreditinvoicejournalPrinter(
-                        iFiltered, iNumber, iTo);
+                () -> {
 
-                SSVoucherPrinter            iPrinter2 = new SSVoucherPrinter(iVoucher1,
-                        iPrinter1.getTitle());
+                        SSCreditinvoicejournalPrinter iPrinter1 = new SSCreditinvoicejournalPrinter(
+                                iFiltered, iNumber, iTo);
 
-                SSMultiPrinter iPrinter = new SSMultiPrinter();
+                        SSVoucherPrinter            iPrinter2 = new SSVoucherPrinter(iVoucher1,
+                                iPrinter1.getTitle());
 
-                iPrinter.addReport(iPrinter1);
-                iPrinter.addReport(iPrinter2);
+                        SSMultiPrinter iPrinter = new SSMultiPrinter();
 
-                iPrinter.preview(iMainFrame, iCloseListener);
-            }
-        });
+                        iPrinter.addReport(iPrinter1);
+                        iPrinter.addReport(iPrinter2);
+
+                        iPrinter.preview(iMainFrame, iCloseListener);
+
+                    });
 
     }
 
@@ -2417,14 +2403,10 @@ public class SSReportFactory {
         final Date iFrom = iDialog.getFrom();
         final Date iTo = iDialog.getTo();
 
-        final List<SSInpayment> iFiltered = new LinkedList<SSInpayment>();
-
-        for (SSInpayment iInpayment : iInpayments) {
-            if (!iInpayment.isEntered()
-                    && SSInpaymentMath.inPeriod(iInpayment, iFrom, iTo)) {
-                iFiltered.add(iInpayment);
-            }
-        }
+        final List<SSInpayment> iFiltered = iInpayments.stream()
+                .filter(iInpayment -> !iInpayment.isEntered()
+                        && SSInpaymentMath.inPeriod(iInpayment, iFrom, iTo))
+                .collect(Collectors.toList());
         if (iFiltered.isEmpty()) {
             SSPostLock.removeLock(lockString);
             new SSInformationDialog(iMainFrame, "inpaymentjournal.dialog.norows");
@@ -2451,12 +2433,12 @@ public class SSReportFactory {
         }
         final SSVoucher iVoucher1 = SSVoucherMath.compress(iVoucher);
 
-        final ActionListener iCloseListener = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSQueryDialog iDialog = new SSQueryDialog(iMainFrame, SSBundle.getBundle(),
+        final ActionListener iCloseListener = e -> {
+
+                SSQueryDialog iDialog1 = new SSQueryDialog(iMainFrame, SSBundle.getBundle(),
                         "inpaymentjournal.dialog.register", iNumber, iVoucher1.getNumber());
 
-                if (iDialog.getResponce() != JOptionPane.YES_NO_OPTION) {
+                if (iDialog1.getResponce() != JOptionPane.YES_NO_OPTION) {
                     SSPostLock.removeLock(lockString);
                     return;
                 }
@@ -2478,26 +2460,26 @@ public class SSReportFactory {
                     SSVoucherFrame.getInstance().getModel().fireTableDataChanged();
                 }
                 SSPostLock.removeLock(lockString);
-            }
-        };
+
+            };
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSInpaymentjournalPrinter iPrinter1 = new SSInpaymentjournalPrinter(
-                        iFiltered, iNumber, iTo);
+                () -> {
 
-                SSVoucherPrinter            iPrinter2 = new SSVoucherPrinter(iVoucher1,
-                        iPrinter1.getTitle());
+                        SSInpaymentjournalPrinter iPrinter1 = new SSInpaymentjournalPrinter(
+                                iFiltered, iNumber, iTo);
 
-                SSMultiPrinter iPrinter = new SSMultiPrinter();
+                        SSVoucherPrinter            iPrinter2 = new SSVoucherPrinter(iVoucher1,
+                                iPrinter1.getTitle());
 
-                iPrinter.addReport(iPrinter1);
-                iPrinter.addReport(iPrinter2);
+                        SSMultiPrinter iPrinter = new SSMultiPrinter();
 
-                iPrinter.preview(iMainFrame, iCloseListener);
-            }
-        });
+                        iPrinter.addReport(iPrinter1);
+                        iPrinter.addReport(iPrinter2);
+
+                        iPrinter.preview(iMainFrame, iCloseListener);
+
+                    });
 
     }
 
@@ -2548,14 +2530,10 @@ public class SSReportFactory {
         final Date iFrom = iDialog.getFrom();
         final Date iTo = iDialog.getTo();
 
-        final List<SSSupplierInvoice> iFiltered = new LinkedList<SSSupplierInvoice>();
-
-        for (SSSupplierInvoice iInvoice : iInvoices) {
-            if (!iInvoice.isEntered()
-                    && SSSupplierInvoiceMath.inPeriod(iInvoice, iFrom, iTo)) {
-                iFiltered.add(iInvoice);
-            }
-        }
+        final List<SSSupplierInvoice> iFiltered = iInvoices.stream()
+                .filter(iInvoice -> !iInvoice.isEntered()
+                        && SSSupplierInvoiceMath.inPeriod(iInvoice, iFrom, iTo))
+                .collect(Collectors.toList());
         if (iFiltered.isEmpty()) {
             SSPostLock.removeLock(lockString);
             new SSInformationDialog(iMainFrame, "supplierinvoicejournal.dialog.norows");
@@ -2582,14 +2560,14 @@ public class SSReportFactory {
         }
         final SSVoucher iVoucher1 = SSVoucherMath.compress(iVoucher);
 
-        final ActionListener iCloseListener = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSQueryDialog iDialog = new SSQueryDialog(iMainFrame, SSBundle.getBundle(),
+        final ActionListener iCloseListener = e -> {
+
+                SSQueryDialog iDialog1 = new SSQueryDialog(iMainFrame, SSBundle.getBundle(),
                         "supplierinvoicejournal.dialog.register", iNumber,
                         iVoucher1.getNumber());
-                int iResponce = iDialog.getResponce();
+                int iResponce1 = iDialog1.getResponce();
 
-                if (iResponce != JOptionPane.YES_NO_OPTION) {
+                if (iResponce1 != JOptionPane.YES_NO_OPTION) {
                     SSPostLock.removeLock(lockString);
                     return;
                 }
@@ -2611,26 +2589,26 @@ public class SSReportFactory {
                     SSVoucherFrame.getInstance().getModel().fireTableDataChanged();
                 }
                 SSPostLock.removeLock(lockString);
-            }
-        };
+
+            };
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSSupplierInvoicejournalPrinter iPrinter1 = new SSSupplierInvoicejournalPrinter(
-                        iFiltered, iNumber, iTo);
+                () -> {
 
-                SSVoucherPrinter     iPrinter2 = new SSVoucherPrinter(iVoucher1,
-                        iPrinter1.getTitle());
+                        SSSupplierInvoicejournalPrinter iPrinter1 = new SSSupplierInvoicejournalPrinter(
+                                iFiltered, iNumber, iTo);
 
-                SSMultiPrinter iPrinter = new SSMultiPrinter();
+                        SSVoucherPrinter     iPrinter2 = new SSVoucherPrinter(iVoucher1,
+                                iPrinter1.getTitle());
 
-                iPrinter.addReport(iPrinter1);
-                iPrinter.addReport(iPrinter2);
+                        SSMultiPrinter iPrinter = new SSMultiPrinter();
 
-                iPrinter.preview(iMainFrame, iCloseListener);
-            }
-        });
+                        iPrinter.addReport(iPrinter1);
+                        iPrinter.addReport(iPrinter2);
+
+                        iPrinter.preview(iMainFrame, iCloseListener);
+
+                    });
     }
 
     /**
@@ -2679,14 +2657,10 @@ public class SSReportFactory {
         final Date iFrom = iDialog.getFrom();
         final Date iTo = iDialog.getTo();
 
-        final List<SSSupplierCreditInvoice> iFiltered = new LinkedList<SSSupplierCreditInvoice>();
-
-        for (SSSupplierCreditInvoice iInvoice : iInvoices) {
-            if (!iInvoice.isEntered()
-                    && SSSupplierCreditInvoiceMath.inPeriod(iInvoice, iFrom, iTo)) {
-                iFiltered.add(iInvoice);
-            }
-        }
+        final List<SSSupplierCreditInvoice> iFiltered = iInvoices.stream()
+                .filter(iInvoice -> !iInvoice.isEntered()
+                        && SSSupplierCreditInvoiceMath.inPeriod(iInvoice, iFrom, iTo))
+                .collect(Collectors.toList());
         if (iFiltered.isEmpty()) {
             SSPostLock.removeLock(lockString);
             new SSInformationDialog(iMainFrame,
@@ -2715,14 +2689,14 @@ public class SSReportFactory {
         }
         final SSVoucher iVoucher1 = SSVoucherMath.compress(iVoucher);
 
-        final ActionListener iCloseListener = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSQueryDialog iDialog = new SSQueryDialog(iMainFrame, SSBundle.getBundle(),
+        final ActionListener iCloseListener = e -> {
+
+                SSQueryDialog iDialog1 = new SSQueryDialog(iMainFrame, SSBundle.getBundle(),
                         "suppliercreditinvoicejournal.dialog.register", iNumber,
                         iVoucher1.getNumber());
-                int iResponce = iDialog.getResponce();
+                int iResponce1 = iDialog1.getResponce();
 
-                if (iResponce != JOptionPane.YES_NO_OPTION) {
+                if (iResponce1 != JOptionPane.YES_NO_OPTION) {
                     SSPostLock.removeLock(lockString);
                     return;
                 }
@@ -2745,26 +2719,26 @@ public class SSReportFactory {
                 }
 
                 SSPostLock.removeLock(lockString);
-            }
-        };
+
+            };
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSSuppliercreditinvoicejournalPrinter iPrinter1 = new SSSuppliercreditinvoicejournalPrinter(
-                        iFiltered, iNumber, iTo);
+                () -> {
 
-                SSVoucherPrinter     iPrinter2 = new SSVoucherPrinter(iVoucher1,
-                        iPrinter1.getTitle());
+                        SSSuppliercreditinvoicejournalPrinter iPrinter1 = new SSSuppliercreditinvoicejournalPrinter(
+                                iFiltered, iNumber, iTo);
 
-                SSMultiPrinter iPrinter = new SSMultiPrinter();
+                        SSVoucherPrinter     iPrinter2 = new SSVoucherPrinter(iVoucher1,
+                                iPrinter1.getTitle());
 
-                iPrinter.addReport(iPrinter1);
-                iPrinter.addReport(iPrinter2);
+                        SSMultiPrinter iPrinter = new SSMultiPrinter();
 
-                iPrinter.preview(iMainFrame, iCloseListener);
-            }
-        });
+                        iPrinter.addReport(iPrinter1);
+                        iPrinter.addReport(iPrinter2);
+
+                        iPrinter.preview(iMainFrame, iCloseListener);
+
+                    });
     }
 
     /**
@@ -2812,14 +2786,10 @@ public class SSReportFactory {
         final Date iFrom = iDialog.getFrom();
         final Date iTo = iDialog.getTo();
 
-        final List<SSOutpayment> iFiltered = new LinkedList<SSOutpayment>();
-
-        for (SSOutpayment iOutpayment : iOutpayments) {
-            if (!iOutpayment.isEntered()
-                    && SSOutpaymentMath.inPeriod(iOutpayment, iFrom, iTo)) {
-                iFiltered.add(iOutpayment);
-            }
-        }
+        final List<SSOutpayment> iFiltered = iOutpayments.stream()
+                .filter(iOutpayment -> !iOutpayment.isEntered()
+                        && SSOutpaymentMath.inPeriod(iOutpayment, iFrom, iTo))
+                .collect(Collectors.toList());
         if (iFiltered.isEmpty()) {
             SSPostLock.removeLock(lockString);
             new SSInformationDialog(iMainFrame, "outpaymentjournal.dialog.norows");
@@ -2846,14 +2816,14 @@ public class SSReportFactory {
         }
         final SSVoucher iVoucher1 = SSVoucherMath.compress(iVoucher);
 
-        final ActionListener iCloseListener = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSQueryDialog iDialog = new SSQueryDialog(iMainFrame, SSBundle.getBundle(),
+        final ActionListener iCloseListener = e -> {
+
+                SSQueryDialog iDialog1 = new SSQueryDialog(iMainFrame, SSBundle.getBundle(),
                         "outpaymentjournal.dialog.register", iNumber,
                         iVoucher1.getNumber());
-                int iResponce = iDialog.getResponce();
+                int iResponce1 = iDialog1.getResponce();
 
-                if (iResponce != JOptionPane.YES_NO_OPTION) {
+                if (iResponce1 != JOptionPane.YES_NO_OPTION) {
                     SSPostLock.removeLock(lockString);
                     return;
                 }
@@ -2875,26 +2845,26 @@ public class SSReportFactory {
                     SSVoucherFrame.getInstance().getModel().fireTableDataChanged();
                 }
                 SSPostLock.removeLock(lockString);
-            }
-        };
+
+            };
 
         SSProgressDialog.runProgress(iMainFrame,
-                new Runnable() {
-            public void run() {
-                SSOutpaymentjournalPrinter iPrinter1 = new SSOutpaymentjournalPrinter(
-                        iFiltered, iNumber, iTo);
+                () -> {
 
-                SSVoucherPrinter            iPrinter2 = new SSVoucherPrinter(iVoucher1,
-                        iPrinter1.getTitle());
+                        SSOutpaymentjournalPrinter iPrinter1 = new SSOutpaymentjournalPrinter(
+                                iFiltered, iNumber, iTo);
 
-                SSMultiPrinter iPrinter = new SSMultiPrinter();
+                        SSVoucherPrinter            iPrinter2 = new SSVoucherPrinter(iVoucher1,
+                                iPrinter1.getTitle());
 
-                iPrinter.addReport(iPrinter1);
-                iPrinter.addReport(iPrinter2);
+                        SSMultiPrinter iPrinter = new SSMultiPrinter();
 
-                iPrinter.preview(iMainFrame, iCloseListener);
-            }
-        });
+                        iPrinter.addReport(iPrinter1);
+                        iPrinter.addReport(iPrinter2);
+
+                        iPrinter.preview(iMainFrame, iCloseListener);
+
+                    });
 
     }
 

@@ -44,32 +44,24 @@ public class SSProjectPanel {
         iNumber.setEnabled(!iEdit);
         iNumber.setValue("");
 
-        iConcluded.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent e) {
-                iConcludedDate.setEnabled(iConcluded.isSelected());
-            }
-        });
+        iConcluded.addItemListener(e -> iConcludedDate.setEnabled(iConcluded.isSelected()));
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+        SwingUtilities.invokeLater(() -> {
+
                 if (iNumber.isEnabled()) {
                     iNumber.requestFocusInWindow();
                 } else {
                     iName.requestFocusInWindow();
                 }
 
-            }
-        });
+
+            });
 
         iNumber.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iName.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iName.requestFocusInWindow());
                 }
             }
         });
@@ -78,11 +70,7 @@ public class SSProjectPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iDescription.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iDescription.requestFocusInWindow());
                 }
             }
         });
@@ -91,11 +79,7 @@ public class SSProjectPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iConcluded.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iConcluded.requestFocusInWindow());
                 }
             }
         });
@@ -105,15 +89,15 @@ public class SSProjectPanel {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     SwingUtilities.invokeLater(
-                            new Runnable() {
-                        public void run() {
-                            if (iConcluded.isSelected()) {
-                                iConcludedDate.getEditor().getComponent(0).requestFocusInWindow();
-                            } else {
-                                iOkButton.requestFocusInWindow();
-                            }
-                        }
-                    });
+                            () -> {
+
+                                    if (iConcluded.isSelected()) {
+                                        iConcludedDate.getEditor().getComponent(0).requestFocusInWindow();
+                                    } else {
+                                        iOkButton.requestFocusInWindow();
+                                    }
+
+                                });
                 }
             }
         });
@@ -122,11 +106,7 @@ public class SSProjectPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iOkButton.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iOkButton.requestFocusInWindow());
                 }
             }
         });
@@ -135,19 +115,15 @@ public class SSProjectPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iCancelButton.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iCancelButton.requestFocusInWindow());
                 } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
+                    SwingUtilities.invokeLater(() -> {
+
                             for (ActionListener al : iOkButton.getActionListeners()) {
                                 al.actionPerformed(null);
                             }
-                        }
-                    });
+
+                        });
                 }
             }
         });
@@ -156,19 +132,15 @@ public class SSProjectPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iOkButton.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iOkButton.requestFocusInWindow());
                 } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
+                    SwingUtilities.invokeLater(() -> {
+
                             for (ActionListener al : iCancelButton.getActionListeners()) {
                                 al.actionPerformed(null);
                             }
-                        }
-                    });
+
+                        });
                 }
             }
         });

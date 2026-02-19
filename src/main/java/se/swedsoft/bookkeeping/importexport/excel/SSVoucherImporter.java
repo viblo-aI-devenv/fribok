@@ -39,7 +39,7 @@ public class SSVoucherImporter {
      */
     public SSVoucherImporter(File iFile) {
         this.iFile = iFile;
-        iColumns = new HashMap<String, Integer>();
+        iColumns = new HashMap<>();
     }
 
     /**
@@ -143,7 +143,7 @@ public class SSVoucherImporter {
 
         getColumnIndexes(iRows.get(0));
 
-        List<SSVoucher> iVouchers = new LinkedList<SSVoucher>();
+        List<SSVoucher> iVouchers = new LinkedList<>();
 
         SSVoucher    iVoucher = null;
         SSVoucherRow iVoucherRow = null;

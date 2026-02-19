@@ -16,7 +16,7 @@ public abstract class SSFileFilter extends FileFilter {
     private List<String> iExtensions;
 
     public SSFileFilter() {
-        iExtensions = new LinkedList<String>();
+        iExtensions = new LinkedList<>();
     }
 
     /**

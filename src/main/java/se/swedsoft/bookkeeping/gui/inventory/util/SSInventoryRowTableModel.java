@@ -33,7 +33,7 @@ public class SSInventoryRowTableModel extends SSEditableTableModel<SSInventoryRo
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSInventory.class;
     }
 
@@ -48,7 +48,7 @@ public class SSInventoryRowTableModel extends SSEditableTableModel<SSInventoryRo
     /**
      * Product
      */
-    public static SSTableColumn<SSInventoryRow> COLUMN_PRODUCT = new SSTableColumn<SSInventoryRow>(
+    public static SSTableColumn<SSInventoryRow> COLUMN_PRODUCT = new SSTableColumn<>(
             SSBundle.getBundle().getString("inventoryrowtable.column.1")) {
         @Override
         public Object getValue(SSInventoryRow iRow) {
@@ -83,7 +83,7 @@ public class SSInventoryRowTableModel extends SSEditableTableModel<SSInventoryRo
     /**
      * Product beskrivning
      */
-    public static SSTableColumn<SSInventoryRow> COLUMN_DESCRIPTION = new SSTableColumn<SSInventoryRow>(
+    public static SSTableColumn<SSInventoryRow> COLUMN_DESCRIPTION = new SSTableColumn<>(
             SSBundle.getBundle().getString("inventoryrowtable.column.2")) {
         @Override
         public Object getValue(SSInventoryRow iRow) {
@@ -109,7 +109,7 @@ public class SSInventoryRowTableModel extends SSEditableTableModel<SSInventoryRo
     /**
      * Inventerat antal
      */
-    public static SSTableColumn<SSInventoryRow> COLUMN_INVENTORYQUANTITY = new SSTableColumn<SSInventoryRow>(
+    public static SSTableColumn<SSInventoryRow> COLUMN_INVENTORYQUANTITY = new SSTableColumn<>(
             SSBundle.getBundle().getString("inventoryrowtable.column.3")) {
         @Override
         public Object getValue(SSInventoryRow iRow) {
@@ -135,7 +135,7 @@ public class SSInventoryRowTableModel extends SSEditableTableModel<SSInventoryRo
     /**
      * Antal i lager
      */
-    public static SSTableColumn<SSInventoryRow> COLUMN_STOCKQUANTITY = new SSTableColumn<SSInventoryRow>(
+    public static SSTableColumn<SSInventoryRow> COLUMN_STOCKQUANTITY = new SSTableColumn<>(
             SSBundle.getBundle().getString("inventoryrowtable.column.4")) {
         @Override
         public Object getValue(SSInventoryRow iRow) {
@@ -169,7 +169,7 @@ public class SSInventoryRowTableModel extends SSEditableTableModel<SSInventoryRo
     /**
      * Skillnad
      */
-    public static SSTableColumn<SSInventoryRow> COLUMN_CHANGE = new SSTableColumn<SSInventoryRow>(
+    public static SSTableColumn<SSInventoryRow> COLUMN_CHANGE = new SSTableColumn<>(
             SSBundle.getBundle().getString("inventoryrowtable.column.5")) {
         @Override
         public Object getValue(SSInventoryRow iRow) {
@@ -192,7 +192,7 @@ public class SSInventoryRowTableModel extends SSEditableTableModel<SSInventoryRo
         }
     };
 
-    public static SSTableColumn<SSInventoryRow> COLUMN_WAREHOUSELOCATION = new SSTableColumn<SSInventoryRow>(
+    public static SSTableColumn<SSInventoryRow> COLUMN_WAREHOUSELOCATION = new SSTableColumn<>(
             SSBundle.getBundle().getString("inventoryrowtable.column.6")) {
         @Override
         public Object getValue(SSInventoryRow iRow) {
@@ -223,7 +223,7 @@ public class SSInventoryRowTableModel extends SSEditableTableModel<SSInventoryRo
     /**
      * Product nummer
 
-     public static SSTableColumn<SSProduct> COLUMN_NUMBER = new SSTableColumn<SSProduct>(SSBundle.getBundle().getString("producttable.column.1")) {
+     public static SSTableColumn<SSProduct> COLUMN_NUMBER = new SSTableColumn<>(SSBundle.getBundle().getString("producttable.column.1")) {
      public Object getValue(SSProduct iInventory) {
      return iInventory.getNumber();
      }
@@ -241,7 +241,7 @@ public class SSInventoryRowTableModel extends SSEditableTableModel<SSInventoryRo
      }
      };
 
-     public static SSTableColumn<SSProduct> COLUMN_DESCRIPTION = new SSTableColumn<SSProduct>(SSBundle.getBundle().getString("producttable.column.2")) {
+     public static SSTableColumn<SSProduct> COLUMN_DESCRIPTION = new SSTableColumn<>(SSBundle.getBundle().getString("producttable.column.2")) {
      public Object getValue(SSProduct iProduct) {
      return iProduct.getDescription();
      }

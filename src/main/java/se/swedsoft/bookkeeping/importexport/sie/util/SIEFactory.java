@@ -40,8 +40,8 @@ public class SIEFactory {
      *
      */
     private SIEFactory() {
-        iEntries = new HashMap<String, SIEEntry>();
-        iLabels = new LinkedList<SIELabel>();
+        iEntries = new HashMap<>();
+        iLabels = new LinkedList<>();
 
         for (SIELabel iLabel : SIELabel.values()) {
             put(iLabel, iLabel.getEntry());
@@ -53,8 +53,8 @@ public class SIEFactory {
      * @param iType
      */
     private SIEFactory(SIEType iType) {
-        iEntries = new HashMap<String, SIEEntry>();
-        iLabels = new LinkedList<SIELabel>();
+        iEntries = new HashMap<>();
+        iLabels = new LinkedList<>();
 
         for (SIELabel iLabel : SIELabel.values(iType)) {
             put(iLabel, iLabel.getEntry());

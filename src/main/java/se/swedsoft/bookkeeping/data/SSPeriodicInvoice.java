@@ -64,8 +64,8 @@ public class SSPeriodicInvoice implements Serializable {
         iInformation = "Detta är faktura [FAK] av [TOT].";
         iPeriodStart = SSDateMath.getFirstDayInMonth(iDate);
         iPeriodEnd = SSDateMath.getLastDayMonth(iDate);
-        iInvoices = new LinkedList<SSInvoice>();
-        iAdded = new HashMap<Integer, Boolean>();
+        iInvoices = new LinkedList<>();
+        iAdded = new HashMap<>();
         doAutoIncrecement();
     }
 
@@ -93,8 +93,8 @@ public class SSPeriodicInvoice implements Serializable {
         iAppendInformation = iPeriodicInvoice.iAppendInformation;
         iInformation = iPeriodicInvoice.iInformation;
         iTemplate = new SSInvoice(iPeriodicInvoice.iTemplate);
-        iInvoices = new LinkedList<SSInvoice>();
-        iAdded = new HashMap<Integer, Boolean>();
+        iInvoices = new LinkedList<>();
+        iAdded = new HashMap<>();
         iTemplate.setCurrency(iPeriodicInvoice.getTemplate().getCurrency());
         iTemplate.setCurrencyRate(iPeriodicInvoice.getTemplate().getCurrencyRate());
 
@@ -330,7 +330,7 @@ public class SSPeriodicInvoice implements Serializable {
      */
     public boolean isAdded(SSInvoice iInvoice) {
         if (iAdded == null) {
-            iAdded = new HashMap<Integer, Boolean>();
+            iAdded = new HashMap<>();
         }
 
         Integer iNumber = iInvoice.getNumber();
@@ -348,7 +348,7 @@ public class SSPeriodicInvoice implements Serializable {
      */
     public void setAdded(SSInvoice iInvoice) {
         if (iAdded == null) {
-            iAdded = new HashMap<Integer, Boolean>();
+            iAdded = new HashMap<>();
         }
 
         Integer iNumber = iInvoice.getNumber();
@@ -380,7 +380,7 @@ public class SSPeriodicInvoice implements Serializable {
      */
     private Map<Integer, Boolean> getAdded() {
         if (iAdded == null) {
-            iAdded = new HashMap<Integer, Boolean>();
+            iAdded = new HashMap<>();
         }
         return iAdded;
     }
@@ -393,7 +393,7 @@ public class SSPeriodicInvoice implements Serializable {
      */
     public List<SSInvoice> getInvoices() {
         if (iInvoices == null) {
-            iInvoices = new LinkedList<SSInvoice>();
+            iInvoices = new LinkedList<>();
         }
 
         return iInvoices;
@@ -406,7 +406,7 @@ public class SSPeriodicInvoice implements Serializable {
      * @return
      */
     public List<SSInvoice> getInvoices(Date iDate) {
-        List<SSInvoice> iFiltered = new LinkedList<SSInvoice>();
+        List<SSInvoice> iFiltered = new LinkedList<>();
 
         for (SSInvoice iInvoice : getInvoices()) {
 
@@ -445,7 +445,7 @@ public class SSPeriodicInvoice implements Serializable {
      *
      */
     public void createInvoices() {
-        iInvoices = new LinkedList<SSInvoice>();
+        iInvoices = new LinkedList<>();
 
         if (iPeriod == null || iPeriodStart == null || iPeriodEnd == null
                 || iTemplate == null) {
@@ -519,7 +519,7 @@ public class SSPeriodicInvoice implements Serializable {
         }
 
         if (iAdded == null || iAdded.size() != iInvoices.size()) {
-            iAdded = new HashMap<Integer, Boolean>();
+            iAdded = new HashMap<>();
             for (SSInvoice iInvoice : iInvoices) {
                 Integer iNumber = iInvoice.getNumber();
 

@@ -37,12 +37,12 @@ public class SSMenuLoader {
      * Default constructor.
      */
     public SSMenuLoader() {
-        iMenuBars = new HashMap<String, JMenuBar>();
-        iMenus = new HashMap<String, JMenu>();
-        iMenuItems = new HashMap<String, JMenuItem>();
+        iMenuBars = new HashMap<>();
+        iMenus = new HashMap<>();
+        iMenuItems = new HashMap<>();
 
-        iActions = new HashMap<String, List<ActionListener>>();
-        iDependancies = new HashMap<String, List<JComponent>>();
+        iActions = new HashMap<>();
+        iDependancies = new HashMap<>();
     }
 
     /**
@@ -103,7 +103,7 @@ public class SSMenuLoader {
         List<ActionListener> iListeners = iActions.get(pName);
 
         if (iListeners == null) {
-            iListeners = new LinkedList<ActionListener>();
+            iListeners = new LinkedList<>();
 
             iActions.put(pName, iListeners);
         }
@@ -120,7 +120,7 @@ public class SSMenuLoader {
         List<JComponent> iComponents = iDependancies.get(pGroup);
 
         if (iComponents == null) {
-            iComponents = new LinkedList<JComponent>();
+            iComponents = new LinkedList<>();
 
             iDependancies.put(pGroup, iComponents);
         }
@@ -166,11 +166,7 @@ public class SSMenuLoader {
      * @return
      */
     private ActionListener createActionListener(final String pName) {
-        return new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                notifyActionListeners(pName, e);
-            }
-        };
+        return e -> notifyActionListeners(pName, e);
     }
 
     /**
@@ -187,7 +183,7 @@ public class SSMenuLoader {
          */
         public MenuBuilder() {
             iMenuBar = null;
-            iMenuStack = new Stack<JMenu>();
+            iMenuStack = new Stack<>();
         }
 
         /**

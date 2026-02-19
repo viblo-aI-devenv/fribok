@@ -54,16 +54,8 @@ public class SSInvoiceListDialog extends SSDialog {
 
         setPanel(iPanel);
 
-        iButtonPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setModalResult(JOptionPane.CANCEL_OPTION, true);
-            }
-        });
-        iButtonPanel.addOkActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setModalResult(JOptionPane.OK_OPTION, true);
-            }
-        });
+        iButtonPanel.addCancelActionListener(e -> setModalResult(JOptionPane.CANCEL_OPTION, true));
+        iButtonPanel.addOkActionListener(e -> setModalResult(JOptionPane.OK_OPTION, true));
 
 	getRootPane().setDefaultButton(iButtonPanel.getOkButton());
 
@@ -72,14 +64,14 @@ public class SSInvoiceListDialog extends SSDialog {
         iCustomer.setColumnWidths(60, 200);
         iCustomer.setPopupSize(250, 150);
 
-        ChangeListener iChangeListener = new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
+        ChangeListener iChangeListener = e -> {
+
                 iCustomer.setEnabled(iCheckCustomer.isSelected());
 
                 iFromDate.setEnabled(iCheckDate.isSelected());
                 iToDate.setEnabled(iCheckDate.isSelected());
-            }
-        };
+
+            };
 
         iCheckDate.addChangeListener(iChangeListener);
         iCheckCustomer.addChangeListener(iChangeListener);
@@ -113,12 +105,12 @@ public class SSInvoiceListDialog extends SSDialog {
 
         List<SSInvoice> iInvoices = SSDB.getInstance().getInvoices();
 
-        SSFilterFactory<SSInvoice> iFactory = new SSFilterFactory<SSInvoice>(iInvoices);
+        SSFilterFactory<SSInvoice> iFactory = new SSFilterFactory<>(iInvoices);
 
         // Filter by non payed invoices
         if (iRadioNotpayed.isSelected()) {
 
-            iFactory.applyFilter(new SSFilter<SSInvoice>() {
+            iFactory.applyFilter(new SSFilter<>() {
                 public boolean applyFilter(SSInvoice iInvoice) {
                     return SSInvoiceMath.getSaldo(iInvoice.getNumber()).signum() != 0;
                 }
@@ -129,7 +121,7 @@ public class SSInvoiceListDialog extends SSDialog {
         if (iRadioExpired.isSelected()) {
 
             iFactory.applyFilter(
-                    new SSFilter<SSInvoice>() {
+                    new SSFilter<>() {
                 public boolean applyFilter(SSInvoice iInvoice) {
                     return SSInvoiceMath.getSaldo(iInvoice.getNumber()).signum() != 0
                             && SSInvoiceMath.expired(iInvoice);
@@ -141,7 +133,7 @@ public class SSInvoiceListDialog extends SSDialog {
         if (iCheckCustomer.isSelected() && iCustomer.hasSelected()) {
             final SSCustomer iCustomer = this.iCustomer.getSelected();
 
-            iFactory.applyFilter(new SSFilter<SSInvoice>() {
+            iFactory.applyFilter(new SSFilter<>() {
                 public boolean applyFilter(SSInvoice iInvoice) {
                     return iCustomer.equals(iInvoice.getCustomer(iCustomers));
                 }
@@ -153,7 +145,7 @@ public class SSInvoiceListDialog extends SSDialog {
             final Date iDateFrom = iFromDate.getDate();
             final Date iDateTo = iToDate.getDate();
 
-            iFactory.applyFilter(new SSFilter<SSInvoice>() {
+            iFactory.applyFilter(new SSFilter<>() {
                 public boolean applyFilter(SSInvoice iInvoice) {
                     return SSInvoiceMath.inPeriod(iInvoice, iDateFrom, iDateTo);
                 }

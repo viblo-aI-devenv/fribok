@@ -34,7 +34,7 @@ public class SSCustomerDropdownModel extends SSDefaultTableModel<SSCustomer> {
     }
 
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSCustomer.class;
     }
 

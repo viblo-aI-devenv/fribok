@@ -20,7 +20,7 @@ public class SSAutoIncrement implements Serializable {
      *
      */
     public SSAutoIncrement() {
-        iNumbers = new HashMap<String, Integer>();
+        iNumbers = new HashMap<>();
     }
 
     /**

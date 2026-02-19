@@ -71,7 +71,7 @@ public class SSSupplierInvoice implements SSTableSearchable, Serializable {
      *
      */
     public SSSupplierInvoice() {
-        iRows = new LinkedList<SSSupplierInvoiceRow>();
+        iRows = new LinkedList<>();
         iDate = getLastDate();
         iDueDate = getLastDate();
         iCurrencyRate = new BigDecimal(1);
@@ -81,7 +81,7 @@ public class SSSupplierInvoice implements SSTableSearchable, Serializable {
         iRoundingSum = new BigDecimal(0);
         iEntered = false;
         iStockInfluencing = true;
-        iDefaultAccounts = new HashMap<SSDefaultAccount, Integer>();
+        iDefaultAccounts = new HashMap<>();
         iDefaultAccounts.putAll(
                 SSDB.getInstance().getCurrentCompany().getDefaultAccounts());
         SSNewCompany iCompany = SSDB.getInstance().getCurrentCompany();
@@ -115,8 +115,8 @@ public class SSSupplierInvoice implements SSTableSearchable, Serializable {
         iCurrencyRate = iPurchaseOrder.getCurrencyRate();
         iVoucher = new SSVoucher();
         iCorrection = new SSVoucher();
-        iDefaultAccounts = new HashMap<SSDefaultAccount, Integer>();
-        iRows = new LinkedList<SSSupplierInvoiceRow>();
+        iDefaultAccounts = new HashMap<>();
+        iRows = new LinkedList<>();
         iRoundingSum = new BigDecimal(0);
 
         // Copy all default accounts
@@ -154,7 +154,7 @@ public class SSSupplierInvoice implements SSTableSearchable, Serializable {
         iCorrection = new SSVoucher(iSupplierInvoice.iCorrection);
 
         iSupplier = iSupplierInvoice.iSupplier;
-        iDefaultAccounts = new HashMap<SSDefaultAccount, Integer>();
+        iDefaultAccounts = new HashMap<>();
 
         // Copy all default accounts
         for (SSDefaultAccount iDefaultAccount : iSupplierInvoice.getDefaultAccounts().keySet()) {
@@ -162,7 +162,7 @@ public class SSSupplierInvoice implements SSTableSearchable, Serializable {
                     iSupplierInvoice.getDefaultAccounts().get(iDefaultAccount));
         }
 
-        iRows = new LinkedList<SSSupplierInvoiceRow>();
+        iRows = new LinkedList<>();
         for (SSSupplierInvoiceRow iRow : iSupplierInvoice.iRows) {
             iRows.add(new SSSupplierInvoiceRow(iRow));
         }

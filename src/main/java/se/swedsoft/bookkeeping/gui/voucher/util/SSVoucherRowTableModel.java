@@ -48,7 +48,7 @@ public class SSVoucherRowTableModel extends SSEditableTableModel<SSVoucherRow> {
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSVoucherRow.class;
     }
 
@@ -100,7 +100,7 @@ public class SSVoucherRowTableModel extends SSEditableTableModel<SSVoucherRow> {
     /**
      * Account column
      */
-    public static SSTableColumn<SSVoucherRow> COLUMN_ACCOUNT = new SSTableColumn<SSVoucherRow>(
+    public static SSTableColumn<SSVoucherRow> COLUMN_ACCOUNT = new SSTableColumn<>(
             SSBundle.getBundle().getString("voucherrowtable.column.1")) {
         @Override
         public Object getValue(SSVoucherRow iVoucherRow) {
@@ -136,7 +136,7 @@ public class SSVoucherRowTableModel extends SSEditableTableModel<SSVoucherRow> {
     /**
      * Account column
      */
-    public static SSTableColumn<SSVoucherRow> COLUMN_DESCRIPTION = new SSTableColumn<SSVoucherRow>(
+    public static SSTableColumn<SSVoucherRow> COLUMN_DESCRIPTION = new SSTableColumn<>(
             SSBundle.getBundle().getString("voucherrowtable.column.2")) {
         @Override
         public Object getValue(SSVoucherRow iVoucherRow) {
@@ -169,7 +169,7 @@ public class SSVoucherRowTableModel extends SSEditableTableModel<SSVoucherRow> {
     /**
      * Debet column
      */
-    public static SSTableColumn<SSVoucherRow> COLUMN_DEBET = new SSTableColumn<SSVoucherRow>(
+    public static SSTableColumn<SSVoucherRow> COLUMN_DEBET = new SSTableColumn<>(
             SSBundle.getBundle().getString("voucherrowtable.column.3")) {
         @Override
         public Object getValue(SSVoucherRow iVoucherRow) {
@@ -203,7 +203,7 @@ public class SSVoucherRowTableModel extends SSEditableTableModel<SSVoucherRow> {
     /**
      * Credit column
      */
-    public static SSTableColumn<SSVoucherRow> COLUMN_CREDIT = new SSTableColumn<SSVoucherRow>(
+    public static SSTableColumn<SSVoucherRow> COLUMN_CREDIT = new SSTableColumn<>(
             SSBundle.getBundle().getString("voucherrowtable.column.4")) {
         @Override
         public Object getValue(SSVoucherRow iVoucherRow) {
@@ -236,7 +236,7 @@ public class SSVoucherRowTableModel extends SSEditableTableModel<SSVoucherRow> {
     /**
      * Project column
      */
-    public static SSTableColumn<SSVoucherRow> COLUMN_PROJECT = new SSTableColumn<SSVoucherRow>(
+    public static SSTableColumn<SSVoucherRow> COLUMN_PROJECT = new SSTableColumn<>(
             SSBundle.getBundle().getString("voucherrowtable.column.5")) {
         @Override
         public Object getValue(SSVoucherRow iVoucherRow) {
@@ -267,7 +267,7 @@ public class SSVoucherRowTableModel extends SSEditableTableModel<SSVoucherRow> {
     /**
      * Result unit column
      */
-    public static SSTableColumn<SSVoucherRow> COLUMN_RESULTUNIT = new SSTableColumn<SSVoucherRow>(
+    public static SSTableColumn<SSVoucherRow> COLUMN_RESULTUNIT = new SSTableColumn<>(
             SSBundle.getBundle().getString("voucherrowtable.column.6")) {
         @Override
         public Object getValue(SSVoucherRow iVoucherRow) {
@@ -298,7 +298,7 @@ public class SSVoucherRowTableModel extends SSEditableTableModel<SSVoucherRow> {
     /**
      * Edited date
      */
-    public static SSTableColumn<SSVoucherRow> COLUMN_EDITED_DATE = new SSTableColumn<SSVoucherRow>(
+    public static SSTableColumn<SSVoucherRow> COLUMN_EDITED_DATE = new SSTableColumn<>(
             SSBundle.getBundle().getString("voucherrowtable.column.7")) {
         @Override
         public Object getValue(SSVoucherRow iVoucherRow) {
@@ -327,7 +327,7 @@ public class SSVoucherRowTableModel extends SSEditableTableModel<SSVoucherRow> {
     /**
      * Edited signature
      */
-    public static SSTableColumn<SSVoucherRow> COLUMN_EDITED_SIGNATURE = new SSTableColumn<SSVoucherRow>(
+    public static SSTableColumn<SSVoucherRow> COLUMN_EDITED_SIGNATURE = new SSTableColumn<>(
             SSBundle.getBundle().getString("voucherrowtable.column.8")) {
         @Override
         public Object getValue(SSVoucherRow iVoucherRow) {

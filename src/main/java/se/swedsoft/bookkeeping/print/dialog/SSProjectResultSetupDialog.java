@@ -49,22 +49,10 @@ public class SSProjectResultSetupDialog extends SSDialog {
 
         setPanel(iPanel);
 
-        iRadioSingle.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                iProjects.setEnabled(iRadioSingle.isSelected());
-            }
-        });
+        iRadioSingle.addChangeListener(e -> iProjects.setEnabled(iRadioSingle.isSelected()));
 
-        iButtonPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setModalResult(JOptionPane.CANCEL_OPTION, true);
-            }
-        });
-        iButtonPanel.addOkActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setModalResult(JOptionPane.OK_OPTION, true);
-            }
-        });
+        iButtonPanel.addCancelActionListener(e -> setModalResult(JOptionPane.CANCEL_OPTION, true));
+        iButtonPanel.addOkActionListener(e -> setModalResult(JOptionPane.OK_OPTION, true));
 
 	getRootPane().setDefaultButton(iButtonPanel.getOkButton());
 

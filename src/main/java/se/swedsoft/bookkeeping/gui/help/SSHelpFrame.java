@@ -8,6 +8,7 @@ import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.components.SSButton;
 
 import javax.help.HelpSet;
+import javax.help.HelpSetException;
 import javax.help.InvalidHelpSetContextException;
 import javax.help.JHelpContentViewer;
 import javax.swing.*;
@@ -53,7 +54,7 @@ public class SSHelpFrame extends JFrame {
      * @param pHeight
      * @param iHelpClass
      */
-    public static void showFrame(SSMainFrame iMainFrame, int pWidth, int pHeight, Class iHelpClass) {
+    public static void showFrame(SSMainFrame iMainFrame, int pWidth, int pHeight, Class<?> iHelpClass) {
         if (cInstance == null) {
             cInstance = new SSHelpFrame(iMainFrame, pWidth, pHeight);
         }
@@ -98,7 +99,7 @@ public class SSHelpFrame extends JFrame {
                 URL iHelpSetUrl = HelpSet.findHelpSet(iClassLoader, "jfs.hs");
 
                 iHelpSet = new HelpSet(null, iHelpSetUrl);
-            } catch (Exception ex) {
+            } catch (HelpSetException ex) {
                 ex.printStackTrace();
 
             }
@@ -124,15 +125,15 @@ public class SSHelpFrame extends JFrame {
         // Back
         // ***************************
         SSButton iButton = new SSButton("ICON_HOME", "helpframe.homebutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    iViewer.setCurrentID(iHelpSet.getHomeID());
-                } catch (InvalidHelpSetContextException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+                e -> {
+
+                        try {
+                            iViewer.setCurrentID(iHelpSet.getHomeID());
+                        } catch (InvalidHelpSetContextException ex) {
+                            ex.printStackTrace();
+                        }
+
+                    });
 
         toolBar.add(iButton);
         toolBar.addSeparator();
@@ -140,21 +141,13 @@ public class SSHelpFrame extends JFrame {
         // Back
         // ***************************
         iBackButton = new SSButton("ICON_BACK", "helpframe.prevbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iHistory.back();
-            }
-        });
+                e -> iHistory.back());
         toolBar.add(iBackButton);
 
         // Forward
         // ***************************
         iForwardButton = new SSButton("ICON_FORWARD", "helpframe.nextbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iHistory.forward();
-            }
-        });
+                e -> iHistory.forward());
         toolBar.add(iForwardButton);
         toolBar.addSeparator();
 
@@ -165,12 +158,12 @@ public class SSHelpFrame extends JFrame {
          toolBar.add(iButton);
          */
 
-        iHistory.addHistoryListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iHistory.addHistoryListener(e -> {
+
                 iBackButton.setEnabled(iHistory.hasPrevious());
                 iForwardButton.setEnabled(iHistory.hasNext());
-            }
-        });
+
+            });
         iBackButton.setEnabled(iHistory.hasPrevious());
         iForwardButton.setEnabled(iHistory.hasNext());
 
@@ -208,7 +201,7 @@ public class SSHelpFrame extends JFrame {
      *
      * @param pHelpClass
      */
-    private void setHelpClass(Class pHelpClass) {
+    private void setHelpClass(Class<?> pHelpClass) {
         // @todo Restructure help file to be able to connect a frame to a help topic.
         System.out.println(pHelpClass);
         // iViewer.setCurrentID();

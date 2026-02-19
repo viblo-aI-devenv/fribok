@@ -34,7 +34,7 @@ public class SSSIEExporter {
      * @param pType
      */
     public SSSIEExporter(SIEType pType) {
-        iLines = new LinkedList<String>();
+        iLines = new LinkedList<>();
         iType = pType;
         iComment = null;
     }
@@ -45,7 +45,7 @@ public class SSSIEExporter {
      * @param pComment
      */
     public SSSIEExporter(SIEType pType, String pComment) {
-        iLines = new LinkedList<String>();
+        iLines = new LinkedList<>();
         iType = pType;
         iComment = pComment;
     }

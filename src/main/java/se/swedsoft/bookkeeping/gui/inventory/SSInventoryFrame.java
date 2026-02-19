@@ -85,34 +85,30 @@ public class SSInventoryFrame extends SSDefaultTableFrame {
         // New
         // ***************************
         SSButton iButton = new SSButton("ICON_NEWITEM", "inventortyframe.newbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSInventoryDialog.newDialog(getMainFrame(), iModel);
-            }
-        });
+                e -> SSInventoryDialog.newDialog(getMainFrame(), iModel));
 
         toolBar.add(iButton);
 
         // Edit
         // ***************************
         iButton = new SSButton("ICON_EDITITEM", "inventortyframe.editbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSInventory iInventory = iModel.getSelectedRow(iTable);
-                Integer iNumber = null;
+                e -> {
 
-                if (iInventory != null) {
-                    iNumber = iInventory.getNumber();
-                    iInventory = getInventory(iInventory);
-                }
-                if (iInventory != null) {
-                    SSInventoryDialog.editDialog(getMainFrame(), iInventory, iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "inventoryframe.inventorygone",
-                            iNumber);
-                }
-            }
-        });
+                        SSInventory iInventory = iModel.getSelectedRow(iTable);
+                        Integer iNumber = null;
+
+                        if (iInventory != null) {
+                            iNumber = iInventory.getNumber();
+                            iInventory = getInventory(iInventory);
+                        }
+                        if (iInventory != null) {
+                            SSInventoryDialog.editDialog(getMainFrame(), iInventory, iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "inventoryframe.inventorygone",
+                                    iNumber);
+                        }
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         toolBar.add(iButton);
         toolBar.addSeparator();
@@ -120,13 +116,13 @@ public class SSInventoryFrame extends SSDefaultTableFrame {
         /*
          // Copy
          // ***************************
-         iButton = new SSButton("ICON_COPYITEM", "inventortyframe.copybutton", new ActionListener(){
-         public void actionPerformed(ActionEvent e) {
-         SSInventory iInventory = iModel.getSelectedRow(iTable);
+         iButton = new SSButton("ICON_COPYITEM", "inventortyframe.copybutton", e -> {
 
-         if(iInventory != null) SSInventoryDialog.copyDialog(getMainFrame(), iInventory, iModel);
-         }
-         });
+                 SSInventory iInventory = iModel.getSelectedRow(iTable);
+
+                 if(iInventory != null) SSInventoryDialog.copyDialog(getMainFrame(), iInventory, iModel);
+
+             });
          iTable.addSelectionDependentComponent(iButton);
          toolBar.add(iButton);
          toolBar.addSeparator(); */
@@ -134,28 +130,24 @@ public class SSInventoryFrame extends SSDefaultTableFrame {
         // Delete
         // ***************************
         iButton = new SSButton("ICON_DELETEITEM", "inventortyframe.deletebutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                int[] selected = iTable.getSelectedRows();
-                List<SSInventory> toDelete = iModel.getObjects(selected);
+                e -> {
 
-                deleteSelected(toDelete);
-            }
-        });
+                        int[] selected = iTable.getSelectedRows();
+                        List<SSInventory> toDelete = iModel.getObjects(selected);
+
+                        deleteSelected(toDelete);
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         toolBar.add(iButton);
         toolBar.addSeparator();
 
         // Print
         // ***************************
-        SSMenuButton<SSButton> iMenuButton = new SSMenuButton<SSButton>("ICON_PRINT",
+        SSMenuButton<SSButton> iMenuButton = new SSMenuButton<>("ICON_PRINT",
                 "inventortyframe.printbutton");
 
-        iMenuButton.add("inventortyframe.print.list", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSReportFactory.InventoryList(getMainFrame());
-            }
-        });
+        iMenuButton.add("inventortyframe.print.list", e -> SSReportFactory.InventoryList(getMainFrame()));
         toolBar.add(iMenuButton);
 
         return toolBar;
@@ -179,25 +171,25 @@ public class SSInventoryFrame extends SSDefaultTableFrame {
         iModel.setupTable(iTable);
 
         iTable.addDblClickListener(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSInventory iInventory = iModel.getSelectedRow(iTable);
-                Integer iNumber;
+                e -> {
 
-                if (iInventory != null) {
-                    iNumber = iInventory.getNumber();
-                    iInventory = getInventory(iInventory);
-                } else {
-                    return;
-                }
-                if (iInventory != null) {
-                    SSInventoryDialog.editDialog(getMainFrame(), iInventory, iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "inventoryframe.inventorygone",
-                            iNumber);
-                }
-            }
-        });
+                        SSInventory iInventory = iModel.getSelectedRow(iTable);
+                        Integer iNumber;
+
+                        if (iInventory != null) {
+                            iNumber = iInventory.getNumber();
+                            iInventory = getInventory(iInventory);
+                        } else {
+                            return;
+                        }
+                        if (iInventory != null) {
+                            SSInventoryDialog.editDialog(getMainFrame(), iInventory, iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "inventoryframe.inventorygone",
+                                    iNumber);
+                        }
+
+                    });
 
         JPanel iPanel = new JPanel();
 

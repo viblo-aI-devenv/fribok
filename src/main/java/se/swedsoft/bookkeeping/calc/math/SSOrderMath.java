@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -30,15 +31,9 @@ public class SSOrderMath extends SSTenderMath {
      */
     public static List<SSOrder> getOrdersByCustomerNr(List<SSOrder> iOrders, String iCustomerNr) {
 
-        List<SSOrder> iFiltered = new LinkedList<SSOrder>();
-
-        for (SSOrder iOrder : iOrders) {
-            if (iCustomerNr.equals(iOrder.getCustomerNr())) {
-                iFiltered.add(iOrder);
-            }
-
-        }
-        return iFiltered;
+        return iOrders.stream()
+                .filter(iOrder -> iCustomerNr.equals(iOrder.getCustomerNr()))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -49,15 +44,9 @@ public class SSOrderMath extends SSTenderMath {
      */
     public static List<SSOrder> getOrdersWithoutInvoice(List<SSOrder> iOrders) {
 
-        List<SSOrder> iFiltered = new LinkedList<SSOrder>();
-
-        for (SSOrder iOrder : iOrders) {
-            if (!iOrder.hasInvoice()) {
-                iFiltered.add(iOrder);
-            }
-
-        }
-        return iFiltered;
+        return iOrders.stream()
+                .filter(iOrder -> !iOrder.hasInvoice())
+                .collect(Collectors.toList());
     }
 
     /**
@@ -92,7 +81,7 @@ public class SSOrderMath extends SSTenderMath {
     public static Map<SSProduct, Integer> getProductCount(SSOrder iOrder) {
         List<SSProduct> iProducts = SSDB.getInstance().getProducts();
 
-        Map<SSProduct, Integer> iProductCount = new HashMap<SSProduct, Integer>();
+        Map<SSProduct, Integer> iProductCount = new HashMap<>();
 
         for (SSSaleRow iRow : iOrder.getRows()) {
             // Get the product for the row
@@ -122,7 +111,7 @@ public class SSOrderMath extends SSTenderMath {
      */
     public static Map<SSProduct, Integer> getProductCount(List<SSOrder> iOrders) {
 
-        Map<SSProduct, Integer> iProductCount = new HashMap<SSProduct, Integer>();
+        Map<SSProduct, Integer> iProductCount = new HashMap<>();
 
         for (SSOrder iOrder : iOrders) {
             Map<SSProduct, Integer> iCounts = getProductCount(iOrder);
@@ -143,9 +132,9 @@ public class SSOrderMath extends SSTenderMath {
     }
 
     public static Map<String, Integer> getStockInfluencing(List<SSOrder> iOrders) {
-        Map<String, Integer> iOrderCount = new HashMap<String, Integer>();
-        List<String> iParcelProducts = new LinkedList<String>();
-        List<SSProduct> iProducts = new LinkedList<SSProduct>(
+        Map<String, Integer> iOrderCount = new HashMap<>();
+        List<String> iParcelProducts = new LinkedList<>();
+        List<SSProduct> iProducts = new LinkedList<>(
                 SSDB.getInstance().getProducts());
 
         for (SSProduct iProduct : iProducts) {
@@ -189,7 +178,7 @@ public class SSOrderMath extends SSTenderMath {
 
     public static HashMap<Integer, String> iInvoiceForOrders;
 
-    public static void setInvoiceForOrders() {/* if(iInvoiceForOrders == null) iInvoiceForOrders = new HashMap<Integer,String>();
+    public static void setInvoiceForOrders() {/* if(iInvoiceForOrders == null) iInvoiceForOrders = new HashMap<>();
 
          List<SSOrder> iOrders = SSDB.getInstance().getOrders();
 

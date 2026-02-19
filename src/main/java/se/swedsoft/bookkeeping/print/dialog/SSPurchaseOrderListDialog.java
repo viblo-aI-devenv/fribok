@@ -55,30 +55,22 @@ public class SSPurchaseOrderListDialog extends SSDialog {
 
         setPanel(iPanel);
 
-        iButtonPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setModalResult(JOptionPane.CANCEL_OPTION, true);
-            }
-        });
-        iButtonPanel.addOkActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setModalResult(JOptionPane.OK_OPTION, true);
-            }
-        });
+        iButtonPanel.addCancelActionListener(e -> setModalResult(JOptionPane.CANCEL_OPTION, true));
+        iButtonPanel.addOkActionListener(e -> setModalResult(JOptionPane.OK_OPTION, true));
 
 	getRootPane().setDefaultButton(iButtonPanel.getOkButton());
 
         iSupplier.setModel(SSSupplierTableModel.getDropDownModel());
         iSupplier.setSearchColumns(0);
 
-        ChangeListener iChangeListener = new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
+        ChangeListener iChangeListener = e -> {
+
                 iSupplier.setEnabled(iCheckSupplier.isSelected());
 
                 iFromDate.setEnabled(iCheckDate.isSelected());
                 iToDate.setEnabled(iCheckDate.isSelected());
-            }
-        };
+
+            };
 
         iCheckDate.addChangeListener(iChangeListener);
         iCheckSupplier.addChangeListener(iChangeListener);
@@ -107,7 +99,7 @@ public class SSPurchaseOrderListDialog extends SSDialog {
     public List<SSPurchaseOrder> getElementsToPrint() {
         List<SSPurchaseOrder> iPurchaseOrders = SSDB.getInstance().getPurchaseOrders();
 
-        SSFilterFactory<SSPurchaseOrder> iFactory = new SSFilterFactory<SSPurchaseOrder>(
+        SSFilterFactory<SSPurchaseOrder> iFactory = new SSFilterFactory<>(
                 iPurchaseOrders);
 
         final List<SSSupplierInvoice> iSupplierInvoices = SSDB.getInstance().getSupplierInvoices();
@@ -115,7 +107,7 @@ public class SSPurchaseOrderListDialog extends SSDialog {
         // Filter by non payed orders
         if (iRadioNoInvoice.isSelected()) {
 
-            iFactory.applyFilter(new SSFilter<SSPurchaseOrder>() {
+            iFactory.applyFilter(new SSFilter<>() {
                 public boolean applyFilter(SSPurchaseOrder iPurchaseOrder) {
 
                     return iPurchaseOrder.getInvoice(iSupplierInvoices) == null;
@@ -127,7 +119,7 @@ public class SSPurchaseOrderListDialog extends SSDialog {
         if (iCheckSupplier.isSelected() && iSupplier.getSelected() != null) {
             final SSSupplier iSupplier = this.iSupplier.getSelected();
 
-            iFactory.applyFilter(new SSFilter<SSPurchaseOrder>() {
+            iFactory.applyFilter(new SSFilter<>() {
                 public boolean applyFilter(SSPurchaseOrder iPurchaseOrder) {
                     return iPurchaseOrder.hasSupplier(iSupplier);
                 }
@@ -140,7 +132,7 @@ public class SSPurchaseOrderListDialog extends SSDialog {
             final Date iDateTo = iToDate.getDate();
 
             iFactory.applyFilter(
-                    new SSFilter<SSPurchaseOrder>() {
+                    new SSFilter<>() {
                 public boolean applyFilter(SSPurchaseOrder iPurchaseOrder) {
                     return SSPurchaseOrderMath.inPeriod(iPurchaseOrder, iDateFrom, iDateTo);
                 }

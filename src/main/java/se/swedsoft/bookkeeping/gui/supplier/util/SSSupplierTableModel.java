@@ -43,7 +43,7 @@ public class SSSupplierTableModel extends SSTableModel<SSSupplier> {
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSSupplier.class;
     }
 
@@ -63,7 +63,7 @@ public class SSSupplierTableModel extends SSTableModel<SSSupplier> {
     /**
      * Number column
      */
-    public static SSTableColumn<SSSupplier> COLUMN_NUMBER = new SSTableColumn<SSSupplier>(
+    public static SSTableColumn<SSSupplier> COLUMN_NUMBER = new SSTableColumn<>(
             SSBundle.getBundle().getString("suppliertable.column.1")) {
         @Override
         public Object getValue(SSSupplier iObject) {
@@ -87,7 +87,7 @@ public class SSSupplierTableModel extends SSTableModel<SSSupplier> {
     /**
      * Name
      */
-    public static SSTableColumn<SSSupplier> COLUMN_NAME = new SSTableColumn<SSSupplier>(
+    public static SSTableColumn<SSSupplier> COLUMN_NAME = new SSTableColumn<>(
             SSBundle.getBundle().getString("suppliertable.column.2")) {
         @Override
         public Object getValue(SSSupplier iObject) {
@@ -111,7 +111,7 @@ public class SSSupplierTableModel extends SSTableModel<SSSupplier> {
     /**
      * Your contact
      */
-    public static SSTableColumn<SSSupplier> COLUMN_YOUR_CONTACT = new SSTableColumn<SSSupplier>(
+    public static SSTableColumn<SSSupplier> COLUMN_YOUR_CONTACT = new SSTableColumn<>(
             SSBundle.getBundle().getString("suppliertable.column.3")) {
         @Override
         public Object getValue(SSSupplier iObject) {
@@ -137,7 +137,7 @@ public class SSSupplierTableModel extends SSTableModel<SSSupplier> {
     /**
      * Date column
      */
-    public static SSTableColumn<SSSupplier> COLUMN_PHONE = new SSTableColumn<SSSupplier>(
+    public static SSTableColumn<SSSupplier> COLUMN_PHONE = new SSTableColumn<>(
             SSBundle.getBundle().getString("suppliertable.column.4")) {
         @Override
         public Object getValue(SSSupplier iObject) {
@@ -164,7 +164,7 @@ public class SSSupplierTableModel extends SSTableModel<SSSupplier> {
     /**
      * Our customer nr
      */
-    public static SSTableColumn<SSSupplier> COLUMN_OUR_CUSTOMER_NR = new SSTableColumn<SSSupplier>(
+    public static SSTableColumn<SSSupplier> COLUMN_OUR_CUSTOMER_NR = new SSTableColumn<>(
             SSBundle.getBundle().getString("suppliertable.column.5")) {
         @Override
         public Object getValue(SSSupplier iObject) {
@@ -191,7 +191,7 @@ public class SSSupplierTableModel extends SSTableModel<SSSupplier> {
     /**
      * Supplier debt
      */
-    public static SSTableColumn<SSSupplier> COLUMN_SUPPLIERDEBT = new SSTableColumn<SSSupplier>(
+    public static SSTableColumn<SSSupplier> COLUMN_SUPPLIERDEBT = new SSTableColumn<>(
             SSBundle.getBundle().getString("suppliertable.column.6")) {
         @Override
         public Object getValue(SSSupplier iObject) {

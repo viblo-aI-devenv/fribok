@@ -51,7 +51,7 @@ public class SSPurchaseSuggestionTableModel extends SSTableModel<SSPurchaseSugge
      * @param iProducts
      */
     public SSPurchaseSuggestionTableModel(List<SSProduct> iProducts) {
-        List<Entry> iItems = new LinkedList<Entry>();
+        List<Entry> iItems = new LinkedList<>();
 
         iStock = new SSStock(true);
         for (SSProduct iProduct : iProducts) {
@@ -72,7 +72,7 @@ public class SSPurchaseSuggestionTableModel extends SSTableModel<SSPurchaseSugge
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return Entry.class;
     }
 
@@ -81,7 +81,7 @@ public class SSPurchaseSuggestionTableModel extends SSTableModel<SSPurchaseSugge
      * @return
      */
     public List<SSProduct> getSelected() {
-        List<SSProduct> iSelected = new LinkedList<SSProduct>();
+        List<SSProduct> iSelected = new LinkedList<>();
 
         for (Entry iEntry : getObjects()) {
 
@@ -114,7 +114,7 @@ public class SSPurchaseSuggestionTableModel extends SSTableModel<SSPurchaseSugge
      * @return
      */
     public SSTableColumn<Entry> getSelectionColumn() {
-        return new SSTableColumn<Entry>(
+        return new SSTableColumn<>(
                 SSBundle.getBundle().getString("purchasesuggestiontable.column.1")) {
             @Override
             public Object getValue(Entry iEntry) {
@@ -141,7 +141,7 @@ public class SSPurchaseSuggestionTableModel extends SSTableModel<SSPurchaseSugge
     /**
      * Number column
      */
-    public static SSTableColumn<Entry> COLUMN_NUMBER = new SSTableColumn<Entry>(
+    public static SSTableColumn<Entry> COLUMN_NUMBER = new SSTableColumn<>(
             SSBundle.getBundle().getString("purchasesuggestiontable.column.2")) {
         @Override
         public Object getValue(Entry iEntry) {
@@ -165,7 +165,7 @@ public class SSPurchaseSuggestionTableModel extends SSTableModel<SSPurchaseSugge
     /**
      * Description column
      */
-    public static SSTableColumn<Entry> COLUMN_DESCRIPTION = new SSTableColumn<Entry>(
+    public static SSTableColumn<Entry> COLUMN_DESCRIPTION = new SSTableColumn<>(
             SSBundle.getBundle().getString("purchasesuggestiontable.column.3")) {
         @Override
         public Object getValue(Entry iEntry) {
@@ -192,7 +192,7 @@ public class SSPurchaseSuggestionTableModel extends SSTableModel<SSPurchaseSugge
     /**
      * Beställningspunktkolumn
      */
-    public static SSTableColumn<Entry> COLUMN_ORDERPOINT = new SSTableColumn<Entry>(
+    public static SSTableColumn<Entry> COLUMN_ORDERPOINT = new SSTableColumn<>(
             SSBundle.getBundle().getString("purchasesuggestiontable.column.4")) {
         @Override
         public Object getValue(Entry iEntry) {
@@ -218,7 +218,7 @@ public class SSPurchaseSuggestionTableModel extends SSTableModel<SSPurchaseSugge
     /**
      *  Lagerantal
      */
-    public static SSTableColumn<Entry> COLUMN_STOCK_QUANTITY = new SSTableColumn<Entry>(
+    public static SSTableColumn<Entry> COLUMN_STOCK_QUANTITY = new SSTableColumn<>(
             SSBundle.getBundle().getString("purchasesuggestiontable.column.5")) {
         @Override
         public Object getValue(Entry iEntry) {
@@ -245,7 +245,7 @@ public class SSPurchaseSuggestionTableModel extends SSTableModel<SSPurchaseSugge
     /**
      *  Väntas
      */
-    public static SSTableColumn<Entry> COLUMN_INCOMMING = new SSTableColumn<Entry>(
+    public static SSTableColumn<Entry> COLUMN_INCOMMING = new SSTableColumn<>(
             SSBundle.getBundle().getString("purchasesuggestiontable.column.6")) {
         @Override
         public Object getValue(Entry iEntry) {
@@ -269,7 +269,7 @@ public class SSPurchaseSuggestionTableModel extends SSTableModel<SSPurchaseSugge
     /**
      *  Beställningsantal
      */
-    public static SSTableColumn<Entry> COLUMN_ORDER_VOLUME = new SSTableColumn<Entry>(
+    public static SSTableColumn<Entry> COLUMN_ORDER_VOLUME = new SSTableColumn<>(
             SSBundle.getBundle().getString("purchasesuggestiontable.column.7")) {
         @Override
         public Object getValue(Entry iEntry) {
@@ -295,7 +295,7 @@ public class SSPurchaseSuggestionTableModel extends SSTableModel<SSPurchaseSugge
     /**
      *  Leverantör
      */
-    public static SSTableColumn<Entry> COLUMN_SUPPLIER = new SSTableColumn<Entry>(
+    public static SSTableColumn<Entry> COLUMN_SUPPLIER = new SSTableColumn<>(
             SSBundle.getBundle().getString("purchasesuggestiontable.column.8")) {
         @Override
         public Object getValue(Entry iEntry) {

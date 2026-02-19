@@ -28,9 +28,9 @@ public class SSStock {
      * @param update
      */
     public SSStock(boolean update) {
-        iQuantity = new HashMap<SSProduct, Integer>();
-        iReserved = new HashMap<SSProduct, Integer>();
-        iOrdered = new HashMap<SSProduct, Integer>();
+        iQuantity = new HashMap<>();
+        iReserved = new HashMap<>();
+        iOrdered = new HashMap<>();
 
         if (update) {
             update();
@@ -61,35 +61,35 @@ public class SSStock {
         iOrders = SSOrderMath.getOrdersWithoutInvoice(iOrders);
         iPurchaseOrders = SSPurchaseOrderMath.getOrdersWithoutInvoice(iPurchaseOrders);
 
-        iInvoices = SSFilterFactory.doFilter(iInvoices, new SSFilter<SSInvoice>() {
+        iInvoices = SSFilterFactory.doFilter(iInvoices, new SSFilter<>() {
             public boolean applyFilter(SSInvoice iInvoice) {
                 return iInvoice.isStockInfluencing();
             }
         });
 
         iCreditInvoices = SSFilterFactory.doFilter(iCreditInvoices,
-                new SSFilter<SSCreditInvoice>() {
+                new SSFilter<>() {
             public boolean applyFilter(SSCreditInvoice iCreditInvoice) {
                 return iCreditInvoice.isStockInfluencing();
             }
         });
 
         iPurchaseOrders = SSFilterFactory.doFilter(iPurchaseOrders,
-                new SSFilter<SSPurchaseOrder>() {
+                new SSFilter<>() {
             public boolean applyFilter(SSPurchaseOrder iPurchaseOrder) {
                 return iPurchaseOrder.isStockInfluencing();
             }
         });
 
         iSupplierInvoices = SSFilterFactory.doFilter(iSupplierInvoices,
-                new SSFilter<SSSupplierInvoice>() {
+                new SSFilter<>() {
             public boolean applyFilter(SSSupplierInvoice iSupplierInvoice) {
                 return iSupplierInvoice.isStockInfluencing();
             }
         });
 
         iSupplierCreditInvoices = SSFilterFactory.doFilter(iSupplierCreditInvoices,
-                new SSFilter<SSSupplierCreditInvoice>() {
+                new SSFilter<>() {
             public boolean applyFilter(SSSupplierCreditInvoice iSupplierCreditInvoice) {
                 return iSupplierCreditInvoice.isStockInfluencing();
             }
@@ -117,14 +117,14 @@ public class SSStock {
         iOrders = SSOrderMath.getOrdersWithoutInvoice(iOrders);
         iPurchaseOrders = SSPurchaseOrderMath.getOrdersWithoutInvoice(iPurchaseOrders);
 
-        iOrders = SSFilterFactory.doFilter(iOrders, new SSFilter<SSOrder>() {
+        iOrders = SSFilterFactory.doFilter(iOrders, new SSFilter<>() {
             public boolean applyFilter(SSOrder iOrder) {
                 return SSOrderMath.inPeriod(iOrder, iDate);
             }
         });
 
         iInvoices = SSFilterFactory.doFilter(iInvoices,
-                new SSFilter<SSInvoice>() {
+                new SSFilter<>() {
             public boolean applyFilter(SSInvoice iInvoice) {
                 return iInvoice.isStockInfluencing()
                         && SSInvoiceMath.inPeriod(iInvoice, iDate);
@@ -132,7 +132,7 @@ public class SSStock {
         });
 
         iCreditInvoices = SSFilterFactory.doFilter(iCreditInvoices,
-                new SSFilter<SSCreditInvoice>() {
+                new SSFilter<>() {
             public boolean applyFilter(SSCreditInvoice iCreditInvoice) {
                 return iCreditInvoice.isStockInfluencing()
                         && SSInvoiceMath.inPeriod(iCreditInvoice, iDate);
@@ -140,7 +140,7 @@ public class SSStock {
         });
 
         iPurchaseOrders = SSFilterFactory.doFilter(iPurchaseOrders,
-                new SSFilter<SSPurchaseOrder>() {
+                new SSFilter<>() {
             public boolean applyFilter(SSPurchaseOrder iPurchaseOrder) {
                 return iPurchaseOrder.isStockInfluencing()
                         && SSPurchaseOrderMath.inPeriod(iPurchaseOrder, iDate);
@@ -148,7 +148,7 @@ public class SSStock {
         });
 
         iSupplierInvoices = SSFilterFactory.doFilter(iSupplierInvoices,
-                new SSFilter<SSSupplierInvoice>() {
+                new SSFilter<>() {
             public boolean applyFilter(SSSupplierInvoice iSupplierInvoice) {
                 return iSupplierInvoice.isStockInfluencing()
                         && SSSupplierInvoiceMath.inPeriod(iSupplierInvoice, iDate);
@@ -156,7 +156,7 @@ public class SSStock {
         });
 
         iSupplierCreditInvoices = SSFilterFactory.doFilter(iSupplierCreditInvoices,
-                new SSFilter<SSSupplierCreditInvoice>() {
+                new SSFilter<>() {
             public boolean applyFilter(SSSupplierCreditInvoice iSupplierCreditInvoice) {
                 return iSupplierCreditInvoice.isStockInfluencing()
                         && SSSupplierInvoiceMath.inPeriod(iSupplierCreditInvoice, iDate);
@@ -164,21 +164,21 @@ public class SSStock {
         });
 
         iInventories = SSFilterFactory.doFilter(iInventories,
-                new SSFilter<SSInventory>() {
+                new SSFilter<>() {
             public boolean applyFilter(SSInventory iInventory) {
                 return SSInventoryMath.inPeriod(iInventory, iDate);
             }
         });
 
         iIndeliveries = SSFilterFactory.doFilter(iIndeliveries,
-                new SSFilter<SSIndelivery>() {
+                new SSFilter<>() {
             public boolean applyFilter(SSIndelivery iIndelivery) {
                 return SSIndeliveryMath.inPeriod(iIndelivery, iDate);
             }
         });
 
         iOutdeliveries = SSFilterFactory.doFilter(iOutdeliveries,
-                new SSFilter<SSOutdelivery>() {
+                new SSFilter<>() {
             public boolean applyFilter(SSOutdelivery iOutdelivery) {
                 return SSOutdeliveryMath.inPeriod(iOutdelivery, iDate);
             }
@@ -207,14 +207,14 @@ public class SSStock {
         iOrders = SSOrderMath.getOrdersWithoutInvoice(iOrders);
         iPurchaseOrders = SSPurchaseOrderMath.getOrdersWithoutInvoice(iPurchaseOrders);
 
-        iOrders = SSFilterFactory.doFilter(iOrders, new SSFilter<SSOrder>() {
+        iOrders = SSFilterFactory.doFilter(iOrders, new SSFilter<>() {
             public boolean applyFilter(SSOrder iOrder) {
                 return SSOrderMath.inPeriod(iOrder, iFrom, iTo);
             }
         });
 
         iInvoices = SSFilterFactory.doFilter(iInvoices,
-                new SSFilter<SSInvoice>() {
+                new SSFilter<>() {
             public boolean applyFilter(SSInvoice iInvoice) {
                 return iInvoice.isStockInfluencing()
                         && SSInvoiceMath.inPeriod(iInvoice, iFrom, iTo);
@@ -222,7 +222,7 @@ public class SSStock {
         });
 
         iCreditInvoices = SSFilterFactory.doFilter(iCreditInvoices,
-                new SSFilter<SSCreditInvoice>() {
+                new SSFilter<>() {
             public boolean applyFilter(SSCreditInvoice iCreditInvoice) {
                 return iCreditInvoice.isStockInfluencing()
                         && SSInvoiceMath.inPeriod(iCreditInvoice, iFrom, iTo);
@@ -230,7 +230,7 @@ public class SSStock {
         });
 
         iPurchaseOrders = SSFilterFactory.doFilter(iPurchaseOrders,
-                new SSFilter<SSPurchaseOrder>() {
+                new SSFilter<>() {
             public boolean applyFilter(SSPurchaseOrder iPurchaseOrder) {
                 return iPurchaseOrder.isStockInfluencing()
                         && SSPurchaseOrderMath.inPeriod(iPurchaseOrder, iFrom, iTo);
@@ -238,7 +238,7 @@ public class SSStock {
         });
 
         iSupplierInvoices = SSFilterFactory.doFilter(iSupplierInvoices,
-                new SSFilter<SSSupplierInvoice>() {
+                new SSFilter<>() {
             public boolean applyFilter(SSSupplierInvoice iSupplierInvoice) {
                 return iSupplierInvoice.isStockInfluencing()
                         && SSSupplierInvoiceMath.inPeriod(iSupplierInvoice, iFrom, iTo);
@@ -246,7 +246,7 @@ public class SSStock {
         });
 
         iSupplierCreditInvoices = SSFilterFactory.doFilter(iSupplierCreditInvoices,
-                new SSFilter<SSSupplierCreditInvoice>() {
+                new SSFilter<>() {
             public boolean applyFilter(SSSupplierCreditInvoice iSupplierCreditInvoice) {
                 return iSupplierCreditInvoice.isStockInfluencing()
                         && SSSupplierInvoiceMath.inPeriod(iSupplierCreditInvoice, iFrom,
@@ -255,21 +255,21 @@ public class SSStock {
         });
 
         iInventories = SSFilterFactory.doFilter(iInventories,
-                new SSFilter<SSInventory>() {
+                new SSFilter<>() {
             public boolean applyFilter(SSInventory iInventory) {
                 return SSInventoryMath.inPeriod(iInventory, iFrom, iTo);
             }
         });
 
         iIndeliveries = SSFilterFactory.doFilter(iIndeliveries,
-                new SSFilter<SSIndelivery>() {
+                new SSFilter<>() {
             public boolean applyFilter(SSIndelivery iIndelivery) {
                 return SSIndeliveryMath.inPeriod(iIndelivery, iFrom, iTo);
             }
         });
 
         iOutdeliveries = SSFilterFactory.doFilter(iOutdeliveries,
-                new SSFilter<SSOutdelivery>() {
+                new SSFilter<>() {
             public boolean applyFilter(SSOutdelivery iOutdelivery) {
                 return SSOutdeliveryMath.inPeriod(iOutdelivery, iFrom, iTo);
             }
@@ -292,7 +292,7 @@ public class SSStock {
      * @param iOutdeliveries
      */
     private void calculate(List<SSOrder> iOrders, List<SSInvoice> iInvoices, List<SSCreditInvoice> iCreditInvoices, List<SSPurchaseOrder> iPurchaseOrders, List<SSSupplierInvoice> iSupplierInvoices, List<SSSupplierCreditInvoice> iSupplierCreditInvoices, List<SSInventory> iInventories, List<SSIndelivery> iIndeliveries, List<SSOutdelivery> iOutdeliveries) {
-        List<SSProduct> iProducts = new LinkedList<SSProduct>(
+        List<SSProduct> iProducts = new LinkedList<>(
                 SSDB.getInstance().getProducts());
 
         Map<String, Integer> iOrderCount = SSOrderMath.getStockInfluencing(iOrders);

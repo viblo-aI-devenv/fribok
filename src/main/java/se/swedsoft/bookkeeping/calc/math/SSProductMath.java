@@ -43,7 +43,7 @@ public class SSProductMath {
      */
     public static List<SSProduct> getNormalProducts() {
         List<SSProduct> iProducts = SSDB.getInstance().getProducts();
-        List<SSProduct> iFiltered = new LinkedList<SSProduct>();
+        List<SSProduct> iFiltered = new LinkedList<>();
 
         for (SSProduct iProduct : iProducts) {
             if (!iProduct.isParcel()) {
@@ -60,14 +60,10 @@ public class SSProductMath {
      * @return
      */
     public static BigDecimal getLastPurchasePrice(SSProduct iProduct, Date iDate) {
-        List<SSSupplierInvoice> iSupplierInvoices = new LinkedList<SSSupplierInvoice>(
+        List<SSSupplierInvoice> iSupplierInvoices = new LinkedList<>(
                 SSDB.getInstance().getSupplierInvoices());
 
-        Collections.sort(iSupplierInvoices, new Comparator<SSSupplierInvoice>() {
-            public int compare(SSSupplierInvoice o1, SSSupplierInvoice o2) {
-                return o2.getDate().compareTo(o1.getDate());
-            }
-        });
+        Collections.sort(iSupplierInvoices, (o1, o2) -> o2.getDate().compareTo(o1.getDate()));
 
         for (SSSupplierInvoice iSupplierInvoice : iSupplierInvoices) {
             List<SSSupplierInvoiceRow> iRows = iSupplierInvoice.getRows();
@@ -88,7 +84,7 @@ public class SSProductMath {
      * @return
      */
     public static List<SSProduct> getStockProducts(List<SSProduct> iProducts) {
-        List<SSProduct> iFiltered = new LinkedList<SSProduct>();
+        List<SSProduct> iFiltered = new LinkedList<>();
 
         for (SSProduct iProduct : iProducts) {
 
@@ -132,7 +128,7 @@ public class SSProductMath {
      * @return
      */
     public static Map<SSProduct, BigDecimal> getInprices(List<SSProduct> iProducts) {
-        Map<SSProduct, BigDecimal> IInprices = new HashMap<SSProduct, BigDecimal>();
+        Map<SSProduct, BigDecimal> IInprices = new HashMap<>();
 
         for (SSProduct iProduct : iProducts) {
             IInprices.put(iProduct, getInprice(iProduct));
@@ -147,7 +143,7 @@ public class SSProductMath {
      * @return
      */
     public static Map<SSProduct, BigDecimal> getInprices(List<SSProduct> iProducts, Date iDate) {
-        Map<SSProduct, BigDecimal> IInprices = new HashMap<SSProduct, BigDecimal>();
+        Map<SSProduct, BigDecimal> IInprices = new HashMap<>();
 
         for (SSProduct iProduct : iProducts) {
             IInprices.put(iProduct, getInprice(iProduct, iDate));
@@ -205,15 +201,11 @@ public class SSProductMath {
         }
         List<SSSupplierInvoice> iSupplierInvoices = SSDB.getInstance().getSupplierInvoices();
 
-        List<SSSupplierInvoice> iFiltered = new LinkedList<SSSupplierInvoice>(
+        List<SSSupplierInvoice> iFiltered = new LinkedList<>(
                 iSupplierInvoices);
 
         // Sortera efter datum i fallande ordning
-        Collections.sort(iFiltered, new Comparator<SSSupplierInvoice>() {
-            public int compare(SSSupplierInvoice o1, SSSupplierInvoice o2) {
-                return o2.getDate().compareTo(o1.getDate());
-            }
-        });
+        Collections.sort(iFiltered, (o1, o2) -> o2.getDate().compareTo(o1.getDate()));
 
         for (SSSupplierInvoice iSupplierInvoice : iFiltered) {
 

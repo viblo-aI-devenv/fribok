@@ -32,7 +32,7 @@ public class CreateQRCode {
      */
     public static void createQRCode(final String uqrData, final File iFile, final int height, final int width) throws WriterException, UnsupportedEncodingException {
 
-        Map<EncodeHintType, ErrorCorrectionLevel> encodeHintMap = new HashMap<EncodeHintType, ErrorCorrectionLevel>();
+        Map<EncodeHintType, ErrorCorrectionLevel> encodeHintMap = new HashMap<>();
         encodeHintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
 
         // fixme! - We go UTF-8 here specifically (due to spec) from windows-1252, 

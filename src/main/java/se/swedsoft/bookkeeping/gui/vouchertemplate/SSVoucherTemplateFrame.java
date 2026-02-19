@@ -75,100 +75,100 @@ public class SSVoucherTemplateFrame extends SSDefaultTableFrame {
         // Importera
         // ***************************
         SSButton iButton = new SSButton("ICON_IMPORT", "vouchertemplateframe.importbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSExcelFileChooser iFilechooser = SSExcelFileChooser.getInstance();
+                e -> {
 
-                if (iFilechooser.showOpenDialog(getMainFrame())
-                        == JFileChooser.APPROVE_OPTION) {
-                    SSVoucherTemplateImporter iImporter = new SSVoucherTemplateImporter(
-                            iFilechooser.getSelectedFile());
+                        SSExcelFileChooser iFilechooser = SSExcelFileChooser.getInstance();
 
-                    try {
-                        iImporter.Import();
+                        if (iFilechooser.showOpenDialog(getMainFrame())
+                                == JFileChooser.APPROVE_OPTION) {
+                            SSVoucherTemplateImporter iImporter = new SSVoucherTemplateImporter(
+                                    iFilechooser.getSelectedFile());
 
-                    } catch (IOException ex) {
-                        SSErrorDialog.showDialog(getMainFrame(), "",
-                                ex.getLocalizedMessage());
-                    } catch (SSImportException ex) {
-                        SSErrorDialog.showDialog(getMainFrame(), "",
-                                ex.getLocalizedMessage());
-                    }
-                    iModel.fireTableDataChanged();
-                }
+                            try {
+                                iImporter.Import();
 
-            }
-        });
+                            } catch (IOException ex) {
+                                SSErrorDialog.showDialog(getMainFrame(), "",
+                                        ex.getLocalizedMessage());
+                            } catch (SSImportException ex) {
+                                SSErrorDialog.showDialog(getMainFrame(), "",
+                                        ex.getLocalizedMessage());
+                            }
+                            iModel.fireTableDataChanged();
+                        }
+
+
+                    });
 
         iToolBar.add(iButton);
 
         // Exportera
         // ***************************
         iButton = new SSButton("ICON_EXPORT", "vouchertemplateframe.exportbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSExcelFileChooser iFilechooser = SSExcelFileChooser.getInstance();
+                e -> {
 
-                List<SSVoucherTemplate> iItems;
-                List<SSVoucherTemplate> iSelected = iModel.getSelectedRows(iTable);
+                        SSExcelFileChooser iFilechooser = SSExcelFileChooser.getInstance();
 
-                if (iSelected != null) {
-                    int select = SSQueryDialog.showDialog(getMainFrame(),
-                            JOptionPane.YES_NO_CANCEL_OPTION, getTitle(),
-                            SSBundle.getBundle().getString(
-                            "vouchertemplateframe.import.allorselected"));
+                        List<SSVoucherTemplate> iItems;
+                        List<SSVoucherTemplate> iSelected = iModel.getSelectedRows(iTable);
 
-                    switch (select) {
-                    case JOptionPane.YES_OPTION:
-                        iItems = getVoucherTemplates(iSelected);
-                        break;
+                        if (iSelected != null) {
+                            int select = SSQueryDialog.showDialog(getMainFrame(),
+                                    JOptionPane.YES_NO_CANCEL_OPTION, getTitle(),
+                                    SSBundle.getBundle().getString(
+                                    "vouchertemplateframe.import.allorselected"));
 
-                    case JOptionPane.NO_OPTION:
-                        iItems = SSDB.getInstance().getVoucherTemplates();
-                        break;
+                            switch (select) {
+                            case JOptionPane.YES_OPTION:
+                                iItems = getVoucherTemplates(iSelected);
+                                break;
 
-                    default:
-                        return;
-                    }
-                } else {
-                    iItems = SSDB.getInstance().getVoucherTemplates();
-                }
+                            case JOptionPane.NO_OPTION:
+                                iItems = SSDB.getInstance().getVoucherTemplates();
+                                break;
 
-                iFilechooser.setSelectedFile(new File("Konteringsmallar.xls"));
+                            default:
+                                return;
+                            }
+                        } else {
+                            iItems = SSDB.getInstance().getVoucherTemplates();
+                        }
 
-                if (iFilechooser.showSaveDialog(getMainFrame())
-                        == JFileChooser.APPROVE_OPTION) {
+                        iFilechooser.setSelectedFile(new File("Konteringsmallar.xls"));
 
-                    SSVoucherTemplateExporter iExporter = new SSVoucherTemplateExporter(
-                            iFilechooser.getSelectedFile(), iItems);
+                        if (iFilechooser.showSaveDialog(getMainFrame())
+                                == JFileChooser.APPROVE_OPTION) {
 
-                    try {
-                        iExporter.export();
-                    } catch (IOException ex) {
-                        SSErrorDialog.showDialog(getMainFrame(), "",
-                                ex.getLocalizedMessage());
-                    } catch (SSExportException ex) {
-                        SSErrorDialog.showDialog(getMainFrame(), "",
-                                ex.getLocalizedMessage());
-                    }
-                }
+                            SSVoucherTemplateExporter iExporter = new SSVoucherTemplateExporter(
+                                    iFilechooser.getSelectedFile(), iItems);
 
-            }
-        });
+                            try {
+                                iExporter.export();
+                            } catch (IOException ex) {
+                                SSErrorDialog.showDialog(getMainFrame(), "",
+                                        ex.getLocalizedMessage());
+                            } catch (SSExportException ex) {
+                                SSErrorDialog.showDialog(getMainFrame(), "",
+                                        ex.getLocalizedMessage());
+                            }
+                        }
+
+
+                    });
         iToolBar.add(iButton);
         iToolBar.addSeparator();
 
         // Ta bort verifikation
         // ***************************
         iButton = new SSButton("ICON_DELETEITEM", "vouchertemplateframe.deletebutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                int[] selected = iTable.getSelectedRows();
-                List<SSVoucherTemplate> toDelete = iModel.getObjects(selected);
+                e -> {
 
-                deleteSelectedTemplates(toDelete);
-            }
-        });
+                        int[] selected = iTable.getSelectedRows();
+                        List<SSVoucherTemplate> toDelete = iModel.getObjects(selected);
+
+                        deleteSelectedTemplates(toDelete);
+
+                    });
         iToolBar.add(iButton);
         iTable.addSelectionDependentComponent(iButton);
 

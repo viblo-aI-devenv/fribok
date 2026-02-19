@@ -47,11 +47,11 @@ public class SSOutpayment implements SSTableSearchable, Serializable {
      * Default constructor
      */
     public SSOutpayment() {
-        iRows = new LinkedList<SSOutpaymentRow>();
+        iRows = new LinkedList<>();
         iVoucher = new SSVoucher();
         iDifference = new SSVoucher();
         iEntered = false;
-        iDefaultAccounts = new HashMap<SSDefaultAccount, Integer>();
+        iDefaultAccounts = new HashMap<>();
         iDefaultAccounts.putAll(
                 SSDB.getInstance().getCurrentCompany().getDefaultAccounts());
 
@@ -91,8 +91,8 @@ public class SSOutpayment implements SSTableSearchable, Serializable {
         iEntered = iOutpayment.iEntered;
         iVoucher = new SSVoucher(iOutpayment.iVoucher);
         iDifference = new SSVoucher(iOutpayment.iDifference);
-        iRows = new LinkedList<SSOutpaymentRow>();
-        iDefaultAccounts = new HashMap<SSDefaultAccount, Integer>();
+        iRows = new LinkedList<>();
+        iDefaultAccounts = new HashMap<>();
 
         // Copy all rows
         for (SSOutpaymentRow iRow : iOutpayment.iRows) {
@@ -234,7 +234,7 @@ public class SSOutpayment implements SSTableSearchable, Serializable {
      */
     public List<SSOutpaymentRow> getRows() {
         if (iRows == null) {
-            iRows = new LinkedList<SSOutpaymentRow>();
+            iRows = new LinkedList<>();
         }
         return iRows;
     }
@@ -329,7 +329,7 @@ public class SSOutpayment implements SSTableSearchable, Serializable {
     }
 
     public List<SSSupplierInvoice> getSupplierInvoices() {
-        List<SSSupplierInvoice> iSupplierInvoices = new LinkedList<SSSupplierInvoice>();
+        List<SSSupplierInvoice> iSupplierInvoices = new LinkedList<>();
 
         for (SSOutpaymentRow iRow : iRows) {
             if (iRow.getSupplierInvoice(SSDB.getInstance().getSupplierInvoices()) != null) {

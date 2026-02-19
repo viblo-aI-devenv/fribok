@@ -40,19 +40,11 @@ public class SSDateCellEditor extends AbstractCellEditor implements TableCellEdi
         DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
         iDateChooser = new SSDateChooser();
-        iDateChooser.addChangeListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setDate(iDateChooser.getDate());
-            }
-        });
+        iDateChooser.addChangeListener(e -> setDate(iDateChooser.getDate()));
 
         iTextField = new JFormattedTextField(iFormat);
         iTextField.setHorizontalAlignment(JTextField.TRAILING);
-        iTextField.addPropertyChangeListener("value", new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent evt) {
-                setDate((Date) iTextField.getValue());
-            }
-        });
+        iTextField.addPropertyChangeListener("value", evt -> setDate((Date) iTextField.getValue()));
 
         iButton = new SSButton("ICON_CALENDAR16");
         iButton.setToolTipText(SSBundle.getBundle().getString("date.tooltip"));
@@ -60,12 +52,12 @@ public class SSDateCellEditor extends AbstractCellEditor implements TableCellEdi
         iButton.setMaximumSize(new Dimension(20, 20));
         iButton.setMinimumSize(new Dimension(20, 20));
 
-        iButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iButton.addActionListener(e -> {
+
                 iDateChooser.setDate(iDate);
                 iDateChooser.show(iButton, 0, iButton.getHeight());
-            }
-        });
+
+            });
 
         iPanel = new JPanel();
         iPanel.setLayout(new BorderLayout());

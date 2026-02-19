@@ -41,7 +41,7 @@ public class SSDeliveryWayTableModel extends SSTableModel<SSDeliveryWay> {
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSDeliveryWay.class;
     }
 
@@ -67,7 +67,7 @@ public class SSDeliveryWayTableModel extends SSTableModel<SSDeliveryWay> {
     /**
      *  Name
      */
-    public static SSTableColumn<SSDeliveryWay> COLUMN_NAME = new SSTableColumn<SSDeliveryWay>(
+    public static SSTableColumn<SSDeliveryWay> COLUMN_NAME = new SSTableColumn<>(
             SSBundle.getBundle().getString("currencytable.column.1")) {
         @Override
         public Object getValue(SSDeliveryWay iCurrency) {
@@ -91,7 +91,7 @@ public class SSDeliveryWayTableModel extends SSTableModel<SSDeliveryWay> {
     /**
      *  Description
      */
-    public static SSTableColumn<SSDeliveryWay> COLUMN_DESCRIPTION = new SSTableColumn<SSDeliveryWay>(
+    public static SSTableColumn<SSDeliveryWay> COLUMN_DESCRIPTION = new SSTableColumn<>(
             SSBundle.getBundle().getString("currencytable.column.2")) {
         @Override
         public Object getValue(SSDeliveryWay iCurrency) {

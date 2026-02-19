@@ -85,21 +85,13 @@ public class SSOutdeliveryPanel {
             }
         };
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                iDate.getEditor().getComponent(0).requestFocusInWindow();
-            }
-        });
+        SwingUtilities.invokeLater(() -> iDate.getEditor().getComponent(0).requestFocusInWindow());
 
         iDate.getEditor().getComponent(0).addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iText.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iText.requestFocusInWindow());
                 }
             }
         });
@@ -108,12 +100,12 @@ public class SSOutdeliveryPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
+                    SwingUtilities.invokeLater(() -> {
+
                             iTable.requestFocusInWindow();
                             iTable.changeSelection(0, 0, false, false);
-                        }
-                    });
+
+                        });
                 }
             }
         });
@@ -122,11 +114,7 @@ public class SSOutdeliveryPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iButtonPanel.getCancelButton().requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iButtonPanel.getCancelButton().requestFocusInWindow());
                 }
             }
         });
@@ -135,11 +123,7 @@ public class SSOutdeliveryPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iButtonPanel.getOkButton().requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iButtonPanel.getOkButton().requestFocusInWindow());
                 }
             }
         });

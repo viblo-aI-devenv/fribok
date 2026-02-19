@@ -28,7 +28,7 @@ public class SSAccountPlanTableModel extends SSTableModel<SSAccountPlan> {
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSAccountPlan.class;
     }
 
@@ -47,7 +47,7 @@ public class SSAccountPlanTableModel extends SSTableModel<SSAccountPlan> {
     /**
      * Namn
      */
-    public static SSTableColumn<SSAccountPlan> COLUMN_NAME = new SSTableColumn<SSAccountPlan>(
+    public static SSTableColumn<SSAccountPlan> COLUMN_NAME = new SSTableColumn<>(
             SSBundle.getBundle().getString("accountplantable.column.1")) {
         @Override
         public Object getValue(SSAccountPlan iAccountPlan) {
@@ -73,7 +73,7 @@ public class SSAccountPlanTableModel extends SSTableModel<SSAccountPlan> {
     /**
      * Namn
      */
-    public static SSTableColumn<SSAccountPlan> COLUMN_TYPE = new SSTableColumn<SSAccountPlan>(
+    public static SSTableColumn<SSAccountPlan> COLUMN_TYPE = new SSTableColumn<>(
             SSBundle.getBundle().getString("accountplantable.column.2")) {
         @Override
         public Object getValue(SSAccountPlan iAccountPlan) {
@@ -99,7 +99,7 @@ public class SSAccountPlanTableModel extends SSTableModel<SSAccountPlan> {
     /**
      * Namn
      */
-    public static SSTableColumn<SSAccountPlan> COLUMN_ASSESSMENTYEAR = new SSTableColumn<SSAccountPlan>(
+    public static SSTableColumn<SSAccountPlan> COLUMN_ASSESSMENTYEAR = new SSTableColumn<>(
             SSBundle.getBundle().getString("accountplantable.column.3")) {
         @Override
         public Object getValue(SSAccountPlan iAccountPlan) {

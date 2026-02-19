@@ -144,7 +144,7 @@ public class SSCurrency implements Serializable, SSTableSearchable {
      * @return the default currenices
      */
     public static List<SSCurrency> getDefaultCurrencies() {
-        List<SSCurrency> iCurrencies = new LinkedList<SSCurrency>();
+        List<SSCurrency> iCurrencies = new LinkedList<>();
 
         iCurrencies.add(new SSCurrency("EUR", "Euro"));
         iCurrencies.add(new SSCurrency("SEK", "Svenska kronor"));

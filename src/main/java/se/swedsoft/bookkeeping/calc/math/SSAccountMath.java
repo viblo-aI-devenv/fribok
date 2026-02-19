@@ -102,7 +102,7 @@ public class SSAccountMath {
      * @return list of balance accounts
      */
     public static List<SSAccount> getBalanceAccounts(SSNewAccountingYear pAccountingYear, List<SSAccount> pAccounts) {
-        List<SSAccount> iFiltered = new LinkedList<SSAccount>();
+        List<SSAccount> iFiltered = new LinkedList<>();
 
         for (SSAccount iAccount: pAccounts) {
             if (isBalanceAccount(iAccount, pAccountingYear)) {
@@ -121,7 +121,7 @@ public class SSAccountMath {
      * @return list of result accounts
      */
     public static List<SSAccount> getResultAccounts(SSNewAccountingYear pAccountingYear, List<SSAccount> pAccounts) {
-        List<SSAccount> iFiltered = new LinkedList<SSAccount>();
+        List<SSAccount> iFiltered = new LinkedList<>();
 
         for (SSAccount iAccount: pAccounts) {
             if (isResultAccount(iAccount, pAccountingYear)) {
@@ -181,7 +181,7 @@ public class SSAccountMath {
      * @return A list with accounts with number between from and to.
      */
     public static List<SSAccount> getAccounts(List<SSAccount> pAccounts, SSAccount pFrom, SSAccount pTo) {
-        List<SSAccount> iFiltered = new LinkedList<SSAccount>();
+        List<SSAccount> iFiltered = new LinkedList<>();
 
         for (SSAccount iAccount : pAccounts) {
             if (inPeriod(iAccount, pFrom, pTo)) {
@@ -239,7 +239,7 @@ public class SSAccountMath {
      * @return A list with accounts with number between from and to.
      */
     public static List<SSAccount> getAccountsByVATCode(List<SSAccount> pAccounts, String... pVatCodes) {
-        List <SSAccount> filtered = new LinkedList<SSAccount>();
+        List <SSAccount> filtered = new LinkedList<>();
 
         for (SSAccount iAccount : pAccounts) {
 
@@ -325,7 +325,7 @@ public class SSAccountMath {
      * @return A list with accounts with number between from and to.
      */
     public static List<SSAccount> getAccountsBySRUCode(List<SSAccount> pAccounts, String... pSruCodes) {
-        List <SSAccount> filtered = new LinkedList<SSAccount>();
+        List <SSAccount> filtered = new LinkedList<>();
 
         for (SSAccount iAccount : pAccounts) {
 
@@ -363,7 +363,7 @@ public class SSAccountMath {
      * @return A list with accounts with number between from and to.
      */
     public static List<SSAccount> getAccountsWithoutSRUCode(List<SSAccount> pAccounts) {
-        List <SSAccount> filtered = new LinkedList<SSAccount>();
+        List <SSAccount> filtered = new LinkedList<>();
 
         for (SSAccount iAccount : pAccounts) {
             if ((iAccount.getSRUCode() == null) || (iAccount.getSRUCode().length() == 0)) {

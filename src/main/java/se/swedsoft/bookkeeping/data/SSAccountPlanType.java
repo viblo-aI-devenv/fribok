@@ -17,7 +17,7 @@ import java.util.Map;
 public class SSAccountPlanType implements SSTableSearchable, Serializable {
 
     static final long serialVersionUID = 1L;
-    private static final Map<String, SSAccountPlanType> iAccountPlanTypes = new HashMap<String, SSAccountPlanType>();
+    private static final Map<String, SSAccountPlanType> iAccountPlanTypes = new HashMap<>();
 
     // TODO: Load this from file
     static {
@@ -32,7 +32,7 @@ public class SSAccountPlanType implements SSTableSearchable, Serializable {
      * @return List of types
      */
     public static List<SSAccountPlanType> getAccountPlanTypes() {
-        return new LinkedList<SSAccountPlanType>(iAccountPlanTypes.values());
+        return new LinkedList<>(iAccountPlanTypes.values());
     }
 
     /**

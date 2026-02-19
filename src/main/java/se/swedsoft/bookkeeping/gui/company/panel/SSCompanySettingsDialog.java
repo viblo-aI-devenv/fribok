@@ -45,7 +45,7 @@ public class SSCompanySettingsDialog extends SSDialog implements ListSelectionLi
     public SSCompanySettingsDialog(SSMainFrame iMainFrame, String iDialogTitle) {
         super(iMainFrame, iDialogTitle);
 
-        iPages = new LinkedList<SSCompanyPage>();
+        iPages = new LinkedList<>();
         iPages.add(new SSCompanyPageGeneral(this));
         iPages.add(new SSCompanyPageAddress(this));
         iPages.add(new SSCompanyPageAdditional(this));
@@ -56,17 +56,9 @@ public class SSCompanySettingsDialog extends SSDialog implements ListSelectionLi
 
         setPanel(iPanel);
 
-        iButtonPanel.addOkActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                closeDialog(JOptionPane.OK_OPTION);
-            }
-        });
+        iButtonPanel.addOkActionListener(e -> closeDialog(JOptionPane.OK_OPTION));
 
-        iButtonPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                closeDialog(JOptionPane.CANCEL_OPTION);
-            }
-        });
+        iButtonPanel.addCancelActionListener(e -> closeDialog(JOptionPane.CANCEL_OPTION));
 
 	getRootPane().setDefaultButton(iButtonPanel.getOkButton());
 
@@ -110,9 +102,7 @@ public class SSCompanySettingsDialog extends SSDialog implements ListSelectionLi
     public void setCompany(SSNewCompany iCompany) {
         this.iCompany = iCompany;
 
-        for (SSCompanyPage iPage : iPages) {
-            iPage.setCompany(iCompany);
-        }
+        iPages.forEach(iPage -> iPage.setCompany(iCompany));
     }
 
     /**

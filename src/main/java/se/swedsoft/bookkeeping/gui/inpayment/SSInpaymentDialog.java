@@ -53,8 +53,8 @@ public class SSInpaymentDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        final ActionListener iSaveAction = e -> {
+
                 SSInpayment iInpayment = iPanel.getInpayment();
 
                 SSDB.getInstance().updateInpayment(iInpayment);
@@ -69,18 +69,18 @@ public class SSInpaymentDialog {
                 SSPostLock.removeLock(lockString);
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 SSPostLock.removeLock(lockString);
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        });
+
+            });
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override
@@ -116,11 +116,11 @@ public class SSInpaymentDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSInpayment iInpayment = iPanel.getInpayment();
+        final ActionListener iSaveAction = e -> {
 
-                SSDB.getInstance().addInpayment(iInpayment);
+                SSInpayment iInpayment1 = iPanel.getInpayment();
+
+                SSDB.getInstance().addInpayment(iInpayment1);
                 SSInvoiceFrame.fireTableDataChanged();
 
                 if (pModel != null) {
@@ -133,17 +133,17 @@ public class SSInpaymentDialog {
 
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        });
+
+            });
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override
@@ -179,11 +179,11 @@ public class SSInpaymentDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSInpayment iInpayment = iPanel.getInpayment();
+        final ActionListener iSaveAction = e -> {
 
-                SSDB.getInstance().addInpayment(iInpayment);
+                SSInpayment iInpayment1 = iPanel.getInpayment();
+
+                SSDB.getInstance().addInpayment(iInpayment1);
 
                 SSInvoiceFrame.fireTableDataChanged();
 
@@ -193,17 +193,17 @@ public class SSInpaymentDialog {
 
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        });
+
+            });
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override

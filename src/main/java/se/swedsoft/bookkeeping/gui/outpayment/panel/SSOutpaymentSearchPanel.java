@@ -42,7 +42,7 @@ public class SSOutpaymentSearchPanel extends JPanel {
 
     public void ApplyFilter() {
         List<SSOutpayment> iOutpayments = SSDB.getInstance().getOutpayments();
-        List<SSOutpayment> iFiltered = new LinkedList<SSOutpayment>();
+        List<SSOutpayment> iFiltered = new LinkedList<>();
 
         String iText = iTextField.getText();
 

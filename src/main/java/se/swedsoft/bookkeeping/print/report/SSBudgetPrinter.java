@@ -104,9 +104,9 @@ public class SSBudgetPrinter extends SSPrinter {
 
         iDataSource = new SSDefaultJasperDataSource(iPrinter.getModel());
 
-        SSDefaultTableModel<SSAccount> iModel = new SSDefaultTableModel<SSAccount>() {
+        SSDefaultTableModel<SSAccount> iModel = new SSDefaultTableModel<>() {
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSAccount.class;
             }
 
@@ -147,12 +147,12 @@ public class SSBudgetPrinter extends SSPrinter {
         iModel.addColumn("month.data");
 
         Collections.sort(iAccounts,
-                new Comparator<SSAccount>() {
-            public int compare(SSAccount o1, SSAccount o2) {
-                return SSAccountMath.getResultGroup(o1, iAccountingYear)
-                        - SSAccountMath.getResultGroup(o2, iAccountingYear);
-            }
-        });
+                (o1, o2) -> {
+
+                        return SSAccountMath.getResultGroup(o1, iAccountingYear)
+                                - SSAccountMath.getResultGroup(o2, iAccountingYear);
+
+                    });
 
         iModel.setObjects(iAccounts);
 
@@ -185,10 +185,10 @@ public class SSBudgetPrinter extends SSPrinter {
 
             final SSBudget iBudget = pAccountingYear.getBudget();
 
-            iModel = new SSDefaultTableModel<SSMonth>(iBudget.getMonths()) {
+            iModel = new SSDefaultTableModel<>(iBudget.getMonths()) {
 
                 @Override
-                public Class getType() {
+                public Class<?> getType() {
                     return SSMonth.class;
                 }
 

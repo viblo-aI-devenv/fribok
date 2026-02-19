@@ -19,7 +19,7 @@ public class SSCompanyTableModel extends SSDefaultTableModel<SSNewCompany> {
     }
 
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSNewCompany.class;
     }
 

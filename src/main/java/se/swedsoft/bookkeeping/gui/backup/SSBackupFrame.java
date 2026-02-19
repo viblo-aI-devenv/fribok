@@ -99,39 +99,39 @@ public class SSBackupFrame extends SSDefaultTableFrame {
         // Restore from selected backup
         // ***************************
         SSButton iButton = new SSButton("ICON_IMPORT", "backupframe.restorebutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSBackup iBackup = getSelected();
+                e -> {
 
-                // If nothing selected, return
-                if (iBackup == null) {
-                    new SSErrorDialog(getMainFrame(), "backupframe.selectone");
-                    return;
-                }
+                        SSBackup iBackup = getSelected();
 
-                if (!iBackup.exists()) {
-                    iDatabase.getBackups().remove(iBackup);
-                    iDatabase.notifyUpdated();
+                        // If nothing selected, return
+                        if (iBackup == null) {
+                            new SSErrorDialog(getMainFrame(), "backupframe.selectone");
+                            return;
+                        }
 
-                    new SSErrorDialog(getMainFrame(), "backupframe.missingfile");
+                        if (!iBackup.exists()) {
+                            iDatabase.getBackups().remove(iBackup);
+                            iDatabase.notifyUpdated();
 
-                    return;
-                }
-                try {
-                    SSBackupFactory.restoreBackup(iBackup.getFilename());
+                            new SSErrorDialog(getMainFrame(), "backupframe.missingfile");
 
-                    SSDB.getInstance().setCurrentCompany(null);
-                    SSDB.getInstance().setCurrentYear(null);
-                    iModel.fireTableDataChanged();
-                    SSFrameManager.getInstance().close();
+                            return;
+                        }
+                        try {
+                            SSBackupFactory.restoreBackup(iBackup.getFilename());
 
-                    SSCompanyFrame.showFrame(getMainFrame(), 500, 300);
-                } catch (SSException ex) {
-                    new SSErrorDialog(getMainFrame(), "exceptiondialog",
-                            ex.getLocalizedMessage());
-                }
-            }
-        });
+                            SSDB.getInstance().setCurrentCompany(null);
+                            SSDB.getInstance().setCurrentYear(null);
+                            iModel.fireTableDataChanged();
+                            SSFrameManager.getInstance().close();
+
+                            SSCompanyFrame.showFrame(getMainFrame(), 500, 300);
+                        } catch (SSException ex) {
+                            new SSErrorDialog(getMainFrame(), "exceptiondialog",
+                                    ex.getLocalizedMessage());
+                        }
+
+                    });
 
         toolBar.add(iButton);
         toolBar.addSeparator();
@@ -140,42 +140,37 @@ public class SSBackupFrame extends SSDefaultTableFrame {
         // Restore from external backup
         // ***************************
         iButton = new SSButton("ICON_OPENITEM", "backupframe.openbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSBackupFileChooser iFileChooser = SSBackupFileChooser.getInstance();
+                e -> {
 
-                if (iFileChooser.showOpenDialog(getMainFrame()) != JOptionPane.OK_OPTION) {
-                    return;
-                }
+                        SSBackupFileChooser iFileChooser = SSBackupFileChooser.getInstance();
 
-                String iFileName = iFileChooser.getSelectedFile().getAbsolutePath();
+                        if (iFileChooser.showOpenDialog(getMainFrame()) != JOptionPane.OK_OPTION) {
+                            return;
+                        }
 
-                try {
-                    SSBackupFactory.restoreBackup(iFileName);
+                        String iFileName = iFileChooser.getSelectedFile().getAbsolutePath();
 
-                    SSDB.getInstance().setCurrentCompany(null);
-                    SSDB.getInstance().setCurrentYear(null);
+                        try {
+                            SSBackupFactory.restoreBackup(iFileName);
 
-                    iModel.fireTableDataChanged();
+                            SSDB.getInstance().setCurrentCompany(null);
+                            SSDB.getInstance().setCurrentYear(null);
 
-                    SSCompanyFrame.showFrame(getMainFrame(), 500, 300);
-                } catch (SSException ex) {
-                    new SSErrorDialog(getMainFrame(), "exceptiondialog",
-                            ex.getLocalizedMessage());
-                }
-            }
-        });
+                            iModel.fireTableDataChanged();
+
+                            SSCompanyFrame.showFrame(getMainFrame(), 500, 300);
+                        } catch (SSException ex) {
+                            new SSErrorDialog(getMainFrame(), "exceptiondialog",
+                                    ex.getLocalizedMessage());
+                        }
+
+                    });
         toolBar.add(iButton);
 
         // Ta bort backup
         // ***************************
         iButton = new SSButton("ICON_DELETEITEM", "backupframe.deletebutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                deleteSelectedBackup();
-
-            }
-        });
+                e -> deleteSelectedBackup());
         toolBar.add(iButton);
         iTable.addSelectionDependentComponent(iButton);
 
@@ -195,11 +190,7 @@ public class SSBackupFrame extends SSDefaultTableFrame {
 
         List<SSBackup> iBackups = iDatabase.getBackups();
 
-        Collections.sort(iBackups, new Comparator<SSBackup>() {
-            public int compare(SSBackup o1, SSBackup o2) {
-                return o2.getDate().compareTo(o1.getDate());
-            }
-        });
+        Collections.sort(iBackups, (o1, o2) -> o2.getDate().compareTo(o1.getDate()));
 
         iTable = new SSTable();
 
@@ -264,7 +255,7 @@ public class SSBackupFrame extends SSDefaultTableFrame {
             iDatabase.getBackups().remove(iBackup);
 
             iModel.fireTableDataChanged();
-        } catch (Exception ex) {
+        } catch (RuntimeException ex) {
             ex.printStackTrace();
         }
 

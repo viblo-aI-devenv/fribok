@@ -42,7 +42,7 @@ public class SSPeriodicInvoiceSearchPanel extends JPanel {
 
     public void ApplyFilter() {
         List<SSPeriodicInvoice> iPeriodicInvoices = SSDB.getInstance().getPeriodicInvoices();
-        List<SSPeriodicInvoice> iFiltered = new LinkedList<SSPeriodicInvoice>();
+        List<SSPeriodicInvoice> iFiltered = new LinkedList<>();
 
         String iText = iTextField.getText();
 

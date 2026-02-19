@@ -36,7 +36,7 @@ public class SSStartingAmountPanel {
     private SSCurrencyTextField iSumField;
 
     public SSStartingAmountPanel() {
-        iInBalance = new HashMap<SSAccount, BigDecimal>();
+        iInBalance = new HashMap<>();
 
         iModel = new SSStartingAmountTableModel(iInBalance);
 
@@ -57,13 +57,13 @@ public class SSStartingAmountPanel {
         iTable.setDefaultRenderer(BigDecimal.class, new SSBigDecimalCellRenderer(2));
 
         // Update the sum if a change occurs in the second column.
-        iModel.addTableModelListener(new TableModelListener() {
-            public void tableChanged(TableModelEvent e) {
+        iModel.addTableModelListener(e -> {
+
                 if (e.getColumn() == 2) {
                     updateSumField();
                 }
-            }
-        });
+
+            });
 
     }
 
@@ -105,7 +105,7 @@ public class SSStartingAmountPanel {
      * @return
      */
     public Map<SSAccount, BigDecimal> getInBalance() {
-        Map<SSAccount, BigDecimal> iResult = new HashMap<SSAccount, BigDecimal>();
+        Map<SSAccount, BigDecimal> iResult = new HashMap<>();
 
         for (Map.Entry<SSAccount, BigDecimal> ssAccountBigDecimalEntry : iInBalance.entrySet()) {
             BigDecimal iValue = ssAccountBigDecimalEntry.getValue();

@@ -159,34 +159,34 @@ public class SSBookkeeping {
         // Perhaps add some type of shut down hook.
         Runtime.getRuntime().addShutdownHook(
                 new Thread(
-                        new Runnable() {
-            public void run() {
-                SSFrameManager.getInstance().storeAllFrames();
+                        () -> {
 
-                if (SSDBConfig.getClientkey() != null
-                        && SSDBConfig.getClientkey().length() != 0) {
-                    SSDB.getInstance().removeClient();
-                }
+                                SSFrameManager.getInstance().storeAllFrames();
 
-                try {
-                    iRunning = false;
-                    SSDB.getInstance().shutdown();
-                    // Shut down the database.
-                    if (SSDB.getInstance().getLocking()
-                            && SSDB.getInstance().getSocket() != null) {
-                        SSDB.getInstance().getWriter().println("disconnect");
-                        SSDB.getInstance().getWriter().flush();
-                        SSDB.getInstance().getWriter().close();
+                                if (SSDBConfig.getClientkey() != null
+                                        && SSDBConfig.getClientkey().length() != 0) {
+                                    SSDB.getInstance().removeClient();
+                                }
 
-                        SSDB.getInstance().getReader().close();
-                        SSDB.getInstance().getSocket().close();
-                    }
+                                try {
+                                    iRunning = false;
+                                    SSDB.getInstance().shutdown();
+                                    // Shut down the database.
+                                    if (SSDB.getInstance().getLocking()
+                                            && SSDB.getInstance().getSocket() != null) {
+                                        SSDB.getInstance().getWriter().println("disconnect");
+                                        SSDB.getInstance().getWriter().flush();
+                                        SSDB.getInstance().getWriter().close();
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }));
+                                        SSDB.getInstance().getReader().close();
+                                        SSDB.getInstance().getSocket().close();
+                                    }
+
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }));
     }
 
 }

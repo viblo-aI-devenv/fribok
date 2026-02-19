@@ -79,7 +79,7 @@ public class SSVATControl2007Printer extends SSPrinter {
         iCreditMinusDebetSum = SSVoucherMath.getCreditMinusDebetSum(iVouchers);
         iDebetMinusCreditSum = SSVoucherMath.getDebetMinusCreditSum(iVouchers);
 
-        iAccountsByVatCode = new HashMap<String, List<SSAccount>>();
+        iAccountsByVatCode = new HashMap<>();
 
         for (SSAccount iAccount : iAccounts) {
             String iVATCode = iAccount.getVATCode();
@@ -87,7 +87,7 @@ public class SSVATControl2007Printer extends SSPrinter {
             List<SSAccount> iAccountsForVatCode = iAccountsByVatCode.get(iVATCode);
 
             if (iAccountsForVatCode == null) {
-                iAccountsForVatCode = new LinkedList<SSAccount>();
+                iAccountsForVatCode = new LinkedList<>();
 
                 iAccountsByVatCode.put(iVATCode, iAccountsForVatCode);
             }
@@ -241,10 +241,10 @@ public class SSVATControl2007Printer extends SSPrinter {
         addParameter("dateFrom", iDateFrom);
         addParameter("dateTo", iDateTo);
 
-        SSDefaultTableModel<Integer> iModel = new SSDefaultTableModel<Integer>() {
+        SSDefaultTableModel<Integer> iModel = new SSDefaultTableModel<>() {
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return String.class;
             }
 

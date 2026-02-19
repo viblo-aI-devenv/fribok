@@ -33,7 +33,7 @@ public class SSStartingAmountTableModel extends SSDefaultTableModel<SSAccount> {
     }
 
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSAccount.class;
     }
 

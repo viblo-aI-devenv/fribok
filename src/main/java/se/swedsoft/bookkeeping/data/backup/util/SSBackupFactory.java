@@ -177,7 +177,7 @@ public class SSBackupFactory {
 
         try {
             SSDB.getInstance().loadLocalDatabase();
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
         }
 

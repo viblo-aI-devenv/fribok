@@ -39,7 +39,7 @@ public class SSSupplierImporter {
      */
     public SSSupplierImporter(File iFile) {
         this.iFile = iFile;
-        iColumns = new HashMap<String, Integer>();
+        iColumns = new HashMap<>();
     }
 
     /**
@@ -55,7 +55,7 @@ public class SSSupplierImporter {
         iSettings.setExcelDisplayLanguage("SE");
         iSettings.setExcelRegionalSettings("SE");
 
-        List<SSSupplier> iSuppliers = new LinkedList<SSSupplier>();
+        List<SSSupplier> iSuppliers = new LinkedList<>();
 
         try {
             Workbook iWorkbook = Workbook.getWorkbook(iFile, iSettings);
@@ -75,25 +75,25 @@ public class SSSupplierImporter {
         } catch (BiffException e) {
             throw new SSImportException(e.getLocalizedMessage());
         }
-        final List<SSSupplier> iNewSuppliers = new LinkedList<SSSupplier>(iSuppliers);
+        final List<SSSupplier> iNewSuppliers = new LinkedList<>(iSuppliers);
         final boolean iResult = showImportReport(iSuppliers);
 
         SSInitDialog.runProgress(SSMainFrame.getInstance(), "Importerar leverant�rer",
-                new Runnable() {
-            public void run() {
-                if (iNewSuppliers != null && iResult) {
-                    Integer iOutPaymentNumber = SSSupplierMath.getOutpaymentNumber();
+                () -> {
 
-                    for (SSSupplier iSupplier : iNewSuppliers) {
-                        if (!SSDB.getInstance().getSuppliers().contains(iSupplier)) {
-                            iSupplier.setOutpaymentNumber(iOutPaymentNumber);
-                            SSDB.getInstance().addSupplier(iSupplier);
-                            iOutPaymentNumber++;
+                        if (iNewSuppliers != null && iResult) {
+                            Integer iOutPaymentNumber = SSSupplierMath.getOutpaymentNumber();
+
+                            for (SSSupplier iSupplier : iNewSuppliers) {
+                                if (!SSDB.getInstance().getSuppliers().contains(iSupplier)) {
+                                    iSupplier.setOutpaymentNumber(iOutPaymentNumber);
+                                    SSDB.getInstance().addSupplier(iSupplier);
+                                    iOutPaymentNumber++;
+                                }
+                            }
                         }
-                    }
-                }
-            }
-        });
+
+                    });
 
     }
 
@@ -172,7 +172,7 @@ public class SSSupplierImporter {
 
         getColumnIndexes(iRows.get(0));
 
-        List<SSSupplier> iSuppliers = new LinkedList<SSSupplier>();
+        List<SSSupplier> iSuppliers = new LinkedList<>();
 
         for (int row = 1; row < iRows.size(); row++) {
             SSExcelRow iRow = iRows.get(row);

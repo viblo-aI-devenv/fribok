@@ -39,14 +39,14 @@ public class SSInventoryTableModel extends SSTableModel<SSInventory> {
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSInventory.class;
     }
 
     /**
      *  Inventerings nummer
      */
-    public static SSTableColumn<SSInventory> COLUMN_NUMBER = new SSTableColumn<SSInventory>(
+    public static SSTableColumn<SSInventory> COLUMN_NUMBER = new SSTableColumn<>(
             SSBundle.getBundle().getString("inventorytable.column.1")) {
         @Override
         public Object getValue(SSInventory iInventory) {
@@ -73,7 +73,7 @@ public class SSInventoryTableModel extends SSTableModel<SSInventory> {
     /**
      * Datum
      */
-    public static SSTableColumn<SSInventory> COLUMN_DATE = new SSTableColumn<SSInventory>(
+    public static SSTableColumn<SSInventory> COLUMN_DATE = new SSTableColumn<>(
             SSBundle.getBundle().getString("inventorytable.column.2")) {
         @Override
         public Object getValue(SSInventory iInventory) {
@@ -99,7 +99,7 @@ public class SSInventoryTableModel extends SSTableModel<SSInventory> {
     /**
      * Text
      */
-    public static SSTableColumn<SSInventory> COLUMN_TEXT = new SSTableColumn<SSInventory>(
+    public static SSTableColumn<SSInventory> COLUMN_TEXT = new SSTableColumn<>(
             SSBundle.getBundle().getString("inventorytable.column.3")) {
         @Override
         public Object getValue(SSInventory iInventory) {

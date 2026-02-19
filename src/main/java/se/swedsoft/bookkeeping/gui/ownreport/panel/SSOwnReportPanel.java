@@ -114,7 +114,7 @@ public class SSOwnReportPanel {
         iProjectComboBox.setModel(SSProjectTableModel.getDropDownModel());
         iProjectComboBox.setSearchColumns(0, 1);
         iProjectComboBox.setAllowCustomValues(false);
-        iProjectComboBox.addSelectionListener(new SSSelectionListener<SSNewProject>() {
+        iProjectComboBox.addSelectionListener(new SSSelectionListener<>() {
             public void selected(SSNewProject iProject) {
                 if (iProject != null) {
                     iResultUnitComboBox.setSelected(null);
@@ -138,7 +138,7 @@ public class SSOwnReportPanel {
         iResultUnitComboBox.setSearchColumns(0, 1);
         iResultUnitComboBox.setAllowCustomValues(false);
         iResultUnitComboBox.addSelectionListener(
-                new SSSelectionListener<SSNewResultUnit>() {
+                new SSSelectionListener<>() {
             public void selected(SSNewResultUnit iResultUnit) {
                 if (iResultUnit != null) {
                     iProjectComboBox.setSelected(null);
@@ -187,11 +187,7 @@ public class SSOwnReportPanel {
         iMonthlyTableModel.addColumn(
                 SSBundle.getBundle().getString("ownreport.monthtable.column.2"));
 
-        Collections.sort(iMonths, new Comparator<SSMonth>() {
-            public int compare(SSMonth o1, SSMonth o2) {
-                return o1.getDate().compareTo(o2.getDate());
-            }
-        });
+        Collections.sort(iMonths, (o1, o2) -> o1.getDate().compareTo(o2.getDate()));
         iMonthlyTableModel.setObjects(iMonths);
         iMonthlyTable.setModel(iMonthlyTableModel);
 
@@ -245,44 +241,44 @@ public class SSOwnReportPanel {
             }
         };
 
-        iAddRowButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iAddRowButton.addActionListener(e -> {
+
                 int selected = iHeadingTable.getSelectedRow();
                 List<SSOwnReportRow> iObjects = iHeadingTableModel.getObjects();
 
                 iObjects.add(selected, new SSOwnReportRow());
                 iHeadingTableModel.fireTableDataChanged();
-            }
-        });
+
+            });
 
         iTabbedPane.addChangeListener(
-                new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                switch (iTabbedPane.getSelectedIndex()) {
-                case 0:
-                    break;
+                e -> {
 
-                case 1:
-                    for (SSOwnReportRow iRow : iOwnReportRows) {
-                        if (!iHeadingComboBox.getModel().getObjects().contains(iRow)
-                                && iRow.getType() == SSHeadingType.HEADING2) {
-                            iHeadingComboBox.getModel().add(iRow);
+                        switch (iTabbedPane.getSelectedIndex()) {
+                        case 0:
+                            break;
+
+                        case 1:
+                            for (SSOwnReportRow iRow : iOwnReportRows) {
+                                if (!iHeadingComboBox.getModel().getObjects().contains(iRow)
+                                        && iRow.getType() == SSHeadingType.HEADING2) {
+                                    iHeadingComboBox.getModel().add(iRow);
+                                }
+                            }
+                            iHeadingComboBox.getModel().fireTableDataChanged();
+
+                            break;
+
+                        case 2:
+                            iAccountComboBox.setModel(
+                                    SSAccountTableModel.getDropDownModel(getAccounts()));
+                            break;
                         }
-                    }
-                    iHeadingComboBox.getModel().fireTableDataChanged();
 
-                    break;
-
-                case 2:
-                    iAccountComboBox.setModel(
-                            SSAccountTableModel.getDropDownModel(getAccounts()));
-                    break;
-                }
-            }
-        });
+                    });
 
         iHeadingComboBox.addSelectionListener(
-                new SSSelectionListener<SSOwnReportRow>() {
+                new SSSelectionListener<>() {
             public void selected(SSOwnReportRow selected) {
                 if (selected != null) {
                     if (selected.getHeading() != null
@@ -299,7 +295,7 @@ public class SSOwnReportPanel {
             }
         });
 
-        iAccountComboBox.addSelectionListener(new SSSelectionListener<SSAccount>() {
+        iAccountComboBox.addSelectionListener(new SSSelectionListener<>() {
             public void selected(SSAccount iAccount) {
                 iMonthlyTableModel.setAccount(iAccount);
             }
@@ -349,7 +345,7 @@ public class SSOwnReportPanel {
     }
 
     public List<SSAccount> getAccounts() {
-        List<SSAccount> iAccounts = new LinkedList<SSAccount>();
+        List<SSAccount> iAccounts = new LinkedList<>();
 
         for (SSOwnReportRow iRow : iOwnReportRows) {
             for (SSOwnReportAccountRow iAccountRow : iRow.getAccountRows()) {

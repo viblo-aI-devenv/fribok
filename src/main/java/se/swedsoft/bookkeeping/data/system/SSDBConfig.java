@@ -8,6 +8,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 import org.fribok.bookkeeping.app.Path;
 import se.swedsoft.bookkeeping.data.SSNewAccountingYear;
 
@@ -64,7 +65,7 @@ public class SSDBConfig {
                     iFormat);
 
             serializer.serialize(iParser.getDocument());
-        } catch (Exception ex) {
+        } catch (IOException | SAXException ex) {
             ex.printStackTrace();
         }
     }
@@ -116,7 +117,7 @@ public class SSDBConfig {
 
             serializer.serialize(iParser.getDocument());
 
-        } catch (Exception ex) {
+        } catch (IOException | SAXException ex) {
             ex.printStackTrace();
         }
     }
@@ -154,7 +155,7 @@ public class SSDBConfig {
                 }
             }
 
-        } catch (Exception ex) {
+        } catch (IOException | SAXException ex) {
             ex.printStackTrace();
         }
         return null;
@@ -189,7 +190,7 @@ public class SSDBConfig {
 
             serializer.serialize(iParser.getDocument());
 
-        } catch (Exception ex) {
+        } catch (IOException | SAXException ex) {
             ex.printStackTrace();
         }
 
@@ -210,7 +211,7 @@ public class SSDBConfig {
                     iFormat);
 
             serializer.serialize(iParser.getDocument());
-        } catch (Exception ex) {
+        } catch (IOException | SAXException ex) {
             ex.printStackTrace();
         }
     }
@@ -295,7 +296,7 @@ public class SSDBConfig {
 
             iServerAddress = iServer;
 
-        } catch (Exception ex) {
+        } catch (IOException | SAXException ex) {
             ex.printStackTrace();
         }
     }

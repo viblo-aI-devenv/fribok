@@ -73,17 +73,17 @@ public class SSStartingAmountPrinter extends SSPrinter {
         addParameter("dateFrom", iFrom);
         addParameter("dateTo", iTo);
 
-        List<SSAccount> iAccounts = new LinkedList<SSAccount>();
+        List<SSAccount> iAccounts = new LinkedList<>();
 
         // Extract all accounts
         for (SSAccount iAccount: iInBalance.keySet()) {
             iAccounts.add(iAccount);
         }
 
-        SSDefaultTableModel<SSAccount> iModel = new SSDefaultTableModel<SSAccount>() {
+        SSDefaultTableModel<SSAccount> iModel = new SSDefaultTableModel<>() {
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSAccount.class;
 
             }
@@ -116,11 +116,7 @@ public class SSStartingAmountPrinter extends SSPrinter {
         iModel.addColumn("description");
         iModel.addColumn("inbalance");
 
-        Collections.sort(iAccounts, new Comparator<SSAccount>() {
-            public int compare(SSAccount o1, SSAccount o2) {
-                return o1.getNumber() - o2.getNumber();
-            }
-        });
+        Collections.sort(iAccounts, (o1, o2) -> o1.getNumber() - o2.getNumber());
 
         iModel.setObjects(iAccounts);
 

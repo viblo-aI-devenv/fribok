@@ -82,34 +82,30 @@ public class SSOwnReportFrame extends SSDefaultTableFrame {
         // New
         // ***************************
         SSButton iButton = new SSButton("ICON_NEWITEM", "ownreportframe.newbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSOwnReportDialog.newDialog(getMainFrame());
-            }
-        });
+                e -> SSOwnReportDialog.newDialog(getMainFrame()));
 
         toolBar.add(iButton);
 
         // Edit
         // ***************************
         iButton = new SSButton("ICON_EDITITEM", "ownreportframe.editbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSOwnReport iSelected = iModel.getSelectedRow(iTable);
-                String iName = null;
+                e -> {
 
-                if (iSelected != null) {
-                    iName = iSelected.getName();
-                    iSelected = getOwnReport(iSelected);
-                }
-                if (iSelected != null) {
-                    SSOwnReportDialog.editDialog(getMainFrame(), iSelected);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "ownreportframe.ownreportgone",
-                            iName);
-                }
-            }
-        });
+                        SSOwnReport iSelected = iModel.getSelectedRow(iTable);
+                        String iName = null;
+
+                        if (iSelected != null) {
+                            iName = iSelected.getName();
+                            iSelected = getOwnReport(iSelected);
+                        }
+                        if (iSelected != null) {
+                            SSOwnReportDialog.editDialog(getMainFrame(), iSelected);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "ownreportframe.ownreportgone",
+                                    iName);
+                        }
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         toolBar.add(iButton);
         toolBar.addSeparator();
@@ -117,15 +113,15 @@ public class SSOwnReportFrame extends SSDefaultTableFrame {
         // Delete
         // ***************************
         iButton = new SSButton("ICON_DELETEITEM", "ownreportframe.deletebutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+                e -> {
 
-                int[] selected = iTable.getSelectedRows();
-                List<SSOwnReport> toDelete = iModel.getObjects(selected);
 
-                deleteSelectedOwnReport(toDelete);
-            }
-        });
+                        int[] selected = iTable.getSelectedRows();
+                        List<SSOwnReport> toDelete = iModel.getObjects(selected);
+
+                        deleteSelectedOwnReport(toDelete);
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         toolBar.add(iButton);
         toolBar.addSeparator();
@@ -133,23 +129,23 @@ public class SSOwnReportFrame extends SSDefaultTableFrame {
         // Print
         // ***************************
         iButton = new SSButton("ICON_PRINT", "ownreportframe.printbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSOwnReport iSelected = iModel.getSelectedRow(iTable);
-                String iName = null;
+                e -> {
 
-                if (iSelected != null) {
-                    iName = iSelected.getName();
-                    iSelected = getOwnReport(iSelected);
-                }
-                if (iSelected != null) {
-                    SSReportFactory.buildOwnReport(getMainFrame(), iSelected);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "ownreportframe.ownreportgone",
-                            iName);
-                }
-            }
-        });
+                        SSOwnReport iSelected = iModel.getSelectedRow(iTable);
+                        String iName = null;
+
+                        if (iSelected != null) {
+                            iName = iSelected.getName();
+                            iSelected = getOwnReport(iSelected);
+                        }
+                        if (iSelected != null) {
+                            SSReportFactory.buildOwnReport(getMainFrame(), iSelected);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "ownreportframe.ownreportgone",
+                                    iName);
+                        }
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         toolBar.add(iButton);
         return toolBar;
@@ -173,25 +169,25 @@ public class SSOwnReportFrame extends SSDefaultTableFrame {
         iModel.setupTable(iTable);
 
         iTable.addDblClickListener(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSOwnReport iSelected = iModel.getSelectedRow(iTable);
-                String iName;
+                e -> {
 
-                if (iSelected != null) {
-                    iName = iSelected.getName();
-                    iSelected = getOwnReport(iSelected);
-                } else {
-                    return;
-                }
-                if (iSelected != null) {
-                    SSOwnReportDialog.editDialog(getMainFrame(), iSelected);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "ownreportframe.ownreportgone",
-                            iName);
-                }
-            }
-        });
+                        SSOwnReport iSelected = iModel.getSelectedRow(iTable);
+                        String iName;
+
+                        if (iSelected != null) {
+                            iName = iSelected.getName();
+                            iSelected = getOwnReport(iSelected);
+                        } else {
+                            return;
+                        }
+                        if (iSelected != null) {
+                            SSOwnReportDialog.editDialog(getMainFrame(), iSelected);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "ownreportframe.ownreportgone",
+                                    iName);
+                        }
+
+                    });
         JPanel iPanel = new JPanel();
 
         iPanel.setLayout(new BorderLayout());

@@ -44,7 +44,7 @@ public class SSCurrencyTableModel extends SSTableModel<SSCurrency> {
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSCurrency.class;
     }
 
@@ -79,7 +79,7 @@ public class SSCurrencyTableModel extends SSTableModel<SSCurrency> {
     /**
      *  Name
      */
-    public static SSTableColumn<SSCurrency> COLUMN_NAME = new SSTableColumn<SSCurrency>(
+    public static SSTableColumn<SSCurrency> COLUMN_NAME = new SSTableColumn<>(
             SSBundle.getBundle().getString("currencytable.column.1")) {
         @Override
         public Object getValue(SSCurrency iCurrency) {
@@ -105,7 +105,7 @@ public class SSCurrencyTableModel extends SSTableModel<SSCurrency> {
     /**
      *  Description
      */
-    public static SSTableColumn<SSCurrency> COLUMN_DESCRIPTION = new SSTableColumn<SSCurrency>(
+    public static SSTableColumn<SSCurrency> COLUMN_DESCRIPTION = new SSTableColumn<>(
             SSBundle.getBundle().getString("currencytable.column.2")) {
         @Override
         public Object getValue(SSCurrency iCurrency) {
@@ -131,7 +131,7 @@ public class SSCurrencyTableModel extends SSTableModel<SSCurrency> {
     /**
      *  Description
      */
-    public static SSTableColumn<SSCurrency> COLUMN_EXCHANGERATE = new SSTableColumn<SSCurrency>(
+    public static SSTableColumn<SSCurrency> COLUMN_EXCHANGERATE = new SSTableColumn<>(
             SSBundle.getBundle().getString("currencytable.column.3")) {
         @Override
         public Object getValue(SSCurrency iCurrency) {

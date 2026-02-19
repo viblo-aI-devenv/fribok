@@ -226,10 +226,10 @@ public class SSInvoicePrinter extends SSPrinter {
         addParameter("subreport.parameters", iPrinter.getParameters());
         addParameter("subreport.datasource", iPrinter.getDataSource());
 
-        SSDefaultTableModel<SSInvoice> iModel = new SSDefaultTableModel<SSInvoice>() {
+        SSDefaultTableModel<SSInvoice> iModel = new SSDefaultTableModel<>() {
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSInvoice.class;
             }
 
@@ -271,10 +271,10 @@ public class SSInvoicePrinter extends SSPrinter {
          */
         @Override
         protected SSDefaultTableModel getModel() {
-            SSDefaultTableModel<SSSaleRow> iModel = new SSDefaultTableModel<SSSaleRow>() {
+            SSDefaultTableModel<SSSaleRow> iModel = new SSDefaultTableModel<>() {
 
                 @Override
-                public Class getType() {
+                public Class<?> getType() {
                     return SSSaleRow.class;
                 }
 
@@ -325,7 +325,7 @@ public class SSInvoicePrinter extends SSPrinter {
             iModel.addColumn("row.discount");
             iModel.addColumn("row.sum");
 
-            List<SSSaleRow> iRows = new LinkedList<SSSaleRow>(iInvoice.getRows());
+            List<SSSaleRow> iRows = new LinkedList<>(iInvoice.getRows());
 
             if (iInvoice.getOrderNumbers() != null
                     && iInvoice.getOrderNumbers().length() != 0

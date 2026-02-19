@@ -63,7 +63,7 @@ public class SSVoucherRowTableModelOld extends SSDefaultTableModel<SSVoucherRow>
             addColumn(SSBundle.getBundle().getString("voucherrowtable.column.7"));
             addColumn(SSBundle.getBundle().getString("voucherrowtable.column.8"));
         }
-        setObjects(new LinkedList<SSVoucherRow>());
+        setObjects(new LinkedList<>());
     }
 
     /**
@@ -131,7 +131,7 @@ public class SSVoucherRowTableModelOld extends SSDefaultTableModel<SSVoucherRow>
     }
 
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSVoucherRow.class;
     }
 
@@ -393,7 +393,7 @@ public class SSVoucherRowTableModelOld extends SSDefaultTableModel<SSVoucherRow>
             } else {
                 iTable.getColumnModel().getColumn(COL_DESCRIPTION).setPreferredWidth(376);
             }
-        } catch (Exception ignored) {}
+        } catch (ArrayIndexOutOfBoundsException ignored) {}
     }
 
     @Override

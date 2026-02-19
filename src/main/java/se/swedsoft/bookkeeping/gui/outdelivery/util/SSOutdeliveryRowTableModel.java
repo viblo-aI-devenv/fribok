@@ -22,7 +22,7 @@ public class SSOutdeliveryRowTableModel extends SSEditableTableModel<SSOutdelive
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSInventory.class;
     }
 
@@ -37,7 +37,7 @@ public class SSOutdeliveryRowTableModel extends SSEditableTableModel<SSOutdelive
     /**
      * Product
      */
-    public static SSTableColumn<SSOutdeliveryRow> COLUMN_PRODUCT = new SSTableColumn<SSOutdeliveryRow>(
+    public static SSTableColumn<SSOutdeliveryRow> COLUMN_PRODUCT = new SSTableColumn<>(
             SSBundle.getBundle().getString("outdeliveryrowtable.column.1")) {
         @Override
         public Object getValue(SSOutdeliveryRow iRow) {
@@ -65,7 +65,7 @@ public class SSOutdeliveryRowTableModel extends SSEditableTableModel<SSOutdelive
     /**
      * Product beskrivning
      */
-    public static SSTableColumn<SSOutdeliveryRow> COLUMN_DESCRIPTION = new SSTableColumn<SSOutdeliveryRow>(
+    public static SSTableColumn<SSOutdeliveryRow> COLUMN_DESCRIPTION = new SSTableColumn<>(
             SSBundle.getBundle().getString("outdeliveryrowtable.column.2")) {
         @Override
         public Object getValue(SSOutdeliveryRow iRow) {
@@ -91,7 +91,7 @@ public class SSOutdeliveryRowTableModel extends SSEditableTableModel<SSOutdelive
     /**
      * Skillnad
      */
-    public static SSTableColumn<SSOutdeliveryRow> COLUMN_CHANGE = new SSTableColumn<SSOutdeliveryRow>(
+    public static SSTableColumn<SSOutdeliveryRow> COLUMN_CHANGE = new SSTableColumn<>(
             SSBundle.getBundle().getString("outdeliveryrowtable.column.3")) {
         @Override
         public Object getValue(SSOutdeliveryRow iRow) {

@@ -75,12 +75,12 @@ public class SSOrderListPrinter extends SSPrinter {
 
         iDataSource = new SSDefaultJasperDataSource(iPrinter.getModel());
 
-        SSDefaultTableModel<SSOrder> iModel = new SSDefaultTableModel<SSOrder>() {
+        SSDefaultTableModel<SSOrder> iModel = new SSDefaultTableModel<>() {
 
             DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSAccount.class;
             }
 
@@ -142,11 +142,7 @@ public class SSOrderListPrinter extends SSPrinter {
         iModel.addColumn("order.rows");
         iModel.addColumn("order.sum");
 
-        Collections.sort(iOrders, new Comparator<SSOrder>() {
-            public int compare(SSOrder o1, SSOrder o2) {
-                return o1.getNumber() - o2.getNumber();
-            }
-        });
+        Collections.sort(iOrders, (o1, o2) -> o1.getNumber() - o2.getNumber());
 
         iModel.setObjects(iOrders);
 
@@ -166,10 +162,10 @@ public class SSOrderListPrinter extends SSPrinter {
             setDetail("orderlist.row.jrxml");
             setSummary("orderlist.row.jrxml");
 
-            iModel = new SSDefaultTableModel<SSSaleRow>() {
+            iModel = new SSDefaultTableModel<>() {
 
                 @Override
-                public Class getType() {
+                public Class<?> getType() {
                     return SSSaleRow.class;
                 }
 

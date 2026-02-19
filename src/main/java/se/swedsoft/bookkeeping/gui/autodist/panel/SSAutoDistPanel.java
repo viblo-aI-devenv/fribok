@@ -118,40 +118,36 @@ public class SSAutoDistPanel {
         iAccount.setModel(SSAccountTableModel.getDropDownModel());
         iAccount.setSearchColumns(0);
         iAccount.setAllowCustomValues(true);
-        iAccount.addSelectionListener(new SSSelectionListener<SSAccount>() {
+        iAccount.addSelectionListener(new SSSelectionListener<>() {
             public void selected(SSAccount iAccount) {
                 iAccountDescription.setText(iAccount.getDescription());
                 iButtonPanel.getOkButton().setEnabled(true);
             }
         });
-        iAccount.addChangeListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iAccount.addChangeListener(e -> {
+
                 if (iAccount.getSelected() == null) {
                     iButtonPanel.getOkButton().setEnabled(false);
                     iAccountDescription.setText(null);
                 }
-            }
-        });
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+            });
+
+        SwingUtilities.invokeLater(() -> {
+
                 if (iAccount.isEnabled()) {
                     iAccount.getComponent(0).requestFocusInWindow();
                 } else {
                     iText.requestFocusInWindow();
                 }
-            }
-        });
+
+            });
 
         iAccount.getComponent(0).addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iText.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iText.requestFocusInWindow());
                 }
             }
         });
@@ -160,11 +156,7 @@ public class SSAutoDistPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iAmount.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iAmount.requestFocusInWindow());
                 }
             }
         });
@@ -173,12 +165,12 @@ public class SSAutoDistPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
+                    SwingUtilities.invokeLater(() -> {
+
                             iTable.requestFocusInWindow();
                             iTable.changeSelection(0, 0, false, false);
-                        }
-                    });
+
+                        });
                 }
             }
         });
@@ -187,11 +179,7 @@ public class SSAutoDistPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iButtonPanel.getOkButton().requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iButtonPanel.getOkButton().requestFocusInWindow());
                 }
             }
         });
@@ -200,11 +188,7 @@ public class SSAutoDistPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iButtonPanel.getOkButton().requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iButtonPanel.getOkButton().requestFocusInWindow());
                 }
             }
         });

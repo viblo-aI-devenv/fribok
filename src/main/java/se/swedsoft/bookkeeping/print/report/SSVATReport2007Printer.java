@@ -79,7 +79,7 @@ public class SSVATReport2007Printer extends SSPrinter {
         iCreditMinusDebetSum = SSVoucherMath.getCreditMinusDebetSum(iVouchers);
         iDebetMinusCreditSum = SSVoucherMath.getDebetMinusCreditSum(iVouchers);
 
-        iAccountsByVatCode = new HashMap<String, List<SSAccount>>();
+        iAccountsByVatCode = new HashMap<>();
 
         for (SSAccount iAccount : iAccounts) {
             String iVATCode = iAccount.getVATCode();
@@ -87,7 +87,7 @@ public class SSVATReport2007Printer extends SSPrinter {
             List<SSAccount> iAccountsForVatCode = iAccountsByVatCode.get(iVATCode);
 
             if (iAccountsForVatCode == null) {
-                iAccountsForVatCode = new LinkedList<SSAccount>();
+                iAccountsForVatCode = new LinkedList<>();
 
                 iAccountsByVatCode.put(iVATCode, iAccountsForVatCode);
             }
@@ -311,10 +311,10 @@ public class SSVATReport2007Printer extends SSPrinter {
 
         iDataSource = new SSDefaultJasperDataSource(iPrinter.getModel());
 
-        SSDefaultTableModel<String> iModel = new SSDefaultTableModel<String>() {
+        SSDefaultTableModel<String> iModel = new SSDefaultTableModel<>() {
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return String.class;
             }
 
@@ -373,10 +373,10 @@ public class SSVATReport2007Printer extends SSPrinter {
 
             setDetail("vatreport2007.rows.jrxml");
 
-            iModel = new SSDefaultTableModel<Integer>() {
+            iModel = new SSDefaultTableModel<>() {
 
                 @Override
-                public Class getType() {
+                public Class<?> getType() {
                     return Integer.class;
                 }
 
@@ -439,7 +439,7 @@ public class SSVATReport2007Printer extends SSPrinter {
          * @param iNumber
          */
         public void setGroup(char iNumber) {
-            List<Integer> iObjects = new LinkedList<Integer>();
+            List<Integer> iObjects = new LinkedList<>();
 
             switch (iNumber) {
             case 'A':

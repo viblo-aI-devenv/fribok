@@ -49,7 +49,7 @@ public class SSReportCache {
      *
      */
     private SSReportCache() {
-        iReportCache = new HashMap<String, JasperReport>();
+        iReportCache = new HashMap<>();
     }
 
     /**

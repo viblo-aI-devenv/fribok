@@ -30,17 +30,9 @@ public class SSCopyReversedVoucherDialog extends SSDialog {
 
         add(iPanel, BorderLayout.CENTER);
         pack();
-        iButtonPanel.addOkActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                closeDialog(JOptionPane.OK_OPTION);
-            }
-        });
+        iButtonPanel.addOkActionListener(e -> closeDialog(JOptionPane.OK_OPTION));
 
-        iButtonPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                closeDialog(JOptionPane.CANCEL_OPTION);
-            }
-        });
+        iButtonPanel.addCancelActionListener(e -> closeDialog(JOptionPane.CANCEL_OPTION));
 
         getRootPane().setDefaultButton(iButtonPanel.getOkButton());
     }

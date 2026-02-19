@@ -39,7 +39,7 @@ public class SSEditableTableComboBox<T extends SSTableSearchable> extends JPanel
      * and a flow layout.
      */
     public SSEditableTableComboBox() {
-        iComboBox = new SSTableComboBox<T>();
+        iComboBox = new SSTableComboBox<>();
 
         iEditButton = new JButton("...");
         iEditButton.setPreferredSize(new Dimension(20, 20));
@@ -56,8 +56,8 @@ public class SSEditableTableComboBox<T extends SSTableSearchable> extends JPanel
         iMenuItem.setDisabledIcon(SSIcon.getIcon("ICON_NEW16", SSIcon.IconState.DISABLED));
         iMenuItem.setRolloverIcon(
                 SSIcon.getIcon("ICON_NEW16", SSIcon.IconState.HIGHLIGHTED));
-        iMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuItem.addActionListener(e -> {
+
 
                 if (iFactory != null) {
                     T iSelected = iFactory.newAction();
@@ -70,8 +70,8 @@ public class SSEditableTableComboBox<T extends SSTableSearchable> extends JPanel
                         iComboBox.setSelected(iSelected, true);
                     }
                 }
-            }
-        });
+
+            });
         iPopup.add(iMenuItem);
 
         iMenuItem = new JMenuItem("Ändra...");
@@ -79,8 +79,8 @@ public class SSEditableTableComboBox<T extends SSTableSearchable> extends JPanel
         iMenuItem.setDisabledIcon(SSIcon.getIcon("ICON_EDIT16", SSIcon.IconState.DISABLED));
         iMenuItem.setRolloverIcon(
                 SSIcon.getIcon("ICON_EDIT16", SSIcon.IconState.HIGHLIGHTED));
-        iMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuItem.addActionListener(e -> {
+
                 T iSelected = iComboBox.getSelected();
 
                 if (iFactory != null && iSelected != null) {
@@ -92,8 +92,8 @@ public class SSEditableTableComboBox<T extends SSTableSearchable> extends JPanel
                     iComboBox.setModel(iComboBox.getModel().getDropdownmodel());
                     iComboBox.setSelected(iSelected, true);
                 }
-            }
-        });
+
+            });
         iPopup.add(iMenuItem);
 
         iMenuItem = new JMenuItem("Ta bort...");
@@ -102,8 +102,8 @@ public class SSEditableTableComboBox<T extends SSTableSearchable> extends JPanel
                 SSIcon.getIcon("ICON_DELETE16", SSIcon.IconState.DISABLED));
         iMenuItem.setRolloverIcon(
                 SSIcon.getIcon("ICON_DELETE16", SSIcon.IconState.HIGHLIGHTED));
-        iMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuItem.addActionListener(e -> {
+
                 T iSelected = iComboBox.getSelected();
 
                 if (iFactory != null && iSelected != null) {
@@ -116,15 +116,11 @@ public class SSEditableTableComboBox<T extends SSTableSearchable> extends JPanel
                     iComboBox.setSelected(null, true);
                 }
 
-            }
-        });
+
+            });
         iPopup.add(iMenuItem);
 
-        iEditButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iPopup.show(iEditButton, 0, iEditButton.getHeight());
-            }
-        });
+        iEditButton.addActionListener(e -> iPopup.show(iEditButton, 0, iEditButton.getHeight()));
     }
 
     public void dispose() {

@@ -56,10 +56,10 @@ public class SSProjectsPrinter extends SSPrinter {
 
         final DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
-        SSDefaultTableModel<SSNewProject> iModel = new SSDefaultTableModel<SSNewProject>() {
+        SSDefaultTableModel<SSNewProject> iModel = new SSDefaultTableModel<>() {
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSNewProject.class;
             }
 

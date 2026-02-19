@@ -157,9 +157,9 @@ public class SSMainBookCalculator {
         this.iProject = iProject;
         this.iResultUnit = iResultUnit;
 
-        iRows = new LinkedList<SSMainBookRow>();
-        iInBalance = new HashMap<SSAccount, BigDecimal>();
-        iInSaldo = new HashMap<SSAccount, BigDecimal>();
+        iRows = new LinkedList<>();
+        iInBalance = new HashMap<>();
+        iInSaldo = new HashMap<>();
     }
 
     /**

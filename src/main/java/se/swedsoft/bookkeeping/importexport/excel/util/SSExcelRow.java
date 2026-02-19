@@ -24,7 +24,7 @@ public class SSExcelRow {
     }
 
     public List<SSExcelCell> getCells() {
-        List<SSExcelCell> iList = new LinkedList<SSExcelCell>();
+        List<SSExcelCell> iList = new LinkedList<>();
 
         int iColumn = 0;
 

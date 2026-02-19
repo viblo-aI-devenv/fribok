@@ -73,95 +73,95 @@ public class SSSupplierPaymentDialog extends SSDialog {
                 SSDB.getInstance().getCurrentCompany().getBankGiroNumber());
 
         iButtonPanel.addOkActionListener(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                List<SupplierPayment> iSupplierPayments = iModel.getObjects();
+                e -> {
 
-                for (SupplierPayment iPayment : iSupplierPayments) {
-                    SSSupplierInvoice pSupplierInvoice = iPayment.getSupplierInvoice();
+                        List<SupplierPayment> iSupplierPayments = iModel.getObjects();
 
-                    if (SSDB.getInstance().getSupplierInvoice(pSupplierInvoice) == null) {
-                        iSupplierPayments.remove(iPayment);
-                        new SSErrorDialog(iMainFrame,
-                                "supplierinvoiceframe.supplierinvoicegone",
-                                pSupplierInvoice.getNumber());
-                    }
+                        for (SupplierPayment iPayment : iSupplierPayments) {
+                            SSSupplierInvoice pSupplierInvoice = iPayment.getSupplierInvoice();
 
-                }
-                iModel.setObjects(iSupplierPayments);
-                if (iSupplierPayments.isEmpty()) {
-                    new SSErrorDialog(iMainFrame,
-                            "supplierinvoiceframe.nosupplierpayments");
-                    return;
-                }
+                            if (SSDB.getInstance().getSupplierInvoice(pSupplierInvoice) == null) {
+                                iSupplierPayments.remove(iPayment);
+                                new SSErrorDialog(iMainFrame,
+                                        "supplierinvoiceframe.supplierinvoicegone",
+                                        pSupplierInvoice.getNumber());
+                            }
 
-                SSFileChooser iFileChooser = new SSFileChooser(new SSFilterTXT());
+                        }
+                        iModel.setObjects(iSupplierPayments);
+                        if (iSupplierPayments.isEmpty()) {
+                            new SSErrorDialog(iMainFrame,
+                                    "supplierinvoiceframe.nosupplierpayments");
+                            return;
+                        }
 
-                iFileChooser.setSelectedFile(new File("Leverantörsbetalning.txt"));
-                int iResponce = iFileChooser.showSaveDialog(iMainFrame);
+                        SSFileChooser iFileChooser = new SSFileChooser(new SSFilterTXT());
 
-                if (iResponce != SSFileChooser.APPROVE_OPTION) {
-                    return;
-                }
+                        iFileChooser.setSelectedFile(new File("Leverantörsbetalning.txt"));
+                        int iResponce = iFileChooser.showSaveDialog(iMainFrame);
 
-                for (SupplierPayment iPayment : iSupplierPayments) {
-                    SSSupplierInvoice pSupplierInvoice = iPayment.getSupplierInvoice();
+                        if (iResponce != SSFileChooser.APPROVE_OPTION) {
+                            return;
+                        }
 
-                    if (SSDB.getInstance().getSupplierInvoice(pSupplierInvoice) == null) {
-                        iSupplierPayments.remove(iPayment);
-                        new SSErrorDialog(iMainFrame,
-                                "supplierinvoiceframe.supplierinvoicegone",
-                                pSupplierInvoice.getNumber());
-                    }
+                        for (SupplierPayment iPayment : iSupplierPayments) {
+                            SSSupplierInvoice pSupplierInvoice = iPayment.getSupplierInvoice();
 
-                }
-                iModel.setObjects(iSupplierPayments);
-                if (iSupplierPayments.isEmpty()) {
-                    new SSErrorDialog(iMainFrame,
-                            "supplierinvoiceframe.nosupplierpayments");
-                    return;
-                }
-                Date iDate = new Date();
+                            if (SSDB.getInstance().getSupplierInvoice(pSupplierInvoice) == null) {
+                                iSupplierPayments.remove(iPayment);
+                                new SSErrorDialog(iMainFrame,
+                                        "supplierinvoiceframe.supplierinvoicegone",
+                                        pSupplierInvoice.getNumber());
+                            }
 
-                for (SupplierPayment iSupplierPayment : iSupplierPayments) {
-                    if (iSupplierPayment.getDate().after(iDate)) {
-                        iDate = iSupplierPayment.getDate();
-                    }
-                    iSupplierPayment.getSupplierInvoice().setBGCEntered();
-                    SSDB.getInstance().updateSupplierInvoice(
-                            iSupplierPayment.getSupplierInvoice());
-                }
-                SupplierPaymentConfig.setOurBankGiroAccount(iOurBankGiroNumber.getText());
-                SupplierPaymentConfig.setMessage(iMessage.getText());
-                SupplierPaymentConfig.setMessageDate(iDate);
+                        }
+                        iModel.setObjects(iSupplierPayments);
+                        if (iSupplierPayments.isEmpty()) {
+                            new SSErrorDialog(iMainFrame,
+                                    "supplierinvoiceframe.nosupplierpayments");
+                            return;
+                        }
+                        Date iDate = new Date();
 
-                try {
-                    SSSupplierPaymentExporter.Export(iFileChooser.getSelectedFile(),
-                            iSupplierPayments);
-                } catch (SSExportException e1) {
-                    SSErrorDialog.showDialog(iMainFrame,
-                            SSBundle.getBundle().getString("supplierpaymentframe.error"),
-                            e1.getMessage());
+                        for (SupplierPayment iSupplierPayment : iSupplierPayments) {
+                            if (iSupplierPayment.getDate().after(iDate)) {
+                                iDate = iSupplierPayment.getDate();
+                            }
+                            iSupplierPayment.getSupplierInvoice().setBGCEntered();
+                            SSDB.getInstance().updateSupplierInvoice(
+                                    iSupplierPayment.getSupplierInvoice());
+                        }
+                        SupplierPaymentConfig.setOurBankGiroAccount(iOurBankGiroNumber.getText());
+                        SupplierPaymentConfig.setMessage(iMessage.getText());
+                        SupplierPaymentConfig.setMessageDate(iDate);
 
-                    e1.printStackTrace();
+                        try {
+                            SSSupplierPaymentExporter.Export(iFileChooser.getSelectedFile(),
+                                    iSupplierPayments);
+                        } catch (SSExportException e1) {
+                            SSErrorDialog.showDialog(iMainFrame,
+                                    SSBundle.getBundle().getString("supplierpaymentframe.error"),
+                                    e1.getMessage());
 
-                    return;
-                }
+                            e1.printStackTrace();
 
-                SSPostLock.removeLock(
-                        "supplierpayment" + SSDB.getInstance().getCurrentCompany().getId());
-                closeDialog(JOptionPane.OK_OPTION);
-            }
-        });
+                            return;
+                        }
+
+                        SSPostLock.removeLock(
+                                "supplierpayment" + SSDB.getInstance().getCurrentCompany().getId());
+                        closeDialog(JOptionPane.OK_OPTION);
+
+                    });
 
         iButtonPanel.addCancelActionListener(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSPostLock.removeLock(
-                        "supplierpayment" + SSDB.getInstance().getCurrentCompany().getId());
-                closeDialog();
-            }
-        });
+                e -> {
+
+                        SSPostLock.removeLock(
+                                "supplierpayment" + SSDB.getInstance().getCurrentCompany().getId());
+                        closeDialog();
+
+                    });
 
         getRootPane().setDefaultButton(iButtonPanel.getOkButton());
 

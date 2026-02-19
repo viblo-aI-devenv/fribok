@@ -7,6 +7,7 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -181,7 +182,7 @@ public class SSSupplierInvoiceMath {
 
     public static void calculateSaldos() {
         if (iSaldoMap == null) {
-            iSaldoMap = new HashMap<Integer, BigDecimal>();
+            iSaldoMap = new HashMap<>();
         }
         HashMap<Integer, BigDecimal> iOutpaymentSum = SSOutpaymentMath.getSumsForSupplierInvoices();
 
@@ -207,7 +208,7 @@ public class SSSupplierInvoiceMath {
     }
 
     public static Map<Integer, BigDecimal> getSaldos(Date iDate) {
-        Map<Integer, BigDecimal> iSaldos = new HashMap<Integer, BigDecimal>();
+        Map<Integer, BigDecimal> iSaldos = new HashMap<>();
 
         HashMap<Integer, BigDecimal> iOutpaymentSum = SSOutpaymentMath.getSumsForSupplierInvoices(
                 iDate);
@@ -246,7 +247,7 @@ public class SSSupplierInvoiceMath {
      */
     
     /* public static Map<SSSupplierInvoice, BigDecimal> getSaldo(List<SSSupplierInvoice> iInvoices, Date iDate) {
-     Map<SSSupplierInvoice, BigDecimal> iSaldos = new HashMap<SSSupplierInvoice, BigDecimal>();
+     Map<SSSupplierInvoice, BigDecimal> iSaldos = new HashMap<>();
 
      // Ceil the date so the before and after comparisions will be correct
      iDate = SSDateMath.ceil(iDate);
@@ -266,7 +267,7 @@ public class SSSupplierInvoiceMath {
      } */
 
     public static Map<SSSupplierInvoice, BigDecimal> getSaldo(List<SSSupplierInvoice> iInvoices, Date iDate) {
-        Map<SSSupplierInvoice, BigDecimal> iSaldos = new HashMap<SSSupplierInvoice, BigDecimal>();
+        Map<SSSupplierInvoice, BigDecimal> iSaldos = new HashMap<>();
 
         // Ceil the date so the before and after comparisions will be correct
         iDate = SSDateMath.ceil(iDate);
@@ -340,16 +341,9 @@ public class SSSupplierInvoiceMath {
      * @return the invoices for the customer
      */
     public static List<SSSupplierInvoice> getInvoicesForSupplier(List<SSSupplierInvoice> iInvoices, SSSupplier iSupplier) {
-        List<SSSupplierInvoice> iFiltered = new LinkedList<SSSupplierInvoice>();
-
-        for (SSSupplierInvoice iInvoice : iInvoices) {
-            if (iInvoice.hasSupplier(iSupplier)) {
-                iFiltered.add(iInvoice);
-            }
-
-        }
-
-        return iFiltered;
+        return iInvoices.stream()
+                .filter(iInvoice -> iInvoice.hasSupplier(iSupplier))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -373,16 +367,9 @@ public class SSSupplierInvoiceMath {
      * @return the invoices for the customer
      */
     public static List<SSSupplierInvoice> getInvoicesForSupplier(List<SSSupplierInvoice> iInvoices, SSSupplier iSupplier, Date iDate) {
-        List<SSSupplierInvoice> iFiltered = new LinkedList<SSSupplierInvoice>();
-
-        for (SSSupplierInvoice iInvoice : iInvoices) {
-            if (iInvoice.hasSupplier(iSupplier) && inPeriod(iInvoice, iDate)) {
-                iFiltered.add(iInvoice);
-            }
-
-        }
-
-        return iFiltered;
+        return iInvoices.stream()
+                .filter(iInvoice -> iInvoice.hasSupplier(iSupplier) && inPeriod(iInvoice, iDate))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -510,7 +497,7 @@ public class SSSupplierInvoiceMath {
      * @return list of invoices
      */
     public static List<SSSupplierInvoice> getNonPayedOrCreditedInvoices(List<SSSupplierInvoice> iInvoices) {
-        List<SSSupplierInvoice> iFiltered = new LinkedList<SSSupplierInvoice>();
+        List<SSSupplierInvoice> iFiltered = new LinkedList<>();
 
         for (SSSupplierInvoice iInvoice : iInvoices) {
             BigDecimal iSaldo = getSaldo(iInvoice.getNumber());
@@ -523,9 +510,9 @@ public class SSSupplierInvoiceMath {
     }
 
     public static Map<String, Integer> getStockInfluencing(List<SSSupplierInvoice> iSupplierInvoices) {
-        Map<String, Integer> iSupplierInvoiceCount = new HashMap<String, Integer>();
-        List<String> iParcelProducts = new LinkedList<String>();
-        List<SSProduct> iProducts = new LinkedList<SSProduct>(
+        Map<String, Integer> iSupplierInvoiceCount = new HashMap<>();
+        List<String> iParcelProducts = new LinkedList<>();
+        List<SSProduct> iProducts = new LinkedList<>(
                 SSDB.getInstance().getProducts());
 
         for (SSProduct iProduct : iProducts) {

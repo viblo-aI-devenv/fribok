@@ -33,10 +33,10 @@ public class SSHelpHistory {
      */
     public SSHelpHistory(JHelpContentViewer pViewer) {
         iViewer = pViewer;
-        iHistory = new LinkedList<HelpModelEvent>();
+        iHistory = new LinkedList<>();
         iIndex = 0;
         iUpdating = false;
-        iListeners = new LinkedList<ActionListener>();
+        iListeners = new LinkedList<>();
 
         iViewer.addHelpModelListener(new HelpModelListener() {
             public void idChanged(HelpModelEvent helpModelEvent) {

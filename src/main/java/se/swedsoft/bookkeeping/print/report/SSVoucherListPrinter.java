@@ -65,12 +65,12 @@ public class SSVoucherListPrinter extends SSPrinter {
 
         iDataSource = new SSDefaultJasperDataSource(iPrinter.getModel());
 
-        SSDefaultTableModel<SSVoucher> iModel = new SSDefaultTableModel<SSVoucher>() {
+        SSDefaultTableModel<SSVoucher> iModel = new SSDefaultTableModel<>() {
 
             DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSInvoice.class;
             }
 
@@ -123,11 +123,7 @@ public class SSVoucherListPrinter extends SSPrinter {
 
         iModel.addColumn("voucher.rows");
 
-        Collections.sort(iVouchers, new Comparator<SSVoucher>() {
-            public int compare(SSVoucher o1, SSVoucher o2) {
-                return o1.getNumber() - o2.getNumber();
-            }
-        });
+        Collections.sort(iVouchers, (o1, o2) -> o1.getNumber() - o2.getNumber());
 
         iModel.setObjects(iVouchers);
 
@@ -147,12 +143,12 @@ public class SSVoucherListPrinter extends SSPrinter {
             setDetail("voucherlist.rows.jrxml");
             setSummary("voucherlist.rows.jrxml");
 
-            iModel = new SSDefaultTableModel<SSVoucherRow>() {
+            iModel = new SSDefaultTableModel<>() {
 
                 DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
                 @Override
-                public Class getType() {
+                public Class<?> getType() {
                     return SSVoucherRow.class;
                 }
 

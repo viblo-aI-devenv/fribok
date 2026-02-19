@@ -75,7 +75,7 @@ public class SSPostLock {
 
          FileInputStream fis = null;
          ObjectInputStream ois = null;
-         Vector<Object> iObjects = new Vector<Object>();
+         Vector<Object> iObjects = new Vector<>();
          if (!iFile.exists()) {
          return;
          }

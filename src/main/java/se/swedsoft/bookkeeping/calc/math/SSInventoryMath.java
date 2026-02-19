@@ -65,7 +65,7 @@ public class SSInventoryMath {
     }
 
     public static Map<String, Integer> getStockInfluencing(List<SSInventory> iInventories) {
-        Map<String, Integer> iInventoryCount = new HashMap<String, Integer>();
+        Map<String, Integer> iInventoryCount = new HashMap<>();
 
         for (SSInventory iInventory : iInventories) {
             for (SSInventoryRow iRow : iInventory.getRows()) {

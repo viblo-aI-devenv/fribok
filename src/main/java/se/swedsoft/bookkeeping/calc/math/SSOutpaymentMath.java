@@ -162,7 +162,7 @@ public class SSOutpaymentMath {
     }
 
     public static HashMap<Integer, BigDecimal> getSumsForSupplierInvoices() {
-        HashMap<Integer, BigDecimal> iSums = new HashMap<Integer, BigDecimal>();
+        HashMap<Integer, BigDecimal> iSums = new HashMap<>();
 
         List<SSOutpayment> iOutpayments = SSDB.getInstance().getOutpayments();
 
@@ -182,7 +182,7 @@ public class SSOutpaymentMath {
     }
 
     public static HashMap<Integer, BigDecimal> getSumsForSupplierInvoices(Date iDate) {
-        HashMap<Integer, BigDecimal> iSums = new HashMap<Integer, BigDecimal>();
+        HashMap<Integer, BigDecimal> iSums = new HashMap<>();
 
         List<SSOutpayment> iOutpayments = SSDB.getInstance().getOutpayments();
 

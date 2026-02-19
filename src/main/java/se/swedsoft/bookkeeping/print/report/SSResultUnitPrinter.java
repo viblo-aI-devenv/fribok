@@ -53,10 +53,10 @@ public class SSResultUnitPrinter extends SSPrinter {
     @Override
     protected SSDefaultTableModel getModel() {
 
-        SSDefaultTableModel<SSNewResultUnit> iModel = new SSDefaultTableModel<SSNewResultUnit>() {
+        SSDefaultTableModel<SSNewResultUnit> iModel = new SSDefaultTableModel<>() {
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSNewResultUnit.class;
             }
 

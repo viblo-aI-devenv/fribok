@@ -117,17 +117,10 @@ public class SSBackup implements Serializable {
      * @throws ClassNotFoundException
      */
     public static SSBackup loadBackup(File iFile) throws IOException, ClassNotFoundException {
-        SSBackup iBackup = null;
-        ObjectInputStream iObjectInputStream = new ObjectInputStream(
-                new BufferedInputStream(new FileInputStream(iFile)));
-
-        try {
-            iBackup = (SSBackup) iObjectInputStream.readObject();
-        } finally {
-            iObjectInputStream.close();
+        try (ObjectInputStream iObjectInputStream = new ObjectInputStream(
+                new BufferedInputStream(new FileInputStream(iFile)))) {
+            return (SSBackup) iObjectInputStream.readObject();
         }
-
-        return iBackup;
     }
 
     /**
