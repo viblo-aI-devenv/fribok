@@ -88,6 +88,22 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>3.5.2</version>
       </plugin>
+      <plugin>
+        <groupId>io.github.git-commit-id</groupId>
+        <artifactId>git-commit-id-maven-plugin</artifactId>
+        <version>9.0.1</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>revision</goal>
+            </goals>
+            <phase>initialize</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <generateGitPropertiesFile>false</generateGitPropertiesFile>
+        </configuration>
+      </plugin>
       <!-- Start: For IDEA-forms -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -134,6 +150,9 @@
       <resource>
         <directory>src/main/resources</directory>
         <filtering>false</filtering>
+        <excludes>
+          <exclude>meta/**</exclude>
+        </excludes>
       </resource>
       <resource>
         <directory>src/main/resources/meta</directory>
