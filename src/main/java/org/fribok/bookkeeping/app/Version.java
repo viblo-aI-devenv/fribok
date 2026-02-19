@@ -1,11 +1,9 @@
 package org.fribok.bookkeeping.app;
 
-import java.io.IOException;
 import java.util.ResourceBundle;
 
 /**
- * Class holding constants with version information
- * @version $Id$
+ * Class holding constants with version information.
  */
 public final class Version {
     public final static String APP_TITLE = "Fribok";
@@ -17,7 +15,7 @@ public final class Version {
 	return ResourceBundle.getBundle("version").getString("build.date");
     }
     public static String version() {
-	return ResourceBundle.getBundle("version").getString("version") + "-$Rev$";
+	return ResourceBundle.getBundle("version").getString("version");
     }
 
     public final static boolean CAN_DELETE_VOUCHERS = false;
