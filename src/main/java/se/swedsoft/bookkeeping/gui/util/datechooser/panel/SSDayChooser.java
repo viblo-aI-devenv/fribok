@@ -57,7 +57,7 @@ public class SSDayChooser implements ActionListener {
      *
      */
     public SSDayChooser() {
-        iChangeListeners = new LinkedList<ActionListener>();
+        iChangeListeners = new LinkedList<>();
 
         iPanel.setBackground(BACKGROUND_COLOR);
 
@@ -73,7 +73,7 @@ public class SSDayChooser implements ActionListener {
         iWeekNamePanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
         // Initializate all the day buttons
-        iDayButtons = new LinkedList<DayButton>();
+        iDayButtons = new LinkedList<>();
         for (int i = 0; i < 42; i++) {
             DayButton iButton = new DayButton();
 
@@ -86,7 +86,7 @@ public class SSDayChooser implements ActionListener {
         }
 
         // Initialize the day names
-        iDayNames = new LinkedList<JLabel>();
+        iDayNames = new LinkedList<>();
         for (int i = 0; i < 7; i++) {
             JLabel iLabel = new JLabel();
 
@@ -99,7 +99,7 @@ public class SSDayChooser implements ActionListener {
         }
 
         // Initialize the week names
-        iWeekNames = new LinkedList<JLabel>();
+        iWeekNames = new LinkedList<>();
         for (int i = 0; i < 6; i++) {
             JLabel iLabel = new JLabel();
 

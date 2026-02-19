@@ -34,11 +34,11 @@ public class SSBalanceCalculator {
     public SSBalanceCalculator(SSNewAccountingYear pYearData) {
         iYearData = pYearData;
 
-        iInBalance = new HashMap<SSAccount, BigDecimal>();
-        iInSaldo = new HashMap<SSAccount, BigDecimal>();
-        iChange = new HashMap<SSAccount, BigDecimal>();
-        iChangePeriod = new HashMap<SSAccount, BigDecimal>();
-        iOutSaldo = new HashMap<SSAccount, BigDecimal>();
+        iInBalance = new HashMap<>();
+        iInSaldo = new HashMap<>();
+        iChange = new HashMap<>();
+        iChangePeriod = new HashMap<>();
+        iOutSaldo = new HashMap<>();
     }
 
     /**
@@ -119,7 +119,7 @@ public class SSBalanceCalculator {
      * @return Returns all influencing accounts
      */
     public List<SSAccount> getAccounts() {
-        List<SSAccount> iList = new LinkedList<SSAccount>();
+        List<SSAccount> iList = new LinkedList<>();
 
         for (SSAccount iAccount : iOutSaldo.keySet()) {
             iList.add(iAccount);
@@ -209,7 +209,7 @@ public class SSBalanceCalculator {
     public static Map<SSAccount, BigDecimal> getOutBalance(SSNewAccountingYear pYearData) {
         List<SSVoucher> iVouchers = pYearData.getVouchers();
 
-        Map<SSAccount, BigDecimal> iOutBalance = new HashMap<SSAccount, BigDecimal>();
+        Map<SSAccount, BigDecimal> iOutBalance = new HashMap<>();
         Map<SSAccount, BigDecimal> iInBalance = pYearData.getInBalance();
 
         // Add the inbalance to the out balance

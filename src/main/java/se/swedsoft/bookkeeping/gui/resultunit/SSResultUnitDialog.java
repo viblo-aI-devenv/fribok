@@ -41,8 +41,8 @@ public class SSResultUnitDialog {
 
         iPanel.setResultUnit(new SSNewResultUnit());
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        final ActionListener iSaveAction = e -> {
+
                 SSNewResultUnit iResultUnit = iPanel.getResultUnit();
 
                 List<SSNewResultUnit> iResultUnits = SSDB.getInstance().getResultUnits();
@@ -60,16 +60,12 @@ public class SSResultUnitDialog {
                 model.fireTableDataChanged();
 
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iDialog.closeDialog();
-            }
-        });
+        iPanel.addCancelAction(e -> iDialog.closeDialog());
 
         iDialog.addWindowListener(
                 new WindowAdapter() {
@@ -111,8 +107,8 @@ public class SSResultUnitDialog {
 
         iPanel.setResultUnit(pResultUnit);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        final ActionListener iSaveAction = e -> {
+
 
                 SSNewResultUnit iResultUnit = iPanel.getResultUnit();
 
@@ -121,17 +117,17 @@ public class SSResultUnitDialog {
                 model.fireTableDataChanged();
                 SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
-            }
-        });
+
+            });
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override

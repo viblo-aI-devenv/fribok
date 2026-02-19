@@ -82,7 +82,7 @@ public class SSOutdeliveryMath {
     }
 
     public static Map<String, Integer> getStockInfluencing(List<SSOutdelivery> iOutdeliveries) {
-        Map<String, Integer> iOutdeliveryCount = new HashMap<String, Integer>();
+        Map<String, Integer> iOutdeliveryCount = new HashMap<>();
 
         for (SSOutdelivery iOutdelivery : iOutdeliveries) {
             for (SSOutdeliveryRow iRow : iOutdelivery.getRows()) {

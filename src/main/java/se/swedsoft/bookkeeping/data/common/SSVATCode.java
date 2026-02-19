@@ -5,12 +5,14 @@ import org.apache.xerces.parsers.DOMParser;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 import org.fribok.bookkeeping.app.Path;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.table.SSTableSearchable;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.io.InputStream;
@@ -120,7 +122,7 @@ public class SSVATCode implements SSTableSearchable {
      */
     public static List<SSVATCode> getValues() {
         if (iValues == null) {
-            iValues = new LinkedList<SSVATCode>();
+            iValues = new LinkedList<>();
 
             DOMParser iParser = new DOMParser();
 
@@ -145,7 +147,7 @@ public class SSVATCode implements SSTableSearchable {
 
                     iValues.add(iVatCode);
                 }
-            } catch (Exception ex) {
+            } catch (IOException | SAXException ex) {
                 ex.printStackTrace();
             }
         }

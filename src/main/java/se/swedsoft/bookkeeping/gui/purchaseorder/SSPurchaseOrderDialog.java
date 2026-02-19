@@ -55,8 +55,8 @@ public class SSPurchaseOrderDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        final ActionListener iSaveAction = e -> {
+
                 SSPurchaseOrder iOrder = iPanel.getOrder();
 
                 SSDB.getInstance().addPurchaseOrder(iOrder);
@@ -67,17 +67,17 @@ public class SSPurchaseOrderDialog {
 
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        });
+
+            });
 
         iDialog.addWindowListener(
                 new WindowAdapter() {
@@ -127,15 +127,15 @@ public class SSPurchaseOrderDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSPurchaseOrder iPurchaseOrder = iPanel.getOrder();
+        final ActionListener iSaveAction = e -> {
 
-                SSDB.getInstance().addPurchaseOrder(iPurchaseOrder);
+                SSPurchaseOrder iPurchaseOrder1 = iPanel.getOrder();
+
+                SSDB.getInstance().addPurchaseOrder(iPurchaseOrder1);
 
                 for (SSOrder iOrder : iSelected) {
                     if (SSDB.getInstance().getOrders().contains(iOrder)) {
-                        iOrder.setPurchaseOrder(iPurchaseOrder);
+                        iOrder.setPurchaseOrder(iPurchaseOrder1);
                         SSDB.getInstance().updateOrder(iOrder);
                     }
                 }
@@ -143,18 +143,18 @@ public class SSPurchaseOrderDialog {
                 iPanel.dispose();
                 SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 iPanel.dispose();
                 SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
-            }
-        });
+
+            });
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override
@@ -202,8 +202,8 @@ public class SSPurchaseOrderDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        final ActionListener iSaveAction = e -> {
+
                 SSPurchaseOrder iOrder = iPanel.getOrder();
 
                 SSDB.getInstance().updatePurchaseOrder(iOrder);
@@ -215,18 +215,18 @@ public class SSPurchaseOrderDialog {
                 SSPostLock.removeLock(lockString);
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 SSPostLock.removeLock(lockString);
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        });
+
+            });
 
         iDialog.addWindowListener(
                 new WindowAdapter() {
@@ -283,8 +283,8 @@ public class SSPurchaseOrderDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        final ActionListener iSaveAction = e -> {
+
                 SSPurchaseOrder iOrder = iPanel.getOrder();
 
                 SSDB.getInstance().addPurchaseOrder(iOrder);
@@ -295,17 +295,17 @@ public class SSPurchaseOrderDialog {
 
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        });
+
+            });
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override

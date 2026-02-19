@@ -132,7 +132,7 @@ public class SSAccountGroup implements Serializable {
      */
     public void addAccountGroup(SSAccountGroup pAccountGroup) {
         if (iGroups == null) {
-            iGroups = new LinkedList<SSAccountGroup>();
+            iGroups = new LinkedList<>();
         }
 
         iGroups.add(pAccountGroup);
@@ -187,7 +187,7 @@ public class SSAccountGroup implements Serializable {
      * @return
      */
     public List<SSAccount> getGroupAccounts(List<SSAccount> iAccounts) {
-        List<SSAccount> iGroupAccounts = new LinkedList<SSAccount>();
+        List<SSAccount> iGroupAccounts = new LinkedList<>();
 
         for (SSAccount iAccount: iAccounts) {
             if (iAccount.getNumber() >= getFromAccount()

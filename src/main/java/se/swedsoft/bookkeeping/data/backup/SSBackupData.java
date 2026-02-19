@@ -17,7 +17,7 @@ public class SSBackupData implements Serializable {
     private List<SSBackup> iBackups;
 
     public SSBackupData() {
-        iBackups = new LinkedList<SSBackup>();
+        iBackups = new LinkedList<>();
     }
 
     /**

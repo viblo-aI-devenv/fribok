@@ -51,27 +51,23 @@ public class SSExportSIEDialog {
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
         iPanel.addOkAction(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String iComment = iPanel.getComment();
-                SIEType iType = iPanel.getType();
+                e -> {
 
-                try {
-                    SSSIEExporter iExporter = new SSSIEExporter(iType, iComment);
+                        String iComment = iPanel.getComment();
+                        SIEType iType = iPanel.getType();
 
-                    iExporter.exportSIE(iFile);
-                } catch (SSExportException ex) {
-                    new SSErrorDialog(iMainFrame, "exportexceptiondialog", ex.getMessage());
-                }
+                        try {
+                            SSSIEExporter iExporter = new SSSIEExporter(iType, iComment);
 
-                iDialog.closeDialog();
-            }
-        });
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iDialog.closeDialog();
-            }
-        });
+                            iExporter.exportSIE(iFile);
+                        } catch (SSExportException ex) {
+                            new SSErrorDialog(iMainFrame, "exportexceptiondialog", ex.getMessage());
+                        }
+
+                        iDialog.closeDialog();
+
+                    });
+        iPanel.addCancelAction(e -> iDialog.closeDialog());
 
         iDialog.pack();
         iDialog.setLocationRelativeTo(iMainFrame);

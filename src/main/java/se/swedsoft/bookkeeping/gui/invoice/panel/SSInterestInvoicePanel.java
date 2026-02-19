@@ -54,7 +54,7 @@ public class SSInterestInvoicePanel {
         iAccount.setModel(SSAccountTableModel.getDropDownModel());
         iAccount.setSearchColumns(0);
         iAccount.setAllowCustomValues(true);
-        iAccount.addSelectionListener(new SSSelectionListener<SSAccount>() {
+        iAccount.addSelectionListener(new SSSelectionListener<>() {
             public void selected(SSAccount selected) {
                 if (selected != null) {
                     iAccountText.setText(selected.getDescription());
@@ -113,7 +113,7 @@ public class SSInterestInvoicePanel {
         List<SSInvoice> iInvoices = SSDB.getInstance().getInvoices();
 
         // Get all the rows
-        List<SSInvoice> iRows = new LinkedList<SSInvoice>();
+        List<SSInvoice> iRows = new LinkedList<>();
 
         for (SSInvoice iInvoice : iInvoices) {
             // Skip invoices that is flagged as interest invoiced or is a cash sales

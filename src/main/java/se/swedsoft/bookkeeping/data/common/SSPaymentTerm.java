@@ -139,7 +139,7 @@ public class SSPaymentTerm implements Serializable, SSTableSearchable {
      * @return
      */
     public static List<SSPaymentTerm> getDefaultPaymentTerms() {
-        List<SSPaymentTerm> iPaymentTerms = new LinkedList<SSPaymentTerm>();
+        List<SSPaymentTerm> iPaymentTerms = new LinkedList<>();
 
         iPaymentTerms.add(new SSPaymentTerm("K", "Kontant"));
         iPaymentTerms.add(new SSPaymentTerm("PF", "Postförskott"));

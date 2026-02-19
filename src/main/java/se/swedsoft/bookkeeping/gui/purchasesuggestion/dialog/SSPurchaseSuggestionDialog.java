@@ -66,25 +66,25 @@ public class SSPurchaseSuggestionDialog extends SSDialog {
 
         iTable.setDefaultEditor(SSSupplier.class, new SSSupplierCellEditor());
 
-        iButtonPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iButtonPanel.addCancelActionListener(e -> {
+
                 setModalResult(JOptionPane.CANCEL_OPTION);
                 setVisible(false);
-            }
-        });
+
+            });
 
         iButtonPanel.addOkActionListener(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (iModel.getSelected() == null) {
-                    new SSErrorDialog(SSMainFrame.getInstance(),
-                            "purchasesuggestiondialog.nosupplier");
-                    return;
-                }
-                setModalResult(JOptionPane.OK_OPTION);
-                setVisible(false);
-            }
-        });
+                e -> {
+
+                        if (iModel.getSelected() == null) {
+                            new SSErrorDialog(SSMainFrame.getInstance(),
+                                    "purchasesuggestiondialog.nosupplier");
+                            return;
+                        }
+                        setModalResult(JOptionPane.OK_OPTION);
+                        setVisible(false);
+
+                    });
         iButtonPanel.getOkButton().setEnabled(!iProducts.isEmpty());
 
         setPanel(iPanel);
@@ -98,7 +98,7 @@ public class SSPurchaseSuggestionDialog extends SSDialog {
      * @return iProducts
      */
     private List<SSProduct> getProductsForPurchaseSuggestion() {
-        List<SSProduct> iProducts = new LinkedList<SSProduct>();
+        List<SSProduct> iProducts = new LinkedList<>();
         SSStock iStock = new SSStock(true);
 
         for (SSProduct iProduct : SSDB.getInstance().getProducts()) {
@@ -167,7 +167,7 @@ public class SSPurchaseSuggestionDialog extends SSDialog {
             return;
         }
         List<SSProduct> iProducts = iDialog.iModel.getSelected();
-        List<SSProduct> iUseForPurchaseOrder = new LinkedList<SSProduct>();
+        List<SSProduct> iUseForPurchaseOrder = new LinkedList<>();
         String iAddedOrders = "";
 
         for (SSSupplier iSupplier : SSDB.getInstance().getSuppliers()) {

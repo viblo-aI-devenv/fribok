@@ -75,12 +75,12 @@ public class SSCreditInvoiceListPrinter extends SSPrinter {
 
         iDataSource = new SSDefaultJasperDataSource(iPrinter.getModel());
 
-        SSDefaultTableModel<SSCreditInvoice> iModel = new SSDefaultTableModel<SSCreditInvoice>() {
+        SSDefaultTableModel<SSCreditInvoice> iModel = new SSDefaultTableModel<>() {
 
             DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSAccount.class;
             }
 
@@ -162,11 +162,7 @@ public class SSCreditInvoiceListPrinter extends SSPrinter {
         iModel.addColumn("invoice.totalsum");
         iModel.addColumn("invoice.totaltax");
 
-        Collections.sort(iInvoices, new Comparator<SSCreditInvoice>() {
-            public int compare(SSCreditInvoice o1, SSCreditInvoice o2) {
-                return o1.getNumber() - o2.getNumber();
-            }
-        });
+        Collections.sort(iInvoices, (o1, o2) -> o1.getNumber() - o2.getNumber());
 
         iModel.setObjects(iInvoices);
 
@@ -186,10 +182,10 @@ public class SSCreditInvoiceListPrinter extends SSPrinter {
             setDetail("creditinvoicelist.row.jrxml");
             setSummary("creditinvoicelist.row.jrxml");
 
-            iModel = new SSDefaultTableModel<SSSaleRow>() {
+            iModel = new SSDefaultTableModel<>() {
 
                 @Override
-                public Class getType() {
+                public Class<?> getType() {
                     return SSSaleRow.class;
                 }
 

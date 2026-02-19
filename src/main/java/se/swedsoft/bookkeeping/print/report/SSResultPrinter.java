@@ -143,7 +143,7 @@ public class SSResultPrinter extends SSPrinter {
 
         List<SSAccount> iAccounts = iYearData.getAccounts();
 
-        List<ResultRow> iRows = new LinkedList<ResultRow>();
+        List<ResultRow> iRows = new LinkedList<>();
 
         iLastVisibleSummaryGroup = 1;
 
@@ -172,10 +172,10 @@ public class SSResultPrinter extends SSPrinter {
             }
         }
 
-        SSDefaultTableModel<ResultRow> iModel = new SSDefaultTableModel<ResultRow>() {
+        SSDefaultTableModel<ResultRow> iModel = new SSDefaultTableModel<>() {
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return ResultRow.class;
 
             }
@@ -347,7 +347,7 @@ public class SSResultPrinter extends SSPrinter {
     private List<ResultRow> getRows(SSAccountGroup iGroup, List<SSAccount> iAccounts, int iLevel) {
         List<SSAccount> iGroupAccounts = iGroup.getGroupAccounts(iAccounts);
 
-        List<ResultRow> iRows = new LinkedList<ResultRow>();
+        List<ResultRow> iRows = new LinkedList<>();
 
         // This is a leaf node, add this node's groups to the list
         if (iGroup.getGroups() == null) {

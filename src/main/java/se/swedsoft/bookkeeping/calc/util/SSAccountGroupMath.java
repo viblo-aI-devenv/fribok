@@ -83,7 +83,7 @@ public class SSAccountGroupMath {
      */
     @Deprecated
     public static List<SSAccount> getResultGroupAccounts(List<SSAccount> pAccounts, int pGroup) {
-        List<SSAccount> accounts = new LinkedList<SSAccount>();
+        List<SSAccount> accounts = new LinkedList<>();
 
         for (SSAccount iAccount: pAccounts) {
             if (getResultGroup(iAccount) == pGroup) {
@@ -101,7 +101,7 @@ public class SSAccountGroupMath {
      */
     @Deprecated
     public static List<SSAccount> getResultAccounts(List<SSAccount> iAccounts) {
-        List<SSAccount> accounts = new LinkedList<SSAccount>();
+        List<SSAccount> accounts = new LinkedList<>();
 
         for (SSAccount iAccount: iAccounts) {
             if (isResultAccount(iAccount)) {

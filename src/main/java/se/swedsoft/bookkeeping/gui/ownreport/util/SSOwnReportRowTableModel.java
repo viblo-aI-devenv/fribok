@@ -43,11 +43,11 @@ public class SSOwnReportRowTableModel extends SSEditableTableModel<SSOwnReportRo
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSOwnReportRow.class;
     }
 
-    public static SSTableColumn<SSOwnReportRow> COLUMN_TYPE = new SSTableColumn<SSOwnReportRow>(
+    public static SSTableColumn<SSOwnReportRow> COLUMN_TYPE = new SSTableColumn<>(
             SSBundle.getBundle().getString("ownreport.headingtable.column.1")) {
         @Override
         public Object getValue(SSOwnReportRow iObject) {
@@ -85,7 +85,7 @@ public class SSOwnReportRowTableModel extends SSEditableTableModel<SSOwnReportRo
         }
     };
 
-    public static SSTableColumn<SSOwnReportRow> COLUMN_HEADING = new SSTableColumn<SSOwnReportRow>(
+    public static SSTableColumn<SSOwnReportRow> COLUMN_HEADING = new SSTableColumn<>(
             SSBundle.getBundle().getString("ownreport.headingtable.column.2")) {
         @Override
         public Object getValue(SSOwnReportRow iObject) {

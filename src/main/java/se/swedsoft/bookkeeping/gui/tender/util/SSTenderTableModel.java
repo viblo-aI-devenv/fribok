@@ -44,14 +44,14 @@ public class SSTenderTableModel extends SSTableModel<SSTender> {
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSTender.class;
     }
 
     /**
      *  Utskriven
      */
-    public static SSTableColumn<SSTender> COLUMN_PRINTED = new SSTableColumn<SSTender>("") {
+    public static SSTableColumn<SSTender> COLUMN_PRINTED = new SSTableColumn<>("") {
         @Override
         public Object getValue(SSTender iTender) {
             return iTender.isPrinted()
@@ -76,7 +76,7 @@ public class SSTenderTableModel extends SSTableModel<SSTender> {
     /**
      *  Ordernummer
      */
-    public static SSTableColumn<SSTender> COLUMN_NUMBER = new SSTableColumn<SSTender>(
+    public static SSTableColumn<SSTender> COLUMN_NUMBER = new SSTableColumn<>(
             SSBundle.getBundle().getString("tendertable.column.1")) {
         @Override
         public Object getValue(SSTender iTender) {
@@ -103,7 +103,7 @@ public class SSTenderTableModel extends SSTableModel<SSTender> {
     /**
      *  Kund nummer
      */
-    public static SSTableColumn<SSTender> COLUMN_CUSTOMER_NR = new SSTableColumn<SSTender>(
+    public static SSTableColumn<SSTender> COLUMN_CUSTOMER_NR = new SSTableColumn<>(
             SSBundle.getBundle().getString("tendertable.column.2")) {
         @Override
         public Object getValue(SSTender iInvoice) {
@@ -129,7 +129,7 @@ public class SSTenderTableModel extends SSTableModel<SSTender> {
     /**
      *  Kund namn
      */
-    public static SSTableColumn<SSTender> COLUMN_CUSTOMER_NAME = new SSTableColumn<SSTender>(
+    public static SSTableColumn<SSTender> COLUMN_CUSTOMER_NAME = new SSTableColumn<>(
             SSBundle.getBundle().getString("tendertable.column.3")) {
         @Override
         public Object getValue(SSTender iInvoice) {
@@ -155,7 +155,7 @@ public class SSTenderTableModel extends SSTableModel<SSTender> {
     /**
      * Datum
      */
-    public static SSTableColumn<SSTender> COLUMN_DATE = new SSTableColumn<SSTender>(
+    public static SSTableColumn<SSTender> COLUMN_DATE = new SSTableColumn<>(
             SSBundle.getBundle().getString("tendertable.column.4")) {
         @Override
         public Object getValue(SSTender iTender) {
@@ -181,7 +181,7 @@ public class SSTenderTableModel extends SSTableModel<SSTender> {
     /**
      * Nettosyumma
      */
-    public static SSTableColumn<SSTender> COLUMN_NET_SUM = new SSTableColumn<SSTender>(
+    public static SSTableColumn<SSTender> COLUMN_NET_SUM = new SSTableColumn<>(
             SSBundle.getBundle().getString("tendertable.column.5")) {
         @Override
         public Object getValue(SSTender iTender) {
@@ -205,7 +205,7 @@ public class SSTenderTableModel extends SSTableModel<SSTender> {
     /**
      * Valuta
      */
-    public static SSTableColumn<SSTender> COLUMN_CURRENCY = new SSTableColumn<SSTender>(
+    public static SSTableColumn<SSTender> COLUMN_CURRENCY = new SSTableColumn<>(
             SSBundle.getBundle().getString("tendertable.column.6")) {
         @Override
         public Object getValue(SSTender iTender) {
@@ -231,7 +231,7 @@ public class SSTenderTableModel extends SSTableModel<SSTender> {
     /**
      * Faktura
      */
-    public static SSTableColumn<SSTender> COLUMN_ORDER = new SSTableColumn<SSTender>(
+    public static SSTableColumn<SSTender> COLUMN_ORDER = new SSTableColumn<>(
             SSBundle.getBundle().getString("tendertable.column.7")) {
         @Override
         public Object getValue(SSTender iTender) {

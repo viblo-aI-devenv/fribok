@@ -31,7 +31,7 @@ public class SSOwnReportAccountRow implements Serializable {
 
     public SSOwnReportAccountRow() {
         iAccount = new SSAccount();
-        iBudget = new HashMap<SSMonth, BigDecimal>();
+        iBudget = new HashMap<>();
 
         SSNewAccountingYear iYear = SSDB.getInstance().getCurrentYear();
         List<SSMonth> iMonths = SSMonth.splitYearIntoMonths(iYear);

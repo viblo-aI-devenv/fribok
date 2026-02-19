@@ -50,11 +50,7 @@ public class SSAccountingYearPanel {
         iGroup.add(iRadioUseLast);
         iGroup.add(iRadioAccountPlan);
 
-        iRadioAccountPlan.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                iAccountPlan.setEnabled(iRadioAccountPlan.isSelected());
-            }
-        });
+        iRadioAccountPlan.addChangeListener(e -> iAccountPlan.setEnabled(iRadioAccountPlan.isSelected()));
 
         iAccountPlan.setModel(SSAccountPlanTableModel.getDropDownModel());
         iAccountPlan.setSelected(iAccountPlan.getFirst());

@@ -45,7 +45,7 @@ public class SSVoucherTableModel extends SSTableModel<SSVoucher> {
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSVoucher.class;
     }
 
@@ -65,7 +65,7 @@ public class SSVoucherTableModel extends SSTableModel<SSVoucher> {
     /**
      *  Fakturanr
      */
-    public static SSTableColumn<SSVoucher> COLUMN_NUMBER = new SSTableColumn<SSVoucher>(
+    public static SSTableColumn<SSVoucher> COLUMN_NUMBER = new SSTableColumn<>(
             SSBundle.getBundle().getString("vouchertable.column.1")) {
         @Override
         public Object getValue(SSVoucher iVoucher) {
@@ -92,7 +92,7 @@ public class SSVoucherTableModel extends SSTableModel<SSVoucher> {
     /**
      *  Fakturanr
      */
-    public static SSTableColumn<SSVoucher> COLUMN_DATE = new SSTableColumn<SSVoucher>(
+    public static SSTableColumn<SSVoucher> COLUMN_DATE = new SSTableColumn<>(
             SSBundle.getBundle().getString("vouchertable.column.2")) {
         @Override
         public Object getValue(SSVoucher iVoucher) {
@@ -119,7 +119,7 @@ public class SSVoucherTableModel extends SSTableModel<SSVoucher> {
     /**
      *  Fakturanr
      */
-    public static SSTableColumn<SSVoucher> COLUMN_DESCRIPTION = new SSTableColumn<SSVoucher>(
+    public static SSTableColumn<SSVoucher> COLUMN_DESCRIPTION = new SSTableColumn<>(
             SSBundle.getBundle().getString("vouchertable.column.3")) {
         @Override
         public Object getValue(SSVoucher iVoucher) {
@@ -146,7 +146,7 @@ public class SSVoucherTableModel extends SSTableModel<SSVoucher> {
     /**
      *  Fakturanr
      */
-    public static SSTableColumn<SSVoucher> COLUMN_CORRECTS = new SSTableColumn<SSVoucher>(
+    public static SSTableColumn<SSVoucher> COLUMN_CORRECTS = new SSTableColumn<>(
             SSBundle.getBundle().getString("vouchertable.column.4")) {
         @Override
         public Object getValue(SSVoucher iVoucher) {
@@ -173,7 +173,7 @@ public class SSVoucherTableModel extends SSTableModel<SSVoucher> {
     /**
      *  Fakturanr
      */
-    public static SSTableColumn<SSVoucher> COLUMN_CORRECTEDBY = new SSTableColumn<SSVoucher>(
+    public static SSTableColumn<SSVoucher> COLUMN_CORRECTEDBY = new SSTableColumn<>(
             SSBundle.getBundle().getString("vouchertable.column.5")) {
         @Override
         public Object getValue(SSVoucher iVoucher) {
@@ -200,7 +200,7 @@ public class SSVoucherTableModel extends SSTableModel<SSVoucher> {
     /**
      *  Omslutning
      */
-    public static SSTableColumn<SSVoucher> COLUMN_SUM = new SSTableColumn<SSVoucher>(
+    public static SSTableColumn<SSVoucher> COLUMN_SUM = new SSTableColumn<>(
             SSBundle.getBundle().getString("vouchertable.column.6")) {
         @Override
         public Object getValue(SSVoucher iVoucher) {

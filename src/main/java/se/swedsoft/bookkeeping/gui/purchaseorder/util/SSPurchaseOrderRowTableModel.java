@@ -29,7 +29,7 @@ public class SSPurchaseOrderRowTableModel extends SSTableModel<SSPurchaseOrderRo
     }
 
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSPurchaseOrderRow.class;
     }
 
@@ -62,7 +62,7 @@ public class SSPurchaseOrderRowTableModel extends SSTableModel<SSPurchaseOrderRo
     /**
      * Number column
      */
-    public static SSTableColumn<SSPurchaseOrderRow> COLUMN_PRODUCT = new SSTableColumn<SSPurchaseOrderRow>(
+    public static SSTableColumn<SSPurchaseOrderRow> COLUMN_PRODUCT = new SSTableColumn<>(
             "Produkt nr") {
         @Override
         public Object getValue(SSPurchaseOrderRow iObject) {
@@ -102,7 +102,7 @@ public class SSPurchaseOrderRowTableModel extends SSTableModel<SSPurchaseOrderRo
     /**
      * Date column
      */
-    public static SSTableColumn<SSPurchaseOrderRow> COLUMN_DESCRIPTION = new SSTableColumn<SSPurchaseOrderRow>(
+    public static SSTableColumn<SSPurchaseOrderRow> COLUMN_DESCRIPTION = new SSTableColumn<>(
             "Beskrivning") {
         @Override
         public Object getValue(SSPurchaseOrderRow iObject) {
@@ -134,7 +134,7 @@ public class SSPurchaseOrderRowTableModel extends SSTableModel<SSPurchaseOrderRo
     /**
      * Supplier name
      */
-    public static SSTableColumn<SSPurchaseOrderRow> COLUMN_SUPPLIER_ARTICLE_NR = new SSTableColumn<SSPurchaseOrderRow>(
+    public static SSTableColumn<SSPurchaseOrderRow> COLUMN_SUPPLIER_ARTICLE_NR = new SSTableColumn<>(
             "Lev art nr") {
         @Override
         public Object getValue(SSPurchaseOrderRow iObject) {
@@ -160,7 +160,7 @@ public class SSPurchaseOrderRowTableModel extends SSTableModel<SSPurchaseOrderRo
     /**
      * Supplier nr
      */
-    public static SSTableColumn<SSPurchaseOrderRow> COLUMN_UNITPRICE = new SSTableColumn<SSPurchaseOrderRow>(
+    public static SSTableColumn<SSPurchaseOrderRow> COLUMN_UNITPRICE = new SSTableColumn<>(
             "Inköpspris") {
         @Override
         public Object getValue(SSPurchaseOrderRow iObject) {
@@ -186,7 +186,7 @@ public class SSPurchaseOrderRowTableModel extends SSTableModel<SSPurchaseOrderRo
     /**
      * Supplier nr
      */
-    public static SSTableColumn<SSPurchaseOrderRow> COLUMN_QUANTITY = new SSTableColumn<SSPurchaseOrderRow>(
+    public static SSTableColumn<SSPurchaseOrderRow> COLUMN_QUANTITY = new SSTableColumn<>(
             "Antal") {
         @Override
         public Object getValue(SSPurchaseOrderRow iObject) {
@@ -212,7 +212,7 @@ public class SSPurchaseOrderRowTableModel extends SSTableModel<SSPurchaseOrderRo
     /**
      * Supplier nr
      */
-    public static SSTableColumn<SSPurchaseOrderRow> COLUMN_UNIT = new SSTableColumn<SSPurchaseOrderRow>(
+    public static SSTableColumn<SSPurchaseOrderRow> COLUMN_UNIT = new SSTableColumn<>(
             "Enhet") {
         @Override
         public Object getValue(SSPurchaseOrderRow iObject) {
@@ -238,7 +238,7 @@ public class SSPurchaseOrderRowTableModel extends SSTableModel<SSPurchaseOrderRo
     /**
      * Supplier nr
      */
-    public static SSTableColumn<SSPurchaseOrderRow> COLUMN_SUM = new SSTableColumn<SSPurchaseOrderRow>(
+    public static SSTableColumn<SSPurchaseOrderRow> COLUMN_SUM = new SSTableColumn<>(
             "Summa") {
         @Override
         public Object getValue(SSPurchaseOrderRow iObject) {

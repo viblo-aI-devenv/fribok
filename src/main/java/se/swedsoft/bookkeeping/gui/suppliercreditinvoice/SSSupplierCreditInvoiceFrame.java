@@ -89,36 +89,32 @@ public class SSSupplierCreditInvoiceFrame extends SSDefaultTableFrame {
         // New
         // ***************************
         SSButton iButton = new SSButton("ICON_NEWITEM",
-                "suppliercreditinvoiceframe.newbutton", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSSupplierCreditInvoiceDialog.newDialog(getMainFrame(), iModel);
-            }
-        });
+                "suppliercreditinvoiceframe.newbutton", e -> SSSupplierCreditInvoiceDialog.newDialog(getMainFrame(), iModel));
 
         toolBar.add(iButton);
 
         // Edit
         // ***************************
         iButton = new SSButton("ICON_EDITITEM", "suppliercreditinvoiceframe.editbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSSupplierCreditInvoice iSelected = iModel.getSelectedRow(iTable);
-                Integer iNumber = null;
+                e -> {
 
-                if (iSelected != null) {
-                    iNumber = iSelected.getNumber();
-                    iSelected = getSupplierCreditInvoice(iSelected);
-                }
-                if (iSelected != null) {
-                    SSSupplierCreditInvoiceDialog.editDialog(getMainFrame(), iSelected,
-                            iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(),
-                            "suppliercreditinvoiceframe.suppliercreditinvoicegone",
-                            iNumber);
-                }
-            }
-        });
+                        SSSupplierCreditInvoice iSelected = iModel.getSelectedRow(iTable);
+                        Integer iNumber = null;
+
+                        if (iSelected != null) {
+                            iNumber = iSelected.getNumber();
+                            iSelected = getSupplierCreditInvoice(iSelected);
+                        }
+                        if (iSelected != null) {
+                            SSSupplierCreditInvoiceDialog.editDialog(getMainFrame(), iSelected,
+                                    iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(),
+                                    "suppliercreditinvoiceframe.suppliercreditinvoicegone",
+                                    iNumber);
+                        }
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         toolBar.add(iButton);
         toolBar.addSeparator();
@@ -126,25 +122,25 @@ public class SSSupplierCreditInvoiceFrame extends SSDefaultTableFrame {
         // Copy
         // ***************************
         iButton = new SSButton("ICON_COPYITEM", "suppliercreditinvoiceframe.copybutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSSupplierCreditInvoice iSelected = iModel.getSelectedRow(iTable);
-                Integer iNumber = null;
+                e -> {
 
-                if (iSelected != null) {
-                    iNumber = iSelected.getNumber();
-                    iSelected = getSupplierCreditInvoice(iSelected);
-                }
-                if (iSelected != null) {
-                    SSSupplierCreditInvoiceDialog.copyDialog(getMainFrame(), iSelected,
-                            iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(),
-                            "suppliercreditinvoiceframe.suppliercreditinvoicegone",
-                            iNumber);
-                }
-            }
-        });
+                        SSSupplierCreditInvoice iSelected = iModel.getSelectedRow(iTable);
+                        Integer iNumber = null;
+
+                        if (iSelected != null) {
+                            iNumber = iSelected.getNumber();
+                            iSelected = getSupplierCreditInvoice(iSelected);
+                        }
+                        if (iSelected != null) {
+                            SSSupplierCreditInvoiceDialog.copyDialog(getMainFrame(), iSelected,
+                                    iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(),
+                                    "suppliercreditinvoiceframe.suppliercreditinvoicegone",
+                                    iNumber);
+                        }
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         toolBar.add(iButton);
         toolBar.addSeparator();
@@ -152,14 +148,14 @@ public class SSSupplierCreditInvoiceFrame extends SSDefaultTableFrame {
         // Delete
         // ***************************
         iButton = new SSButton("ICON_DELETEITEM",
-                "suppliercreditinvoiceframe.deletebutton", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                int[] selected = iTable.getSelectedRows();
-                List<SSSupplierCreditInvoice> toDelete = iModel.getObjects(selected);
+                "suppliercreditinvoiceframe.deletebutton", e -> {
 
-                deleteSelected(toDelete);
-            }
-        });
+                        int[] selected = iTable.getSelectedRows();
+                        List<SSSupplierCreditInvoice> toDelete = iModel.getObjects(selected);
+
+                        deleteSelected(toDelete);
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         toolBar.add(iButton);
 
@@ -168,11 +164,7 @@ public class SSSupplierCreditInvoiceFrame extends SSDefaultTableFrame {
         SSMenuButton iMenuButton = new SSMenuButton("ICON_PRINT",
                 "suppliercreditinvoiceframe.printbutton");
 
-        iMenuButton.add("suppliercreditinvoiceframe.print.list", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSReportFactory.SupplierCreditInvoiceListReport(getMainFrame());
-            }
-        });
+        iMenuButton.add("suppliercreditinvoiceframe.print.list", e -> SSReportFactory.SupplierCreditInvoiceListReport(getMainFrame()));
         toolBar.add(iMenuButton);
 
         return toolBar;
@@ -202,27 +194,27 @@ public class SSSupplierCreditInvoiceFrame extends SSDefaultTableFrame {
         iModel.setupTable(iTable);
 
         iTable.addDblClickListener(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSSupplierCreditInvoice iSelected = iModel.getSelectedRow(iTable);
-                Integer iNumber;
+                e -> {
 
-                if (iSelected != null) {
-                    iNumber = iSelected.getNumber();
-                    iSelected = getSupplierCreditInvoice(iSelected);
-                } else {
-                    return;
-                }
-                if (iSelected != null) {
-                    SSSupplierCreditInvoiceDialog.editDialog(getMainFrame(), iSelected,
-                            iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(),
-                            "suppliercreditinvoiceframe.suppliercreditinvoicegone",
-                            iNumber);
-                }
-            }
-        });
+                        SSSupplierCreditInvoice iSelected = iModel.getSelectedRow(iTable);
+                        Integer iNumber;
+
+                        if (iSelected != null) {
+                            iNumber = iSelected.getNumber();
+                            iSelected = getSupplierCreditInvoice(iSelected);
+                        } else {
+                            return;
+                        }
+                        if (iSelected != null) {
+                            SSSupplierCreditInvoiceDialog.editDialog(getMainFrame(), iSelected,
+                                    iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(),
+                                    "suppliercreditinvoiceframe.suppliercreditinvoicegone",
+                                    iNumber);
+                        }
+
+                    });
 
         iSearchPanel = new SSSupplierCreditInvoiceSearchPanel(iModel);
         JPanel iPanel = new JPanel();

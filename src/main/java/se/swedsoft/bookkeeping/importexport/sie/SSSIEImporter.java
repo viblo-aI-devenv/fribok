@@ -45,7 +45,7 @@ public class SSSIEImporter {
     public SSSIEImporter(File iFile) {
         this.iFile = iFile;
 
-        iLines = new LinkedList<String>();
+        iLines = new LinkedList<>();
         iDimensions = SIEDimension.getDefaultDimensions();
         iFactory = SIEFactory.getImportInstance();
     }
@@ -77,14 +77,14 @@ public class SSSIEImporter {
         }
         SSDB.getInstance().getVouchers().clear();
 
-        List<SSNewProject> projectsToDelete = new LinkedList<SSNewProject>(
+        List<SSNewProject> projectsToDelete = new LinkedList<>(
                 SSDB.getInstance().getProjects());
 
         for (SSNewProject iProject : projectsToDelete) {
             SSDB.getInstance().deleteProject(iProject);
         }
         projectsToDelete = null;
-        List<SSNewResultUnit> resultUnitsToDelete = new LinkedList<SSNewResultUnit>(
+        List<SSNewResultUnit> resultUnitsToDelete = new LinkedList<>(
                 SSDB.getInstance().getResultUnits());
 
         for (SSNewResultUnit iResultUnit : resultUnitsToDelete) {
@@ -172,7 +172,7 @@ public class SSSIEImporter {
      * @return
      */
     private static List<List<String>> getParsedLines(List<String> iLines) {
-        List<List<String>> iParsedLines = new LinkedList<List<String>>();
+        List<List<String>> iParsedLines = new LinkedList<>();
 
         for (int iIndex = 0; iIndex < iLines.size(); iIndex++) {
             String iLine = iLines.get(iIndex);
@@ -183,7 +183,7 @@ public class SSSIEImporter {
                 continue;
             }
 
-            List<String> iEntryLines = new LinkedList<String>();
+            List<String> iEntryLines = new LinkedList<>();
 
             iEntryLines.add(iLine);
 

@@ -53,68 +53,64 @@ public class SSAddAccountDialog extends SSDialog {
         add(iPanel, BorderLayout.CENTER);
         pack();
         iButtonPanel.addOkActionListener(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSAccount iAccount = new SSAccount();
+                e -> {
 
-                try {
-                    iAccount.setNumber(Integer.parseInt(iAccountNr.getText()));
-                } catch (NumberFormatException ex) {
-                    SSErrorDialog.showDialog(iDialog, "Felaktigt kontonummer",
-                            "Kontonummret får bara innehålla siffror.");
-                    return;
-                }
+                        SSAccount iAccount = new SSAccount();
 
-                SSNewAccountingYear iCurrentYear = SSDB.getInstance().getCurrentYear();
-                List<SSAccount> iExistingAccounts = new LinkedList<SSAccount>(
-                        iCurrentYear.getAccounts());
-
-                if (iExistingAccounts.contains(iAccount)) {
-                    iAccount = iExistingAccounts.get(iExistingAccounts.indexOf(iAccount));
-                    if (iAccount.isActive()) {
-                        SSErrorDialog.showDialog(iDialog, "Dubblett",
-                                "Kontot " + iAccount.getNumber() + " existerar redan.");
-                        return;
-                    } else {
-                        int result = SSConfirmDialog.showDialog(iDialog, "Kontot inaktivt",
-                                "Kontot " + iAccount.getNumber()
-                                + " är inaktivt. Vill du aktivera det?");
-
-                        if (result == JOptionPane.YES_OPTION) {
-                            iAccount.setActive(true);
-                            SSDB.getInstance().updateAccountingYear(iCurrentYear);
-                        } else {
+                        try {
+                            iAccount.setNumber(Integer.parseInt(iAccountNr.getText()));
+                        } catch (NumberFormatException ex) {
+                            SSErrorDialog.showDialog(iDialog, "Felaktigt kontonummer",
+                                    "Kontonummret får bara innehålla siffror.");
                             return;
                         }
 
-                    }
-                } else {
-                    iAccount.setDescription(iDescription.getText());
-                    iAccount.setVATCode(
-                            iVatCode.getSelected() == null
-                                    ? null
-                                    : iVatCode.getSelected().getName());
-                    iAccount.setSRUCode(iSruCode.getText());
-                    iAccount.setReportCode(iReportCode.getText());
-                    iAccount.setProjectRequired(iProjectRequired.isSelected());
-                    iAccount.setResultUnitRequired(iResultUnitRequired.isSelected());
+                        SSNewAccountingYear iCurrentYear = SSDB.getInstance().getCurrentYear();
+                        List<SSAccount> iExistingAccounts = new LinkedList<>(
+                                iCurrentYear.getAccounts());
 
-                    iCurrentYear.getAccountPlan().addAccount(iAccount);
-                    iCurrentYear.getAccountPlan().setAccounts(
-                            iCurrentYear.getAccountPlan().getAccounts());
+                        if (iExistingAccounts.contains(iAccount)) {
+                            iAccount = iExistingAccounts.get(iExistingAccounts.indexOf(iAccount));
+                            if (iAccount.isActive()) {
+                                SSErrorDialog.showDialog(iDialog, "Dubblett",
+                                        "Kontot " + iAccount.getNumber() + " existerar redan.");
+                                return;
+                            } else {
+                                int result = SSConfirmDialog.showDialog(iDialog, "Kontot inaktivt",
+                                        "Kontot " + iAccount.getNumber()
+                                        + " är inaktivt. Vill du aktivera det?");
 
-                    SSDB.getInstance().updateAccountingYear(iCurrentYear);
-                }
+                                if (result == JOptionPane.YES_OPTION) {
+                                    iAccount.setActive(true);
+                                    SSDB.getInstance().updateAccountingYear(iCurrentYear);
+                                } else {
+                                    return;
+                                }
 
-                closeDialog(JOptionPane.OK_OPTION);
-            }
-        });
+                            }
+                        } else {
+                            iAccount.setDescription(iDescription.getText());
+                            iAccount.setVATCode(
+                                    iVatCode.getSelected() == null
+                                            ? null
+                                            : iVatCode.getSelected().getName());
+                            iAccount.setSRUCode(iSruCode.getText());
+                            iAccount.setReportCode(iReportCode.getText());
+                            iAccount.setProjectRequired(iProjectRequired.isSelected());
+                            iAccount.setResultUnitRequired(iResultUnitRequired.isSelected());
 
-        iButtonPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                closeDialog(JOptionPane.CANCEL_OPTION);
-            }
-        });
+                            iCurrentYear.getAccountPlan().addAccount(iAccount);
+                            iCurrentYear.getAccountPlan().setAccounts(
+                                    iCurrentYear.getAccountPlan().getAccounts());
+
+                            SSDB.getInstance().updateAccountingYear(iCurrentYear);
+                        }
+
+                        closeDialog(JOptionPane.OK_OPTION);
+
+                    });
+
+        iButtonPanel.addCancelActionListener(e -> closeDialog(JOptionPane.CANCEL_OPTION));
 
         getRootPane().setDefaultButton(iButtonPanel.getOkButton());
 

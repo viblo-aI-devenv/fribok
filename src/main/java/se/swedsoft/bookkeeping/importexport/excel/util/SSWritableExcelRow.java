@@ -40,7 +40,7 @@ public class SSWritableExcelRow {
      * @return
      */
     public List<SSWritableExcelCell> getCells(int pCount) {
-        List<SSWritableExcelCell> iList = new LinkedList<SSWritableExcelCell>();
+        List<SSWritableExcelCell> iList = new LinkedList<>();
 
         for (int iColumn = 0; iColumn < pCount; iColumn++) {
             iList.add(new SSWritableExcelCell(iSheet, iRow, iColumn));

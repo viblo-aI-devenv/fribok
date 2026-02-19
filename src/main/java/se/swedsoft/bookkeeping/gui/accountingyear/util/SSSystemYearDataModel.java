@@ -30,7 +30,7 @@ public class SSSystemYearDataModel extends SSDefaultTableModel<SSNewAccountingYe
     }
 
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSSystemYear.class;
     }
 

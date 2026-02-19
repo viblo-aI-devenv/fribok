@@ -41,7 +41,7 @@ public enum Path {
     APP_BASE, /** The application data directory */ APP_DATA, /** The user configuration directory */ USER_CONF, /** The user data directory */ USER_DATA;
 
     private static final String APP_SUBDIR = "fribok";
-    private static final Map<Path, File> path = new EnumMap<Path, File>(Path.class);
+    private static final Map<Path, File> path = new EnumMap<>(Path.class);
 
     static {
         File base = new File(new File("").getAbsolutePath());

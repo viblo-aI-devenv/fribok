@@ -41,7 +41,7 @@ public class SSUnitTableModel extends SSTableModel<SSUnit> {
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSUnit.class;
     }
 
@@ -67,7 +67,7 @@ public class SSUnitTableModel extends SSTableModel<SSUnit> {
     /**
      *  Name
      */
-    public static SSTableColumn<SSUnit> COLUMN_NAME = new SSTableColumn<SSUnit>(
+    public static SSTableColumn<SSUnit> COLUMN_NAME = new SSTableColumn<>(
             SSBundle.getBundle().getString("currencytable.column.1")) {
         @Override
         public Object getValue(SSUnit iCurrency) {
@@ -91,7 +91,7 @@ public class SSUnitTableModel extends SSTableModel<SSUnit> {
     /**
      *  Description
      */
-    public static SSTableColumn<SSUnit> COLUMN_DESCRIPTION = new SSTableColumn<SSUnit>(
+    public static SSTableColumn<SSUnit> COLUMN_DESCRIPTION = new SSTableColumn<>(
             SSBundle.getBundle().getString("currencytable.column.2")) {
         @Override
         public Object getValue(SSUnit iCurrency) {

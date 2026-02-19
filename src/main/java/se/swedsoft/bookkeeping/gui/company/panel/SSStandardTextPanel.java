@@ -63,12 +63,12 @@ public class SSStandardTextPanel extends JPanel {
                 SSStandardText.Email));
 
         iSelected = null;
-        iTexts = new HashMap<SSStandardText, String>();
+        iTexts = new HashMap<>();
 
         iComboBox.setModel(iModel);
 
-        iComboBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iComboBox.addActionListener(e -> {
+
                 if (iSelected != null) {
                     iTexts.put(iSelected, iTextPane.getText());
                 }
@@ -77,9 +77,8 @@ public class SSStandardTextPanel extends JPanel {
                 if (iSelected != null) {
                     iTextPane.setText(iTexts.get(iSelected));
                 }
-            }
 
-        });
+            });
         iComboBox.setSelectedIndex(0);
     }
 

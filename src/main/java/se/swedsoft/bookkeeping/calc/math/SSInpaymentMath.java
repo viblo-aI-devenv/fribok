@@ -96,7 +96,7 @@ public class SSInpaymentMath {
     }
 
     public static HashMap<Integer, BigDecimal> getSumsForInvoices() {
-        HashMap<Integer, BigDecimal> iSums = new HashMap<Integer, BigDecimal>();
+        HashMap<Integer, BigDecimal> iSums = new HashMap<>();
 
         List<SSInpayment> iInpayments = SSDB.getInstance().getInpayments();
 
@@ -116,7 +116,7 @@ public class SSInpaymentMath {
     }
 
     public static HashMap<Integer, BigDecimal> getSumsForInvoices(Date iDate) {
-        HashMap<Integer, BigDecimal> iSums = new HashMap<Integer, BigDecimal>();
+        HashMap<Integer, BigDecimal> iSums = new HashMap<>();
 
         List<SSInpayment> iInpayments = SSDB.getInstance().getInpayments();
 

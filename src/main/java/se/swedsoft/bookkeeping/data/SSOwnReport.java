@@ -28,7 +28,7 @@ public class SSOwnReport implements Serializable {
     public SSOwnReport() {
         iId = -1;
         iName = "";
-        iHeadings = new LinkedList<SSOwnReportRow>();
+        iHeadings = new LinkedList<>();
         iProjectNr = null;
         iResultUnitNr = null;
     }

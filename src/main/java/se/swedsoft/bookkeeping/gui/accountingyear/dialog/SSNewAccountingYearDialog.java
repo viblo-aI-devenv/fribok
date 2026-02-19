@@ -45,37 +45,33 @@ public class SSNewAccountingYearDialog {
         iPanel.setYearFromAndTo();
 
         iPanel.addOkAction(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSNewAccountingYear iAccountingYear = iPanel.getAccountingYear();
+                e -> {
 
-                SSDB.getInstance().addAccountingYear(iAccountingYear);
+                        SSNewAccountingYear iAccountingYear = iPanel.getAccountingYear();
 
-                int iResponce = SSQueryDialog.showDialog(iMainFrame, SSBundle.getBundle(),
-                        "accountingyearframe.replaceyear",
-                        iAccountingYear.toRenderString());
+                        SSDB.getInstance().addAccountingYear(iAccountingYear);
 
-                if (iResponce == JOptionPane.YES_OPTION) {
+                        int iResponce = SSQueryDialog.showDialog(iMainFrame, SSBundle.getBundle(),
+                                "accountingyearframe.replaceyear",
+                                iAccountingYear.toRenderString());
 
-                    SSDB.getInstance().setCurrentYear(iAccountingYear);
-                    SSDB.getInstance().initYear(true);
-                    SSYearLock.applyLock(iAccountingYear);
-                    SSDBConfig.setYearId(SSDB.getInstance().getCurrentCompany().getId(),
-                            iAccountingYear.getId());
-                    // Close all year related frames
-                    SSFrameManager.getInstance().close();
-                }
+                        if (iResponce == JOptionPane.YES_OPTION) {
 
-                iDialog.closeDialog();
+                            SSDB.getInstance().setCurrentYear(iAccountingYear);
+                            SSDB.getInstance().initYear(true);
+                            SSYearLock.applyLock(iAccountingYear);
+                            SSDBConfig.setYearId(SSDB.getInstance().getCurrentCompany().getId(),
+                                    iAccountingYear.getId());
+                            // Close all year related frames
+                            SSFrameManager.getInstance().close();
+                        }
 
-            }
-        });
+                        iDialog.closeDialog();
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iDialog.closeDialog();
-            }
-        });
+
+                    });
+
+        iPanel.addCancelAction(e -> iDialog.closeDialog());
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
         iDialog.pack();
         iDialog.setLocationRelativeTo(iMainFrame);

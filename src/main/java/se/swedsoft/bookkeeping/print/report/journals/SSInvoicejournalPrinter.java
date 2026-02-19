@@ -73,18 +73,14 @@ public class SSInvoicejournalPrinter extends SSPrinter {
         iDataSource = new SSDefaultJasperDataSource(iPrinter.getModel());
 
         // Sort the invoices
-        Collections.sort(iInvoices, new Comparator<SSInvoice>() {
-            public int compare(SSInvoice o1, SSInvoice o2) {
-                return o1.getNumber() - o2.getNumber();
-            }
-        });
+        Collections.sort(iInvoices, (o1, o2) -> o1.getNumber() - o2.getNumber());
 
-        SSDefaultTableModel<SSInvoice> iModel = new SSDefaultTableModel<SSInvoice>() {
+        SSDefaultTableModel<SSInvoice> iModel = new SSDefaultTableModel<>() {
 
             DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSInvoice.class;
             }
 
@@ -178,12 +174,12 @@ public class SSInvoicejournalPrinter extends SSPrinter {
 
             setDetail("journals/invoicejournal.rows.jrxml");
 
-            iModel = new SSDefaultTableModel<SSVoucherRow>() {
+            iModel = new SSDefaultTableModel<>() {
 
                 DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
                 @Override
-                public Class getType() {
+                public Class<?> getType() {
                     return SSVoucherRow.class;
                 }
 

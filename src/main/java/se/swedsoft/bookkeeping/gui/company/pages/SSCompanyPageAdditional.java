@@ -143,27 +143,15 @@ public class SSCompanyPageAdditional extends SSCompanyPage {
      */
     public void addKeyListeners() {
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                iContactPerson.requestFocusInWindow();
-            }
-        });
+        SwingUtilities.invokeLater(() -> iContactPerson.requestFocusInWindow());
 
-        iEditMailServerButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setMailServer(new SSMailServerDialog(null).showServerQuery(iMailServer));
-            }
-        });
+        iEditMailServerButton.addActionListener(e -> setMailServer(new SSMailServerDialog(null).showServerQuery(iMailServer)));
 
         iContactPerson.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iPhone.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iPhone.requestFocusInWindow());
                 }
             }
         });
@@ -172,11 +160,7 @@ public class SSCompanyPageAdditional extends SSCompanyPage {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iPhone2.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iPhone2.requestFocusInWindow());
                 }
             }
         });
@@ -185,11 +169,7 @@ public class SSCompanyPageAdditional extends SSCompanyPage {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iTelefax.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iTelefax.requestFocusInWindow());
                 }
             }
         });
@@ -198,11 +178,7 @@ public class SSCompanyPageAdditional extends SSCompanyPage {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iEMail.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iEMail.requestFocusInWindow());
                 }
             }
         });
@@ -211,11 +187,7 @@ public class SSCompanyPageAdditional extends SSCompanyPage {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iWebAddress.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iWebAddress.requestFocusInWindow());
                 }
             }
         });
@@ -224,11 +196,7 @@ public class SSCompanyPageAdditional extends SSCompanyPage {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iEditMailServerButton.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iEditMailServerButton.requestFocusInWindow());
                 }
             }
         });
@@ -263,11 +231,7 @@ public class SSCompanyPageAdditional extends SSCompanyPage {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iBankGiroNumber.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iBankGiroNumber.requestFocusInWindow());
                 }
             }
         });
@@ -276,11 +240,7 @@ public class SSCompanyPageAdditional extends SSCompanyPage {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iPlusGiroNumber.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iPlusGiroNumber.requestFocusInWindow());
                 }
             }
         });
@@ -289,11 +249,7 @@ public class SSCompanyPageAdditional extends SSCompanyPage {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iSwiftCode.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iSwiftCode.requestFocusInWindow());
                 }
             }
         });
@@ -302,11 +258,7 @@ public class SSCompanyPageAdditional extends SSCompanyPage {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iIBAN.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iIBAN.requestFocusInWindow());
                 }
             }
         });

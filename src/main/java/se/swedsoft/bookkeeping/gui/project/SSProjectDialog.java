@@ -43,8 +43,8 @@ public class SSProjectDialog {
 
         iPanel.setProject(new SSNewProject());
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        final ActionListener iSaveAction = e -> {
+
                 SSNewProject iProject = iPanel.getProject();
                 List<SSNewProject> iProjects = SSDB.getInstance().getProjects();
 
@@ -62,16 +62,12 @@ public class SSProjectDialog {
                 }
 
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iDialog.closeDialog();
-            }
-        });
+        iPanel.addCancelAction(e -> iDialog.closeDialog());
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override
@@ -112,8 +108,8 @@ public class SSProjectDialog {
         final SSProjectPanel iPanel = new SSProjectPanel(true);
 
         iPanel.setProject(pProject);
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        final ActionListener iSaveAction = e -> {
+
                 SSNewProject iProject = iPanel.getProject();
 
                 SSDB.getInstance().updateProject(iProject);
@@ -123,17 +119,17 @@ public class SSProjectDialog {
                 }
                 SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
-            }
-        });
+
+            });
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override

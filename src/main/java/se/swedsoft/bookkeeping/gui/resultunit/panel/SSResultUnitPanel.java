@@ -38,25 +38,21 @@ public class SSResultUnitPanel {
     public SSResultUnitPanel(boolean iEdit) {
         iNumber.setEnabled(!iEdit);
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+        SwingUtilities.invokeLater(() -> {
+
                 if (iNumber.isEnabled()) {
                     iNumber.requestFocusInWindow();
                 } else {
                     iName.requestFocusInWindow();
                 }
-            }
-        });
+
+            });
 
         iNumber.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iName.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iName.requestFocusInWindow());
                 }
             }
         });
@@ -65,11 +61,7 @@ public class SSResultUnitPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iDescription.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iDescription.requestFocusInWindow());
                 }
             }
         });
@@ -78,11 +70,7 @@ public class SSResultUnitPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iOkButton.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iOkButton.requestFocusInWindow());
                 }
             }
         });
@@ -91,19 +79,15 @@ public class SSResultUnitPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iCancelButton.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iCancelButton.requestFocusInWindow());
                 } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
+                    SwingUtilities.invokeLater(() -> {
+
                             for (ActionListener al : iOkButton.getActionListeners()) {
                                 al.actionPerformed(null);
                             }
-                        }
-                    });
+
+                        });
                 }
             }
         });
@@ -112,19 +96,15 @@ public class SSResultUnitPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iOkButton.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iOkButton.requestFocusInWindow());
                 } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
+                    SwingUtilities.invokeLater(() -> {
+
                             for (ActionListener al : iCancelButton.getActionListeners()) {
                                 al.actionPerformed(null);
                             }
-                        }
-                    });
+
+                        });
                 }
             }
         });

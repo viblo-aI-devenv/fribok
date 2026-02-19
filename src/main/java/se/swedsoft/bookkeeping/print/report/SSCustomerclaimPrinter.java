@@ -61,21 +61,17 @@ public class SSCustomerclaimPrinter extends SSPrinter {
     @Override
     protected SSDefaultTableModel getModel() {
         // Get all invoices
-        List<SSInvoice> iInvoices = new LinkedList<SSInvoice>(iSaldos.keySet());
+        List<SSInvoice> iInvoices = new LinkedList<>(iSaldos.keySet());
 
         // Sort the invoices
-        Collections.sort(iInvoices, new Comparator<SSInvoice>() {
-            public int compare(SSInvoice o1, SSInvoice o2) {
-                return o1.getNumber() - o2.getNumber();
-            }
-        });
+        Collections.sort(iInvoices, (o1, o2) -> o1.getNumber() - o2.getNumber());
 
-        SSDefaultTableModel<SSInvoice> iModel = new SSDefaultTableModel<SSInvoice>() {
+        SSDefaultTableModel<SSInvoice> iModel = new SSDefaultTableModel<>() {
 
             DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSInvoice.class;
             }
 

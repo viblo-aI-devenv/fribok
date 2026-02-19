@@ -49,8 +49,8 @@ public class SSEditAccountingYearDialog {
         iPanel.setShowAccountPlanPanel(false);
         iPanel.setAccountingYear(pAccountingYear);
 
-        iPanel.addOkAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addOkAction(e -> {
+
                 SSNewAccountingYear iYear = iPanel.getAccountingYear();
 
                 iYear.setId(pAccountingYear.getId());
@@ -60,15 +60,15 @@ public class SSEditAccountingYearDialog {
                 SSPostLock.removeLock(pAccountingYear.getId());
 
                 iDialog.closeDialog();
-            }
-        });
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            });
+
+        iPanel.addCancelAction(e -> {
+
                 SSPostLock.removeLock(pAccountingYear.getId());
                 iDialog.closeDialog();
-            }
-        });
+
+            });
 
         iDialog.addWindowListener(new WindowAdapter() {
             @Override

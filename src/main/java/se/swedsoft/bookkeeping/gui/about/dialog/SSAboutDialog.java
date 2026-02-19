@@ -35,11 +35,7 @@ public class SSAboutDialog {
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
         iDialog.setResizable(false);
 
-        iPanel.addCloseButtonListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iDialog.closeDialog();
-            }
-        });
+        iPanel.addCloseButtonListener(e -> iDialog.closeDialog());
 
         iDialog.pack();
         iDialog.setLocationRelativeTo(iMainFrame);

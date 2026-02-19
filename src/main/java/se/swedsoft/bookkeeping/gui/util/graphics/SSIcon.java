@@ -38,7 +38,7 @@ public class SSIcon {
     }
 
     // Library of all graphics
-    private static Map<String, ImageIcon> icons = new HashMap<String, ImageIcon>();
+    private static Map<String, ImageIcon> icons = new HashMap<>();
 
     // Standard graphics
     static {

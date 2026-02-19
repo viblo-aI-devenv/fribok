@@ -4,6 +4,7 @@ package se.swedsoft.bookkeeping.calc.util;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -35,16 +36,9 @@ public class SSFilterFactory<T> {
      * @param iFilter
      */
     public void applyFilter(SSFilter<T> iFilter) {
-        List<T> iFiltered = new LinkedList<T>();
-
-        for (T iObject : iObjects) {
-            if (iFilter.applyFilter(iObject)) {
-                iFiltered.add(iObject);
-            }
-        }
-
-        iObjects = iFiltered;
-
+        iObjects = iObjects.stream()
+                .filter(iFilter::applyFilter)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -83,7 +77,7 @@ public class SSFilterFactory<T> {
      * @return
      */
     public static <T> List<T> doFilter(List<T> iObjects, SSFilter<T> iFilter) {
-        SSFilterFactory<T> iFactory = new SSFilterFactory<T>(iObjects);
+        SSFilterFactory<T> iFactory = new SSFilterFactory<>(iObjects);
 
         iFactory.applyFilter(iFilter);
 

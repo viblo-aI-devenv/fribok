@@ -65,25 +65,13 @@ public class SSMailServerDialog extends SSDialog {
         setContentPane(contentPane);
         setModal(true);
 
-        iButtonPanel.getOkButton().addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onOK();
-            }
-        });
+        iButtonPanel.getOkButton().addActionListener(e -> onOK());
 
-        iButtonPanel.getCancelButton().addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        });
+        iButtonPanel.getCancelButton().addActionListener(e -> onCancel());
 
 	getRootPane().setDefaultButton(iButtonPanel.getOkButton());
 
-        authCheckbox.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent e) {
-                onNewAuthState(e.getStateChange() == ItemEvent.SELECTED);
-            }
-        });
+        authCheckbox.addItemListener(e -> onNewAuthState(e.getStateChange() == ItemEvent.SELECTED));
 	for (ConnectionSecurity type : ConnectionSecurity.values()) {
 	    connectionSecurityCombobox.addItem(type);
 	}

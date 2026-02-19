@@ -24,7 +24,7 @@ public class SIEReader implements Iterator<String> {
      *
      */
     public SIEReader() {
-        iLines = new LinkedList<String>();
+        iLines = new LinkedList<>();
         iIndex = 0;
         iValues = null;
     }
@@ -34,7 +34,7 @@ public class SIEReader implements Iterator<String> {
      * @param pLine
      */
     public SIEReader(String pLine) {
-        iLines = new ArrayList<String>(1);
+        iLines = new ArrayList<>(1);
         iValues = null;
         iLines.add(pLine);
         reset();

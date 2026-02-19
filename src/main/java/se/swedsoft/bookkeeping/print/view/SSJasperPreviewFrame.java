@@ -64,17 +64,9 @@ public class SSJasperPreviewFrame extends SSDefaultTableFrame implements Propert
         super(frame, SSBundle.getBundle().getString("printpreviewframe.title"), width,
                 height);
 
-        iViewer.addPropertyChangeListener("page_zoom", new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent evt) {
-                updateStatusBar();
-            }
-        });
+        iViewer.addPropertyChangeListener("page_zoom", evt -> updateStatusBar());
 
-        iViewer.addPropertyChangeListener("page_change", new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent evt) {
-                updateStatusBar();
-            }
-        });
+        iViewer.addPropertyChangeListener("page_change", evt -> updateStatusBar());
 
     }
 
@@ -96,27 +88,27 @@ public class SSJasperPreviewFrame extends SSDefaultTableFrame implements Propert
         // Save
         // ***************************
         SSButton iButton = new SSButton("ICON_SAVEITEM", "printpreviewframe.savebutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSJasperFileChooser iFileChooser = SSJasperFileChooser.getInstance();
+                e -> {
 
-                if (iReport != null) {
-                    String iTitle = (String) iReport.getParameter("title");
+                        SSJasperFileChooser iFileChooser = SSJasperFileChooser.getInstance();
 
-                    iFileChooser.setSelectedFile(new File(iTitle + ".pdf"));
-                } else {
-                    iFileChooser.setSelectedFile(new File("Rapport.pdf"));
+                        if (iReport != null) {
+                            String iTitle = (String) iReport.getParameter("title");
 
-                }
+                            iFileChooser.setSelectedFile(new File(iTitle + ".pdf"));
+                        } else {
+                            iFileChooser.setSelectedFile(new File("Rapport.pdf"));
 
-                if (iFileChooser.showSaveDialog(SSJasperPreviewFrame.this)
-                        == JFileChooser.APPROVE_OPTION) {
-                    saveDocument(iFileChooser.getFileFilter(),
-                            iFileChooser.getSelectedFile());
-                }
+                        }
 
-            }
-        });
+                        if (iFileChooser.showSaveDialog(SSJasperPreviewFrame.this)
+                                == JFileChooser.APPROVE_OPTION) {
+                            saveDocument(iFileChooser.getFileFilter(),
+                                    iFileChooser.getSelectedFile());
+                        }
+
+
+                    });
 
         iButton.setDefaultSize();
         toolbar.add(iButton);
@@ -124,15 +116,15 @@ public class SSJasperPreviewFrame extends SSDefaultTableFrame implements Propert
         // Print
         // ***************************
         iButton = new SSButton("ICON_PRINT", "printpreviewframe.printbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    JasperPrintManager.printReport(iPrinter, true);
-                } catch (JRException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+                e -> {
+
+                        try {
+                            JasperPrintManager.printReport(iPrinter, true);
+                        } catch (JRException ex) {
+                            ex.printStackTrace();
+                        }
+
+                    });
         iButton.setDefaultSize();
         toolbar.add(iButton);
         toolbar.addSeparator();
@@ -140,44 +132,28 @@ public class SSJasperPreviewFrame extends SSDefaultTableFrame implements Propert
         // First
         // ***************************
         iFirst = new SSButton("ICON_FIRST", "printpreviewframe.firstbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iViewer.firstPage();
-            }
-        });
+                e -> iViewer.firstPage());
         iFirst.setDefaultSize();
         toolbar.add(iFirst);
 
         // Back
         // ***************************
         iBack = new SSButton("ICON_BACK", "printpreviewframe.prevbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iViewer.prevPage();
-            }
-        });
+                e -> iViewer.prevPage());
         iBack.setDefaultSize();
         toolbar.add(iBack);
 
         // Forward
         // ***************************
         iForward = new SSButton("ICON_FORWARD", "printpreviewframe.nextbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iViewer.nextPage();
-            }
-        });
+                e -> iViewer.nextPage());
         iForward.setDefaultSize();
         toolbar.add(iForward);
 
         // Last
         // ***************************
         iLast = new SSButton("ICON_LAST", "printpreviewframe.lastbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iViewer.lastPage();
-            }
-        });
+                e -> iViewer.lastPage());
         iLast.setDefaultSize();
         toolbar.add(iLast);
         toolbar.addSeparator();
@@ -185,58 +161,58 @@ public class SSJasperPreviewFrame extends SSDefaultTableFrame implements Propert
         // Zoom in
         // ***************************
         iButton = new SSButton("ICON_ZOOMIN", "printpreviewframe.zoominbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                int index = iZoomLevels.getSelectedIndex() - 1;
+                e -> {
 
-                if (index >= 0) {
-                    iZoomLevels.setSelectedItem(SSZoomLevel.values()[index]);
-                }
+                        int index = iZoomLevels.getSelectedIndex() - 1;
 
-            }
-        });
+                        if (index >= 0) {
+                            iZoomLevels.setSelectedItem(SSZoomLevel.values()[index]);
+                        }
+
+
+                    });
         iButton.setDefaultSize();
         toolbar.add(iButton);
 
         // Zoom out
         // ***************************
         iButton = new SSButton("ICON_ZOOMOUT", "printpreviewframe.zoomoutbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                int index = iZoomLevels.getSelectedIndex() + 2;
+                e -> {
 
-                if (index < SSZoomLevel.values().length) {
-                    iZoomLevels.setSelectedItem(SSZoomLevel.values()[index - 1]);
-                }
+                        int index = iZoomLevels.getSelectedIndex() + 2;
 
-            }
-        });
+                        if (index < SSZoomLevel.values().length) {
+                            iZoomLevels.setSelectedItem(SSZoomLevel.values()[index - 1]);
+                        }
+
+
+                    });
         iButton.setDefaultSize();
         toolbar.add(iButton);
         toolbar.addSeparator();
 
         iZoomLevels.addActionListener(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+                e -> {
 
-                int iZoom;
 
-                try {
-                    if (iZoomLevels.getSelectedIndex() >= 0) {
-                        SSZoomLevel iSelected = (SSZoomLevel) iZoomLevels.getSelectedItem();
+                        int iZoom;
 
-                        iZoom = iSelected.getZoom();
-                    } else {
-                        iZoom = Integer.parseInt((String) iZoomLevels.getSelectedItem());
-                    }
+                        try {
+                            if (iZoomLevels.getSelectedIndex() >= 0) {
+                                SSZoomLevel iSelected = (SSZoomLevel) iZoomLevels.getSelectedItem();
 
-                } catch (NumberFormatException e1) {
-                    return;
-                }
-                iViewer.setZoom(iZoom);
+                                iZoom = iSelected.getZoom();
+                            } else {
+                                iZoom = Integer.parseInt((String) iZoomLevels.getSelectedItem());
+                            }
 
-            }
-        });
+                        } catch (NumberFormatException e1) {
+                            return;
+                        }
+                        iViewer.setZoom(iZoom);
+
+
+                    });
 
         toolbar.add(iZoomLevels);
 

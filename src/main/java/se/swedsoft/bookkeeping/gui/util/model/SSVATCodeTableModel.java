@@ -38,7 +38,7 @@ public class SSVATCodeTableModel extends SSTableModel<SSVATCode> {
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSVATCode.class;
     }
 
@@ -67,7 +67,7 @@ public class SSVATCodeTableModel extends SSTableModel<SSVATCode> {
     /**
      *  Name
      */
-    public static SSTableColumn<SSVATCode> COLUMN_NAME = new SSTableColumn<SSVATCode>(
+    public static SSTableColumn<SSVATCode> COLUMN_NAME = new SSTableColumn<>(
             SSBundle.getBundle().getString("vatcodetable.column.1")) {
         @Override
         public Object getValue(SSVATCode iVATCode) {
@@ -93,7 +93,7 @@ public class SSVATCodeTableModel extends SSTableModel<SSVATCode> {
     /**
      *  Description
      */
-    public static SSTableColumn<SSVATCode> COLUMN_DESCRIPTION = new SSTableColumn<SSVATCode>(
+    public static SSTableColumn<SSVATCode> COLUMN_DESCRIPTION = new SSTableColumn<>(
             SSBundle.getBundle().getString("vatcodetable.column.1")) {
         @Override
         public Object getValue(SSVATCode iVATCode) {

@@ -116,7 +116,7 @@ public class SSInvoice extends SSSale {
         iCurrencyRate = iOrder.getCurrencyRate();
         iVoucher = new SSVoucher();
         iDate = new Date();
-        iRows = new LinkedList<SSSaleRow>();
+        iRows = new LinkedList<>();
 
         SSNewCompany iCompany = SSDB.getInstance().getCurrentCompany();
 

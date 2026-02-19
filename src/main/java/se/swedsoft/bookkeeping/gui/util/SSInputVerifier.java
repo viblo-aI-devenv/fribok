@@ -33,8 +33,8 @@ public class SSInputVerifier implements DocumentListener, ActionListener {
      *
      */
     public SSInputVerifier() {
-        iComponents = new LinkedList<JComponent>();
-        iListeners = new LinkedList<SSVerifierListener>();
+        iComponents = new LinkedList<>();
+        iListeners = new LinkedList<>();
 
     }
 

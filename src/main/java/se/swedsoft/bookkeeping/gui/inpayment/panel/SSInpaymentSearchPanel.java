@@ -42,7 +42,7 @@ public class SSInpaymentSearchPanel extends JPanel {
 
     public void ApplyFilter() {
         List<SSInpayment> iInpayments = SSDB.getInstance().getInpayments();
-        List<SSInpayment> iFiltered = new LinkedList<SSInpayment>();
+        List<SSInpayment> iFiltered = new LinkedList<>();
 
         String iText = iTextField.getText();
 

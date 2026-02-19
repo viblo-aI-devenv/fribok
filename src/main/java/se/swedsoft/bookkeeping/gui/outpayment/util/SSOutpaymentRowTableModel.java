@@ -34,7 +34,7 @@ public class SSOutpaymentRowTableModel extends SSTableModel<SSOutpaymentRow> {
     }
 
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSOutpaymentRow.class;
     }
 
@@ -67,7 +67,7 @@ public class SSOutpaymentRowTableModel extends SSTableModel<SSOutpaymentRow> {
     /**
      * Supplier invoice column
      */
-    public static SSTableColumn<SSOutpaymentRow> COLUMN_SUPPLIERINVOICE = new SSTableColumn<SSOutpaymentRow>(
+    public static SSTableColumn<SSOutpaymentRow> COLUMN_SUPPLIERINVOICE = new SSTableColumn<>(
             SSBundle.getBundle().getString("outpaymentrowtable.column.1")) {
         @Override
         public Object getValue(SSOutpaymentRow iObject) {
@@ -94,7 +94,7 @@ public class SSOutpaymentRowTableModel extends SSTableModel<SSOutpaymentRow> {
     /**
      * Currency column
      */
-    public static SSTableColumn<SSOutpaymentRow> COLUMN_CURRENCY = new SSTableColumn<SSOutpaymentRow>(
+    public static SSTableColumn<SSOutpaymentRow> COLUMN_CURRENCY = new SSTableColumn<>(
             SSBundle.getBundle().getString("outpaymentrowtable.column.2")) {
         @Override
         public Object getValue(SSOutpaymentRow iObject) {
@@ -121,7 +121,7 @@ public class SSOutpaymentRowTableModel extends SSTableModel<SSOutpaymentRow> {
     /**
      * Currencyrate column
      */
-    public static SSTableColumn<SSOutpaymentRow> COLUMN_INVOICE_CURRENCYRATE = new SSTableColumn<SSOutpaymentRow>(
+    public static SSTableColumn<SSOutpaymentRow> COLUMN_INVOICE_CURRENCYRATE = new SSTableColumn<>(
             SSBundle.getBundle().getString("outpaymentrowtable.column.3")) {
         @Override
         public Object getValue(SSOutpaymentRow iObject) {
@@ -164,7 +164,7 @@ public class SSOutpaymentRowTableModel extends SSTableModel<SSOutpaymentRow> {
     /**
      * Value column
      */
-    public static SSTableColumn<SSOutpaymentRow> COLUMN_VALUE = new SSTableColumn<SSOutpaymentRow>(
+    public static SSTableColumn<SSOutpaymentRow> COLUMN_VALUE = new SSTableColumn<>(
             SSBundle.getBundle().getString("outpaymentrowtable.column.4")) {
         @Override
         public Object getValue(SSOutpaymentRow iObject) {
@@ -190,7 +190,7 @@ public class SSOutpaymentRowTableModel extends SSTableModel<SSOutpaymentRow> {
     /**
      * Value column
      */
-    public static SSTableColumn<SSOutpaymentRow> COLUMN_CURRENCYRATE = new SSTableColumn<SSOutpaymentRow>(
+    public static SSTableColumn<SSOutpaymentRow> COLUMN_CURRENCYRATE = new SSTableColumn<>(
             SSBundle.getBundle().getString("outpaymentrowtable.column.5")) {
         @Override
         public Object getValue(SSOutpaymentRow iObject) {
@@ -232,7 +232,7 @@ public class SSOutpaymentRowTableModel extends SSTableModel<SSOutpaymentRow> {
     /**
      * Payed column
      */
-    public static SSTableColumn<SSOutpaymentRow> COLUMN_PAYED = new SSTableColumn<SSOutpaymentRow>(
+    public static SSTableColumn<SSOutpaymentRow> COLUMN_PAYED = new SSTableColumn<>(
             SSBundle.getBundle().getString("outpaymentrowtable.column.6")) {
         @Override
         public Object getValue(SSOutpaymentRow iObject) {
@@ -259,7 +259,7 @@ public class SSOutpaymentRowTableModel extends SSTableModel<SSOutpaymentRow> {
     /**
      * Value column
      */
-    public static SSTableColumn<SSOutpaymentRow> COLUMN_CURRENCYRATEDIFFERENCE = new SSTableColumn<SSOutpaymentRow>(
+    public static SSTableColumn<SSOutpaymentRow> COLUMN_CURRENCYRATEDIFFERENCE = new SSTableColumn<>(
             SSBundle.getBundle().getString("outpaymentrowtable.column.7")) {
         @Override
         public Object getValue(SSOutpaymentRow iObject) {

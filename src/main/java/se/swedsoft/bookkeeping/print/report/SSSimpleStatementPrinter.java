@@ -92,7 +92,7 @@ public class SSSimpleStatementPrinter extends SSPrinter {
         iCreditMinusDebetSum = SSVoucherMath.getCreditMinusDebetSum(iVouchers);
         iDebetMinusCreditSum = SSVoucherMath.getDebetMinusCreditSum(iVouchers);
 
-        iAccountsByReportCode = new HashMap<String, List<SSAccount>>();
+        iAccountsByReportCode = new HashMap<>();
 
         for (SSAccount iAccount : iAccounts) {
             String iReportCode = iAccount.getReportCode();
@@ -100,7 +100,7 @@ public class SSSimpleStatementPrinter extends SSPrinter {
             List<SSAccount> iAccountsForReportCode = iAccountsByReportCode.get(iReportCode);
 
             if (iAccountsForReportCode == null) {
-                iAccountsForReportCode = new LinkedList<SSAccount>();
+                iAccountsForReportCode = new LinkedList<>();
 
                 iAccountsByReportCode.put(iReportCode, iAccountsForReportCode);
             }
@@ -282,10 +282,10 @@ public class SSSimpleStatementPrinter extends SSPrinter {
 
         iDataSource = new SSDefaultJasperDataSource(iPrinter.getModel());
 
-        SSDefaultTableModel<Integer> iModel = new SSDefaultTableModel<Integer>() {
+        SSDefaultTableModel<Integer> iModel = new SSDefaultTableModel<>() {
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return String.class;
             }
 
@@ -358,10 +358,10 @@ public class SSSimpleStatementPrinter extends SSPrinter {
             setDetail("simplestatement.group.jrxml");
             setSummary("simplestatement.group.jrxml");
 
-            iModel = new SSDefaultTableModel<String>() {
+            iModel = new SSDefaultTableModel<>() {
 
                 @Override
-                public Class getType() {
+                public Class<?> getType() {
                     return Integer.class;
                 }
 
@@ -440,7 +440,7 @@ public class SSSimpleStatementPrinter extends SSPrinter {
         public void setGroup(Integer iNumber) {
             iGroup = iNumber;
 
-            List<String> iObjects = new LinkedList<String>();
+            List<String> iObjects = new LinkedList<>();
 
             switch (iNumber) {
             case 1:

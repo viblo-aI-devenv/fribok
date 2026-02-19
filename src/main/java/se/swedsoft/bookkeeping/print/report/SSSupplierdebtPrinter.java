@@ -61,22 +61,18 @@ public class SSSupplierdebtPrinter extends SSPrinter {
     @Override
     protected SSDefaultTableModel getModel() {
         // Get all invoices
-        List<SSSupplierInvoice> iInvoices = new LinkedList<SSSupplierInvoice>(
+        List<SSSupplierInvoice> iInvoices = new LinkedList<>(
                 iSaldos.keySet());
 
         // Sort the invoices
-        Collections.sort(iInvoices, new Comparator<SSSupplierInvoice>() {
-            public int compare(SSSupplierInvoice o1, SSSupplierInvoice o2) {
-                return o1.getNumber() - o2.getNumber();
-            }
-        });
+        Collections.sort(iInvoices, (o1, o2) -> o1.getNumber() - o2.getNumber());
 
-        SSDefaultTableModel<SSSupplierInvoice> iModel = new SSDefaultTableModel<SSSupplierInvoice>() {
+        SSDefaultTableModel<SSSupplierInvoice> iModel = new SSDefaultTableModel<>() {
 
             DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSSupplierInvoice.class;
             }
 

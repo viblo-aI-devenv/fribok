@@ -68,11 +68,11 @@ public class SSBudgetMainPanel {
         final List<SSAccount> iAccounts = pBudget.getAccounts();
 
         // Get the available accounts.
-        SSDefaultTableModel<SSAccount> iModel = new SSDefaultTableModel<SSAccount>(
+        SSDefaultTableModel<SSAccount> iModel = new SSDefaultTableModel<>(
                 iAccounts) {
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSAccount.class;
             }
 
@@ -102,7 +102,7 @@ public class SSBudgetMainPanel {
         iAccountNumber.setSearchColumns(0);
         iAccountNumber.setColumnWidths(60, 270);
 
-        iAccountNumber.addSelectionListener(new SSSelectionListener<SSAccount>() {
+        iAccountNumber.addSelectionListener(new SSSelectionListener<>() {
             public void selected(SSAccount selected) {
                 iMonthlyTable.removeEditor();
 
@@ -131,20 +131,20 @@ public class SSBudgetMainPanel {
                 new SSBigDecimalCellEditor(2));
 
         iBudgetTable.getSelectionModel().addListSelectionListener(
-                new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
+                e -> {
 
-                if (iBudgetTable.getSelectedRowCount() > 0) {
 
-                    SSAccount account = iBudgetTableModel.getObject(
-                            iBudgetTable.getSelectedRow());
+                        if (iBudgetTable.getSelectedRowCount() > 0) {
 
-                    if (account != null) {
-                        setCurrentAccount(account);
-                    }
-                }
-            }
-        });
+                            SSAccount account = iBudgetTableModel.getObject(
+                                    iBudgetTable.getSelectedRow());
+
+                            if (account != null) {
+                                setCurrentAccount(account);
+                            }
+                        }
+
+                    });
 
         iBudgetTable.addMouseListener(new MouseListener() {
             public void mouseClicked(MouseEvent e) {
@@ -162,16 +162,8 @@ public class SSBudgetMainPanel {
             public void mouseExited(MouseEvent e) {}
         });
 
-        iBudgetTableModel.addTableModelListener(new TableModelListener() {
-            public void tableChanged(TableModelEvent e) {
-                updateSumLabel();
-            }
-        });
-        iMonthlyTableModel.addTableModelListener(new TableModelListener() {
-            public void tableChanged(TableModelEvent e) {
-                updateSumLabel();
-            }
-        });
+        iBudgetTableModel.addTableModelListener(e -> updateSumLabel());
+        iMonthlyTableModel.addTableModelListener(e -> updateSumLabel());
         updateSumLabel();
     }
 

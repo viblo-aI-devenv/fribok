@@ -50,8 +50,8 @@ public class SSFrameManager {
      *
      */
     private SSFrameManager() {
-        iFrames = new HashSet<SSInternalFrame>();
-        iFrameListeners = new LinkedList<ActionListener>();
+        iFrames = new HashSet<>();
+        iFrameListeners = new LinkedList<>();
     }
 
     /**
@@ -112,10 +112,10 @@ public class SSFrameManager {
      * Cascades all  frames
      */
     public synchronized void cascade() {
-        List<SSInternalFrame> iFramesToCascade = new LinkedList<SSInternalFrame>(iFrames);
+        List<SSInternalFrame> iFramesToCascade = new LinkedList<>(iFrames);
 
-        Collections.sort(iFramesToCascade, new Comparator<SSInternalFrame>() {
-            public int compare(SSInternalFrame o1, SSInternalFrame o2) {
+        Collections.sort(iFramesToCascade, (o1, o2) -> {
+
                 String iTitle1 = o1.getTitle();
                 String iTitle2 = o2.getTitle();
 
@@ -124,8 +124,8 @@ public class SSFrameManager {
                 }
 
                 return iTitle1.compareTo(iTitle2);
-            }
-        });
+
+            });
 
         int iFrameCounter = 1;
 
@@ -150,7 +150,7 @@ public class SSFrameManager {
      * Close all frames
      */
     public synchronized void close() {
-        Set<SSInternalFrame> iFramesToClose = new HashSet<SSInternalFrame>(iFrames);
+        Set<SSInternalFrame> iFramesToClose = new HashSet<>(iFrames);
 
         iFrames.clear();
 
@@ -215,7 +215,7 @@ public class SSFrameManager {
      *
      */
     public void storeAllFrames() {
-        Set<SSInternalFrame> iFramesToStore = new HashSet<SSInternalFrame>(iFrames);
+        Set<SSInternalFrame> iFramesToStore = new HashSet<>(iFrames);
 
         for (SSInternalFrame iFrame : iFramesToStore) {
             storeFrame(iFrame);

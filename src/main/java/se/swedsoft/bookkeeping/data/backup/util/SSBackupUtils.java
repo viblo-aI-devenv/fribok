@@ -27,7 +27,7 @@ public class SSBackupUtils {
      */
     public static List<ArchiveFile> getFiles() {
 
-        List<ArchiveFile> iFiles = new LinkedList<ArchiveFile>();
+        List<ArchiveFile> iFiles = new LinkedList<>();
 
         if (!SSDB.getInstance().getLocking()) {
             // Add the database files
@@ -48,7 +48,7 @@ public class SSBackupUtils {
      * @return
      */
     public static List<ArchiveFile> getFiles(SSSystemCompany pCompany) {
-        List<ArchiveFile> iFiles = new LinkedList<ArchiveFile>();
+        List<ArchiveFile> iFiles = new LinkedList<>();
 
         // Add the company
         // iFiles.add(  new ArchiveFile( SSDB.getInstance().getFile(pCompany.getId())) );
@@ -71,7 +71,7 @@ public class SSBackupUtils {
      */
     public static List<ArchiveFile> getFiles(String pFilename, String iDirectory) throws FileNotFoundException, IOException {
 
-        List<ArchiveFile> iFiles = new LinkedList<ArchiveFile>();
+        List<ArchiveFile> iFiles = new LinkedList<>();
 
         // Get the names of the files in the zip file
         for (String iName: SSBackupZip.getFiles(pFilename)) {

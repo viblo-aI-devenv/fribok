@@ -61,24 +61,20 @@ public class SSInventoryDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        iPanel.addOkActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSInventory iInventory = iPanel.getInventory();
+        iPanel.addOkActionListener(e -> {
 
-                SSDB.getInstance().addInventory(iInventory);
+                SSInventory iInventory1 = iPanel.getInventory();
+
+                SSDB.getInstance().addInventory(iInventory1);
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
                 }
 
                 iDialog.closeDialog();
-            }
-        });
 
-        iPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iDialog.closeDialog();
-            }
-        });
+            });
+
+        iPanel.addCancelActionListener(e -> iDialog.closeDialog());
 
         iDialog.addWindowListener(
                 new WindowAdapter() {
@@ -89,9 +85,9 @@ public class SSInventoryDialog {
                         != JOptionPane.OK_OPTION) {
                     return;
                 }
-                SSInventory iInventory = iPanel.getInventory();
+                SSInventory iInventory1 = iPanel.getInventory();
 
-                SSDB.getInstance().addInventory(iInventory);
+                SSDB.getInstance().addInventory(iInventory1);
 
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
@@ -129,26 +125,26 @@ public class SSInventoryDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        iPanel.addOkActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSInventory iInventory = iPanel.getInventory();
+        iPanel.addOkActionListener(e -> {
 
-                SSDB.getInstance().updateInventory(iInventory);
+                SSInventory iInventory1 = iPanel.getInventory();
+
+                SSDB.getInstance().updateInventory(iInventory1);
 
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
                 }
                 SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
-            }
-        });
 
-        iPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            });
+
+        iPanel.addCancelActionListener(e -> {
+
                 SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
-            }
-        });
+
+            });
 
         iDialog.addWindowListener(
                 new WindowAdapter() {
@@ -160,9 +156,9 @@ public class SSInventoryDialog {
                     SSPostLock.removeLock(lockString);
                     return;
                 }
-                SSInventory iInventory = iPanel.getInventory();
+                SSInventory iInventory1 = iPanel.getInventory();
 
-                SSDB.getInstance().updateInventory(iInventory);
+                SSDB.getInstance().updateInventory(iInventory1);
 
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
@@ -191,25 +187,21 @@ public class SSInventoryDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        iPanel.addOkActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSInventory iInventory = iPanel.getInventory();
+        iPanel.addOkActionListener(e -> {
 
-                SSDB.getInstance().addInventory(iInventory);
+                SSInventory iInventory1 = iPanel.getInventory();
+
+                SSDB.getInstance().addInventory(iInventory1);
 
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
                 }
 
                 iDialog.closeDialog();
-            }
-        });
 
-        iPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iDialog.closeDialog();
-            }
-        });
+            });
+
+        iPanel.addCancelActionListener(e -> iDialog.closeDialog());
 
         iDialog.setSize(800, 600);
         iDialog.setLocationRelativeTo(iMainFrame);

@@ -148,10 +148,10 @@ public class SSDeliverynotePrinter extends SSPrinter {
         addParameter("subreport.parameters", iPrinter.getParameters());
         addParameter("subreport.datasource", iPrinter.getDataSource());
 
-        SSDefaultTableModel<SSOrder> iModel = new SSDefaultTableModel<SSOrder>() {
+        SSDefaultTableModel<SSOrder> iModel = new SSDefaultTableModel<>() {
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSOrder.class;
             }
 
@@ -201,10 +201,10 @@ public class SSDeliverynotePrinter extends SSPrinter {
         protected SSDefaultTableModel getModel() {
             final List<SSProduct> iProducts = SSDB.getInstance().getProducts();
 
-            SSDefaultTableModel<SSSaleRow> iModel = new SSDefaultTableModel<SSSaleRow>() {
+            SSDefaultTableModel<SSSaleRow> iModel = new SSDefaultTableModel<>() {
 
                 @Override
-                public Class getType() {
+                public Class<?> getType() {
                     return SSSaleRow.class;
                 }
 

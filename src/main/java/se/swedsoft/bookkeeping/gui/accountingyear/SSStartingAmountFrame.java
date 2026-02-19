@@ -79,29 +79,29 @@ public class SSStartingAmountFrame extends SSDefaultTableFrame {
         iStartingAmountPanel.setInBalance(iAccountingYear.getInBalance(),
                 SSAccountMath.getBalanceAccounts(iAccountingYear));
         addCloseListener(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (cInstance != null) {
-                    SSQueryDialog iDialog = new SSQueryDialog(getMainFrame(),
-                            SSBundle.getBundle(), "startingammountpanel.saveonclose");
-                    int iResponce = iDialog.getResponce();
+                e -> {
 
-                    if (iResponce != JOptionPane.YES_OPTION) {
-                        SSPostLock.removeLock(
-                                "startingamount"
-                                        + SSDB.getInstance().getCurrentCompany().getId()
-                                        + SSDB.getInstance().getCurrentYear().getId());
-                        return;
-                    }
-                    iAccountingYear.setInBalance(iStartingAmountPanel.getInBalance());
-                    SSDB.getInstance().updateAccountingYear(iAccountingYear);
-                    SSPostLock.removeLock(
-                            "startingamount"
-                                    + SSDB.getInstance().getCurrentCompany().getId()
-                                    + SSDB.getInstance().getCurrentYear().getId());
-                }
-            }
-        });
+                        if (cInstance != null) {
+                            SSQueryDialog iDialog = new SSQueryDialog(getMainFrame(),
+                                    SSBundle.getBundle(), "startingammountpanel.saveonclose");
+                            int iResponce = iDialog.getResponce();
+
+                            if (iResponce != JOptionPane.YES_OPTION) {
+                                SSPostLock.removeLock(
+                                        "startingamount"
+                                                + SSDB.getInstance().getCurrentCompany().getId()
+                                                + SSDB.getInstance().getCurrentYear().getId());
+                                return;
+                            }
+                            iAccountingYear.setInBalance(iStartingAmountPanel.getInBalance());
+                            SSDB.getInstance().updateAccountingYear(iAccountingYear);
+                            SSPostLock.removeLock(
+                                    "startingamount"
+                                            + SSDB.getInstance().getCurrentCompany().getId()
+                                            + SSDB.getInstance().getCurrentYear().getId());
+                        }
+
+                    });
     }
 
     /**
@@ -117,52 +117,52 @@ public class SSStartingAmountFrame extends SSDefaultTableFrame {
         // Save
         // ***************************
         SSButton iButton = new SSButton("ICON_SAVEITEM", "startingammountframe.savebutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iAccountingYear.setInBalance(iStartingAmountPanel.getInBalance());
-                SSDB.getInstance().updateAccountingYear(iAccountingYear);
-                SSPostLock.removeLock(
-                        "startingamount" + SSDB.getInstance().getCurrentCompany().getId()
-                        + SSDB.getInstance().getCurrentYear().getId());
-                cInstance = null;
-                setVisible(false);
-            }
-        });
+                e -> {
+
+                        iAccountingYear.setInBalance(iStartingAmountPanel.getInBalance());
+                        SSDB.getInstance().updateAccountingYear(iAccountingYear);
+                        SSPostLock.removeLock(
+                                "startingamount" + SSDB.getInstance().getCurrentCompany().getId()
+                                + SSDB.getInstance().getCurrentYear().getId());
+                        cInstance = null;
+                        setVisible(false);
+
+                    });
 
         toolBar.add(iButton);
 
         // Cancel
         // ***************************
         iButton = new SSButton("ICON_CANCELITEM", "startingammountframe.cancelbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSPostLock.removeLock(
-                        "startingamount" + SSDB.getInstance().getCurrentCompany().getId()
-                        + SSDB.getInstance().getCurrentYear().getId());
-                cInstance = null;
-                setVisible(false);
-            }
-        });
+                e -> {
+
+                        SSPostLock.removeLock(
+                                "startingamount" + SSDB.getInstance().getCurrentCompany().getId()
+                                + SSDB.getInstance().getCurrentYear().getId());
+                        cInstance = null;
+                        setVisible(false);
+
+                    });
         toolBar.add(iButton);
         toolBar.addSeparator();
 
         /*
          // Import
          // ***************************
-         iButton = new SSButton("ICON_IMPORT", "startingammountframe.importbutton", false, new ActionListener(){
-         public void actionPerformed(ActionEvent e) {
+         iButton = new SSButton("ICON_IMPORT", "startingammountframe.importbutton", false, e -> {
 
-         }
-         });
+
+
+             });
          toolBar.add(iButton);
 
          // Export
          // ***************************
-         iButton = new SSButton("ICON_EXPORT", "startingammountframe.exportbutton", false, new ActionListener(){
-         public void actionPerformed(ActionEvent e) {
+         iButton = new SSButton("ICON_EXPORT", "startingammountframe.exportbutton", false, e -> {
 
-         }
-         });
+
+
+             });
          toolBar.add(iButton);
          toolBar.addSeparator();
          */
@@ -170,22 +170,14 @@ public class SSStartingAmountFrame extends SSDefaultTableFrame {
         // Import from balance budget
         // ***************************
         iButton = new SSButton("ICON_REDO", "startingammountframe.importbalancebutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                importFromLastYearBalanceReport();
-            }
-        });
+                e -> importFromLastYearBalanceReport());
         toolBar.add(iButton);
         toolBar.addSeparator();
 
         // Print
         // ***************************
         iButton = new SSButton("ICON_PRINT", "startingammountframe.printbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                printStartingAmmounts();
-            }
-        });
+                e -> printStartingAmmounts());
         toolBar.add(iButton);
 
         return toolBar;
@@ -243,18 +235,18 @@ public class SSStartingAmountFrame extends SSDefaultTableFrame {
      */
     private void printStartingAmmounts() {
         SSProgressDialog.runProgress(getMainFrame(),
-                new Runnable() {
-            public void run() {
-                SSNewAccountingYear iAccountingYear = SSDB.getInstance().getCurrentYear();
+                () -> {
 
-                Date iFrom = iAccountingYear.getFrom();
-                Date iTo = iAccountingYear.getTo();
-                SSStartingAmountPrinter iPrinter = new SSStartingAmountPrinter(
-                        iStartingAmountPanel.getInBalance(), iFrom, iTo);
+                        SSNewAccountingYear iAccountingYear = SSDB.getInstance().getCurrentYear();
 
-                iPrinter.preview(getMainFrame());
-            }
-        });
+                        Date iFrom = iAccountingYear.getFrom();
+                        Date iTo = iAccountingYear.getTo();
+                        SSStartingAmountPrinter iPrinter = new SSStartingAmountPrinter(
+                                iStartingAmountPanel.getInBalance(), iFrom, iTo);
+
+                        iPrinter.preview(getMainFrame());
+
+                    });
     }
 
     /**

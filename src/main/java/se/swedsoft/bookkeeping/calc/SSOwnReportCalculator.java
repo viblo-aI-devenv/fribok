@@ -59,8 +59,8 @@ public class SSOwnReportCalculator {
         iProject = pProject;
         iResultUnit = pResultUnit;
 
-        iChangePeriod = new HashMap<SSAccount, BigDecimal>();
-        iChangeBudget = new HashMap<SSAccount, BigDecimal>();
+        iChangePeriod = new HashMap<>();
+        iChangeBudget = new HashMap<>();
 
     }
 
@@ -75,7 +75,7 @@ public class SSOwnReportCalculator {
         List<SSNewAccountingYear> iAllYearData = SSDB.getInstance().getYears();
 
         // All vouchers
-        List<SSVoucher> iVouchers = new LinkedList<SSVoucher>();
+        List<SSVoucher> iVouchers = new LinkedList<>();
 
         // Add the vouchers for all years to the list
         for (SSNewAccountingYear iCurrent : iAllYearData) {
@@ -189,7 +189,7 @@ public class SSOwnReportCalculator {
      */
     public Map<SSAccount, BigDecimal> getDeviation(Map<SSAccount, BigDecimal> a, Map<SSAccount, BigDecimal> b) {
 
-        Map<SSAccount, BigDecimal> iResult = new HashMap<SSAccount, BigDecimal>();
+        Map<SSAccount, BigDecimal> iResult = new HashMap<>();
 
         for (Map.Entry<SSAccount, BigDecimal> ssAccountBigDecimalEntry1 : b.entrySet()) {
             iResult.put(ssAccountBigDecimalEntry1.getKey(),

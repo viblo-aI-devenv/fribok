@@ -32,8 +32,8 @@ public abstract class SSDefaultTableModel<T> extends AbstractTableModel {
      * Default constructor.
      */
     public SSDefaultTableModel() {
-        iColumns = new LinkedList<String>();
-        iObjects = new LinkedList<T     >();
+        iColumns = new LinkedList<>();
+        iObjects = new LinkedList<>();
     }
 
     /**
@@ -42,7 +42,7 @@ public abstract class SSDefaultTableModel<T> extends AbstractTableModel {
      * @param pObjects The data for the table model.
      */
     public SSDefaultTableModel(List<T> pObjects) {
-        iColumns = new LinkedList<String>();
+        iColumns = new LinkedList<>();
         iObjects = pObjects;
     }
 
@@ -52,8 +52,8 @@ public abstract class SSDefaultTableModel<T> extends AbstractTableModel {
      * @param pObjects The data for the table model.
      */
     public SSDefaultTableModel(T... pObjects) {
-        iColumns = new LinkedList<String>();
-        iObjects = new LinkedList<T     >();
+        iColumns = new LinkedList<>();
+        iObjects = new LinkedList<>();
 
         iObjects.addAll(Arrays.asList(pObjects));
     }
@@ -64,8 +64,8 @@ public abstract class SSDefaultTableModel<T> extends AbstractTableModel {
      * @param pModel The data for the table model.
      */
     public SSDefaultTableModel(SSDefaultTableModel<T> pModel) {
-        iColumns = new ArrayList<String>(pModel.iColumns);
-        iObjects = new ArrayList<T     >(pModel.iObjects);
+        iColumns = new ArrayList<>(pModel.iColumns);
+        iObjects = new ArrayList<>(pModel.iObjects);
     }
 
     /**
@@ -93,7 +93,7 @@ public abstract class SSDefaultTableModel<T> extends AbstractTableModel {
      * @param pObjects The objects to display.
      */
     public void setObjects(T... pObjects) {
-        iObjects = new LinkedList<T>();
+        iObjects = new LinkedList<>();
         iObjects.addAll(Arrays.asList(pObjects));
     }
 
@@ -229,7 +229,7 @@ public abstract class SSDefaultTableModel<T> extends AbstractTableModel {
      *
      * @return The current data type.
      */
-    public abstract Class getType();
+    public abstract Class<?> getType();
 
     /**
      * Returns the List in the background of this table model.
@@ -255,7 +255,7 @@ public abstract class SSDefaultTableModel<T> extends AbstractTableModel {
         if (indices.length == 0) {
             objects = iObjects;
         } else {
-            objects = new ArrayList<T>(indices.length);
+            objects = new ArrayList<>(indices.length);
             for (int i : indices) {
                 objects.add(getObject(i));
             }

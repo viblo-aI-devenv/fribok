@@ -80,34 +80,30 @@ public class SSAutoDistFrame extends SSDefaultTableFrame {
         // New
         // ***************************
         SSButton iButton = new SSButton("ICON_NEWITEM", "autodistframe.newbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSAutoDistDialog.newDialog(getMainFrame(), iModel);
-            }
-        });
+                e -> SSAutoDistDialog.newDialog(getMainFrame(), iModel));
 
         iToolBar.add(iButton);
 
         // Edit
         // ***************************
         iButton = new SSButton("ICON_EDITITEM", "autodistframe.editbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSAutoDist iSelected = iModel.getSelectedRow(iTable);
-                Integer iNumber = null;
+                e -> {
 
-                if (iSelected != null) {
-                    iNumber = iSelected.getNumber();
-                    iSelected = getAutoDist(iSelected);
-                }
-                if (iSelected != null) {
-                    SSAutoDistDialog.editDialog(getMainFrame(), iSelected, iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "autodistframe.autodistgone",
-                            iNumber);
-                }
-            }
-        });
+                        SSAutoDist iSelected = iModel.getSelectedRow(iTable);
+                        Integer iNumber = null;
+
+                        if (iSelected != null) {
+                            iNumber = iSelected.getNumber();
+                            iSelected = getAutoDist(iSelected);
+                        }
+                        if (iSelected != null) {
+                            SSAutoDistDialog.editDialog(getMainFrame(), iSelected, iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "autodistframe.autodistgone",
+                                    iNumber);
+                        }
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         iToolBar.add(iButton);
         iToolBar.addSeparator();
@@ -115,23 +111,23 @@ public class SSAutoDistFrame extends SSDefaultTableFrame {
         // Copy
         // ***************************
         iButton = new SSButton("ICON_COPYITEM", "autodistframe.copybutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSAutoDist iSelected = iModel.getSelectedRow(iTable);
-                Integer iNumber = null;
+                e -> {
 
-                if (iSelected != null) {
-                    iNumber = iSelected.getNumber();
-                    iSelected = getAutoDist(iSelected);
-                }
-                if (iSelected != null) {
-                    SSAutoDistDialog.copyDialog(getMainFrame(), iSelected, iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "autodistframe.autodistgone",
-                            iNumber);
-                }
-            }
-        });
+                        SSAutoDist iSelected = iModel.getSelectedRow(iTable);
+                        Integer iNumber = null;
+
+                        if (iSelected != null) {
+                            iNumber = iSelected.getNumber();
+                            iSelected = getAutoDist(iSelected);
+                        }
+                        if (iSelected != null) {
+                            SSAutoDistDialog.copyDialog(getMainFrame(), iSelected, iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "autodistframe.autodistgone",
+                                    iNumber);
+                        }
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         iToolBar.add(iButton);
         iToolBar.addSeparator();
@@ -139,14 +135,14 @@ public class SSAutoDistFrame extends SSDefaultTableFrame {
         // Delete
         // ***************************
         iButton = new SSButton("ICON_DELETEITEM", "autodistframe.deletebutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                int[] selected = iTable.getSelectedRows();
-                List<SSAutoDist> toDelete = iModel.getObjects(selected);
+                e -> {
 
-                deleteSelectedAutoDists(toDelete);
-            }
-        });
+                        int[] selected = iTable.getSelectedRows();
+                        List<SSAutoDist> toDelete = iModel.getObjects(selected);
+
+                        deleteSelectedAutoDists(toDelete);
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         iToolBar.add(iButton);
 
@@ -173,25 +169,25 @@ public class SSAutoDistFrame extends SSDefaultTableFrame {
         iModel.setupTable(iTable);
 
         iTable.addDblClickListener(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSAutoDist iSelected = iModel.getSelectedRow(iTable);
-                Integer iNumber;
+                e -> {
 
-                if (iSelected != null) {
-                    iNumber = iSelected.getNumber();
-                    iSelected = getAutoDist(iSelected);
-                } else {
-                    return;
-                }
-                if (iSelected != null) {
-                    SSAutoDistDialog.editDialog(getMainFrame(), iSelected, iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "autodistframe.autodistgone",
-                            iNumber);
-                }
-            }
-        });
+                        SSAutoDist iSelected = iModel.getSelectedRow(iTable);
+                        Integer iNumber;
+
+                        if (iSelected != null) {
+                            iNumber = iSelected.getNumber();
+                            iSelected = getAutoDist(iSelected);
+                        } else {
+                            return;
+                        }
+                        if (iSelected != null) {
+                            SSAutoDistDialog.editDialog(getMainFrame(), iSelected, iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "autodistframe.autodistgone",
+                                    iNumber);
+                        }
+
+                    });
 
         JPanel iPanel = new JPanel();
 

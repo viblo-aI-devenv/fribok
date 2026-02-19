@@ -51,11 +51,11 @@ public class SSSupplierInvoiceDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSSupplierInvoice iSupplierInvoice = iPanel.getSupplierInvoice();
+        final ActionListener iSaveAction = e -> {
 
-                SSDB.getInstance().addSupplierInvoice(iSupplierInvoice);
+                SSSupplierInvoice iSupplierInvoice1 = iPanel.getSupplierInvoice();
+
+                SSDB.getInstance().addSupplierInvoice(iSupplierInvoice1);
 
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
@@ -63,17 +63,17 @@ public class SSSupplierInvoiceDialog {
 
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        });
+
+            });
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override
@@ -119,11 +119,11 @@ public class SSSupplierInvoiceDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSSupplierInvoice iSupplierInvoice = iPanel.getSupplierInvoice();
+        final ActionListener iSaveAction = e -> {
 
-                SSDB.getInstance().updateSupplierInvoice(iSupplierInvoice);
+                SSSupplierInvoice iSupplierInvoice1 = iPanel.getSupplierInvoice();
+
+                SSDB.getInstance().updateSupplierInvoice(iSupplierInvoice1);
 
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
@@ -132,18 +132,18 @@ public class SSSupplierInvoiceDialog {
                 SSPostLock.removeLock(lockString);
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 SSPostLock.removeLock(lockString);
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        });
+
+            });
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override
@@ -205,8 +205,8 @@ public class SSSupplierInvoiceDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        final ActionListener iSaveAction = e -> {
+
                 SSSupplierInvoice iSupplierInvoice = iPanel.getSupplierInvoice();
 
                 SSDB.getInstance().addSupplierInvoice(iSupplierInvoice);
@@ -217,17 +217,17 @@ public class SSSupplierInvoiceDialog {
 
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        });
+
+            });
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override
@@ -294,15 +294,15 @@ public class SSSupplierInvoiceDialog {
         iPanel.setOrderNumbers(iOrders);
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSSupplierInvoice iSupplierInvoice = iPanel.getSupplierInvoice();
+        final ActionListener iSaveAction = e -> {
 
-                SSDB.getInstance().addSupplierInvoice(iSupplierInvoice);
+                SSSupplierInvoice iSupplierInvoice1 = iPanel.getSupplierInvoice();
+
+                SSDB.getInstance().addSupplierInvoice(iSupplierInvoice1);
 
                 for (SSPurchaseOrder iPurchaseOrder : iOrders) {
                     // Set the sales for the selected order to the new one
-                    iPurchaseOrder.setInvoice(iSupplierInvoice);
+                    iPurchaseOrder.setInvoice(iSupplierInvoice1);
                     SSDB.getInstance().updatePurchaseOrder(iPurchaseOrder);
                 }
 
@@ -313,18 +313,18 @@ public class SSSupplierInvoiceDialog {
                 iPanel.dispose();
                 SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 iPanel.dispose();
                 SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
-            }
-        });
+
+            });
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override

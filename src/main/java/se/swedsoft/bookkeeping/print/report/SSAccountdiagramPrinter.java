@@ -76,9 +76,9 @@ public class SSAccountdiagramPrinter extends SSPrinter {
         List<AccountDiagramGroup> iGroups = createSRUGroups(creditMinusDebetSum,
                 debetMinusCreditSum);
 
-        SSDefaultTableModel<AccountDiagramGroup> iModel = new SSDefaultTableModel<AccountDiagramGroup>() {
+        SSDefaultTableModel<AccountDiagramGroup> iModel = new SSDefaultTableModel<>() {
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return AccountDiagramGroup.class;
             }
 
@@ -182,7 +182,7 @@ public class SSAccountdiagramPrinter extends SSPrinter {
      * @return List of groups
      */
     private List<AccountDiagramGroup> createSRUGroups(Map<SSAccount, BigDecimal> creditMinusDebetSum, Map<SSAccount, BigDecimal> debetMinusCreditSum) {
-        List<AccountDiagramGroup> iList = new LinkedList<AccountDiagramGroup>();
+        List<AccountDiagramGroup> iList = new LinkedList<>();
 
         iList.add(new AccountDiagramGroup(234, 1, 1));
         iList.add(new AccountDiagramGroup(235, 1, 1));
@@ -294,7 +294,7 @@ public class SSAccountdiagramPrinter extends SSPrinter {
         iList.add(new AccountDiagramGroup(594, 2, 13));
         iList.add(new AccountDiagramGroup(598, 2, 13));
 
-        List<AccountDiagramGroup> iFiltered = new LinkedList<AccountDiagramGroup>();
+        List<AccountDiagramGroup> iFiltered = new LinkedList<>();
 
         for (AccountDiagramGroup iGroup: iList) {
             BigDecimal iSum = getGroupSum(iGroup, creditMinusDebetSum, debetMinusCreditSum);

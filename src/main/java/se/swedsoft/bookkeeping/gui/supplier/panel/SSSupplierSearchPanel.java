@@ -42,7 +42,7 @@ public class SSSupplierSearchPanel extends JPanel {
 
     public void ApplyFilter() {
         List<SSSupplier> iSuppliers = SSDB.getInstance().getSuppliers();
-        List<SSSupplier> iFiltered = new LinkedList<SSSupplier>();
+        List<SSSupplier> iFiltered = new LinkedList<>();
 
         String iText = iTextField.getText();
 

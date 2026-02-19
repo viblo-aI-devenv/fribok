@@ -223,11 +223,7 @@ public class SSAdressPanel extends JPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iAddress.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iAddress.requestFocusInWindow());
                 }
             }
         });
@@ -236,11 +232,7 @@ public class SSAdressPanel extends JPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iStreet.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iStreet.requestFocusInWindow());
                 }
             }
         });
@@ -249,11 +241,7 @@ public class SSAdressPanel extends JPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iZipCode.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iZipCode.requestFocusInWindow());
                 }
             }
         });
@@ -262,11 +250,7 @@ public class SSAdressPanel extends JPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iCity.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iCity.requestFocusInWindow());
                 }
             }
         });
@@ -275,22 +259,14 @@ public class SSAdressPanel extends JPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iCountry.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iCountry.requestFocusInWindow());
                 }
             }
         });
     }
 
     public void setFocus() {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                iName.requestFocusInWindow();
-            }
-        });
+        SwingUtilities.invokeLater(() -> iName.requestFocusInWindow());
     }
 
     @Override

@@ -43,7 +43,7 @@ public class SSSupplierInvoiceTableModel extends SSTableModel<SSSupplierInvoice>
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSSupplierInvoice.class;
     }
 
@@ -75,7 +75,7 @@ public class SSSupplierInvoiceTableModel extends SSTableModel<SSSupplierInvoice>
     /**
      * Number
      */
-    public static SSTableColumn<SSSupplierInvoice> COLUMN_NUMBER = new SSTableColumn<SSSupplierInvoice>(
+    public static SSTableColumn<SSSupplierInvoice> COLUMN_NUMBER = new SSTableColumn<>(
             SSBundle.getBundle().getString("supplierinvoicetable.column.1")) {
         @Override
         public Object getValue(SSSupplierInvoice iObject) {
@@ -99,7 +99,7 @@ public class SSSupplierInvoiceTableModel extends SSTableModel<SSSupplierInvoice>
     /**
      * Supplier nr
      */
-    public static SSTableColumn<SSSupplierInvoice> COLUMN_REFERENCE_NUMBER = new SSTableColumn<SSSupplierInvoice>(
+    public static SSTableColumn<SSSupplierInvoice> COLUMN_REFERENCE_NUMBER = new SSTableColumn<>(
             SSBundle.getBundle().getString("supplierinvoicetable.column.10")) {
         @Override
         public Object getValue(SSSupplierInvoice iObject) {
@@ -123,7 +123,7 @@ public class SSSupplierInvoiceTableModel extends SSTableModel<SSSupplierInvoice>
     /**
      * Supplier nr
      */
-    public static SSTableColumn<SSSupplierInvoice> COLUMN_SUPPLIER_NUMBER = new SSTableColumn<SSSupplierInvoice>(
+    public static SSTableColumn<SSSupplierInvoice> COLUMN_SUPPLIER_NUMBER = new SSTableColumn<>(
             SSBundle.getBundle().getString("supplierinvoicetable.column.2")) {
         @Override
         public Object getValue(SSSupplierInvoice iObject) {
@@ -147,7 +147,7 @@ public class SSSupplierInvoiceTableModel extends SSTableModel<SSSupplierInvoice>
     /**
      * Supplier name
      */
-    public static SSTableColumn<SSSupplierInvoice> COLUMN_SUPPLIER_NAME = new SSTableColumn<SSSupplierInvoice>(
+    public static SSTableColumn<SSSupplierInvoice> COLUMN_SUPPLIER_NAME = new SSTableColumn<>(
             SSBundle.getBundle().getString("supplierinvoicetable.column.3")) {
         @Override
         public Object getValue(SSSupplierInvoice iObject) {
@@ -171,7 +171,7 @@ public class SSSupplierInvoiceTableModel extends SSTableModel<SSSupplierInvoice>
     /**
      * Supplier name
      */
-    public static SSTableColumn<SSSupplierInvoice> COLUMN_DATE = new SSTableColumn<SSSupplierInvoice>(
+    public static SSTableColumn<SSSupplierInvoice> COLUMN_DATE = new SSTableColumn<>(
             SSBundle.getBundle().getString("supplierinvoicetable.column.4")) {
         @Override
         public Object getValue(SSSupplierInvoice iObject) {
@@ -197,7 +197,7 @@ public class SSSupplierInvoiceTableModel extends SSTableModel<SSSupplierInvoice>
     /**
      * Supplier name
      */
-    public static SSTableColumn<SSSupplierInvoice> COLUMN_DUEDATE = new SSTableColumn<SSSupplierInvoice>(
+    public static SSTableColumn<SSSupplierInvoice> COLUMN_DUEDATE = new SSTableColumn<>(
             SSBundle.getBundle().getString("supplierinvoicetable.column.5")) {
         @Override
         public Object getValue(SSSupplierInvoice iObject) {
@@ -221,7 +221,7 @@ public class SSSupplierInvoiceTableModel extends SSTableModel<SSSupplierInvoice>
     /**
      *
      */
-    public static SSTableColumn<SSSupplierInvoice> COLUMN_NETSUM = new SSTableColumn<SSSupplierInvoice>(
+    public static SSTableColumn<SSSupplierInvoice> COLUMN_NETSUM = new SSTableColumn<>(
             SSBundle.getBundle().getString("supplierinvoicetable.column.6")) {
         @Override
         public Object getValue(SSSupplierInvoice iObject) {
@@ -245,7 +245,7 @@ public class SSSupplierInvoiceTableModel extends SSTableModel<SSSupplierInvoice>
     /**
      *
      */
-    public static SSTableColumn<SSSupplierInvoice> COLUMN_CURRENCY = new SSTableColumn<SSSupplierInvoice>(
+    public static SSTableColumn<SSSupplierInvoice> COLUMN_CURRENCY = new SSTableColumn<>(
             SSBundle.getBundle().getString("supplierinvoicetable.column.7")) {
         @Override
         public Object getValue(SSSupplierInvoice iObject) {
@@ -269,7 +269,7 @@ public class SSSupplierInvoiceTableModel extends SSTableModel<SSSupplierInvoice>
     /**
      *
      */
-    public static SSTableColumn<SSSupplierInvoice> COLUMN_TOTALSUM = new SSTableColumn<SSSupplierInvoice>(
+    public static SSTableColumn<SSSupplierInvoice> COLUMN_TOTALSUM = new SSTableColumn<>(
             SSBundle.getBundle().getString("supplierinvoicetable.column.8")) {
         @Override
         public Object getValue(SSSupplierInvoice iObject) {
@@ -293,7 +293,7 @@ public class SSSupplierInvoiceTableModel extends SSTableModel<SSSupplierInvoice>
     /**
      *
      */
-    public static SSTableColumn<SSSupplierInvoice> COLUMN_SALDO = new SSTableColumn<SSSupplierInvoice>(
+    public static SSTableColumn<SSSupplierInvoice> COLUMN_SALDO = new SSTableColumn<>(
             SSBundle.getBundle().getString("supplierinvoicetable.column.9")) {
         @Override
         public Object getValue(SSSupplierInvoice iObject) {
@@ -317,7 +317,7 @@ public class SSSupplierInvoiceTableModel extends SSTableModel<SSSupplierInvoice>
     /**
      * Supplier nr
      */
-    public static SSTableColumn<SSSupplierInvoice> COLUMN_SUPPLIER_BANKGIRO = new SSTableColumn<SSSupplierInvoice>(
+    public static SSTableColumn<SSSupplierInvoice> COLUMN_SUPPLIER_BANKGIRO = new SSTableColumn<>(
             SSBundle.getBundle().getString("supplierinvoicetable.column.11")) {
         @Override
         public Object getValue(SSSupplierInvoice iObject) {
@@ -343,7 +343,7 @@ public class SSSupplierInvoiceTableModel extends SSTableModel<SSSupplierInvoice>
     /**
      * Supplier nr
      */
-    public static SSTableColumn<SSSupplierInvoice> COLUMN_SUPPLIER_PLUSGIRO = new SSTableColumn<SSSupplierInvoice>(
+    public static SSTableColumn<SSSupplierInvoice> COLUMN_SUPPLIER_PLUSGIRO = new SSTableColumn<>(
             SSBundle.getBundle().getString("supplierinvoicetable.column.12")) {
         @Override
         public Object getValue(SSSupplierInvoice iObject) {

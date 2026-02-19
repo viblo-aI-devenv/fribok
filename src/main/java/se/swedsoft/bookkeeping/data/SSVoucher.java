@@ -43,13 +43,13 @@ public class SSVoucher implements Serializable, Cloneable, SSTableSearchable {
      */
     public SSVoucher() {
         iDate = SSVoucherMath.getNextVoucherDate();
-        iVoucherRows = new ArrayList<SSVoucherRow>();
+        iVoucherRows = new ArrayList<>();
         doAutoIncrecement();
     }
 
     public SSVoucher(Integer iNumber) {
         iDate = SSVoucherMath.getNextVoucherDate();
-        iVoucherRows = new ArrayList<SSVoucherRow>();
+        iVoucherRows = new ArrayList<>();
         this.iNumber = iNumber;
     }
 
@@ -72,7 +72,7 @@ public class SSVoucher implements Serializable, Cloneable, SSTableSearchable {
         iDescription = pVoucher.iDescription;
         iCorrects = pVoucher.iCorrects;
         iCorrectedBy = pVoucher.iCorrectedBy;
-        iVoucherRows = new LinkedList<SSVoucherRow>();
+        iVoucherRows = new LinkedList<>();
 
         for (SSVoucherRow iVoucherRow : pVoucher.iVoucherRows) {
             iVoucherRows.add(new SSVoucherRow(iVoucherRow));

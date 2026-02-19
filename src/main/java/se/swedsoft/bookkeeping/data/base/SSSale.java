@@ -83,7 +83,7 @@ public abstract class SSSale implements SSTableSearchable, Serializable {
         iDate = new Date();
         iInvoiceAddress = new SSAddress();
         iDeliveryAddress = new SSAddress();
-        iRows = new LinkedList<SSSaleRow>();
+        iRows = new LinkedList<>();
         iPrinted = false;
         SSNewCompany iCompany = SSDB.getInstance().getCurrentCompany();
 
@@ -147,8 +147,8 @@ public abstract class SSSale implements SSTableSearchable, Serializable {
         iCustomer = null;
         iInvoiceAddress = new SSAddress(iSale.iInvoiceAddress);
         iDeliveryAddress = new SSAddress(iSale.iDeliveryAddress);
-        iRows = new LinkedList<SSSaleRow>();
-        iDefaultAccounts = new HashMap<SSDefaultAccount, Integer>();
+        iRows = new LinkedList<>();
+        iDefaultAccounts = new HashMap<>();
 
         // Copy all rows
         for (SSSaleRow iRow : iSale.iRows) {
@@ -573,7 +573,7 @@ public abstract class SSSale implements SSTableSearchable, Serializable {
      */
     public Map<SSDefaultAccount, Integer> getDefaultAccounts() {
         if (iDefaultAccounts == null) {
-            iDefaultAccounts = new HashMap<SSDefaultAccount, Integer>();
+            iDefaultAccounts = new HashMap<>();
         }
         return iDefaultAccounts;
     }
@@ -608,7 +608,7 @@ public abstract class SSSale implements SSTableSearchable, Serializable {
      * @param iDefaultAccounts
      */
     public void setDefaultAccounts(Map<SSDefaultAccount, Integer> iDefaultAccounts) {
-        this.iDefaultAccounts = new HashMap<SSDefaultAccount, Integer>();
+        this.iDefaultAccounts = new HashMap<>();
         this.iDefaultAccounts.putAll(iDefaultAccounts);
     }
 
@@ -620,7 +620,7 @@ public abstract class SSSale implements SSTableSearchable, Serializable {
      */
     public List<SSSaleRow> getRows() {
         if (iRows == null) {
-            iRows = new LinkedList<SSSaleRow>();
+            iRows = new LinkedList<>();
         }
         return iRows;
     }
@@ -638,7 +638,7 @@ public abstract class SSSale implements SSTableSearchable, Serializable {
      * @param iRows
      */
     public void setRows(SSSaleRow... iRows) {
-        this.iRows = new LinkedList<SSSaleRow>();
+        this.iRows = new LinkedList<>();
         this.iRows.addAll(Arrays.asList(iRows));
     }
 

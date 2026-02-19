@@ -57,10 +57,10 @@ public class SSCustomerListPrinter extends SSPrinter {
     @Override
     protected SSDefaultTableModel getModel() {
 
-        SSDefaultTableModel<SSCustomer> iModel = new SSDefaultTableModel<SSCustomer>() {
+        SSDefaultTableModel<SSCustomer> iModel = new SSDefaultTableModel<>() {
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSAccount.class;
             }
 
@@ -107,11 +107,7 @@ public class SSCustomerListPrinter extends SSPrinter {
         iModel.addColumn("customer.phone");
         iModel.addColumn("customer.telefax");
 
-        Collections.sort(iCustomers, new Comparator<SSCustomer>() {
-            public int compare(SSCustomer o1, SSCustomer o2) {
-                return o1.getNumber().compareTo(o2.getNumber());
-            }
-        });
+        Collections.sort(iCustomers, (o1, o2) -> o1.getNumber().compareTo(o2.getNumber()));
 
         iModel.setObjects(iCustomers);
 

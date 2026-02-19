@@ -61,7 +61,7 @@ public class SSTableComboBoxOld<T extends SSTableSearchable> extends JPanel {
      * and a flow layout.
      */
     public SSTableComboBoxOld() {
-        iSelectionListeners = new LinkedList<SSSelectionListener>();
+        iSelectionListeners = new LinkedList<>();
         iSelected = null;
         iSearchColumns = EMPTY_INT_ARRAY;
         iAllowCustomValues = false;
@@ -86,12 +86,12 @@ public class SSTableComboBoxOld<T extends SSTableSearchable> extends JPanel {
         iPopup.setLightWeightPopupEnabled(true);
 
         // Listener for pressing the button
-        iDropdownButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iDropdownButton.addActionListener(e -> {
+
                 startEdit();
                 searchTable();
-            }
-        });
+
+            });
 
         // Select the null value
         Action iSelectNull = new AbstractAction() {
@@ -102,12 +102,12 @@ public class SSTableComboBoxOld<T extends SSTableSearchable> extends JPanel {
                 notifySelectionListeners(iSelected);
 
                 if (iEditor != null) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
+                    SwingUtilities.invokeLater(() -> {
+
                             iEditor.stopCellEditing();
                             iEditor.transferFocusToTable();
-                        }
-                    });
+
+                        });
                 }
                 stopEdit();
             }
@@ -128,12 +128,12 @@ public class SSTableComboBoxOld<T extends SSTableSearchable> extends JPanel {
                 }
 
                 if (iEditor != null) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
+                    SwingUtilities.invokeLater(() -> {
+
                             iEditor.stopCellEditing();
                             iEditor.transferFocusToTable();
-                        }
-                    });
+
+                        });
                 }
                 stopEdit();
             }
@@ -189,11 +189,7 @@ public class SSTableComboBoxOld<T extends SSTableSearchable> extends JPanel {
             }
         });
 
-        iTable.addDblClickListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iSelectAndClose.actionPerformed(null);
-            }
-        });
+        iTable.addDblClickListener(e -> iSelectAndClose.actionPerformed(null));
 
         iTextField.getInputMap(WHEN_FOCUSED).put(
                 KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "SELECT_NULL");
@@ -225,9 +221,9 @@ public class SSTableComboBoxOld<T extends SSTableSearchable> extends JPanel {
      * @return the model
      */
     private SSDefaultTableModel<T> createDefaultModel() {
-        return new SSDefaultTableModel<T>() {
+        return new SSDefaultTableModel<>() {
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return null;
             }
 
@@ -422,7 +418,7 @@ public class SSTableComboBoxOld<T extends SSTableSearchable> extends JPanel {
         if (iSearchColumns.length == 0) {
             return true;
         }
-        List<T> iVisible = new LinkedList<T>();
+        List<T> iVisible = new LinkedList<>();
 
         // Restore the models objects
         iModel.setObjects(iObjects);
@@ -594,7 +590,7 @@ public class SSTableComboBoxOld<T extends SSTableSearchable> extends JPanel {
          */
         public CellEditor() {
             super(new JTextField());
-            iComboBox = new SSTableComboBoxOld<T>();
+            iComboBox = new SSTableComboBoxOld<>();
             iComboBox.iEditor = this;
         }
 
@@ -638,11 +634,7 @@ public class SSTableComboBoxOld<T extends SSTableSearchable> extends JPanel {
             }
 
             // Request focus to receive input.
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    iComboBox.iTextField.requestFocus();
-                }
-            });
+            SwingUtilities.invokeLater(() -> iComboBox.iTextField.requestFocus());
 
             return iComboBox;
         }

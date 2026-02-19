@@ -34,7 +34,7 @@ public class SSQuarterChooser extends JPanel implements ItemListener {
      *
      */
     public SSQuarterChooser() {
-        iChangeListeners = new LinkedList<ActionListener>();
+        iChangeListeners = new LinkedList<>();
 
         setLayout(new BorderLayout());
 

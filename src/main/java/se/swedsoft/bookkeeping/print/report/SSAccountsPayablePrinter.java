@@ -61,10 +61,10 @@ public class SSAccountsPayablePrinter extends SSPrinter {
         iSupplierCreditInvoiceSum = SSSupplierCreditInvoiceMath.getSumsForSupplierInvoices(
                 iCeiledDate);
 
-        iSupplierInvoicesMap = new HashMap<String, List<SSSupplierInvoice>>();
+        iSupplierInvoicesMap = new HashMap<>();
 
         for (String iSupplierNumber : SSSupplierMath.iInvoicesForSuppliers.keySet()) {
-            List<SSSupplierInvoice> iInvoicesForCustomer = new LinkedList<SSSupplierInvoice>();
+            List<SSSupplierInvoice> iInvoicesForCustomer = new LinkedList<>();
 
             for (SSSupplierInvoice iInvoice : SSSupplierMath.iInvoicesForSuppliers.get(
                     iSupplierNumber)) {
@@ -107,10 +107,10 @@ public class SSAccountsPayablePrinter extends SSPrinter {
 
         iDataSource = new SSDefaultJasperDataSource(iPrinter.getModel());
 
-        SSDefaultTableModel<SSSupplier> iModel = new SSDefaultTableModel<SSSupplier>() {
+        SSDefaultTableModel<SSSupplier> iModel = new SSDefaultTableModel<>() {
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSSupplier.class;
             }
 
@@ -173,11 +173,7 @@ public class SSAccountsPayablePrinter extends SSPrinter {
         iModel.addColumn("supplier.saldosum");
         iModel.addColumn("supplier.invoices");
 
-        Collections.sort(iSuppliers, new Comparator<SSSupplier>() {
-            public int compare(SSSupplier o1, SSSupplier o2) {
-                return o1.getNumber().compareTo(o2.getNumber());
-            }
-        });
+        Collections.sort(iSuppliers, (o1, o2) -> o1.getNumber().compareTo(o2.getNumber()));
 
         iModel.setObjects(iSuppliers);
 
@@ -197,12 +193,12 @@ public class SSAccountsPayablePrinter extends SSPrinter {
             setDetail("accountspayable.row.jrxml");
             setSummary("accountspayable.row.jrxml");
 
-            iModel = new SSDefaultTableModel<SSSupplierInvoice>() {
+            iModel = new SSDefaultTableModel<>() {
 
                 DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
                 @Override
-                public Class getType() {
+                public Class<?> getType() {
                     return SSSaleRow.class;
                 }
 

@@ -42,7 +42,7 @@ public class SSPurchaseOrderSearchPanel extends JPanel {
     }
 
     public void ApplyFilter(List<SSPurchaseOrder> iList) {
-        List<SSPurchaseOrder> iFiltered = new LinkedList<SSPurchaseOrder>();
+        List<SSPurchaseOrder> iFiltered = new LinkedList<>();
 
         String iText = iTextField.getText();
 

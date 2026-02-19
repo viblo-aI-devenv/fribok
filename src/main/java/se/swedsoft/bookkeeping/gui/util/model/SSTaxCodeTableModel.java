@@ -30,7 +30,7 @@ public class SSTaxCodeTableModel extends SSTableModel<SSTaxCode> {
      */
     public SSTaxCodeTableModel() {
         super(SSTaxCode.values());
-        iValues = new HashMap<SSTaxCode, BigDecimal>();
+        iValues = new HashMap<>();
 
         SSNewCompany iCompany = SSDB.getInstance().getCurrentCompany();
 
@@ -57,7 +57,7 @@ public class SSTaxCodeTableModel extends SSTableModel<SSTaxCode> {
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSTaxCode.class;
     }
 
@@ -133,16 +133,16 @@ public class SSTaxCodeTableModel extends SSTableModel<SSTaxCode> {
      */
     public void sort() {
         Collections.sort(getObjects(),
-                new Comparator<SSTaxCode>() {
-            public int compare(SSTaxCode o1, SSTaxCode o2) {
-                BigDecimal iValue1 = iValues.get(o1);
-                BigDecimal iValue2 = iValues.get(o2);
+                (o1, o2) -> {
 
-                return (iValue1 == null || iValue2 == null)
-                        ? 0
-                        : iValue1.compareTo(iValue2);
-            }
-        });
+                        BigDecimal iValue1 = iValues.get(o1);
+                        BigDecimal iValue2 = iValues.get(o2);
+
+                        return (iValue1 == null || iValue2 == null)
+                                ? 0
+                                : iValue1.compareTo(iValue2);
+
+                    });
         fireTableDataChanged();
     }
 

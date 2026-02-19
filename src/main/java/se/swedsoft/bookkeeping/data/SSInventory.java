@@ -33,7 +33,7 @@ public class SSInventory implements Serializable {
         iNumber = 0;
         iDate = new Date();
         iText = "";
-        iRows = new LinkedList<SSInventoryRow>();
+        iRows = new LinkedList<>();
 
         doAutoIncrement();
     }
@@ -73,7 +73,7 @@ public class SSInventory implements Serializable {
         iNumber = iInventory.iNumber;
         iDate = iInventory.iDate;
         iText = iInventory.iText;
-        iRows = new LinkedList<SSInventoryRow>();
+        iRows = new LinkedList<>();
 
         for (SSInventoryRow iRow : iInventory.iRows) {
             iRows.add(new SSInventoryRow(iRow));

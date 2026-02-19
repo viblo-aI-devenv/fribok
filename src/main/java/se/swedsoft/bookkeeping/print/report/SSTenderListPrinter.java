@@ -75,12 +75,12 @@ public class SSTenderListPrinter extends SSPrinter {
 
         iDataSource = new SSDefaultJasperDataSource(iPrinter.getModel());
 
-        SSDefaultTableModel<SSTender> iModel = new SSDefaultTableModel<SSTender>() {
+        SSDefaultTableModel<SSTender> iModel = new SSDefaultTableModel<>() {
 
             DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSAccount.class;
             }
 
@@ -142,11 +142,7 @@ public class SSTenderListPrinter extends SSPrinter {
         iModel.addColumn("tender.rows");
         iModel.addColumn("tender.sum");
 
-        Collections.sort(iTenders, new Comparator<SSTender>() {
-            public int compare(SSTender o1, SSTender o2) {
-                return o1.getNumber() - o2.getNumber();
-            }
-        });
+        Collections.sort(iTenders, (o1, o2) -> o1.getNumber() - o2.getNumber());
 
         iModel.setObjects(iTenders);
 
@@ -166,10 +162,10 @@ public class SSTenderListPrinter extends SSPrinter {
             setDetail("tenderlist.row.jrxml");
             setSummary("tenderlist.row.jrxml");
 
-            iModel = new SSDefaultTableModel<SSSaleRow>() {
+            iModel = new SSDefaultTableModel<>() {
 
                 @Override
-                public Class getType() {
+                public Class<?> getType() {
                     return SSSaleRow.class;
                 }
 

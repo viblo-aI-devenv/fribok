@@ -49,11 +49,11 @@ public class SSOutpaymentDialog {
         iPanel.setOutpayment(iOutpayment);
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSOutpayment iOutpayment = iPanel.getOutpayment();
+        final ActionListener iSaveAction = e -> {
 
-                SSDB.getInstance().addOutpayment(iOutpayment);
+                SSOutpayment iOutpayment1 = iPanel.getOutpayment();
+
+                SSDB.getInstance().addOutpayment(iOutpayment1);
 
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
@@ -63,17 +63,17 @@ public class SSOutpaymentDialog {
                 }
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        });
+
+            });
 
         iDialog.addWindowListener(
                 new WindowAdapter() {
@@ -110,11 +110,11 @@ public class SSOutpaymentDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSOutpayment iOutpayment = iPanel.getOutpayment();
+        final ActionListener iSaveAction = e -> {
 
-                SSDB.getInstance().addOutpayment(iOutpayment);
+                SSOutpayment iOutpayment1 = iPanel.getOutpayment();
+
+                SSDB.getInstance().addOutpayment(iOutpayment1);
 
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
@@ -124,17 +124,17 @@ public class SSOutpaymentDialog {
                 }
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        });
+
+            });
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override
@@ -177,8 +177,8 @@ public class SSOutpaymentDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        final ActionListener iSaveAction = e -> {
+
                 SSOutpayment iOutpayment = iPanel.getOutpayment();
 
                 SSDB.getInstance().updateOutpayment(iOutpayment);
@@ -194,18 +194,18 @@ public class SSOutpaymentDialog {
                 }
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 SSPostLock.removeLock(lockString);
                 iPanel.dispose();
                 iDialog.closeDialog();
-            }
-        });
+
+            });
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override

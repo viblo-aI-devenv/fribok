@@ -33,7 +33,7 @@ public class SSResultUnitTableModel extends SSTableModel<SSNewResultUnit> {
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSNewResultUnit.class;
     }
 
@@ -68,7 +68,7 @@ public class SSResultUnitTableModel extends SSTableModel<SSNewResultUnit> {
     /**
      *  Nummer
      */
-    public static SSTableColumn<SSNewResultUnit> COLUMN_NUMBER = new SSTableColumn<SSNewResultUnit>(
+    public static SSTableColumn<SSNewResultUnit> COLUMN_NUMBER = new SSTableColumn<>(
             SSBundle.getBundle().getString("resultunittable.column.1")) {
         @Override
         public Object getValue(SSNewResultUnit iResultUnit) {
@@ -95,7 +95,7 @@ public class SSResultUnitTableModel extends SSTableModel<SSNewResultUnit> {
     /**
      *  Nummer
      */
-    public static SSTableColumn<SSNewResultUnit> COLUMN_NAME = new SSTableColumn<SSNewResultUnit>(
+    public static SSTableColumn<SSNewResultUnit> COLUMN_NAME = new SSTableColumn<>(
             SSBundle.getBundle().getString("resultunittable.column.2")) {
         @Override
         public Object getValue(SSNewResultUnit iResultUnit) {
@@ -122,7 +122,7 @@ public class SSResultUnitTableModel extends SSTableModel<SSNewResultUnit> {
     /**
      *  Beskrivning
      */
-    public static SSTableColumn<SSNewResultUnit> COLUMN_DESCRIPTION = new SSTableColumn<SSNewResultUnit>(
+    public static SSTableColumn<SSNewResultUnit> COLUMN_DESCRIPTION = new SSTableColumn<>(
             SSBundle.getBundle().getString("resultunittable.column.3")) {
         @Override
         public Object getValue(SSNewResultUnit iResultUnit) {

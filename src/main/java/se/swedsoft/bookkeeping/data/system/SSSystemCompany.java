@@ -43,7 +43,7 @@ public class SSSystemCompany implements Serializable {
         iID = new UID();
         iName = "";
         iCompany = null;
-        iYears = new LinkedList<SSSystemYear>();
+        iYears = new LinkedList<>();
         iCurrent = false;
     }
 
@@ -56,7 +56,7 @@ public class SSSystemCompany implements Serializable {
         iCurrent = false;
         iID = new UID();
         iName = pCompany.getName();
-        iYears = new LinkedList<SSSystemYear>();
+        iYears = new LinkedList<>();
     }
 
     // ////////////////////////////////////////////////////////////////////////////

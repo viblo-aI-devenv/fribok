@@ -39,7 +39,7 @@ public class SSCalendar implements ActionListener {
      *
      */
     public SSCalendar() {
-        iChangeListeners = new LinkedList<ActionListener>();
+        iChangeListeners = new LinkedList<>();
 
         iYearPanel.setLayout(new BorderLayout());
         iMonthPanel.setLayout(new BorderLayout());

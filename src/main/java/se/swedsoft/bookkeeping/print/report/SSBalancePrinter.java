@@ -88,7 +88,7 @@ public class SSBalancePrinter extends SSPrinter {
 
         List<SSAccount> iAccounts = iYearData.getAccounts();
 
-        List<BalanceRow> iRows = new LinkedList<BalanceRow>();
+        List<BalanceRow> iRows = new LinkedList<>();
 
         for (SSAccountGroup iBalanceGroup: iBalanceGroups) {
             List<BalanceRow> iCurrentRows = getRows(iBalanceGroup, iAccounts, 0);
@@ -105,10 +105,10 @@ public class SSBalancePrinter extends SSPrinter {
             }
         }
 
-        SSDefaultTableModel<BalanceRow> iModel = new SSDefaultTableModel<BalanceRow>() {
+        SSDefaultTableModel<BalanceRow> iModel = new SSDefaultTableModel<>() {
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return BalanceRow.class;
             }
 
@@ -256,7 +256,7 @@ public class SSBalancePrinter extends SSPrinter {
     private List<BalanceRow> getRows(SSAccountGroup iGroup, List<SSAccount> iAccounts, int iLevel) {
         List<SSAccount> iGroupAccounts = iGroup.getGroupAccounts(iAccounts);
 
-        List<BalanceRow> iRows = new LinkedList<BalanceRow>();
+        List<BalanceRow> iRows = new LinkedList<>();
 
         // This is a leaf node, add this node's groups to the list
         if (iGroup.getGroups() == null) {

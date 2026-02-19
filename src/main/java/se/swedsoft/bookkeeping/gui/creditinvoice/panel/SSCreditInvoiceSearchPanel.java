@@ -42,7 +42,7 @@ public class SSCreditInvoiceSearchPanel extends JPanel {
 
     public void ApplyFilter() {
         List<SSCreditInvoice> iCreditInvoices = SSDB.getInstance().getCreditInvoices();
-        List<SSCreditInvoice> iFiltered = new LinkedList<SSCreditInvoice>();
+        List<SSCreditInvoice> iFiltered = new LinkedList<>();
 
         String iText = iTextField.getText();
 

@@ -88,34 +88,30 @@ public class SSInpaymentFrame extends SSDefaultTableFrame {
         // New
         // ***************************
         SSButton iButton = new SSButton("ICON_NEWITEM", "inpaymentframe.newbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSInpaymentDialog.newDialog(getMainFrame(), iModel);
-            }
-        });
+                e -> SSInpaymentDialog.newDialog(getMainFrame(), iModel));
 
         toolBar.add(iButton);
 
         // Edit
         // ***************************
         iButton = new SSButton("ICON_EDITITEM", "inpaymentframe.editbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSInpayment iSelected = iModel.getSelectedRow(iTable);
-                Integer iNumber = null;
+                e -> {
 
-                if (iSelected != null) {
-                    iNumber = iSelected.getNumber();
-                    iSelected = getInpayment(iSelected);
-                }
-                if (iSelected != null) {
-                    SSInpaymentDialog.editDialog(getMainFrame(), iSelected, iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "inpaymentframe.inpaymentgone",
-                            iNumber);
-                }
-            }
-        });
+                        SSInpayment iSelected = iModel.getSelectedRow(iTable);
+                        Integer iNumber = null;
+
+                        if (iSelected != null) {
+                            iNumber = iSelected.getNumber();
+                            iSelected = getInpayment(iSelected);
+                        }
+                        if (iSelected != null) {
+                            SSInpaymentDialog.editDialog(getMainFrame(), iSelected, iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "inpaymentframe.inpaymentgone",
+                                    iNumber);
+                        }
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         toolBar.add(iButton);
         toolBar.addSeparator();
@@ -123,29 +119,25 @@ public class SSInpaymentFrame extends SSDefaultTableFrame {
         // Delete
         // ***************************
         iButton = new SSButton("ICON_DELETEITEM", "inpaymentframe.deletebutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+                e -> {
 
-                int[] selected = iTable.getSelectedRows();
-                List<SSInpayment> toDelete = iModel.getObjects(selected);
 
-                deleteSelectedInpayment(toDelete);
-            }
-        });
+                        int[] selected = iTable.getSelectedRows();
+                        List<SSInpayment> toDelete = iModel.getObjects(selected);
+
+                        deleteSelectedInpayment(toDelete);
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         toolBar.add(iButton);
         toolBar.addSeparator();
 
         // Print
         // ***************************
-        SSMenuButton<SSButton> iMenuButton = new SSMenuButton<SSButton>("ICON_PRINT",
+        SSMenuButton<SSButton> iMenuButton = new SSMenuButton<>("ICON_PRINT",
                 "inpaymentframe.printbutton");
 
-        iMenuButton.add("inpaymentframe.print.inpaymentlist", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSReportFactory.InpaymentList(getMainFrame());
-            }
-        });
+        iMenuButton.add("inpaymentframe.print.inpaymentlist", e -> SSReportFactory.InpaymentList(getMainFrame()));
         toolBar.add(iMenuButton);
         return toolBar;
     }
@@ -168,25 +160,25 @@ public class SSInpaymentFrame extends SSDefaultTableFrame {
         SSInpaymentTableModel.setupTable(iTable);
 
         iTable.addDblClickListener(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSInpayment iSelected = iModel.getSelectedRow(iTable);
-                Integer iNumber;
+                e -> {
 
-                if (iSelected != null) {
-                    iNumber = iSelected.getNumber();
-                    iSelected = getInpayment(iSelected);
-                } else {
-                    return;
-                }
-                if (iSelected != null) {
-                    SSInpaymentDialog.editDialog(getMainFrame(), iSelected, iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "inpaymentframe.inpaymentgone",
-                            iNumber);
-                }
-            }
-        });
+                        SSInpayment iSelected = iModel.getSelectedRow(iTable);
+                        Integer iNumber;
+
+                        if (iSelected != null) {
+                            iNumber = iSelected.getNumber();
+                            iSelected = getInpayment(iSelected);
+                        } else {
+                            return;
+                        }
+                        if (iSelected != null) {
+                            SSInpaymentDialog.editDialog(getMainFrame(), iSelected, iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "inpaymentframe.inpaymentgone",
+                                    iNumber);
+                        }
+
+                    });
 
         iSearchPanel = new SSInpaymentSearchPanel(iModel);
         JPanel iPanel = new JPanel();

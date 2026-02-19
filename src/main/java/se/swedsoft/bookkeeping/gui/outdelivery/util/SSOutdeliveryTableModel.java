@@ -40,14 +40,14 @@ public class SSOutdeliveryTableModel extends SSTableModel<SSOutdelivery> {
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSOutdelivery.class;
     }
 
     /**
      *  Inventerings nummer
      */
-    public static SSTableColumn<SSOutdelivery> COLUMN_NUMBER = new SSTableColumn<SSOutdelivery>(
+    public static SSTableColumn<SSOutdelivery> COLUMN_NUMBER = new SSTableColumn<>(
             SSBundle.getBundle().getString("outdeliverytable.column.1")) {
         @Override
         public Object getValue(SSOutdelivery iIndelivery) {
@@ -73,7 +73,7 @@ public class SSOutdeliveryTableModel extends SSTableModel<SSOutdelivery> {
     /**
      * Datum
      */
-    public static SSTableColumn<SSOutdelivery> COLUMN_DATE = new SSTableColumn<SSOutdelivery>(
+    public static SSTableColumn<SSOutdelivery> COLUMN_DATE = new SSTableColumn<>(
             SSBundle.getBundle().getString("outdeliverytable.column.2")) {
         @Override
         public Object getValue(SSOutdelivery iIndelivery) {
@@ -99,7 +99,7 @@ public class SSOutdeliveryTableModel extends SSTableModel<SSOutdelivery> {
     /**
      * Text
      */
-    public static SSTableColumn<SSOutdelivery> COLUMN_TEXT = new SSTableColumn<SSOutdelivery>(
+    public static SSTableColumn<SSOutdelivery> COLUMN_TEXT = new SSTableColumn<>(
             SSBundle.getBundle().getString("outdeliverytable.column.3")) {
         @Override
         public Object getValue(SSOutdelivery iIndelivery) {
@@ -125,7 +125,7 @@ public class SSOutdeliveryTableModel extends SSTableModel<SSOutdelivery> {
     /**
      * Totalt antal
      */
-    public static SSTableColumn<SSOutdelivery> COLUMN_TOTALCOUNT = new SSTableColumn<SSOutdelivery>(
+    public static SSTableColumn<SSOutdelivery> COLUMN_TOTALCOUNT = new SSTableColumn<>(
             SSBundle.getBundle().getString("outdeliverytable.column.4")) {
         @Override
         public Object getValue(SSOutdelivery iIndelivery) {

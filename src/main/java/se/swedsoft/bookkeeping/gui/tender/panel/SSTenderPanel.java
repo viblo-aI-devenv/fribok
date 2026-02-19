@@ -156,14 +156,10 @@ public class SSTenderPanel {
         iModel.addColumn(SSInvoiceRowTableModel.COLUMN_TAX, true);
         iModel.setupTable(iTable);
 
-        iModel.addTableModelListener(new TableModelListener() {
-            public void tableChanged(TableModelEvent e) {
-                updateSumFields();
-            }
-        });
+        iModel.addTableModelListener(e -> updateSumFields());
 
-        iUseInvoiceForDelivery.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iUseInvoiceForDelivery.addActionListener(e -> {
+
                 iDeliveryAddress.setEnabled(!iUseInvoiceForDelivery.isSelected());
 
                 if (!iUseInvoiceForDelivery.isSelected()) {
@@ -171,14 +167,14 @@ public class SSTenderPanel {
                 } else {
                     iInvoiceAddress.setFocus();
                 }
-            }
-        });
+
+            });
 
         iCustomer.setModel(SSCustomerTableModel.getDropDownModel());
         iCustomer.setSearchColumns(0, 1);
         iCustomer.setAllowCustomValues(true);
         iCustomer.addSelectionListener(
-                new SSSelectionListener<SSCustomer>() {
+                new SSSelectionListener<>() {
             public void selected(SSCustomer selected) {
                 if (selected != null) {
                     iModel.setCustomer(selected);
@@ -248,7 +244,7 @@ public class SSTenderPanel {
         iCurrency.setEditingFactory(SSCurrencyTableModel.getEditingFactory(iOwner));
 
         iCurrency.getComboBox().addSelectionListener(
-                new SSSelectionListener<SSCurrency>() {
+                new SSSelectionListener<>() {
             public void selected(SSCurrency selected) {
                 if (selected != null) {
                     iCurrencyRate.setValue(selected.getExchangeRate());
@@ -270,57 +266,57 @@ public class SSTenderPanel {
         iPaymentTerm.getComboBox().setSearchColumns(0);
         iPaymentTerm.setEditingFactory(SSPaymentTermTableModel.getEditingFactory(iOwner));
 
-        iTaxRate1.addPropertyChangeListener("value", new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent evt) {
+        iTaxRate1.addPropertyChangeListener("value", evt -> {
+
                 // Momssats 1
                 iTender.setTaxRate1(iTaxRate1.getValue());
                 updateTaxTexts();
                 updateSumFields();
-            }
-        });
-        iTaxRate2.addPropertyChangeListener("value", new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent evt) {
+
+            });
+        iTaxRate2.addPropertyChangeListener("value", evt -> {
+
                 // Momssats 2
                 iTender.setTaxRate2(iTaxRate2.getValue());
                 updateTaxTexts();
                 updateSumFields();
-            }
-        });
-        iTaxRate3.addPropertyChangeListener("value", new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent evt) {
+
+            });
+        iTaxRate3.addPropertyChangeListener("value", evt -> {
+
                 // Momssats
                 iTender.setTaxRate3(iTaxRate3.getValue());
                 updateTaxTexts();
                 updateSumFields();
-            }
-        });
+
+            });
 
         /**
          *
          */
-        iTaxFree.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iTaxFree.addActionListener(e -> {
+
                 // Momsfritt
                 iTender.setTaxFree(iTaxFree.isSelected());
                 updateSumFields();
-            }
-        });
+
+            });
 
         iCurrencyCalculatorButton.addActionListener(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+                e -> {
 
-                SSCurrency iCompanyCurrency = SSDB.getInstance().getCurrentCompany().getCurrency();
-                SSCurrency iCurrentCurrency = iCurrency.getSelected();
 
-                if (iCompanyCurrency == null || iCurrentCurrency == null) {
-                    new SSInformationDialog(iOwner, "tenderframe.selectcurrency");
-                    return;
-                }
-                SSExchangeRateDialog.showDialog(iOwner, iTender, iCompanyCurrency,
-                        iCurrentCurrency, iModel);
-            }
-        });
+                        SSCurrency iCompanyCurrency = SSDB.getInstance().getCurrentCompany().getCurrency();
+                        SSCurrency iCurrentCurrency = iCurrency.getSelected();
+
+                        if (iCompanyCurrency == null || iCurrentCurrency == null) {
+                            new SSInformationDialog(iOwner, "tenderframe.selectcurrency");
+                            return;
+                        }
+                        SSExchangeRateDialog.showDialog(iOwner, iTender, iCompanyCurrency,
+                                iCurrentCurrency, iModel);
+
+                    });
 
         SSButtonGroup iGroup = new SSButtonGroup(true);
 
@@ -695,21 +691,13 @@ public class SSTenderPanel {
 
     public void addKeyListeners() {
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                iCustomer.getComponent(0).requestFocusInWindow();
-            }
-        });
+        SwingUtilities.invokeLater(() -> iCustomer.getComponent(0).requestFocusInWindow());
 
         iCustomer.getComponent(0).addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iCustomerName.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iCustomerName.requestFocusInWindow());
                 }
             }
         });
@@ -718,11 +706,7 @@ public class SSTenderPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iOurContactPerson.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iOurContactPerson.requestFocusInWindow());
                 }
             }
         });
@@ -731,11 +715,7 @@ public class SSTenderPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iYourContactPerson.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iYourContactPerson.requestFocusInWindow());
                 }
             }
         });
@@ -744,11 +724,7 @@ public class SSTenderPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iDate.getEditor().getComponent(0).requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iDate.getEditor().getComponent(0).requestFocusInWindow());
                 }
             }
         });
@@ -757,11 +733,7 @@ public class SSTenderPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iExpires.getEditor().getComponent(0).requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iExpires.getEditor().getComponent(0).requestFocusInWindow());
                 }
             }
         });
@@ -771,11 +743,7 @@ public class SSTenderPanel {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     SwingUtilities.invokeLater(
-                            new Runnable() {
-                        public void run() {
-                            iPaymentTerm.getComboBox().getComponent(0).requestFocusInWindow();
-                        }
-                    });
+                            () -> iPaymentTerm.getComboBox().getComponent(0).requestFocusInWindow());
                 }
             }
         });
@@ -785,11 +753,7 @@ public class SSTenderPanel {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     SwingUtilities.invokeLater(
-                            new Runnable() {
-                        public void run() {
-                            iDeliveryTerm.getComboBox().getComponent(0).requestFocusInWindow();
-                        }
-                    });
+                            () -> iDeliveryTerm.getComboBox().getComponent(0).requestFocusInWindow());
                 }
             }
         });
@@ -799,11 +763,7 @@ public class SSTenderPanel {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     SwingUtilities.invokeLater(
-                            new Runnable() {
-                        public void run() {
-                            iDeliveryWay.getComboBox().getComponent(0).requestFocusInWindow();
-                        }
-                    });
+                            () -> iDeliveryWay.getComboBox().getComponent(0).requestFocusInWindow());
                 }
             }
         });
@@ -813,11 +773,7 @@ public class SSTenderPanel {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     SwingUtilities.invokeLater(
-                            new Runnable() {
-                        public void run() {
-                            iCurrency.getComboBox().getComponent(0).requestFocusInWindow();
-                        }
-                    });
+                            () -> iCurrency.getComboBox().getComponent(0).requestFocusInWindow());
                 }
             }
         });
@@ -826,11 +782,7 @@ public class SSTenderPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iCurrencyRate.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iCurrencyRate.requestFocusInWindow());
                 }
             }
         });
@@ -839,12 +791,12 @@ public class SSTenderPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
+                    SwingUtilities.invokeLater(() -> {
+
                             iTable.requestFocusInWindow();
                             iTable.changeSelection(0, 0, false, false);
-                        }
-                    });
+
+                        });
                 }
             }
         });
@@ -853,11 +805,7 @@ public class SSTenderPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iButtonPanel.getCancelButton().requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iButtonPanel.getCancelButton().requestFocusInWindow());
                 }
             }
         });
@@ -866,11 +814,7 @@ public class SSTenderPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iButtonPanel.getOkButton().requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iButtonPanel.getOkButton().requestFocusInWindow());
                 }
             }
         });
@@ -878,26 +822,22 @@ public class SSTenderPanel {
         iNumber.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
-                        iCustomer.getComponent(0).requestFocusInWindow();
-                    }
-                });
+                SwingUtilities.invokeLater(() -> iCustomer.getComponent(0).requestFocusInWindow());
             }
         });
 
         iInvoiceAddress.addKeyListeners();
         iDeliveryAddress.addKeyListeners();
 
-        iUseInvoiceForDelivery.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iUseInvoiceForDelivery.addActionListener(e -> {
+
                 if (!iUseInvoiceForDelivery.isSelected()) {
                     iDeliveryAddress.setFocus();
                 } else {
                     iInvoiceAddress.setFocus();
                 }
-            }
-        });
+
+            });
     }
 
     /**

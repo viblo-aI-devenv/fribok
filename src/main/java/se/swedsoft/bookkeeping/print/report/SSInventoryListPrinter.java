@@ -73,12 +73,12 @@ public class SSInventoryListPrinter extends SSPrinter {
 
         iDataSource = new SSDefaultJasperDataSource(iPrinter.getModel());
 
-        SSDefaultTableModel<SSInventory> iModel = new SSDefaultTableModel<SSInventory>() {
+        SSDefaultTableModel<SSInventory> iModel = new SSDefaultTableModel<>() {
 
             DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSInventory.class;
             }
 
@@ -118,11 +118,7 @@ public class SSInventoryListPrinter extends SSPrinter {
         iModel.addColumn("inventory.text");
         iModel.addColumn("inventory.rows");
 
-        Collections.sort(iInventories, new Comparator<SSInventory>() {
-            public int compare(SSInventory o1, SSInventory o2) {
-                return o1.getNumber() - o2.getNumber();
-            }
-        });
+        Collections.sort(iInventories, (o1, o2) -> o1.getNumber() - o2.getNumber());
 
         iModel.setObjects(iInventories);
 
@@ -142,10 +138,10 @@ public class SSInventoryListPrinter extends SSPrinter {
             setDetail("inventorylist.row.jrxml");
             setSummary("inventorylist.row.jrxml");
 
-            iModel = new SSDefaultTableModel<SSInventoryRow>() {
+            iModel = new SSDefaultTableModel<>() {
 
                 @Override
-                public Class getType() {
+                public Class<?> getType() {
                     return SSSaleRow.class;
                 }
 

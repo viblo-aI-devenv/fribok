@@ -35,9 +35,9 @@ public abstract class SSTableModel<T> extends AbstractTableModel {
      * Default constructor.
      */
     public SSTableModel() {
-        iColumns = new LinkedList<SSTableColumn<T>>();
-        iObjects = new LinkedList<T     >();
-        iEditable = new HashMap<SSTableColumn<T>, Boolean>();
+        iColumns = new LinkedList<>();
+        iObjects = new LinkedList<>();
+        iEditable = new HashMap<>();
 
     }
 
@@ -84,7 +84,7 @@ public abstract class SSTableModel<T> extends AbstractTableModel {
      * @param pObjects The objects to display.
      */
     public void setObjects(T... pObjects) {
-        iObjects = new LinkedList<T>();
+        iObjects = new LinkedList<>();
         iObjects.addAll(Arrays.asList(pObjects));
         fireTableDataChanged();
     }
@@ -274,7 +274,7 @@ public abstract class SSTableModel<T> extends AbstractTableModel {
      *
      * @return The current data type.
      */
-    public abstract Class getType();
+    public abstract Class<?> getType();
 
     /**
      * Returns {@code Object.class} regardless of {@code columnIndex}.
@@ -312,7 +312,7 @@ public abstract class SSTableModel<T> extends AbstractTableModel {
         if (iIndices.length == 0) {
             iFiltered = iObjects;
         } else {
-            iFiltered = new ArrayList<T>(iIndices.length);
+            iFiltered = new ArrayList<>(iIndices.length);
             for (int i : iIndices) {
                 iFiltered.add(getObject(i));
             }

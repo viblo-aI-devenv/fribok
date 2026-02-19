@@ -108,7 +108,7 @@ public class SIEDimension {
     }
 
     public static List<SIEDimension> getDefaultDimensions() {
-        List<SIEDimension> iDimensions = new LinkedList<SIEDimension>();
+        List<SIEDimension> iDimensions = new LinkedList<>();
 
         iDimensions.add(new SIEDimension(1, true, "Kostnadsställe / Resultatenhet"));
         iDimensions.add(new SIEDimension(2, true, "Kostnadsbärare"));

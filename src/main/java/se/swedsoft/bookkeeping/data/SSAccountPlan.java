@@ -50,7 +50,7 @@ public class SSAccountPlan implements Serializable, Cloneable, SSTableSearchable
      * Default constructor.
      */
     public SSAccountPlan() {
-        iAccounts = new LinkedList<SSAccount>();
+        iAccounts = new LinkedList<>();
         iType = SSAccountPlanType.get("BAS95");
     }
 
@@ -99,7 +99,7 @@ public class SSAccountPlan implements Serializable, Cloneable, SSTableSearchable
         iType = pAccountPlan.iType;
         iBaseName = pAccountPlan.iBaseName;
         iAssessementYear = pAccountPlan.iAssessementYear;
-        iAccounts = new LinkedList<SSAccount>();
+        iAccounts = new LinkedList<>();
 
         for (SSAccount iAccount : pAccountPlan.getAccounts()) {
             iAccounts.add(new SSAccount(iAccount));
@@ -216,7 +216,7 @@ public class SSAccountPlan implements Serializable, Cloneable, SSTableSearchable
      */
     public List<SSAccount> getAccounts() {
         if (iAccounts == null) {
-            iAccounts = new LinkedList<SSAccount>();
+            iAccounts = new LinkedList<>();
         }
 
         return iAccounts;
@@ -229,11 +229,7 @@ public class SSAccountPlan implements Serializable, Cloneable, SSTableSearchable
     public void setAccounts(List<SSAccount> iAccounts) {
         this.iAccounts = iAccounts;
 
-        Collections.sort(iAccounts, new Comparator<SSAccount>() {
-            public int compare(SSAccount o1, SSAccount o2) {
-                return o1.getNumber() - o2.getNumber();
-            }
-        });
+        Collections.sort(iAccounts, (o1, o2) -> o1.getNumber() - o2.getNumber());
 
         iActiveAccounts = null;
         iAccountMap = null;
@@ -282,7 +278,7 @@ public class SSAccountPlan implements Serializable, Cloneable, SSTableSearchable
      *
      */
     public void clear() {
-        iAccounts = new LinkedList<SSAccount>();
+        iAccounts = new LinkedList<>();
         iActiveAccounts = null;
         iAccountMap = null;
     }
@@ -352,7 +348,7 @@ public class SSAccountPlan implements Serializable, Cloneable, SSTableSearchable
     public List<SSAccount> getActiveAccounts() {
         // If the cache have been cleared for some reason, we have to re-create it.
         if (iActiveAccounts == null) {
-            iActiveAccounts = new ArrayList<SSAccount>(iAccounts.size());
+            iActiveAccounts = new ArrayList<>(iAccounts.size());
 
             for (SSAccount iCurrent: iAccounts) {
                 if (iCurrent.isActive()) {
@@ -371,7 +367,7 @@ public class SSAccountPlan implements Serializable, Cloneable, SSTableSearchable
     public Map<Integer, SSAccount> getAccountMap() {
         // If the cache have been cleared for some reason, we have to re-create it.
         if (iAccountMap == null) {
-            iAccountMap = new HashMap<Integer, SSAccount>();
+            iAccountMap = new HashMap<>();
 
             for (SSAccount iCurrent: iAccounts) {
                 iAccountMap.put(iCurrent.getNumber(), iCurrent);

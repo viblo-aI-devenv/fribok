@@ -54,52 +54,52 @@ public class SSSupplierDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSSupplier iSupplier = iPanel.getSupplier();
+        final ActionListener iSaveAction = e -> {
 
-                if (iSupplier.getOutpaymentNumber() == null) {
-                    iSupplier.setOutpaymentNumber(SSSupplierMath.getOutpaymentNumber());
+                SSSupplier iSupplier1 = iPanel.getSupplier();
+
+                if (iSupplier1.getOutpaymentNumber() == null) {
+                    iSupplier1.setOutpaymentNumber(SSSupplierMath.getOutpaymentNumber());
                 }
 
-                List<SSSupplier> iSuppliers = new LinkedList<SSSupplier>(
+                List<SSSupplier> iSuppliers = new LinkedList<>(
                         SSDB.getInstance().getSuppliers());
 
                 for (SSSupplier iTSupplier : iSuppliers) {
-                    if (iSupplier.equals(iTSupplier)) {
+                    if (iSupplier1.equals(iTSupplier)) {
                         new SSErrorDialog(iMainFrame, "supplierframe.duplicate",
-                                iSupplier.getNumber());
+                                iSupplier1.getNumber());
                         SSPostLock.removeLock("importsupplier");
                         return;
                     }
 
-                    if (iSupplier.getOutpaymentNumber().equals(
+                    if (iSupplier1.getOutpaymentNumber().equals(
                             iTSupplier.getOutpaymentNumber())) {
                         new SSErrorDialog(iMainFrame, "supplierframe.dupopnr",
-                                iSupplier.getOutpaymentNumber());
+                                iSupplier1.getOutpaymentNumber());
                         SSPostLock.removeLock("importsupplier");
                         return;
                     }
                 }
 
-                SSDB.getInstance().addSupplier(iSupplier);
+                SSDB.getInstance().addSupplier(iSupplier1);
 
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
                 }
                 SSPostLock.removeLock("importsupplier");
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 SSPostLock.removeLock("importsupplier");
                 iDialog.closeDialog();
-            }
-        });
+
+            });
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override
@@ -149,8 +149,8 @@ public class SSSupplierDialog {
         // iPanel.setEditPanel(true);
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        final ActionListener iSaveAction = e -> {
+
                 SSSupplier iSupplier = iPanel.getSupplier();
 
                 if (iSupplier.getOutpaymentNumber() == null) {
@@ -158,7 +158,7 @@ public class SSSupplierDialog {
                 }
 
                 if (!iSupplier.getOutpaymentNumber().equals(iOriginalOutPaymentNumber)) {
-                    List<SSSupplier> iSuppliers = new LinkedList<SSSupplier>(
+                    List<SSSupplier> iSuppliers = new LinkedList<>(
                             SSDB.getInstance().getSuppliers());
 
                     for (SSSupplier iTSupplier : iSuppliers) {
@@ -178,17 +178,17 @@ public class SSSupplierDialog {
                 }
                 SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
-            }
-        });
+
+            });
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override
@@ -242,52 +242,52 @@ public class SSSupplierDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSSupplier iSupplier = iPanel.getSupplier();
+        final ActionListener iSaveAction = e -> {
 
-                if (iSupplier.getOutpaymentNumber() == null) {
-                    iSupplier.setOutpaymentNumber(SSSupplierMath.getOutpaymentNumber());
+                SSSupplier iSupplier1 = iPanel.getSupplier();
+
+                if (iSupplier1.getOutpaymentNumber() == null) {
+                    iSupplier1.setOutpaymentNumber(SSSupplierMath.getOutpaymentNumber());
                 }
 
-                List<SSSupplier> iSuppliers = new LinkedList<SSSupplier>(
+                List<SSSupplier> iSuppliers = new LinkedList<>(
                         SSDB.getInstance().getSuppliers());
 
                 for (SSSupplier iTSupplier : iSuppliers) {
-                    if (iSupplier.equals(iTSupplier)) {
+                    if (iSupplier1.equals(iTSupplier)) {
                         new SSErrorDialog(iMainFrame, "supplierframe.duplicate",
-                                iSupplier.getNumber());
+                                iSupplier1.getNumber());
                         SSPostLock.removeLock("importsupplier");
                         return;
                     }
 
-                    if (iSupplier.getOutpaymentNumber().equals(
+                    if (iSupplier1.getOutpaymentNumber().equals(
                             iTSupplier.getOutpaymentNumber())) {
                         new SSErrorDialog(iMainFrame, "supplierframe.dupopnr",
-                                iSupplier.getOutpaymentNumber());
+                                iSupplier1.getOutpaymentNumber());
                         SSPostLock.removeLock("importsupplier");
                         return;
                     }
                 }
 
-                SSDB.getInstance().addSupplier(iSupplier);
+                SSDB.getInstance().addSupplier(iSupplier1);
 
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
                 }
                 SSPostLock.removeLock("importsupplier");
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelAction(e -> {
+
                 SSPostLock.removeLock("importsupplier");
                 iDialog.closeDialog();
-            }
-        });
+
+            });
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override

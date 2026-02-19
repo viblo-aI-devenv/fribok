@@ -37,25 +37,25 @@ public class SSOwnReportDialog {
 
         iDialog.add(iPanel.getPanel());
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        final ActionListener iSaveAction = e -> {
+
                 SSOwnReport iOwnReport = iPanel.getOwnReport();
 
                 SSDB.getInstance().addOwnReport(iOwnReport);
 
                 iDialog.setVisible(false);
                 iDialog.dispose();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        final ActionListener iCancelAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        final ActionListener iCancelAction = e -> {
+
                 iDialog.setVisible(false);
                 iDialog.dispose();
-            }
-        };
+
+            };
 
         iPanel.addCancelAction(iCancelAction);
 
@@ -96,8 +96,8 @@ public class SSOwnReportDialog {
 
         iDialog.add(iPanel.getPanel());
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        final ActionListener iSaveAction = e -> {
+
                 SSOwnReport iOwnReport = iPanel.getOwnReport();
 
                 SSDB.getInstance().updateOwnReport(iOwnReport);
@@ -105,18 +105,18 @@ public class SSOwnReportDialog {
                 SSPostLock.removeLock(lockString);
                 iDialog.setVisible(false);
                 iDialog.dispose();
-            }
-        };
+
+            };
 
         iPanel.addOkAction(iSaveAction);
 
-        final ActionListener iCancelAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        final ActionListener iCancelAction = e -> {
+
                 SSPostLock.removeLock(lockString);
                 iDialog.setVisible(false);
                 iDialog.dispose();
-            }
-        };
+
+            };
 
         iPanel.addCancelAction(iCancelAction);
 

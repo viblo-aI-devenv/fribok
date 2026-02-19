@@ -9,6 +9,7 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -102,7 +103,7 @@ public class SSInvoiceMath extends SSSaleMath {
 
     public static void calculateSaldos() {
         if (iSaldoMap == null) {
-            iSaldoMap = new HashMap<Integer, BigDecimal>();
+            iSaldoMap = new HashMap<>();
         }
         HashMap<Integer, BigDecimal> iInpaymentSum = SSInpaymentMath.getSumsForInvoices();
 
@@ -130,7 +131,7 @@ public class SSInvoiceMath extends SSSaleMath {
     }
 
     public static Map<Integer, BigDecimal> getSaldos(Date iDate) {
-        Map<Integer, BigDecimal> iSaldos = new HashMap<Integer, BigDecimal>();
+        Map<Integer, BigDecimal> iSaldos = new HashMap<>();
 
         HashMap<Integer, BigDecimal> iInpaymentSum = SSInpaymentMath.getSumsForInvoices(
                 iDate);
@@ -195,7 +196,7 @@ public class SSInvoiceMath extends SSSaleMath {
      * @return map of the invoices and their saldo
      */
     public static Map<SSInvoice, BigDecimal> getSaldo(List<SSInvoice> iInvoices, Date iDate) {
-        Map<SSInvoice, BigDecimal> iSaldos = new HashMap<SSInvoice, BigDecimal>();
+        Map<SSInvoice, BigDecimal> iSaldos = new HashMap<>();
 
         // Ceil the date so the before and after comparisions will be correct
         iDate = SSDateMath.ceil(iDate);
@@ -291,14 +292,9 @@ public class SSInvoiceMath extends SSSaleMath {
      * @return the order or null
      */
     public static List<SSOrder> getOrdersForInvoice(List<SSOrder> iOrders, SSInvoice iInvoice) {
-        List<SSOrder> iFiltered = new LinkedList<SSOrder>();
-
-        for (SSOrder iOrder : iOrders) {
-            if (iOrder.hasInvoice(iInvoice)) {
-                iFiltered.add(iOrder);
-            }
-        }
-        return iFiltered;
+        return iOrders.stream()
+                .filter(iOrder -> iOrder.hasInvoice(iInvoice))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -319,28 +315,21 @@ public class SSInvoiceMath extends SSSaleMath {
      * @return the invoices for the customer
      */
     public static List<SSInvoice> getInvoicesForCustomer(List<SSInvoice> iInvoices, SSCustomer iCustomer) {
-        List<SSInvoice> iFiltered = new LinkedList<SSInvoice>();
-
-        for (SSInvoice iInvoice : iInvoices) {
-            if (iInvoice.hasCustomer(iCustomer)) {
-                iFiltered.add(iInvoice);
-            }
-
-        }
-
-        return iFiltered;
+        return iInvoices.stream()
+                .filter(iInvoice -> iInvoice.hasCustomer(iCustomer))
+                .collect(Collectors.toList());
     }
 
     public static Map<String, List<SSInvoice>> getInvoicesforCustomers() {
         List<SSInvoice> iInvoices = SSDB.getInstance().getInvoices();
-        Map<String, List<SSInvoice>> iMap = new HashMap<String, List<SSInvoice>>();
+        Map<String, List<SSInvoice>> iMap = new HashMap<>();
 
         for (SSInvoice iInvoice : iInvoices) {
             if (iInvoice.getCustomerNr() != null) {
                 if (iMap.containsKey(iInvoice.getCustomerNr())) {
                     iMap.get(iInvoice.getCustomerNr()).add(iInvoice);
                 } else {
-                    List<SSInvoice> iTemp = new LinkedList<SSInvoice>();
+                    List<SSInvoice> iTemp = new LinkedList<>();
 
                     iTemp.add(iInvoice);
                     iMap.put(iInvoice.getCustomerNr(), iTemp);
@@ -370,16 +359,9 @@ public class SSInvoiceMath extends SSSaleMath {
      * @return the invoices for the customer
      */
     public static List<SSInvoice> getInvoicesForCustomer(List<SSInvoice> iInvoices, SSCustomer iCustomer, Date iDate) {
-        List<SSInvoice> iFiltered = new LinkedList<SSInvoice>();
-
-        for (SSInvoice iInvoice : iInvoices) {
-            if (iInvoice.hasCustomer(iCustomer) && inPeriod(iInvoice, iDate)) {
-                iFiltered.add(iInvoice);
-            }
-
-        }
-
-        return iFiltered;
+        return iInvoices.stream()
+                .filter(iInvoice -> iInvoice.hasCustomer(iCustomer) && inPeriod(iInvoice, iDate))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -398,7 +380,7 @@ public class SSInvoiceMath extends SSSaleMath {
      * @return list of invoices
      */
     public static List<SSInvoice> getPayedOrCreditedInvoices(List<SSInvoice> iInvoices) {
-        List<SSInvoice> iFiltered = new LinkedList<SSInvoice>();
+        List<SSInvoice> iFiltered = new LinkedList<>();
 
         for (SSInvoice iInvoice : iInvoices) {
             BigDecimal iSaldo = getSaldo(iInvoice.getNumber());
@@ -426,7 +408,7 @@ public class SSInvoiceMath extends SSSaleMath {
      * @return list of invoices
      */
     public static List<SSInvoice> getNonPayedOrCreditedInvoices(List<SSInvoice> iInvoices) {
-        List<SSInvoice> iFiltered = new LinkedList<SSInvoice>();
+        List<SSInvoice> iFiltered = new LinkedList<>();
 
         for (SSInvoice iInvoice : iInvoices) {
             BigDecimal iSaldo = getSaldo(iInvoice.getNumber());
@@ -523,9 +505,9 @@ public class SSInvoiceMath extends SSSaleMath {
     }
 
     public static Map<String, Integer> getStockInfluencing(List<? extends SSInvoice> iInvoices) {
-        Map<String, Integer> iInvoiceCount = new HashMap<String, Integer>();
-        List<String> iParcelProducts = new LinkedList<String>();
-        List<SSProduct> iProducts = new LinkedList<SSProduct>(
+        Map<String, Integer> iInvoiceCount = new HashMap<>();
+        List<String> iParcelProducts = new LinkedList<>();
+        List<SSProduct> iProducts = new LinkedList<>(
                 SSDB.getInstance().getProducts());
 
         for (SSProduct iProduct : iProducts) {

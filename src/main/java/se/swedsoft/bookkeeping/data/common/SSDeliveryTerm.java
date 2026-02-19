@@ -103,7 +103,7 @@ public class SSDeliveryTerm implements Serializable, SSTableSearchable {
      * @return
      */
     public static List<SSDeliveryTerm> getDefaultDeliveryTerms() {
-        List<SSDeliveryTerm> iDeliveryTerms = new LinkedList<SSDeliveryTerm>();
+        List<SSDeliveryTerm> iDeliveryTerms = new LinkedList<>();
 
         iDeliveryTerms.add(new SSDeliveryTerm("FK", "Fritt kund"));
         iDeliveryTerms.add(new SSDeliveryTerm("FVL", "Fritt vårt lager"));

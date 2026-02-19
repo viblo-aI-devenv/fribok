@@ -34,14 +34,14 @@ public class SSAccountPlanRowTableModel extends SSEditableTableModel<SSAccount> 
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSAccount.class;
     }
 
     /**
      * Aktivt
      */
-    public static SSTableColumn<SSAccount> COLUMN_ACTIVE = new SSTableColumn<SSAccount>(
+    public static SSTableColumn<SSAccount> COLUMN_ACTIVE = new SSTableColumn<>(
             SSBundle.getBundle().getString("accounttable.column.3")) {
         @Override
         public Object getValue(SSAccount iAccount) {
@@ -67,7 +67,7 @@ public class SSAccountPlanRowTableModel extends SSEditableTableModel<SSAccount> 
     /**
      * Nummer
      */
-    public static SSTableColumn<SSAccount> COLUMN_NUMBER = new SSTableColumn<SSAccount>(
+    public static SSTableColumn<SSAccount> COLUMN_NUMBER = new SSTableColumn<>(
             SSBundle.getBundle().getString("accounttable.column.1")) {
         @Override
         public Object getValue(SSAccount iAccount) {
@@ -93,7 +93,7 @@ public class SSAccountPlanRowTableModel extends SSEditableTableModel<SSAccount> 
     /**
      * Beskrivning
      */
-    public static SSTableColumn<SSAccount> COLUMN_DESCRIPTION = new SSTableColumn<SSAccount>(
+    public static SSTableColumn<SSAccount> COLUMN_DESCRIPTION = new SSTableColumn<>(
             SSBundle.getBundle().getString("accounttable.column.2")) {
         @Override
         public Object getValue(SSAccount iAccount) {
@@ -119,7 +119,7 @@ public class SSAccountPlanRowTableModel extends SSEditableTableModel<SSAccount> 
     /**
      * Beskrivning
      */
-    public static SSTableColumn<SSAccount> COLUMN_VATCODE = new SSTableColumn<SSAccount>(
+    public static SSTableColumn<SSAccount> COLUMN_VATCODE = new SSTableColumn<>(
             SSBundle.getBundle().getString("accounttable.column.4")) {
         @Override
         public Object getValue(SSAccount iAccount) {
@@ -182,7 +182,7 @@ public class SSAccountPlanRowTableModel extends SSEditableTableModel<SSAccount> 
     /**
      * Beskrivning
      */
-    public static SSTableColumn<SSAccount> COLUMN_SRUCODE = new SSTableColumn<SSAccount>(
+    public static SSTableColumn<SSAccount> COLUMN_SRUCODE = new SSTableColumn<>(
             SSBundle.getBundle().getString("accounttable.column.5")) {
         @Override
         public Object getValue(SSAccount iAccount) {
@@ -208,7 +208,7 @@ public class SSAccountPlanRowTableModel extends SSEditableTableModel<SSAccount> 
     /**
      * Rapportkod
      */
-    public static SSTableColumn<SSAccount> COLUMN_REPORTCODE = new SSTableColumn<SSAccount>(
+    public static SSTableColumn<SSAccount> COLUMN_REPORTCODE = new SSTableColumn<>(
             SSBundle.getBundle().getString("accounttable.column.6")) {
         @Override
         public Object getValue(SSAccount iAccount) {
@@ -235,7 +235,7 @@ public class SSAccountPlanRowTableModel extends SSEditableTableModel<SSAccount> 
      * Projekt krävs
      */
 
-    public static SSTableColumn<SSAccount> COLUMN_PROJECT = new SSTableColumn<SSAccount>(
+    public static SSTableColumn<SSAccount> COLUMN_PROJECT = new SSTableColumn<>(
             SSBundle.getBundle().getString("accounttable.column.7")) {
         @Override
         public Object getValue(SSAccount iAccount) {
@@ -262,7 +262,7 @@ public class SSAccountPlanRowTableModel extends SSEditableTableModel<SSAccount> 
      * Resultatenhet krävs
      */
 
-    public static SSTableColumn<SSAccount> COLUMN_RESULTUNIT = new SSTableColumn<SSAccount>(
+    public static SSTableColumn<SSAccount> COLUMN_RESULTUNIT = new SSTableColumn<>(
             SSBundle.getBundle().getString("accounttable.column.8")) {
         @Override
         public Object getValue(SSAccount iAccount) {

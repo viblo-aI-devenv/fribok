@@ -41,19 +41,19 @@ public class SSSelectInvoiceDialog extends SSDialog {
 
         pack();
 
-        iButtonPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iButtonPanel.addCancelActionListener(e -> {
+
                 setModalResult(JOptionPane.CANCEL_OPTION);
                 setVisible(false);
-            }
-        });
 
-        iButtonPanel.addOkActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            });
+
+        iButtonPanel.addOkActionListener(e -> {
+
                 setModalResult(JOptionPane.OK_OPTION);
                 setVisible(false);
-            }
-        });
+
+            });
 
         getRootPane().setDefaultButton(iButtonPanel.getOkButton());
 

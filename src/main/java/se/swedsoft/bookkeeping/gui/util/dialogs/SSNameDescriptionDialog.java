@@ -35,20 +35,20 @@ public class SSNameDescriptionDialog extends SSDialog {
         add(iPanel, BorderLayout.CENTER);
 
         iModalResult = JOptionPane.CANCEL_OPTION;
-        iOkButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iOkButton.addActionListener(e -> {
+
                 iModalResult = JOptionPane.OK_OPTION;
 
                 closeDialog();
-            }
-        });
 
-        iCancelButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            });
+
+        iCancelButton.addActionListener(e -> {
+
                 iModalResult = JOptionPane.CANCEL_OPTION;
                 closeDialog();
-            }
-        });
+
+            });
         pack();
         setLocationRelativeTo(iFrame);
     }
@@ -62,20 +62,20 @@ public class SSNameDescriptionDialog extends SSDialog {
         add(iPanel, BorderLayout.CENTER);
 
         iModalResult = JOptionPane.CANCEL_OPTION;
-        iOkButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iOkButton.addActionListener(e -> {
+
                 iModalResult = JOptionPane.OK_OPTION;
 
                 closeDialog();
-            }
-        });
 
-        iCancelButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            });
+
+        iCancelButton.addActionListener(e -> {
+
                 iModalResult = JOptionPane.CANCEL_OPTION;
                 closeDialog();
-            }
-        });
+
+            });
         pack();
         setLocationRelativeTo(iDialog);
     }

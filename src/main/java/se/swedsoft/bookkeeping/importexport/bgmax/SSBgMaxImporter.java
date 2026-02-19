@@ -42,7 +42,7 @@ public class SSBgMaxImporter {
      */
     public static BgMaxFile Import(File iFile) throws SSImportException {
 
-        List<String> iLines = new LinkedList<String>();
+        List<String> iLines = new LinkedList<>();
 
         try {
             BufferedReader iReader = new BufferedReader(new FileReader(iFile));
@@ -78,7 +78,7 @@ public class SSBgMaxImporter {
 
         DateFormat iDateFormat = new SimpleDateFormat("yyyyMMdd");
 
-        List<SSInpayment> iInpayments = new LinkedList<SSInpayment>();
+        List<SSInpayment> iInpayments = new LinkedList<>();
 
         for (BgMaxAvsnitt iAvsnitt : iBgMaxFile.iAvsnitts) {
             SSInpayment iInpayment = new SSInpayment();

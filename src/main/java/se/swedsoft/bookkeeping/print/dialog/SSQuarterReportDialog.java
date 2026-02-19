@@ -36,24 +36,12 @@ public class SSQuarterReportDialog extends SSDialog {
 
         setPanel(iPanel);
 
-        iButtonPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setModalResult(JOptionPane.CANCEL_OPTION, true);
-            }
-        });
-        iButtonPanel.addOkActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setModalResult(JOptionPane.OK_OPTION, true);
-            }
-        });
+        iButtonPanel.addCancelActionListener(e -> setModalResult(JOptionPane.CANCEL_OPTION, true));
+        iButtonPanel.addOkActionListener(e -> setModalResult(JOptionPane.OK_OPTION, true));
 
 	getRootPane().setDefaultButton(iButtonPanel.getOkButton());
 
-        iYearChooser.addChangeListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iQuarterChooser.setDate(iYearChooser.getDate());
-            }
-        });
+        iYearChooser.addChangeListener(e -> iQuarterChooser.setDate(iYearChooser.getDate()));
     }
 
     /**

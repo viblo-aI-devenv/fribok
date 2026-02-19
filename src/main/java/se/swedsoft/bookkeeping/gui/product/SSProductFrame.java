@@ -99,33 +99,29 @@ public class SSProductFrame extends SSDefaultTableFrame {
         // New
         // ***************************
         SSButton iButton = new SSButton("ICON_NEWITEM", "productframe.newbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSProductDialog.newDialog(getMainFrame(), iModel);
-            }
-        });
+                e -> SSProductDialog.newDialog(getMainFrame(), iModel));
 
         iToolBar.add(iButton);
 
         // Edit
         // ***************************
         iButton = new SSButton("ICON_EDITITEM", "productframe.editbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSProduct iSelected = iModel.getSelectedRow(iTable);
-                String iNumber = null;
+                e -> {
 
-                if (iSelected != null) {
-                    iNumber = iSelected.getNumber();
-                    iSelected = getProduct(iSelected);
-                }
-                if (iSelected != null) {
-                    SSProductDialog.editDialog(getMainFrame(), iSelected, iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "productframe.productgone", iNumber);
-                }
-            }
-        });
+                        SSProduct iSelected = iModel.getSelectedRow(iTable);
+                        String iNumber = null;
+
+                        if (iSelected != null) {
+                            iNumber = iSelected.getNumber();
+                            iSelected = getProduct(iSelected);
+                        }
+                        if (iSelected != null) {
+                            SSProductDialog.editDialog(getMainFrame(), iSelected, iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "productframe.productgone", iNumber);
+                        }
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         iToolBar.add(iButton);
         iToolBar.addSeparator();
@@ -133,20 +129,20 @@ public class SSProductFrame extends SSDefaultTableFrame {
         // Copy
         // ***************************
         iButton = new SSButton("ICON_COPYITEM", "productframe.copybutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSProduct iSelected = iModel.getSelectedRow(iTable);
+                e -> {
 
-                String iNumber = iSelected.getNumber();
+                        SSProduct iSelected = iModel.getSelectedRow(iTable);
 
-                iSelected = getProduct(iSelected);
-                if (iSelected != null) {
-                    SSProductDialog.copyDialog(getMainFrame(), iSelected, iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "productframe.productgone", iNumber);
-                }
-            }
-        });
+                        String iNumber = iSelected.getNumber();
+
+                        iSelected = getProduct(iSelected);
+                        if (iSelected != null) {
+                            SSProductDialog.copyDialog(getMainFrame(), iSelected, iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "productframe.productgone", iNumber);
+                        }
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         iToolBar.add(iButton);
         iToolBar.addSeparator();
@@ -154,14 +150,14 @@ public class SSProductFrame extends SSDefaultTableFrame {
         // Delete
         // ***************************
         iButton = new SSButton("ICON_DELETEITEM", "productframe.deletebutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                int[] selected = iTable.getSelectedRows();
-                List<SSProduct> toDelete = iModel.getObjects(selected);
+                e -> {
 
-                deleteSelectedProducts(toDelete);
-            }
-        });
+                        int[] selected = iTable.getSelectedRows();
+                        List<SSProduct> toDelete = iModel.getObjects(selected);
+
+                        deleteSelectedProducts(toDelete);
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         iToolBar.add(iButton);
         iToolBar.addSeparator();
@@ -172,167 +168,158 @@ public class SSProductFrame extends SSDefaultTableFrame {
                 "productframe.importbutton");
 
         iButton2.add("productframe.import.excel",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSExcelFileChooser iFilechooser = SSExcelFileChooser.getInstance();
+                e -> {
 
-                if (iFilechooser.showOpenDialog(getMainFrame())
-                        == JFileChooser.APPROVE_OPTION) {
-                    try {
-                        SSProductImporter iImporter = new SSProductImporter(
-                                iFilechooser.getSelectedFile());
+                        SSExcelFileChooser iFilechooser = SSExcelFileChooser.getInstance();
 
-                        iImporter.doImport();
-                    } catch (IOException ex) {
-                        SSErrorDialog.showDialog(getMainFrame(), "",
-                                ex.getLocalizedMessage());
-                    } catch (SSImportException ex) {
-                        SSErrorDialog.showDialog(getMainFrame(), "",
-                                ex.getLocalizedMessage());
-                    }
-                    iModel.fireTableDataChanged();
-                }
-            }
-        });
+                        if (iFilechooser.showOpenDialog(getMainFrame())
+                                == JFileChooser.APPROVE_OPTION) {
+                            try {
+                                SSProductImporter iImporter = new SSProductImporter(
+                                        iFilechooser.getSelectedFile());
+
+                                iImporter.doImport();
+                            } catch (IOException ex) {
+                                SSErrorDialog.showDialog(getMainFrame(), "",
+                                        ex.getLocalizedMessage());
+                            } catch (SSImportException ex) {
+                                SSErrorDialog.showDialog(getMainFrame(), "",
+                                        ex.getLocalizedMessage());
+                            }
+                            iModel.fireTableDataChanged();
+                        }
+
+                    });
         iButton2.add("productframe.import.xml",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSXMLFileChooser iFilechooser = SSXMLFileChooser.getInstance();
+                e -> {
 
-                iFilechooser.setSelectedFile(new File("Produktlista.xml"));
+                        SSXMLFileChooser iFilechooser = SSXMLFileChooser.getInstance();
 
-                if (iFilechooser.showOpenDialog(getMainFrame())
-                        == JFileChooser.APPROVE_OPTION) {
-                    SSProductImporter iImporter = new SSProductImporter(
-                            iFilechooser.getSelectedFile());
+                        iFilechooser.setSelectedFile(new File("Produktlista.xml"));
 
-                    try {
-                        iImporter.doXMLImport();
-                    } catch (SSImportException e1) {
-                        SSErrorDialog.showDialog(getMainFrame(), "",
-                                e1.getLocalizedMessage());
-                    }
+                        if (iFilechooser.showOpenDialog(getMainFrame())
+                                == JFileChooser.APPROVE_OPTION) {
+                            SSProductImporter iImporter = new SSProductImporter(
+                                    iFilechooser.getSelectedFile());
 
-                }
-            }
-        });
+                            try {
+                                iImporter.doXMLImport();
+                            } catch (SSImportException e1) {
+                                SSErrorDialog.showDialog(getMainFrame(), "",
+                                        e1.getLocalizedMessage());
+                            }
+
+                        }
+
+                    });
         iToolBar.add(iButton2);
 
         // Exportera
         // ***************************
         iButton2 = new SSMenuButton("ICON_EXPORT", "productframe.exportbutton");
         iButton2.add("productframe.export.excel",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSExcelFileChooser iFilechooser = SSExcelFileChooser.getInstance();
-                List<SSProduct> iSelected = iModel.getSelectedRows(iTable);
+                e -> {
 
-                iSelected = getProducts(iSelected);
-                List<SSProduct> iItems;
+                        SSExcelFileChooser iFilechooser = SSExcelFileChooser.getInstance();
+                        List<SSProduct> iSelected = iModel.getSelectedRows(iTable);
 
-                if (iSelected != null) {
-                    int select = SSQueryDialog.showDialog(getMainFrame(),
-                            JOptionPane.YES_NO_CANCEL_OPTION, getTitle(),
-                            SSBundle.getBundle().getString(
-                            "productframe.import.allorselected"));
+                        iSelected = getProducts(iSelected);
+                        List<SSProduct> iItems;
 
-                    switch (select) {
-                    case JOptionPane.YES_OPTION:
-                        iItems = iSelected;
-                        break;
+                        if (iSelected != null) {
+                            int select = SSQueryDialog.showDialog(getMainFrame(),
+                                    JOptionPane.YES_NO_CANCEL_OPTION, getTitle(),
+                                    SSBundle.getBundle().getString(
+                                    "productframe.import.allorselected"));
 
-                    case JOptionPane.NO_OPTION:
-                        iItems = SSDB.getInstance().getProducts();
-                        break;
+                            switch (select) {
+                            case JOptionPane.YES_OPTION:
+                                iItems = iSelected;
+                                break;
 
-                    default:
-                        return;
-                    }
-                } else {
-                    iItems = SSDB.getInstance().getProducts();
-                }
-                iFilechooser.setSelectedFile(new File("Produktlista.xls"));
+                            case JOptionPane.NO_OPTION:
+                                iItems = SSDB.getInstance().getProducts();
+                                break;
 
-                if (iFilechooser.showSaveDialog(getMainFrame())
-                        == JFileChooser.APPROVE_OPTION) {
-                    iItems = getProducts(iItems);
-                    try {
-                        SSProductExporter iExporter = new SSProductExporter(
-                                iFilechooser.getSelectedFile(), iItems);
+                            default:
+                                return;
+                            }
+                        } else {
+                            iItems = SSDB.getInstance().getProducts();
+                        }
+                        iFilechooser.setSelectedFile(new File("Produktlista.xls"));
 
-                        iExporter.doExport();
-                    } catch (IOException ex) {
-                        SSErrorDialog.showDialog(getMainFrame(), "",
-                                ex.getLocalizedMessage());
-                    } catch (SSExportException ex) {
-                        SSErrorDialog.showDialog(getMainFrame(), "",
-                                ex.getLocalizedMessage());
-                    }
-                }
-            }
-        });
+                        if (iFilechooser.showSaveDialog(getMainFrame())
+                                == JFileChooser.APPROVE_OPTION) {
+                            iItems = getProducts(iItems);
+                            try {
+                                SSProductExporter iExporter = new SSProductExporter(
+                                        iFilechooser.getSelectedFile(), iItems);
+
+                                iExporter.doExport();
+                            } catch (IOException ex) {
+                                SSErrorDialog.showDialog(getMainFrame(), "",
+                                        ex.getLocalizedMessage());
+                            } catch (SSExportException ex) {
+                                SSErrorDialog.showDialog(getMainFrame(), "",
+                                        ex.getLocalizedMessage());
+                            }
+                        }
+
+                    });
         iButton2.add("customerframe.export.xml",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                List<SSProduct> iSelected = iModel.getSelectedRows(iTable);
+                e -> {
 
-                iSelected = getProducts(iSelected);
-                List<SSProduct> iItems;
+                        List<SSProduct> iSelected = iModel.getSelectedRows(iTable);
 
-                if (iSelected != null) {
-                    int select = SSQueryDialog.showDialog(getMainFrame(),
-                            JOptionPane.YES_NO_CANCEL_OPTION, getTitle(),
-                            SSBundle.getBundle().getString(
-                            "productframe.import.allorselected"));
+                        iSelected = getProducts(iSelected);
+                        List<SSProduct> iItems;
 
-                    switch (select) {
-                    case JOptionPane.YES_OPTION:
-                        iItems = iSelected;
-                        break;
+                        if (iSelected != null) {
+                            int select = SSQueryDialog.showDialog(getMainFrame(),
+                                    JOptionPane.YES_NO_CANCEL_OPTION, getTitle(),
+                                    SSBundle.getBundle().getString(
+                                    "productframe.import.allorselected"));
 
-                    case JOptionPane.NO_OPTION:
-                        iItems = SSDB.getInstance().getProducts();
-                        break;
+                            switch (select) {
+                            case JOptionPane.YES_OPTION:
+                                iItems = iSelected;
+                                break;
 
-                    default:
-                        return;
-                    }
-                } else {
-                    iItems = SSDB.getInstance().getProducts();
-                }
-                if (!iItems.isEmpty()) {
+                            case JOptionPane.NO_OPTION:
+                                iItems = SSDB.getInstance().getProducts();
+                                break;
 
-                    SSXMLFileChooser iFilechooser = SSXMLFileChooser.getInstance();
+                            default:
+                                return;
+                            }
+                        } else {
+                            iItems = SSDB.getInstance().getProducts();
+                        }
+                        if (!iItems.isEmpty()) {
 
-                    iFilechooser.setSelectedFile(new File("Produktlista.xml"));
+                            SSXMLFileChooser iFilechooser = SSXMLFileChooser.getInstance();
 
-                    if (iFilechooser.showSaveDialog(getMainFrame())
-                            == JFileChooser.APPROVE_OPTION) {
-                        SSProductExporter iExporter = new SSProductExporter(
-                                iFilechooser.getSelectedFile(), iItems);
+                            iFilechooser.setSelectedFile(new File("Produktlista.xml"));
 
-                        iExporter.doXMLExport();
-                    }
-                }
-            }
+                            if (iFilechooser.showSaveDialog(getMainFrame())
+                                    == JFileChooser.APPROVE_OPTION) {
+                                SSProductExporter iExporter = new SSProductExporter(
+                                        iFilechooser.getSelectedFile(), iItems);
 
-        });
+                                iExporter.doXMLExport();
+                            }
+                        }
+
+                    });
         iToolBar.add(iButton2);
         iToolBar.addSeparator();
 
         // Print
         // ***************************
         iButton2 = new SSMenuButton("ICON_PRINT", "productframe.printbutton");
-        iButton2.add("productframe.print.productrevenue", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                ProductRevenueReport();
-            }
-        });
-        iButton2.add("productframe.print.productlist", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                ProductListReport();
-            }
-        });
+        iButton2.add("productframe.print.productrevenue", e -> ProductRevenueReport());
+        iButton2.add("productframe.print.productlist", e -> ProductListReport());
         iToolBar.add(iButton2);
 
         return iToolBar;
@@ -367,25 +354,25 @@ public class SSProductFrame extends SSDefaultTableFrame {
         iModel.setupTable(iTable);
 
         iTable.addDblClickListener(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSProduct iSelected = iModel.getSelectedRow(iTable);
+                e -> {
 
-                if (iSelected == null) {
-                    return;
-                }
+                        SSProduct iSelected = iModel.getSelectedRow(iTable);
 
-                String iNumber = iSelected.getNumber();
+                        if (iSelected == null) {
+                            return;
+                        }
 
-                iSelected = getProduct(iSelected);
+                        String iNumber = iSelected.getNumber();
 
-                if (iSelected != null) {
-                    SSProductDialog.editDialog(getMainFrame(), iSelected, iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "productframe.productgone", iNumber);
-                }
-            }
-        });
+                        iSelected = getProduct(iSelected);
+
+                        if (iSelected != null) {
+                            SSProductDialog.editDialog(getMainFrame(), iSelected, iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "productframe.productgone", iNumber);
+                        }
+
+                    });
 
         iSearchPanel = new SSProductSearchPanel(iModel);
 
@@ -513,11 +500,7 @@ public class SSProductFrame extends SSDefaultTableFrame {
         final SSProductRevenuePrinter iPrinter = new SSProductRevenuePrinter(iProducts,
                 iFrom, iTo);
 
-        SSProgressDialog.runProgress(getMainFrame(), new Runnable() {
-            public void run() {
-                iPrinter.preview(getMainFrame());
-            }
-        });
+        SSProgressDialog.runProgress(getMainFrame(), () -> iPrinter.preview(getMainFrame()));
     }
 
     /**
@@ -552,11 +535,7 @@ public class SSProductFrame extends SSDefaultTableFrame {
             iPrinter = new SSProductListPrinter(iProducts);
         }
 
-        SSProgressDialog.runProgress(getMainFrame(), new Runnable() {
-            public void run() {
-                iPrinter.preview(getMainFrame());
-            }
-        });
+        SSProgressDialog.runProgress(getMainFrame(), () -> iPrinter.preview(getMainFrame()));
     }
 
     private SSProduct getProduct(SSProduct iProduct) {

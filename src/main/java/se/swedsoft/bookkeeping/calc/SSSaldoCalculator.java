@@ -43,7 +43,7 @@ public class SSSaldoCalculator {
     public static Map<SSAccount, BigDecimal> getSaldo(SSNewAccountingYear pYearData, SSMonth pMonth) {
         List<SSVoucher> iVouchers = pYearData.getVouchers();
 
-        Map<SSAccount, BigDecimal> iResult = new HashMap<SSAccount, BigDecimal>();
+        Map<SSAccount, BigDecimal> iResult = new HashMap<>();
 
         // Loop through all vouchers
         for (SSVoucher iVoucher: iVouchers) {
@@ -80,7 +80,7 @@ public class SSSaldoCalculator {
     public static Map<SSAccount, BigDecimal> getSaldo(SSNewAccountingYear pYearData, SSNewProject pProject, SSMonth pMonth) {
         List<SSVoucher> iVouchers = pYearData.getVouchers();
 
-        Map<SSAccount, BigDecimal> iResult = new HashMap<SSAccount, BigDecimal>();
+        Map<SSAccount, BigDecimal> iResult = new HashMap<>();
 
         // Loop through all vouchers
         for (SSVoucher iVoucher: iVouchers) {
@@ -121,7 +121,7 @@ public class SSSaldoCalculator {
     public static Map<SSAccount, BigDecimal> getSaldo(SSNewAccountingYear pYearData, SSNewResultUnit pResultUnit, SSMonth pMonth) {
         List<SSVoucher> iVouchers = pYearData.getVouchers();
 
-        Map<SSAccount, BigDecimal> iResult = new HashMap<SSAccount, BigDecimal>();
+        Map<SSAccount, BigDecimal> iResult = new HashMap<>();
 
         // Loop through all vouchers
         for (SSVoucher iVoucher: iVouchers) {
@@ -160,7 +160,7 @@ public class SSSaldoCalculator {
     public static Map<SSMonth, Map<SSAccount, BigDecimal>> getSaldo(SSNewAccountingYear pYearData) {
         List<SSMonth> iMonths = SSMonth.splitYearIntoMonths(pYearData);
 
-        Map<SSMonth, Map<SSAccount, BigDecimal>> iResult = new HashMap<SSMonth, Map<SSAccount, BigDecimal>>();
+        Map<SSMonth, Map<SSAccount, BigDecimal>> iResult = new HashMap<>();
 
         for (SSMonth iMonth: iMonths) {
             Map<SSAccount, BigDecimal> iSaldo = getSaldo(pYearData, iMonth);
@@ -179,7 +179,7 @@ public class SSSaldoCalculator {
     public static Map<SSMonth, Map<SSAccount, BigDecimal>> getSaldo(SSNewAccountingYear pYearData, SSNewProject pProject) {
         List<SSMonth> iMonths = SSMonth.splitYearIntoMonths(pYearData);
 
-        Map<SSMonth, Map<SSAccount, BigDecimal>> iResult = new HashMap<SSMonth, Map<SSAccount, BigDecimal>>();
+        Map<SSMonth, Map<SSAccount, BigDecimal>> iResult = new HashMap<>();
 
         for (SSMonth iMonth: iMonths) {
             System.out.println(iMonth);
@@ -199,7 +199,7 @@ public class SSSaldoCalculator {
     public static Map<SSMonth, Map<SSAccount, BigDecimal>> getSaldo(SSNewAccountingYear pYearData, SSNewResultUnit pResultUnit) {
         List<SSMonth> iMonths = SSMonth.splitYearIntoMonths(pYearData);
 
-        Map<SSMonth, Map<SSAccount, BigDecimal>> iResult = new HashMap<SSMonth, Map<SSAccount, BigDecimal>>();
+        Map<SSMonth, Map<SSAccount, BigDecimal>> iResult = new HashMap<>();
 
         for (SSMonth iMonth: iMonths) {
             System.out.println(iMonth);

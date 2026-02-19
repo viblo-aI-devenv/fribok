@@ -111,23 +111,19 @@ public class SSMainMenu {
         loadActions();
 
         // Called when the year is changed
-        SSDB.getInstance().addPropertyChangeListener("YEAR"   , new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent evt) {
-                iMenuLoader.setEnabled("Year" , evt.getNewValue() != null);
-            }
-        });
+        SSDB.getInstance().addPropertyChangeListener("YEAR"   , evt -> iMenuLoader.setEnabled("Year" , evt.getNewValue() != null));
 
         // Called when the company is changed
-        SSDB.getInstance().addPropertyChangeListener("COMPANY", new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent evt) {
+        SSDB.getInstance().addPropertyChangeListener("COMPANY", evt -> {
+
                 if(evt.getNewValue() == null){
                     iMenuLoader.setEnabled("Company", false);
                     iMenuLoader.setEnabled("Year"   , false);
                 } else {
                     iMenuLoader.setEnabled("Company", true);
                 }
-            }
-        });
+
+            });
 
     }
 
@@ -168,32 +164,20 @@ public class SSMainMenu {
     private void loadFileActions(){
         // Open company
         // *****************************
-        iMenuLoader.addActionListener("filemenu.companies", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSCompanyFrame.showFrame(iMainFrame, 500, 300);
-            }
-        });
+        iMenuLoader.addActionListener("filemenu.companies", e -> SSCompanyFrame.showFrame(iMainFrame, 500, 300));
 
         // Company settings
         // *****************************
-        iMenuLoader.addActionListener("filemenu.company.settings", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSCompanyDialog.editCurrentDialog(iMainFrame, SSDB.getInstance().getCurrentCompany(), null);
-            }
-        });
+        iMenuLoader.addActionListener("filemenu.company.settings", e -> SSCompanyDialog.editCurrentDialog(iMainFrame, SSDB.getInstance().getCurrentCompany(), null));
 
         // Account plans
         // *****************************
-        iMenuLoader.addActionListener("filemenu.accountplans", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSAccountPlanFrame.showFrame(iMainFrame, 640, 480);
-            }
-        });
+        iMenuLoader.addActionListener("filemenu.accountplans", e -> SSAccountPlanFrame.showFrame(iMainFrame, 640, 480));
 
         // SIE Import
         // *****************************
-        iMenuLoader.addActionListener("filemenu.import.sie", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuLoader.addActionListener("filemenu.import.sie", e -> {
+
                 SSNewCompany iCurrentCompany = SSDB.getInstance().getCurrentCompany();
                 SSPostLock.applyLock("sieimport"+iCurrentCompany.getId());
                 SSCompanyLock.removeLock(iCurrentCompany);
@@ -217,7 +201,7 @@ public class SSMainMenu {
                         SSPostLock.removeLock("sieimport"+iCurrentCompany.getId());
                         iShowDialog = false;
                         new SSErrorDialog(iMainFrame, "importexceptiondialog", ex.getMessage());
-                    } catch (Exception ex) {
+                    } catch (RuntimeException ex) {
                         ex.printStackTrace();
                         iShowDialog = false;
                         SSPostLock.removeLock("sieimport"+iCurrentCompany.getId());
@@ -226,13 +210,13 @@ public class SSMainMenu {
                 SSPostLock.removeLock("sieimport"+iCurrentCompany.getId());
                 if(iShowDialog)
                     new SSInformationDialog(iMainFrame, "sieimport.importdone");
-            }
-        });
+
+            });
 
         // Voucher import
         // *****************************
-        iMenuLoader.addActionListener("filemenu.import.vouchers", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuLoader.addActionListener("filemenu.import.vouchers", e -> {
+
                 final String lockString = "voucher"+SSDB.getInstance().getCurrentCompany().getId()+SSDB.getInstance().getCurrentYear().getId();
                 if (!SSPostLock.applyLock(lockString)) {
                     new SSErrorDialog( iMainFrame, "voucheriscreated");
@@ -256,21 +240,17 @@ public class SSMainMenu {
                     SSPostLock.removeLock(lockString);
                 }
 
-            }
-        });
+
+            });
 
         // SIE export
         // *****************************
-        iMenuLoader.addActionListener("filemenu.export.sie", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSExportSIEDialog.showDialog(iMainFrame);
-            }
-        });
+        iMenuLoader.addActionListener("filemenu.export.sie", e -> SSExportSIEDialog.showDialog(iMainFrame));
 
         // Voucher export
         // *****************************
-        iMenuLoader.addActionListener("filemenu.export.vouchers", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuLoader.addActionListener("filemenu.export.vouchers", e -> {
+
                 SSSIEFileChooser iFileChooser = SSSIEFileChooser.getInstance();
 
                 iFileChooser.setDefaultFileName();
@@ -281,37 +261,33 @@ public class SSMainMenu {
                         iExporter.exportSIE(iFileChooser.getSelectedFile() );
                     } catch (SSExportException ex ) {
                         new SSErrorDialog(iMainFrame, "exportexceptiondialog", ex.getMessage());
-                    } catch (Exception ex) {
+                    } catch (RuntimeException ex) {
                         ex.printStackTrace();
                     }
                 }
-            }
-        });
+
+            });
 
         // Backup all
         // *****************************
-        iMenuLoader.addActionListener("filemenu.backup.all", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                createBackupDialog();
-            }
-        });
+        iMenuLoader.addActionListener("filemenu.backup.all", e -> createBackupDialog());
 
         // Restore backup
         // *****************************
-        iMenuLoader.addActionListener("filemenu.backup.restore", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuLoader.addActionListener("filemenu.backup.restore", e -> {
+
                 if (SSDB.getInstance().getLocking()) {
                     new SSInformationDialog(iMainFrame, "backupframe.runningonserver");
                     return;
                 }
                 SSBackupFrame.showFrame(iMainFrame, 600, 400);
-            }
-        });
+
+            });
 
         // Network settings
         // *****************************
-        iMenuLoader.addActionListener("filemenu.network.settings.db", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuLoader.addActionListener("filemenu.network.settings.db", e -> {
+
                 String iIpAddress = SSInputDialog.showDialog();
                 if(iIpAddress == null) return;
                 try {
@@ -351,17 +327,17 @@ public class SSMainMenu {
                 SSFrameManager.getInstance().close();
                 SSDB.getInstance().loadSelectedDatabase(iIpAddress);
                 SSCompanyFrame.showFrame(iMainFrame, 500, 300);
-            }
-        });
+
+            });
 
         // Exit
         // *****************************
-        iMenuLoader.addActionListener("filemenu.exit", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuLoader.addActionListener("filemenu.exit", e -> {
+
                 iMainFrame.saveSizeAndLocation();
                 System.exit(0);
-            }
-        });
+
+            });
 
     }
 
@@ -372,16 +348,12 @@ public class SSMainMenu {
 
         // Select accountingyear
         // *****************************
-        iMenuLoader.addActionListener("registermenu.accountingyear", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSAccountingYearFrame.showFrame(iMainFrame, 500, 300);
-            }
-        });
+        iMenuLoader.addActionListener("registermenu.accountingyear", e -> SSAccountingYearFrame.showFrame(iMainFrame, 500, 300));
 
         // Change accountplan for this year
         // *****************************
-        iMenuLoader.addActionListener("registermenu.accountplan", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuLoader.addActionListener("registermenu.accountplan", e -> {
+
                 SSNewAccountingYear yearData = SSDB.getInstance().getCurrentYear();
 
                 // Open warningdialog if no yeardata
@@ -392,64 +364,40 @@ public class SSMainMenu {
                 SSAccountPlan iAccountPlan = yearData.getAccountPlan();
 
                 SSAccountPlanDialog.editCurrentDialog( iMainFrame, iAccountPlan, null);
-            }
-        });
+
+            });
 
         // Projects
         // *****************************
-        iMenuLoader.addActionListener("registermenu.project", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSProjectFrame.showFrame(iMainFrame, 400, 300);
-            }
-        });
+        iMenuLoader.addActionListener("registermenu.project", e -> SSProjectFrame.showFrame(iMainFrame, 400, 300));
 
         // Resultatenhet
         // *****************************
-        iMenuLoader.addActionListener("registermenu.resultunit", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSResultUnitFrame.showFrame(iMainFrame, 400, 300);
-            }
-        });
+        iMenuLoader.addActionListener("registermenu.resultunit", e -> SSResultUnitFrame.showFrame(iMainFrame, 400, 300));
 
         // Producter
         // *****************************
-        iMenuLoader.addActionListener("registermenu.product", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSProductFrame.showFrame(iMainFrame, 640, 480);
-            }
-        });
+        iMenuLoader.addActionListener("registermenu.product", e -> SSProductFrame.showFrame(iMainFrame, 640, 480));
         // Customer
         // *****************************
-        iMenuLoader.addActionListener("registermenu.customer", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSCustomerFrame.showFrame(iMainFrame, 800, 600);
-            }
-        });
+        iMenuLoader.addActionListener("registermenu.customer", e -> SSCustomerFrame.showFrame(iMainFrame, 800, 600));
 
         // Supplier
         // *****************************
-        iMenuLoader.addActionListener("registermenu.supplier", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSSupplierFrame.showFrame(iMainFrame, 800, 600);
-            }
-        });
+        iMenuLoader.addActionListener("registermenu.supplier", e -> SSSupplierFrame.showFrame(iMainFrame, 800, 600));
 
-        iMenuLoader.addActionListener("registermenu.vouchertemplates", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuLoader.addActionListener("registermenu.vouchertemplates", e -> {
+
                 //SSVoucherTemplateTableFrame voucherTemplateFrame = new SSVoucherTemplateTableFrame(iMainFrame, 400, 300);
                 //voucherTemplateFrame.setVisible(true);
 
                 SSVoucherTemplateFrame.showFrame(iMainFrame);
 
-            }
-        });
+
+            });
 
         // Automatfördelning
-        iMenuLoader.addActionListener("registermenu.autodist", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSAutoDistFrame.showFrame(iMainFrame, 488, 360);
-            }
-        });
+        iMenuLoader.addActionListener("registermenu.autodist", e -> SSAutoDistFrame.showFrame(iMainFrame, 488, 360));
     }
 
     /**
@@ -459,81 +407,41 @@ public class SSMainMenu {
 
         // Inbetalningar
         // *****************************
-        iMenuLoader.addActionListener("salemenu.inpayment", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSInpaymentFrame.showFrame(iMainFrame, 800, 600);
-            }
-        });
+        iMenuLoader.addActionListener("salemenu.inpayment", e -> SSInpaymentFrame.showFrame(iMainFrame, 800, 600));
 
         // Utbetalningar
         // *****************************
-        iMenuLoader.addActionListener("salemenu.outpayment", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSOutpaymentFrame.showFrame(iMainFrame, 800, 600);
-            }
-        });
+        iMenuLoader.addActionListener("salemenu.outpayment", e -> SSOutpaymentFrame.showFrame(iMainFrame, 800, 600));
 
         // Kreditfakturor
         // *****************************
-        iMenuLoader.addActionListener("salemenu.creditinvoice", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSCreditInvoiceFrame.showFrame(iMainFrame, 800, 600);
-            }
-        });
+        iMenuLoader.addActionListener("salemenu.creditinvoice", e -> SSCreditInvoiceFrame.showFrame(iMainFrame, 800, 600));
 
         // Periodfaktura
         // *****************************
-        iMenuLoader.addActionListener("salemenu.periodicinvoice", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSPeriodicInvoiceFrame.showFrame(iMainFrame, 800, 600);
-            }
-        });
+        iMenuLoader.addActionListener("salemenu.periodicinvoice", e -> SSPeriodicInvoiceFrame.showFrame(iMainFrame, 800, 600));
 
         // Offerter
         // *****************************
-        iMenuLoader.addActionListener("salemenu.tender", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSTenderFrame.showFrame(iMainFrame, 800, 600);
-            }
-        });
+        iMenuLoader.addActionListener("salemenu.tender", e -> SSTenderFrame.showFrame(iMainFrame, 800, 600));
 
         // Order
         // *****************************
-        iMenuLoader.addActionListener("salemenu.order", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSOrderFrame.showFrame(iMainFrame, 800, 600);
-            }
-        });
+        iMenuLoader.addActionListener("salemenu.order", e -> SSOrderFrame.showFrame(iMainFrame, 800, 600));
         // Faktura
         // *****************************
-        iMenuLoader.addActionListener("salemenu.invoice", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSInvoiceFrame.showFrame(iMainFrame, 880, 600);
-            }
-        });
+        iMenuLoader.addActionListener("salemenu.invoice", e -> SSInvoiceFrame.showFrame(iMainFrame, 880, 600));
         // Inköpsorder
         // *****************************
-        iMenuLoader.addActionListener("salemenu.purchaseorder", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSPurchaseOrderFrame.showFrame(iMainFrame, 880, 600);
-            }
-        });
+        iMenuLoader.addActionListener("salemenu.purchaseorder", e -> SSPurchaseOrderFrame.showFrame(iMainFrame, 880, 600));
 
         // Leverantörsfaktura
         // *****************************
-        iMenuLoader.addActionListener("salemenu.supplierinvoice", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSSupplierInvoiceFrame.showFrame(iMainFrame, 880, 600);
-            }
-        });
+        iMenuLoader.addActionListener("salemenu.supplierinvoice", e -> SSSupplierInvoiceFrame.showFrame(iMainFrame, 880, 600));
 
         // Leverantörskreditfaktura
         // *****************************
-        iMenuLoader.addActionListener("salemenu.suppliercreditinvoice", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSSupplierCreditInvoiceFrame.showFrame(iMainFrame, 880, 600);
-            }
-        });
+        iMenuLoader.addActionListener("salemenu.suppliercreditinvoice", e -> SSSupplierCreditInvoiceFrame.showFrame(iMainFrame, 880, 600));
 
     }
 
@@ -543,8 +451,8 @@ public class SSMainMenu {
     private void bgcmenuActions() {
         // Importera från bgmax
         // *****************************
-        iMenuLoader.addActionListener("bgcmenu.bgmax", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuLoader.addActionListener("bgcmenu.bgmax", e -> {
+
                 SSFileChooser iFileChooser = new SSFileChooser(  );
 
                 SSFilterBGMAX iFilter = new SSFilterBGMAX();
@@ -581,13 +489,13 @@ public class SSMainMenu {
                 }
                 SSInformationDialog.showDialog(iMainFrame,"bgmaximport.success",iNumbers.toString());
 
-            }
-        });
+
+            });
 
         // Importera från lbin fil
         // *****************************
-        iMenuLoader.addActionListener("bgcmenu.lbin", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuLoader.addActionListener("bgcmenu.lbin", e -> {
+
                 SSFileChooser iFileChooser = new SSFileChooser( );
 
                 SSFilterBGMAX iFilter = new SSFilterBGMAX();
@@ -616,9 +524,8 @@ public class SSMainMenu {
                     iNumbers.append( iOutpayment.getNumber() );
                 }
                 new SSInformationDialog(iMainFrame, "supplierpaymentimport.importcomplete", iNumbers.toString() );
-            }
 
-        });
+            });
 
     }
 
@@ -629,48 +536,32 @@ public class SSMainMenu {
 
         // Inleverans
         // *****************************
-        iMenuLoader.addActionListener("stockmenu.indelivery", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSIndeliveryFrame.showFrame(iMainFrame, 800, 600);
-            }
-        });
+        iMenuLoader.addActionListener("stockmenu.indelivery", e -> SSIndeliveryFrame.showFrame(iMainFrame, 800, 600));
 
         // Utleverans
         // *****************************
-        iMenuLoader.addActionListener("stockmenu.outdelivery", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSOutdeliveryFrame.showFrame(iMainFrame, 800, 600);
-            }
-        });
+        iMenuLoader.addActionListener("stockmenu.outdelivery", e -> SSOutdeliveryFrame.showFrame(iMainFrame, 800, 600));
 
         // Inköpsförslag
         // *****************************
-        iMenuLoader.addActionListener("stockmenu.purchasesuggestion", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSPurchaseSuggestionDialog.showDialog(iMainFrame);
-            }
-        });
+        iMenuLoader.addActionListener("stockmenu.purchasesuggestion", e -> SSPurchaseSuggestionDialog.showDialog(iMainFrame));
 
         // Inventering
         // *****************************
-        iMenuLoader.addActionListener("stockmenu.inventory", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSInventoryFrame.showFrame(iMainFrame, 800, 600);
-            }
-        });
+        iMenuLoader.addActionListener("stockmenu.inventory", e -> SSInventoryFrame.showFrame(iMainFrame, 800, 600));
 
         // Inventeringsunderlag
         // *****************************
-        iMenuLoader.addActionListener("stockmenu.inventorybasisreport", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuLoader.addActionListener("stockmenu.inventorybasisreport", e -> {
+
                 SSInventoryBasisDialog iDialog = new SSInventoryBasisDialog(iMainFrame);
 
                 iDialog.setLocationRelativeTo(iMainFrame);
                 if(iDialog.showDialog() != JOptionPane.OK_OPTION) return;
                 final Date    iDate         = iDialog.getDate();
                 final boolean iDateSelected = iDialog.isDateSelected();
-                SSProgressDialog.runProgress(iMainFrame, new Runnable(){
-                    public void run() {
+                SSProgressDialog.runProgress(iMainFrame, () -> {
+
                         SSInventoryBasisPrinter iPrinter;
                         if(iDateSelected){
                             iPrinter = new SSInventoryBasisPrinter(iDate);
@@ -678,26 +569,18 @@ public class SSMainMenu {
                             iPrinter = new SSInventoryBasisPrinter();
                         }
                         iPrinter.preview( iMainFrame );
-                    }
-                });
-            }
-        });
+
+                    });
+
+            });
 
         // Lagerredovisning
         // *****************************
-        iMenuLoader.addActionListener("stockmenu.stockaccountreport", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSReportFactory.StockAccount(iMainFrame);
-            }
-        });
+        iMenuLoader.addActionListener("stockmenu.stockaccountreport", e -> SSReportFactory.StockAccount(iMainFrame));
 
         // Lagervärde
         // *****************************
-        iMenuLoader.addActionListener("stockmenu.stockvaluereport", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSReportFactory.StockValue(iMainFrame);
-            }
-        });
+        iMenuLoader.addActionListener("stockmenu.stockvaluereport", e -> SSReportFactory.StockValue(iMainFrame));
 
     }
 
@@ -708,37 +591,33 @@ public class SSMainMenu {
 
         // Ingående balans
         // *****************************
-        iMenuLoader.addActionListener("bookkeepingmenu.startingamount", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuLoader.addActionListener("bookkeepingmenu.startingamount", e -> {
+
                 final String lockString = "startingamount"+SSDB.getInstance().getCurrentCompany().getId()+SSDB.getInstance().getCurrentYear().getId();
                 if (!SSPostLock.applyLock(lockString)) {
                     new SSErrorDialog( iMainFrame, "startingamountopen");
                     return;
                 }
                 SSStartingAmountFrame.showFrame(iMainFrame, 500, 400);
-            }
-        });
+
+            });
 
         // Vouchers
         // *****************************
-        iMenuLoader.addActionListener("bookkeepingmenu.vouchers", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSVoucherFrame.showFrame(iMainFrame, 800, 600);
-            }
-        });
+        iMenuLoader.addActionListener("bookkeepingmenu.vouchers", e -> SSVoucherFrame.showFrame(iMainFrame, 800, 600));
 
         // Budget
         // *****************************
-        iMenuLoader.addActionListener("bookkeepingmenu.budget", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuLoader.addActionListener("bookkeepingmenu.budget", e -> {
+
                 final String lockString = "budget"+SSDB.getInstance().getCurrentCompany().getId()+SSDB.getInstance().getCurrentYear().getId();
                 if (!SSPostLock.applyLock(lockString)) {
                     new SSErrorDialog( iMainFrame,  "budgetopen");
                     return;
                 }
                 SSBudgetFrame.showFrame(iMainFrame, 800, 600);
-            }
-        });
+
+            });
 
     }
 
@@ -749,8 +628,8 @@ public class SSMainMenu {
 
         // Vouchers
         // *****************************
-        iMenuLoader.addActionListener("reportmenu.vouchers", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuLoader.addActionListener("reportmenu.vouchers", e -> {
+
                 SSNewAccountingYear yearData = SSDB.getInstance().getCurrentYear();
 
                 // Check so the yeardata isn't null
@@ -760,13 +639,13 @@ public class SSMainMenu {
                 }
 
                 SSReportFactory.buildVoucherReport(iMainFrame, bundle, yearData);
-            }
-        });
+
+            });
 
         // Starting ammounts
         // *****************************
-        iMenuLoader.addActionListener("reportmenu.startingamounts", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuLoader.addActionListener("reportmenu.startingamounts", e -> {
+
                 final SSNewAccountingYear iAccountingYear = SSDB.getInstance().getCurrentYear();
                 // Check so the yeardata isn't null
                 if (iAccountingYear == null) {
@@ -774,19 +653,19 @@ public class SSMainMenu {
                     return;
                 }
 
-                SSProgressDialog.runProgress(iMainFrame, new Runnable(){
-                    public void run() {
+                SSProgressDialog.runProgress(iMainFrame, () -> {
+
                         SSStartingAmountPrinter iPrinter = new SSStartingAmountPrinter(iAccountingYear);
                         iPrinter.preview( iMainFrame );
-                    }
-                });
-            }
-        });
+
+                    });
+
+            });
 
         // Account plan
         // *****************************
-        iMenuLoader.addActionListener("reportmenu.accountplan", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuLoader.addActionListener("reportmenu.accountplan", e -> {
+
                 SSNewAccountingYear yearData = SSDB.getInstance().getCurrentYear();
 
                 // Check so the yeardata isn't null
@@ -794,21 +673,21 @@ public class SSMainMenu {
                     SSNewAccountingYear.openWarningDialogNoYearData(iMainFrame);
                     return;
                 }
-                SSProgressDialog.runProgress(iMainFrame, new Runnable(){
-                    public void run() {
+                SSProgressDialog.runProgress(iMainFrame, () -> {
+
                         SSAccountPlanPrinter iPrinter = new SSAccountPlanPrinter();
 
                         iPrinter.preview( iMainFrame );
-                    }
-                });
 
-            }
-        });
+                    });
+
+
+            });
 
         // Mainbook
         // *****************************
-        iMenuLoader.addActionListener("reportmenu.mainbook", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuLoader.addActionListener("reportmenu.mainbook", e -> {
+
                 SSNewAccountingYear yearData = SSDB.getInstance().getCurrentYear();
 
                 // Check so the yeardata isn't null
@@ -817,13 +696,13 @@ public class SSMainMenu {
                     return;
                 }
                 SSReportFactory.MainbookReport(iMainFrame, yearData);
-            }
-        });
+
+            });
 
         // Result report
         // *****************************
-        iMenuLoader.addActionListener("reportmenu.resultreport", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuLoader.addActionListener("reportmenu.resultreport", e -> {
+
                 SSNewAccountingYear yearData = SSDB.getInstance().getCurrentYear();
 
                 // Check so the yeardata isn't null
@@ -834,13 +713,13 @@ public class SSMainMenu {
                 SSNewAccountingYear previousYearData = SSDB.getInstance().getPreviousYear();
 
                 SSReportFactory.buildResultReport(iMainFrame, bundle, yearData, previousYearData);
-            }
-        });
+
+            });
 
         // Project result
         // *****************************
-        iMenuLoader.addActionListener("reportmenu.projectresult", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuLoader.addActionListener("reportmenu.projectresult", e -> {
+
                 SSNewAccountingYear iAccountingYear = SSDB.getInstance().getCurrentYear();
 
                 // Check so the yeardata isn't null
@@ -849,13 +728,13 @@ public class SSMainMenu {
                     return;
                 }
                 SSReportFactory.ProjectResultReport(iMainFrame, bundle, iAccountingYear);
-            }
-        });
+
+            });
 
         // Resultunit result
         // *****************************
-        iMenuLoader.addActionListener("reportmenu.resultunitresult", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuLoader.addActionListener("reportmenu.resultunitresult", e -> {
+
                 SSNewAccountingYear iAccountingYear = SSDB.getInstance().getCurrentYear();
 
                 // Check so the yeardata isn't null
@@ -865,13 +744,13 @@ public class SSMainMenu {
                 }
 
                 SSReportFactory.ResultUnitResultReport(iMainFrame, bundle, iAccountingYear);
-            }
-        });
+
+            });
 
         // Budget report
         // *****************************
-        iMenuLoader.addActionListener("reportmenu.budget", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuLoader.addActionListener("reportmenu.budget", e -> {
+
                 SSNewAccountingYear yearData = SSDB.getInstance().getCurrentYear();
 
                 // Check so the yeardata isn't null
@@ -881,13 +760,13 @@ public class SSMainMenu {
                 }
 
                 SSReportFactory.buildBudgetReport(iMainFrame, bundle, yearData);
-            }
-        });
+
+            });
 
         // Balance report
         // *****************************
-        iMenuLoader.addActionListener("reportmenu.balancereport", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuLoader.addActionListener("reportmenu.balancereport", e -> {
+
                 SSNewAccountingYear yearData = SSDB.getInstance().getCurrentYear();
 
                 // Check so the yeardata isn't null
@@ -897,13 +776,13 @@ public class SSMainMenu {
                 }
 
                 SSReportFactory.buildBalanceReport(iMainFrame, bundle, yearData);
-            }
-        });
+
+            });
 
         // Momsrapport
         // *****************************
-        /*iMenuLoader.addActionListener("reportmenu.vatreport", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        /*iMenuLoader.addActionListener("reportmenu.vatreport", e -> {
+
                 final String lockString = "voucher"+SSDB.getInstance().getCurrentCompany().getId()+SSDB.getInstance().getCurrentYear().getId();
                 if (!SSPostLock.applyLock(lockString)) {
                     new SSErrorDialog( iMainFrame, "voucheriscreated");
@@ -920,13 +799,13 @@ public class SSMainMenu {
                 }
 
                 SSReportFactory.buildVATReport(iMainFrame, bundle, yearData);
-            }
-        });*/
+
+            });*/
 
         // Momsrapport 2007
         // *****************************
-        /* iMenuLoader.addActionListener("reportmenu.vatreport2007", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        /* iMenuLoader.addActionListener("reportmenu.vatreport2007", e -> {
+
                 final String lockString = "voucher"+SSDB.getInstance().getCurrentCompany().getId()+SSDB.getInstance().getCurrentYear().getId();
                 if (!SSPostLock.applyLock(lockString)) {
                     new SSErrorDialog( iMainFrame, "voucheriscreated");
@@ -942,13 +821,13 @@ public class SSMainMenu {
                 }
 
                 SSReportFactory.VATReport2007(iMainFrame, bundle, iAccountingYear);
-            }
-        }); */
+
+            }); */
 
         // Momsrapport 2015
         // *****************************
-        iMenuLoader.addActionListener("reportmenu.vatreport2015", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuLoader.addActionListener("reportmenu.vatreport2015", e -> {
+
                 final String lockString = "voucher"+SSDB.getInstance().getCurrentCompany().getId()+SSDB.getInstance().getCurrentYear().getId();
                 if (!SSPostLock.applyLock(lockString)) {
                     new SSErrorDialog( iMainFrame, "voucheriscreated");
@@ -964,13 +843,13 @@ public class SSMainMenu {
                 }
 
                 SSReportFactory.VATReport2015(iMainFrame, bundle, iAccountingYear);
-            }
-        });
+
+            });
 
         // Räkenskapsschema
         // *****************************
-        iMenuLoader.addActionListener("reportmenu.accountdiagram", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuLoader.addActionListener("reportmenu.accountdiagram", e -> {
+
                 SSNewAccountingYear yearData = SSDB.getInstance().getCurrentYear();
 
                 // Check so the yeardata isn't null
@@ -980,13 +859,13 @@ public class SSMainMenu {
                 }
 
                 SSReportFactory.buildAccountDiagramReport(iMainFrame, bundle, yearData);
-            }
-        });
+
+            });
 
         // Förenklat årsbokslut
         // *****************************
-        iMenuLoader.addActionListener("reportmenu.simplestatement", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuLoader.addActionListener("reportmenu.simplestatement", e -> {
+
                 SSNewAccountingYear yearData = SSDB.getInstance().getCurrentYear();
 
                 // Check so the yeardata isn't null
@@ -996,11 +875,11 @@ public class SSMainMenu {
                 }
 
                 SSReportFactory.SimplestatementReport(iMainFrame);
-            }
-        });
 
-        iMenuLoader.addActionListener("reportmenu.ownreports", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            });
+
+        iMenuLoader.addActionListener("reportmenu.ownreports", e -> {
+
                 SSNewAccountingYear yearData = SSDB.getInstance().getCurrentYear();
                 // Check so the yeardata isn't null
                 if (yearData == null) {
@@ -1008,133 +887,81 @@ public class SSMainMenu {
                     return;
                 }
                 SSOwnReportFrame.showFrame(iMainFrame,800,600);
-            }
-        });
+
+            });
 
         /////////////////////////////////////////////////////////////////////////////////////////////
 
         // Orderlista
         // *****************************
-        iMenuLoader.addActionListener("reportmenu.orderlist", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSReportFactory.OrderListReport(iMainFrame);
-            }
-        });
+        iMenuLoader.addActionListener("reportmenu.orderlist", e -> SSReportFactory.OrderListReport(iMainFrame));
 
         // Kundreskontra
         // *****************************
-        iMenuLoader.addActionListener("reportmenu.accountsrecievable", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSReportFactory.AccountsRecievableReport(iMainFrame);
-            }
-        });
+        iMenuLoader.addActionListener("reportmenu.accountsrecievable", e -> SSReportFactory.AccountsRecievableReport(iMainFrame));
 
         // Kundfodran
         // *****************************
-        iMenuLoader.addActionListener("reportmenu.customerclaim", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSReportFactory.CustomerClaimReport(iMainFrame);
-            }
-        });
+        iMenuLoader.addActionListener("reportmenu.customerclaim", e -> SSReportFactory.CustomerClaimReport(iMainFrame));
 
         // EU-Kvartalsredovisning
         // *****************************
-        iMenuLoader.addActionListener("reportmenu.quarterreport", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSReportFactory.QuarterReport(iMainFrame);
-            }
-        });
+        iMenuLoader.addActionListener("reportmenu.quarterreport", e -> SSReportFactory.QuarterReport(iMainFrame));
 
         // Faktura journal
         // *****************************
-        iMenuLoader.addActionListener("journalmenu.invoicejornal", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSReportFactory.InvoiceJournal(iMainFrame);
-            }
-        });
+        iMenuLoader.addActionListener("journalmenu.invoicejornal", e -> SSReportFactory.InvoiceJournal(iMainFrame));
 
         // Kreditfaktura journal
         // *****************************
-        iMenuLoader.addActionListener("journalmenu.creditinvoicejornal", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSReportFactory.CreditInvoiceJournal(iMainFrame);
-            }
-        });
+        iMenuLoader.addActionListener("journalmenu.creditinvoicejornal", e -> SSReportFactory.CreditInvoiceJournal(iMainFrame));
 
         // Inbetalningsjournal
         // *****************************
-        iMenuLoader.addActionListener("journalmenu.inpaymentjournal", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSReportFactory.InpaymentJournal(iMainFrame);
-            }
-        });
+        iMenuLoader.addActionListener("journalmenu.inpaymentjournal", e -> SSReportFactory.InpaymentJournal(iMainFrame));
 
         // leverantörsfaktura journal
         // *****************************
-        iMenuLoader.addActionListener("journalmenu.supplierinvoicejornal", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSReportFactory.SupplierInvoiceJournal(iMainFrame);
-            }
-        });
+        iMenuLoader.addActionListener("journalmenu.supplierinvoicejornal", e -> SSReportFactory.SupplierInvoiceJournal(iMainFrame));
 
         // Leverantörskreditfaktura journal
         // *****************************
-        iMenuLoader.addActionListener("journalmenu.suppliercreditinvoicejornal", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSReportFactory.SupplierCreditInvoiceJournal(iMainFrame);
-            }
-        });
+        iMenuLoader.addActionListener("journalmenu.suppliercreditinvoicejornal", e -> SSReportFactory.SupplierCreditInvoiceJournal(iMainFrame));
 
         // Utbetalningsjournal
         // *****************************
-        iMenuLoader.addActionListener("journalmenu.outpaymentjournal", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSReportFactory.OutpaymentJournal(iMainFrame);
-            }
-        });
+        iMenuLoader.addActionListener("journalmenu.outpaymentjournal", e -> SSReportFactory.OutpaymentJournal(iMainFrame));
 
         // Leverantörsreskontra
         // *****************************
-        iMenuLoader.addActionListener("reportmenu.accountspayable", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSReportFactory.AccountsPayableReport(iMainFrame);
-            }
-        });
+        iMenuLoader.addActionListener("reportmenu.accountspayable", e -> SSReportFactory.AccountsPayableReport(iMainFrame));
 
         // Leverantörsskuld
         // *****************************
-        iMenuLoader.addActionListener("reportmenu.supplierdept", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSReportFactory.SupplierDebtReport(iMainFrame);
-            }
-        });
+        iMenuLoader.addActionListener("reportmenu.supplierdept", e -> SSReportFactory.SupplierDebtReport(iMainFrame));
 
         // Försäljningsrapport
         // *****************************
-        iMenuLoader.addActionListener("reportmenu.salereport", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSReportFactory.SaleReport(iMainFrame);
-            }
-        });
+        iMenuLoader.addActionListener("reportmenu.salereport", e -> SSReportFactory.SaleReport(iMainFrame));
 
         // Försäljningsvärden
         // *****************************
-        iMenuLoader.addActionListener("reportmenu.salevalues",new ActionListener() {
-            public void actionPerformed(ActionEvent e){
+        iMenuLoader.addActionListener("reportmenu.salevalues",e -> {
+
                 SSNewAccountingYear yearData = SSDB.getInstance().getCurrentYear();
 
                 SSReportFactory.Salevalues(iMainFrame, bundle, yearData);
-            }
-        });
+
+            });
 
         // Inköpsvärden
         // *****************************
-        iMenuLoader.addActionListener("reportmenu.purchasevalues",new ActionListener() {
-            public void actionPerformed(ActionEvent e){
+        iMenuLoader.addActionListener("reportmenu.purchasevalues",e -> {
+
                 SSNewAccountingYear yearData = SSDB.getInstance().getCurrentYear();
                 SSReportFactory.Purchasevalues(iMainFrame, bundle, yearData);
-            }
-        });
+
+            });
 
     }
 
@@ -1144,44 +971,38 @@ public class SSMainMenu {
     private void loadHelpActions() {
         // Hjälp
         // *****************************
-        iMenuLoader.addActionListener("helpmenu.help",new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSHelpFrame.showFrame(iMainFrame, 980, 720);
-
-            }
-
-        });
+        iMenuLoader.addActionListener("helpmenu.help",e -> SSHelpFrame.showFrame(iMainFrame, 980, 720));
 
         // Online support
         // *****************************
-        iMenuLoader.addActionListener("helpmenu.support", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuLoader.addActionListener("helpmenu.support", e -> {
+
                 String url =  SSBundle.getBundle().getString("application.url.support") ;
                 BrowserLaunch.openURL( url );
-            }
-        });
+
+            });
 
         // Online updates
         // *****************************
-        iMenuLoader.addActionListener("helpmenu.updates", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuLoader.addActionListener("helpmenu.updates", e -> {
+
                 String url =  SSBundle.getBundle().getString("application.url.updates") ;
                 BrowserLaunch.openURL( url );
-            }
-        });
+
+            });
 
         // Ta bort postlås
         // ***********************
-        iMenuLoader.addActionListener("helpmenu.clearlocks", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuLoader.addActionListener("helpmenu.clearlocks", e -> {
+
                 SSConfirmDialog iDialog = new SSConfirmDialog("helpmenu.clearlocks.warning");
                 if(iDialog.openDialog(iMainFrame)==JOptionPane.OK_OPTION)
                     SSPostLock.clearLocks();
-            }
-        });
 
-        iMenuLoader.addActionListener("helpmenu.compress", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            });
+
+        iMenuLoader.addActionListener("helpmenu.compress", e -> {
+
                 SSConfirmDialog iDialog = new SSConfirmDialog("helpmenu.compress.warning");
                 if(iDialog.openDialog(iMainFrame)==JOptionPane.OK_OPTION){
 
@@ -1189,11 +1010,11 @@ public class SSMainMenu {
                     System.exit(0);
                 }
 
-            }
-        });
 
-        iMenuLoader.addActionListener("helpmenu.cleartransactions", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            });
+
+        iMenuLoader.addActionListener("helpmenu.cleartransactions", e -> {
+
                 SSClearTransactionsDialog iDialog = new SSClearTransactionsDialog(iMainFrame);
                 iDialog.setLocationRelativeTo(iMainFrame);
 
@@ -1234,10 +1055,10 @@ public class SSMainMenu {
                 SSFrameManager.getInstance().close();
                 SSDB.getInstance().dropTriggers();
 
-                SSInitDialog.runProgress(SSMainFrame.getInstance(),"Rensar transaktioner...", new Runnable(){
-                    public void run() {
+                SSInitDialog.runProgress(SSMainFrame.getInstance(),"Rensar transaktioner...", () -> {
+
                         SSStock iStock = new SSStock(true);
-                        Map<String, Integer> iStockStatusStart = new HashMap<String, Integer>();
+                        Map<String, Integer> iStockStatusStart = new HashMap<>();
                         for(SSProduct iProduct : SSDB.getInstance().getProducts()){
                             if(iProduct.isStockProduct())
                                 iStockStatusStart.put(iProduct.getNumber(), iStock.getQuantity(iProduct));
@@ -1247,7 +1068,7 @@ public class SSMainMenu {
 
                         for(SSInpayment iInpayment : SSDB.getInstance().getInpayments()){
                             if(iInpayment.getDate().before(iDate)){
-                                List<SSInpaymentRow> iSavedRows = new LinkedList<SSInpaymentRow>();
+                                List<SSInpaymentRow> iSavedRows = new LinkedList<>();
                                 for(SSInpaymentRow iRow : iInpayment.getRows()){
                                     if(iRow.getInvoiceNr() != null && iSaldoMap.containsKey(iRow.getInvoiceNr())){
                                         BigDecimal iSaldo = iSaldoMap.get(iRow.getInvoiceNr());
@@ -1300,7 +1121,7 @@ public class SSMainMenu {
 
                         for(SSOutpayment iOutpayment : SSDB.getInstance().getOutpayments()){
                             if(iOutpayment.getDate().before(iDate)){
-                                List<SSOutpaymentRow> iSavedRows = new LinkedList<SSOutpaymentRow>();
+                                List<SSOutpaymentRow> iSavedRows = new LinkedList<>();
                                 for(SSOutpaymentRow iRow : iOutpayment.getRows()){
                                     if(iRow.getInvoiceNr() != null && iPurchaseSaldoMap.containsKey(iRow.getInvoiceNr())){
                                         BigDecimal iSaldo = iPurchaseSaldoMap.get(iRow.getInvoiceNr());
@@ -1377,18 +1198,14 @@ public class SSMainMenu {
 
                         SSDB.getInstance().shutdownCompact();
                         System.exit(0);
-                    }
-                });
-            }
-        });
+
+                    });
+
+            });
 
         // About
         // *****************************
-        iMenuLoader.addActionListener("helpmenu.about", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSAboutDialog.showDialog(iMainFrame);
-            }
-        });
+        iMenuLoader.addActionListener("helpmenu.about", e -> SSAboutDialog.showDialog(iMainFrame));
 
     }
     private List<JMenuItem> iWindowItems;
@@ -1397,10 +1214,10 @@ public class SSMainMenu {
      * Window actions
      */
     private void loadWindowActions(){
-        iWindowItems = new LinkedList<JMenuItem>();
+        iWindowItems = new LinkedList<>();
 
-        SSFrameManager.getInstance().addFrameListener( new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        SSFrameManager.getInstance().addFrameListener( e -> {
+
                 JMenu iMenu = iMenuLoader.getMenu("Window");
 
                 if(iMenu == null) return;
@@ -1417,11 +1234,7 @@ public class SSMainMenu {
                     iMenuItem.setText(Integer.toString(iCounter) + ": " +  iFrame.getTitle() );
                     iMenuItem.setMnemonic( (char)('0' + iCounter));
 
-                    iMenuItem.addActionListener(new ActionListener() {
-                        public void actionPerformed(ActionEvent e) {
-                            iFrame.deIconize();
-                        }
-                    });
+                    iMenuItem.addActionListener(e1 -> iFrame.deIconize());
                     iMenu.add(iMenuItem);
 
                     iWindowItems.add(iMenuItem);
@@ -1430,24 +1243,16 @@ public class SSMainMenu {
 
                 }
 
-            }
-        });
+
+            });
 
         // Cascade...
         // *****************************
-        iMenuLoader.addActionListener("windowmenu.cascade", new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    SSFrameManager.getInstance().cascade();
-                }
-            });
+        iMenuLoader.addActionListener("windowmenu.cascade", e -> SSFrameManager.getInstance().cascade());
 
         // Close...
         // *****************************
-        iMenuLoader.addActionListener("windowmenu.close", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSFrameManager.getInstance().close();
-            }
-        });
+        iMenuLoader.addActionListener("windowmenu.close", e -> SSFrameManager.getInstance().close());
 
     }
 

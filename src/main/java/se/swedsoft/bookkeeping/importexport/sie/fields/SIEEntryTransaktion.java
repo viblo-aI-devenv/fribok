@@ -63,7 +63,7 @@ public class SIEEntryTransaktion implements SIEEntry {
      * @return
      */
     private List<Object> getObjects(SSVoucherRow iVoucherRow) {
-        List<Object> iObjects = new LinkedList<Object>();
+        List<Object> iObjects = new LinkedList<>();
 
         SSNewResultUnit iResultUnit = iVoucherRow.getResultUnit();
         SSNewProject    iProject = iVoucherRow.getProject();

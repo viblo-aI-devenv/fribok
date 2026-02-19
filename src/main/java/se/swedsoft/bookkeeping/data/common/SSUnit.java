@@ -106,7 +106,7 @@ public class SSUnit implements Serializable, SSTableSearchable {
      * @return
      */
     public static List<SSUnit> getDefaultUnits() {
-        List<SSUnit> iUnits = new LinkedList<SSUnit>();
+        List<SSUnit> iUnits = new LinkedList<>();
 
         iUnits.add(new SSUnit("st", SSBundle.getBundle().getString("ssunit.unit.pcs")));
         iUnits.add(new SSUnit("m", SSBundle.getBundle().getString("ssunit.unit.meter")));

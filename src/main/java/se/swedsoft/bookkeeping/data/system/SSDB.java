@@ -114,7 +114,7 @@ public class SSDB {
     private Map<String, List<PropertyChangeListener>> iListenerMap;
 
     private SSDB() {
-        iListenerMap = new HashMap<String, List<PropertyChangeListener>>();
+        iListenerMap = new HashMap<>();
     }
 
     public boolean getLocking() {
@@ -259,43 +259,43 @@ public class SSDB {
 
         if (iShowDialog) {
             SSInitDialog.runProgress(SSMainFrame.getInstance(), "Läser in data",
-                    new Runnable() {
-                public void run() {
-                    getProducts();
-                    getCustomers();
-                    getSuppliers();
-                    getAutoDists();
+                    () -> {
 
-                    getInpayments();
-                    getTenders();
-                    getOrders();
-                    getInvoices();
-                    getCreditInvoices();
-                    getPeriodicInvoices();
+                            getProducts();
+                            getCustomers();
+                            getSuppliers();
+                            getAutoDists();
 
-                    getOutpayments();
-                    getPurchaseOrders();
-                    getSupplierInvoices();
-                    getSupplierCreditInvoices();
+                            getInpayments();
+                            getTenders();
+                            getOrders();
+                            getInvoices();
+                            getCreditInvoices();
+                            getPeriodicInvoices();
 
-                    getInventories();
-                    getIndeliveries();
-                    getOutdeliveries();
+                            getOutpayments();
+                            getPurchaseOrders();
+                            getSupplierInvoices();
+                            getSupplierCreditInvoices();
 
-                    getOwnReports();
+                            getInventories();
+                            getIndeliveries();
+                            getOutdeliveries();
 
-                    SSInvoiceMath.iSaldoMap = null;
-                    SSInvoiceMath.calculateSaldos();
-                    SSCustomerMath.iInvoicesForCustomers = null;
-                    SSCustomerMath.getInvoicesForCustomers();
-                    SSSupplierInvoiceMath.iSaldoMap = null;
-                    SSSupplierInvoiceMath.calculateSaldos();
-                    SSSupplierMath.iInvoicesForSuppliers = null;
-                    SSSupplierMath.getInvoicesForSuppliers();
-                    // SSOrderMath.setInvoiceForOrders();
-                    initYear(false);
-                }
-            });
+                            getOwnReports();
+
+                            SSInvoiceMath.iSaldoMap = null;
+                            SSInvoiceMath.calculateSaldos();
+                            SSCustomerMath.iInvoicesForCustomers = null;
+                            SSCustomerMath.getInvoicesForCustomers();
+                            SSSupplierInvoiceMath.iSaldoMap = null;
+                            SSSupplierInvoiceMath.calculateSaldos();
+                            SSSupplierMath.iInvoicesForSuppliers = null;
+                            SSSupplierMath.getInvoicesForSuppliers();
+                            // SSOrderMath.setInvoiceForOrders();
+                            initYear(false);
+
+                        });
         } else {
             getProducts();
             getCustomers();
@@ -344,11 +344,7 @@ public class SSDB {
 
         if (iShowLoadingDialog) {
             SSInitDialog.runProgress(SSMainFrame.getInstance(), "Läser in data",
-                    new Runnable() {
-                public void run() {
-                    getVouchers();
-                }
-            });
+                    () -> getVouchers());
         } else {
             getVouchers();
         }
@@ -771,7 +767,7 @@ public class SSDB {
         List<SSNewCompany> iCompanies = null;
 
         try {
-            iCompanies = new LinkedList<SSNewCompany>();
+            iCompanies = new LinkedList<>();
 
             if (iConnection == null || iConnection.isClosed()) {
                 return iCompanies;
@@ -1071,7 +1067,7 @@ public class SSDB {
     }
 
     public List<SSNewAccountingYear> getYears() {
-        List<SSNewAccountingYear> iYears = new LinkedList<SSNewAccountingYear>();
+        List<SSNewAccountingYear> iYears = new LinkedList<>();
 
         if (iCurrentCompany != null) {
             try {
@@ -1100,7 +1096,7 @@ public class SSDB {
     }
 
     public List<SSNewAccountingYear> getYearsForCompany(SSNewCompany iCompany) {
-        List<SSNewAccountingYear> iYears = new LinkedList<SSNewAccountingYear>();
+        List<SSNewAccountingYear> iYears = new LinkedList<>();
 
         if (iCompany != null) {
             try {
@@ -1297,7 +1293,7 @@ public class SSDB {
     }
 
     public SSNewAccountingYear getLastYear() {
-        List<SSNewAccountingYear> iYears = new LinkedList<SSNewAccountingYear>();
+        List<SSNewAccountingYear> iYears = new LinkedList<>();
 
         if (iCurrentCompany != null) {
             try {
@@ -1356,7 +1352,7 @@ public class SSDB {
         List<PropertyChangeListener> iPropertyChangeListeners = iListenerMap.get(pProperty);
 
         if (iPropertyChangeListeners == null) {
-            iPropertyChangeListeners = new LinkedList<PropertyChangeListener>();
+            iPropertyChangeListeners = new LinkedList<>();
 
             iListenerMap.put(pProperty, iPropertyChangeListeners);
         }
@@ -1394,7 +1390,7 @@ public class SSDB {
         if (iVouchers != null) {
             return iVouchers;
         }
-        iVouchers = new LinkedList<SSVoucher>();
+        iVouchers = new LinkedList<>();
         if (iCurrentYear == null) {
             return iVouchers;
         }
@@ -1436,7 +1432,7 @@ public class SSDB {
     }
 
     public List<SSVoucher> getVouchers(SSNewAccountingYear iAccountingYear) {
-        List<SSVoucher> iVoucherList = new LinkedList<SSVoucher>();
+        List<SSVoucher> iVoucherList = new LinkedList<>();
 
         if (iAccountingYear == null) {
             return iVoucherList;
@@ -1514,7 +1510,7 @@ public class SSDB {
         if (pVouchers == null || iCurrentYear == null) {
             return null;
         }
-        List<SSVoucher> iVouchers = new LinkedList<SSVoucher>();
+        List<SSVoucher> iVouchers = new LinkedList<>();
 
         try {
             for (SSVoucher iVoucher : pVouchers) {
@@ -1669,7 +1665,7 @@ public class SSDB {
     }
 
     public List<SSVoucherTemplate> getVoucherTemplates() {
-        List<SSVoucherTemplate> iVoucherTemplates = new LinkedList<SSVoucherTemplate>();
+        List<SSVoucherTemplate> iVoucherTemplates = new LinkedList<>();
 
         if (iCurrentCompany == null) {
             return iVoucherTemplates;
@@ -1703,7 +1699,7 @@ public class SSDB {
         if (pVoucherTemplates == null) {
             return null;
         }
-        List<SSVoucherTemplate> iVoucherTemplates = new LinkedList<SSVoucherTemplate>();
+        List<SSVoucherTemplate> iVoucherTemplates = new LinkedList<>();
 
         if (iCurrentCompany == null) {
             return iVoucherTemplates;
@@ -1788,7 +1784,7 @@ public class SSDB {
 
     public List<SSAccount> getAccounts() {
         return iCurrentYear == null
-                ? new LinkedList<SSAccount>()
+                ? new LinkedList<>()
                 : iCurrentYear.getAccounts();
     }
 
@@ -1806,7 +1802,7 @@ public class SSDB {
     }
 
     public List<SSAccountPlan> getAccountPlans() {
-        List<SSAccountPlan> iAccountPlans = new LinkedList<SSAccountPlan>();
+        List<SSAccountPlan> iAccountPlans = new LinkedList<>();
 
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -1952,7 +1948,7 @@ public class SSDB {
     }
 
     public List<SSUnit> getUnits() {
-        List<SSUnit> iUnits = new LinkedList<SSUnit>();
+        List<SSUnit> iUnits = new LinkedList<>();
 
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -2053,7 +2049,7 @@ public class SSDB {
      * @return A List of curriencies.
      */
     public List<SSCurrency> getCurrencies() {
-        List<SSCurrency> iCurrencies = new LinkedList<SSCurrency>();
+        List<SSCurrency> iCurrencies = new LinkedList<>();
 
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -2180,7 +2176,7 @@ public class SSDB {
      * @return a list of deliveryways
      */
     public List<SSDeliveryWay> getDeliveryWays() {
-        List<SSDeliveryWay> iDeliveryWays = new LinkedList<SSDeliveryWay>();
+        List<SSDeliveryWay> iDeliveryWays = new LinkedList<>();
 
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -2281,7 +2277,7 @@ public class SSDB {
      * @return a list of delivery terms
      */
     public List<SSDeliveryTerm> getDeliveryTerms() {
-        List<SSDeliveryTerm> iDeliveryTerms = new LinkedList<SSDeliveryTerm>();
+        List<SSDeliveryTerm> iDeliveryTerms = new LinkedList<>();
 
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -2382,7 +2378,7 @@ public class SSDB {
      * @return a list of payment terms
      */
     public List<SSPaymentTerm> getPaymentTerms() {
-        List<SSPaymentTerm> iPaymentTerms = new LinkedList<SSPaymentTerm>();
+        List<SSPaymentTerm> iPaymentTerms = new LinkedList<>();
 
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -2478,7 +2474,7 @@ public class SSDB {
     // //////////////////////////////////////////////////////////////////////////////////////
 
     public List<SSNewResultUnit> getResultUnits() {
-        List<SSNewResultUnit> iResultUnits = new LinkedList<SSNewResultUnit>();
+        List<SSNewResultUnit> iResultUnits = new LinkedList<>();
 
         if (iCurrentCompany == null) {
             return iResultUnits;
@@ -2580,7 +2576,7 @@ public class SSDB {
         if (pResultUnits == null) {
             return null;
         }
-        List<SSNewResultUnit> iResultUnits = new LinkedList<SSNewResultUnit>();
+        List<SSNewResultUnit> iResultUnits = new LinkedList<>();
 
         if (iCurrentCompany == null) {
             return iResultUnits;
@@ -2691,7 +2687,7 @@ public class SSDB {
     // //////////////////////////////////////////////////////////////////////////////////////
 
     public List<SSNewProject> getProjects() {
-        List<SSNewProject> iProjects = new LinkedList<SSNewProject>();
+        List<SSNewProject> iProjects = new LinkedList<>();
 
         if (iCurrentCompany == null) {
             return iProjects;
@@ -2791,7 +2787,7 @@ public class SSDB {
         if (pProjects == null) {
             return null;
         }
-        List<SSNewProject> iProjects = new LinkedList<SSNewProject>();
+        List<SSNewProject> iProjects = new LinkedList<>();
 
         if (iCurrentCompany == null) {
             return iProjects;
@@ -2964,7 +2960,7 @@ public class SSDB {
                 iCustomer = getCustomer(iCustomer);
                 iCustomers.add(iCustomer);
                 SSCustomerMath.iInvoicesForCustomers.put(iCustomer.getNumber(),
-                        new LinkedList<SSInvoice>());
+                        new LinkedList<>());
                 iCustomer = null;
                 if (SSCustomerFrame.getInstance() != null) {
                     SSCustomerFrame.getInstance().updateFrame();
@@ -3001,7 +2997,7 @@ public class SSDB {
                 iSupplier = getSupplier(iSupplier);
                 iSuppliers.add(iSupplier);
                 SSSupplierMath.iInvoicesForSuppliers.put(iSupplier.getNumber(),
-                        new LinkedList<SSSupplierInvoice>());
+                        new LinkedList<>());
                 iSupplier = null;
                 if (SSSupplierFrame.getInstance() != null) {
                     SSSupplierFrame.getInstance().updateFrame();
@@ -3252,7 +3248,7 @@ public class SSDB {
                     SSCustomerMath.iInvoicesForCustomers.get(iInvoice.getCustomerNr()).add(
                             iInvoice);
                 } else {
-                    List<SSInvoice> iNumbers = new LinkedList<SSInvoice>();
+                    List<SSInvoice> iNumbers = new LinkedList<>();
 
                     iNumbers.add(iInvoice);
                     SSCustomerMath.iInvoicesForCustomers.put(iInvoice.getCustomerNr(),
@@ -3576,7 +3572,7 @@ public class SSDB {
                     SSSupplierMath.iInvoicesForSuppliers.get(iSupplierInvoice.getSupplierNr()).add(
                             iSupplierInvoice);
                 } else {
-                    List<SSSupplierInvoice> iNumbers = new LinkedList<SSSupplierInvoice>();
+                    List<SSSupplierInvoice> iNumbers = new LinkedList<>();
 
                     iNumbers.add(iSupplierInvoice);
                     SSSupplierMath.iInvoicesForSuppliers.put(
@@ -3915,7 +3911,7 @@ public class SSDB {
         if (iProducts != null) {
             return iProducts;
         }
-        iProducts = new LinkedList<SSProduct>();
+        iProducts = new LinkedList<>();
 
         if (iCurrentCompany == null) {
             return iProducts;
@@ -4028,7 +4024,7 @@ public class SSDB {
         if (pProducts == null) {
             return null;
         }
-        List<SSProduct> iProducts = new LinkedList<SSProduct>();
+        List<SSProduct> iProducts = new LinkedList<>();
 
         if (this.iProducts != null) {
             for (SSProduct iProduct : pProducts) {
@@ -4155,7 +4151,7 @@ public class SSDB {
         if (iCustomers != null) {
             return iCustomers;
         }
-        iCustomers = new LinkedList<SSCustomer>();
+        iCustomers = new LinkedList<>();
         if (iCurrentCompany == null) {
             return iCustomers;
         }
@@ -4267,7 +4263,7 @@ public class SSDB {
         if (pCustomers == null) {
             return null;
         }
-        List<SSCustomer> iCustomers = new LinkedList<SSCustomer>();
+        List<SSCustomer> iCustomers = new LinkedList<>();
 
         if (this.iCustomers != null) {
             for (SSCustomer iCustomer : pCustomers) {
@@ -4394,7 +4390,7 @@ public class SSDB {
         if (iSuppliers != null) {
             return iSuppliers;
         }
-        iSuppliers = new LinkedList<SSSupplier>();
+        iSuppliers = new LinkedList<>();
         if (iCurrentCompany == null) {
             return iSuppliers;
         }
@@ -4469,7 +4465,7 @@ public class SSDB {
         if (pSuppliers == null) {
             return null;
         }
-        List<SSSupplier> iSuppliers = new LinkedList<SSSupplier>();
+        List<SSSupplier> iSuppliers = new LinkedList<>();
 
         if (this.iSuppliers != null) {
             for (SSSupplier iSupplier : pSuppliers) {
@@ -4595,7 +4591,7 @@ public class SSDB {
         if (iAutoDists != null) {
             return iAutoDists;
         }
-        iAutoDists = new LinkedList<SSAutoDist>();
+        iAutoDists = new LinkedList<>();
         if (iCurrentCompany == null) {
             return iAutoDists;
         }
@@ -4670,7 +4666,7 @@ public class SSDB {
         if (pAutoDists == null) {
             return null;
         }
-        List<SSAutoDist> iAutoDists = new LinkedList<SSAutoDist>();
+        List<SSAutoDist> iAutoDists = new LinkedList<>();
 
         if (this.iAutoDists != null) {
             for (SSAutoDist iAutoDist : pAutoDists) {
@@ -4798,7 +4794,7 @@ public class SSDB {
         if (iTenders != null) {
             return iTenders;
         }
-        iTenders = new LinkedList<SSTender>();
+        iTenders = new LinkedList<>();
         if (iCurrentCompany == null) {
             return iTenders;
         }
@@ -4874,7 +4870,7 @@ public class SSDB {
         if (pTenders == null) {
             return null;
         }
-        List<SSTender> iTenders = new LinkedList<SSTender>();
+        List<SSTender> iTenders = new LinkedList<>();
 
         if (this.iTenders != null) {
             for (SSTender iTender : pTenders) {
@@ -5019,7 +5015,7 @@ public class SSDB {
         if (iOrders != null) {
             return iOrders;
         }
-        iOrders = new LinkedList<SSOrder>();
+        iOrders = new LinkedList<>();
         if (iCurrentCompany == null) {
             return iOrders;
         }
@@ -5095,7 +5091,7 @@ public class SSDB {
         if (pOrders == null) {
             return null;
         }
-        List<SSOrder> iOrders = new LinkedList<SSOrder>();
+        List<SSOrder> iOrders = new LinkedList<>();
 
         if (this.iOrders != null) {
             for (SSOrder iOrder : pOrders) {
@@ -5244,7 +5240,7 @@ public class SSDB {
         if (iInvoices != null) {
             return iInvoices;
         }
-        iInvoices = new LinkedList<SSInvoice>();
+        iInvoices = new LinkedList<>();
         if (iCurrentCompany == null) {
             return iInvoices;
         }
@@ -5320,7 +5316,7 @@ public class SSDB {
         if (pInvoices == null) {
             return null;
         }
-        List<SSInvoice> iInvoices = new LinkedList<SSInvoice>();
+        List<SSInvoice> iInvoices = new LinkedList<>();
 
         if (this.iInvoices != null) {
             for (SSInvoice iInvoice : pInvoices) {
@@ -5469,7 +5465,7 @@ public class SSDB {
         if (iInpayments != null) {
             return iInpayments;
         }
-        iInpayments = new LinkedList<SSInpayment>();
+        iInpayments = new LinkedList<>();
         if (iCurrentCompany == null) {
             return iInpayments;
         }
@@ -5648,7 +5644,7 @@ public class SSDB {
         if (iOutpayments != null) {
             return iOutpayments;
         }
-        iOutpayments = new LinkedList<SSOutpayment>();
+        iOutpayments = new LinkedList<>();
         if (iCurrentCompany == null) {
             return iOutpayments;
         }
@@ -5829,7 +5825,7 @@ public class SSDB {
         if (iCreditInvoices != null) {
             return iCreditInvoices;
         }
-        iCreditInvoices = new LinkedList<SSCreditInvoice>();
+        iCreditInvoices = new LinkedList<>();
         if (iCurrentCompany == null) {
             return iCreditInvoices;
         }
@@ -5905,7 +5901,7 @@ public class SSDB {
         if (pCreditInvoices == null) {
             return null;
         }
-        List<SSCreditInvoice> iCreditInvoices = new LinkedList<SSCreditInvoice>();
+        List<SSCreditInvoice> iCreditInvoices = new LinkedList<>();
 
         if (this.iCreditInvoices != null) {
             for (SSCreditInvoice iCreditInvoice : pCreditInvoices) {
@@ -6054,7 +6050,7 @@ public class SSDB {
         if (iPeriodicInvoices != null) {
             return iPeriodicInvoices;
         }
-        iPeriodicInvoices = new LinkedList<SSPeriodicInvoice>();
+        iPeriodicInvoices = new LinkedList<>();
         if (iCurrentCompany == null) {
             return iPeriodicInvoices;
         }
@@ -6236,7 +6232,7 @@ public class SSDB {
         if (iPurchaseOrders != null) {
             return iPurchaseOrders;
         }
-        iPurchaseOrders = new LinkedList<SSPurchaseOrder>();
+        iPurchaseOrders = new LinkedList<>();
         if (iCurrentCompany == null) {
             return iPurchaseOrders;
         }
@@ -6312,7 +6308,7 @@ public class SSDB {
         if (pPurchaseOrders == null) {
             return null;
         }
-        List<SSPurchaseOrder> iPurchaseOrders = new LinkedList<SSPurchaseOrder>();
+        List<SSPurchaseOrder> iPurchaseOrders = new LinkedList<>();
 
         if (this.iPurchaseOrders != null) {
             for (SSPurchaseOrder iPurchaseOrder : pPurchaseOrders) {
@@ -6461,7 +6457,7 @@ public class SSDB {
         if (iSupplierInvoices != null) {
             return iSupplierInvoices;
         }
-        iSupplierInvoices = new LinkedList<SSSupplierInvoice>();
+        iSupplierInvoices = new LinkedList<>();
         if (iCurrentCompany == null) {
             return iSupplierInvoices;
         }
@@ -6538,7 +6534,7 @@ public class SSDB {
         if (pSupplierInvoices == null) {
             return null;
         }
-        List<SSSupplierInvoice> iSupplierInvoices = new LinkedList<SSSupplierInvoice>();
+        List<SSSupplierInvoice> iSupplierInvoices = new LinkedList<>();
 
         if (this.iSupplierInvoices != null) {
             for (SSSupplierInvoice iSupplierInvoice : pSupplierInvoices) {
@@ -6687,7 +6683,7 @@ public class SSDB {
         if (iSupplierCreditInvoices != null) {
             return iSupplierCreditInvoices;
         }
-        iSupplierCreditInvoices = new LinkedList<SSSupplierCreditInvoice>();
+        iSupplierCreditInvoices = new LinkedList<>();
         if (iCurrentCompany == null) {
             return iSupplierCreditInvoices;
         }
@@ -6869,7 +6865,7 @@ public class SSDB {
         if (iInventories != null) {
             return iInventories;
         }
-        iInventories = new LinkedList<SSInventory>();
+        iInventories = new LinkedList<>();
         if (iCurrentCompany == null) {
             return iInventories;
         }
@@ -7049,7 +7045,7 @@ public class SSDB {
         if (iIndeliveries != null) {
             return iIndeliveries;
         }
-        iIndeliveries = new LinkedList<SSIndelivery>();
+        iIndeliveries = new LinkedList<>();
         if (iCurrentCompany == null) {
             return iIndeliveries;
         }
@@ -7229,7 +7225,7 @@ public class SSDB {
         if (iOutdeliveries != null) {
             return iOutdeliveries;
         }
-        iOutdeliveries = new LinkedList<SSOutdelivery>();
+        iOutdeliveries = new LinkedList<>();
         if (iCurrentCompany == null) {
             return iOutdeliveries;
         }
@@ -7404,7 +7400,7 @@ public class SSDB {
         if (iOwnReports != null) {
             return iOwnReports;
         }
-        iOwnReports = new LinkedList<SSOwnReport>();
+        iOwnReports = new LinkedList<>();
 
         if (iCurrentCompany == null) {
             return iOwnReports;
@@ -7517,7 +7513,7 @@ public class SSDB {
         if (pOwnReports == null) {
             return null;
         }
-        List<SSOwnReport> iOwnReports = new LinkedList<SSOwnReport>();
+        List<SSOwnReport> iOwnReports = new LinkedList<>();
 
         if (this.iOwnReports != null) {
             for (SSOwnReport iOwnReport : pOwnReports) {
@@ -7888,82 +7884,82 @@ public class SSDB {
         }
 
         SSInitDialog.runProgress(SSMainFrame.getInstance(), "Konverterar databasen",
-                new Runnable() {
-            public void run() {
-                // dropTriggers();
-                SSDBUtils.backup(iFile);
-                SSSystemData iData = null;
+                () -> {
 
-                try {
-                    iData = (SSSystemData) SSDBUtils.LoadFromFile(iFile);
-                    SSDBUtils.removeBackup(iFile);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    SSDBUtils.restoreBackup(iFile);
-                }
+                        // dropTriggers();
+                        SSDBUtils.backup(iFile);
+                        SSSystemData iData = null;
 
-                if (iData == null) {
-                    return;
-                }
-                List<ArchiveFile> iFiles = new LinkedList<ArchiveFile>();
-
-                iFiles.add(new ArchiveFile(iFile));
-
-                for (SSSystemCompany iSystemCompany : iData.getSystemCompanies()) {
-                    File iCompanyFile = getFile(iSystemCompany.getId());
-
-                    LoadCompany(iCompanyFile);
-                    iFiles.add(new ArchiveFile(iCompanyFile));
-                    for (SSSystemYear iSystemYear : iSystemCompany.getYears()) {
-                        File iYearFile = getFile(iSystemYear.getId());
-
-                        LoadYear(iYearFile);
-                        iFiles.add(new ArchiveFile(iYearFile));
-                        setCurrentYear(null);
-                    }
-                    setCurrentCompany(null);
-                }
-                if (!iData.getAccountPlans().isEmpty()) {
-                    try {
-                        PreparedStatement iStatement = iConnection.prepareStatement(
-                                "DELETE FROM tbl_accountplan");
-
-                        iStatement.executeUpdate();
-                        iStatement.close();
-                        iConnection.commit();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
                         try {
-                            iConnection.rollback();
-                        } catch (SQLException ignored) {}
-                        SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
-                                e.getMessage());
-                    }
-                }
+                            iData = (SSSystemData) SSDBUtils.LoadFromFile(iFile);
+                            SSDBUtils.removeBackup(iFile);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            SSDBUtils.restoreBackup(iFile);
+                        }
 
-                for (SSAccountPlan iAccountPlan : iData.getAccountPlans()) {
-                    addAccountPlan(iAccountPlan);
-                }
+                        if (iData == null) {
+                            return;
+                        }
+                        List<ArchiveFile> iFiles = new LinkedList<>();
 
-                try {
-                    SSBackupZip.compressFiles(
-                            Path.get(Path.APP_BASE) + "/db/databas_v1.zip", iFiles);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                for (ArchiveFile iArchiveFile : iFiles) {
-                    if (iArchiveFile.getFile().exists()) {
-                        iArchiveFile.getFile().delete();
-                    }
-                }
-                if (iLocking) {
-                    createServerTriggers();
-                } else {
-                    createLocalTriggers();
-                }
-                SSFrameManager.getInstance().close();
-            }
-        });
+                        iFiles.add(new ArchiveFile(iFile));
+
+                        for (SSSystemCompany iSystemCompany : iData.getSystemCompanies()) {
+                            File iCompanyFile = getFile(iSystemCompany.getId());
+
+                            LoadCompany(iCompanyFile);
+                            iFiles.add(new ArchiveFile(iCompanyFile));
+                            for (SSSystemYear iSystemYear : iSystemCompany.getYears()) {
+                                File iYearFile = getFile(iSystemYear.getId());
+
+                                LoadYear(iYearFile);
+                                iFiles.add(new ArchiveFile(iYearFile));
+                                setCurrentYear(null);
+                            }
+                            setCurrentCompany(null);
+                        }
+                        if (!iData.getAccountPlans().isEmpty()) {
+                            try {
+                                PreparedStatement iStatement = iConnection.prepareStatement(
+                                        "DELETE FROM tbl_accountplan");
+
+                                iStatement.executeUpdate();
+                                iStatement.close();
+                                iConnection.commit();
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                                try {
+                                    iConnection.rollback();
+                                } catch (SQLException ignored) {}
+                                SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
+                                        e.getMessage());
+                            }
+                        }
+
+                        for (SSAccountPlan iAccountPlan : iData.getAccountPlans()) {
+                            addAccountPlan(iAccountPlan);
+                        }
+
+                        try {
+                            SSBackupZip.compressFiles(
+                                    Path.get(Path.APP_BASE) + "/db/databas_v1.zip", iFiles);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        for (ArchiveFile iArchiveFile : iFiles) {
+                            if (iArchiveFile.getFile().exists()) {
+                                iArchiveFile.getFile().delete();
+                            }
+                        }
+                        if (iLocking) {
+                            createServerTriggers();
+                        } else {
+                            createLocalTriggers();
+                        }
+                        SSFrameManager.getInstance().close();
+
+                    });
     }
 
     private void LoadCompany(File iFile) {

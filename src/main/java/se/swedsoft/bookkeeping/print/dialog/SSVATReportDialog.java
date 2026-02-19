@@ -68,17 +68,17 @@ public class SSVATReportDialog extends SSDialog {
         iAccountR2.setSearchColumns(0);
         iAccountR2.setAllowCustomValues(false);
 
-        iAccountR1.addSelectionListener(new SSSelectionListener<SSAccount>() {
+        iAccountR1.addSelectionListener(new SSSelectionListener<>() {
             public void selected(SSAccount selected) {
                 txtAccountR1.setText(selected == null ? "" : selected.getDescription());
             }
         });
-        iAccountR2.addSelectionListener(new SSSelectionListener<SSAccount>() {
+        iAccountR2.addSelectionListener(new SSSelectionListener<>() {
             public void selected(SSAccount selected) {
                 txtAccountR2.setText(selected == null ? "" : selected.getDescription());
             }
         });
-        iAccountA.addSelectionListener(new SSSelectionListener<SSAccount>() {
+        iAccountA.addSelectionListener(new SSSelectionListener<>() {
             public void selected(SSAccount selected) {
                 txtAccountA.setText(selected == null ? "" : selected.getDescription());
             }
@@ -97,16 +97,8 @@ public class SSVATReportDialog extends SSDialog {
                 new SSAccount(3740)),
                 true);
 
-        iButtonPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setModalResult(JOptionPane.CANCEL_OPTION, true);
-            }
-        });
-        iButtonPanel.addOkActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setModalResult(JOptionPane.OK_OPTION, true);
-            }
-        });
+        iButtonPanel.addCancelActionListener(e -> setModalResult(JOptionPane.CANCEL_OPTION, true));
+        iButtonPanel.addOkActionListener(e -> setModalResult(JOptionPane.OK_OPTION, true));
 
 	getRootPane().setDefaultButton(iButtonPanel.getOkButton());
 

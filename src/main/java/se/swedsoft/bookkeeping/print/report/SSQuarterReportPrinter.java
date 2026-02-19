@@ -58,8 +58,8 @@ public class SSQuarterReportPrinter extends SSPrinter {
 
         addParameters();
 
-        iEuSaleCommodity = new HashMap<SSCustomer, BigDecimal>();
-        iEuSaleThirdPartCommodity = new HashMap<SSCustomer, BigDecimal>();
+        iEuSaleCommodity = new HashMap<>();
+        iEuSaleThirdPartCommodity = new HashMap<>();
 
         Map<String, List<SSInvoice>> iInvoicesForCustomers = SSInvoiceMath.getInvoicesforCustomers();
         Map<String, List<SSCreditInvoice>> iCreditInvoicesForCustomers = SSCreditInvoiceMath.getCreditInvoicesforCustomers();
@@ -196,10 +196,10 @@ public class SSQuarterReportPrinter extends SSPrinter {
     @Override
     protected SSDefaultTableModel getModel() {
 
-        SSDefaultTableModel<SSCustomer> iModel = new SSDefaultTableModel<SSCustomer>() {
+        SSDefaultTableModel<SSCustomer> iModel = new SSDefaultTableModel<>() {
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSAccount.class;
             }
 
@@ -239,11 +239,7 @@ public class SSQuarterReportPrinter extends SSPrinter {
         iModel.addColumn("customer.eusalecommodity");
         iModel.addColumn("customer.eusalethirdpartcommodity");
 
-        Collections.sort(iCustomers, new Comparator<SSCustomer>() {
-            public int compare(SSCustomer o1, SSCustomer o2) {
-                return o1.getNumber().compareTo(o2.getNumber());
-            }
-        });
+        Collections.sort(iCustomers, (o1, o2) -> o1.getNumber().compareTo(o2.getNumber()));
 
         iModel.setObjects(iCustomers);
 

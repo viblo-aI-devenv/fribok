@@ -38,14 +38,14 @@ public class SSAutoDistTableModel extends SSTableModel<SSAutoDist> {
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSAutoDist.class;
     }
 
     /**
      *  Kontonummer
      */
-    public static SSTableColumn<SSAutoDist> COLUMN_NUMBER = new SSTableColumn<SSAutoDist>(
+    public static SSTableColumn<SSAutoDist> COLUMN_NUMBER = new SSTableColumn<>(
             SSBundle.getBundle().getString("autodisttable.column.1")) {
         @Override
         public Object getValue(SSAutoDist iAutoDist) {
@@ -72,7 +72,7 @@ public class SSAutoDistTableModel extends SSTableModel<SSAutoDist> {
     /**
      *  Beskrivning
      */
-    public static SSTableColumn<SSAutoDist> COLUMN_DESCRIPTION = new SSTableColumn<SSAutoDist>(
+    public static SSTableColumn<SSAutoDist> COLUMN_DESCRIPTION = new SSTableColumn<>(
             SSBundle.getBundle().getString("autodisttable.column.2")) {
         @Override
         public Object getValue(SSAutoDist iAutoDist) {

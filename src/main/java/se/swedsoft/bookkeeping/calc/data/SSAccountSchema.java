@@ -33,8 +33,8 @@ public class SSAccountSchema implements Serializable {
      *
      */
     private SSAccountSchema() {
-        iResultGroups = new LinkedList<SSAccountGroup>();
-        iBalanceGroups = new LinkedList<SSAccountGroup>();
+        iResultGroups = new LinkedList<>();
+        iBalanceGroups = new LinkedList<>();
     }
 
     /**
@@ -71,7 +71,7 @@ public class SSAccountSchema implements Serializable {
         return sb.toString();
     }
 
-    private static Map<String, SSAccountSchema> iSchemaCache = new HashMap<String, SSAccountSchema>();
+    private static Map<String, SSAccountSchema> iSchemaCache = new HashMap<>();
 
     /**
      *
@@ -152,7 +152,7 @@ public class SSAccountSchema implements Serializable {
         public AccountGroupLoader(SSAccountSchema pSchema) {
             iSchema = pSchema;
             iLevelOne = null;
-            iLevelTwo = new Stack<SSAccountGroup>();
+            iLevelTwo = new Stack<>();
         }
 
         /**

@@ -37,13 +37,13 @@ public class SSOrderImporter {
     private List<SSProduct> iProducts;
 
     public SSOrderImporter(File pFile) {
-        iCustomers = new LinkedList<SSCustomer>();
-        iProducts = new LinkedList<SSProduct>();
+        iCustomers = new LinkedList<>();
+        iProducts = new LinkedList<>();
         iFile = pFile;
     }
 
     public void doImport() throws SSImportException {
-        List<SSOrder> iOrders = new LinkedList<SSOrder>();
+        List<SSOrder> iOrders = new LinkedList<>();
 
         try {
             DocumentBuilderFactory iDocBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -835,8 +835,8 @@ public class SSOrderImporter {
             BufferedReader br = new BufferedReader(
                     new InputStreamReader(new FileInputStream(iFile), "Windows-1252"));
             String text = null;
-            Collection<String> al = new ArrayList<String>();
-            HashMap<Integer, ArrayList<String>> iResult = new HashMap<Integer, ArrayList<String>>();
+            Collection<String> al = new ArrayList<>();
+            HashMap<Integer, ArrayList<String>> iResult = new HashMap<>();
 
             while ((text = br.readLine()) != null) {
                 al.add(text);
@@ -852,7 +852,7 @@ public class SSOrderImporter {
                 Integer iOrderNumber = Integer.parseInt(iFields[0]);
 
                 if (iResult.get(iOrderNumber) == null) {
-                    ArrayList<String> iLineData = new ArrayList<String>();
+                    ArrayList<String> iLineData = new ArrayList<>();
 
                     iLineData.add(iFields[1]);
                     iResult.put(iOrderNumber, iLineData);
@@ -861,7 +861,7 @@ public class SSOrderImporter {
                 }
             }
 
-            Collection<String> iBadOrders = new LinkedList<String>();
+            Collection<String> iBadOrders = new LinkedList<>();
 
             if (SSDB.getInstance().getProduct("frakt") == null/* && SSDB.getInstance().getProduct("frakt") == null && SSDB.getInstance().getProduct("FRAKT") == null*/) {
                 SSErrorDialog.showDialog(SSMainFrame.getInstance(), "",
@@ -874,7 +874,7 @@ public class SSOrderImporter {
                         "Du måste skapa en produkt med nummer \"Avgift\" innan du kan importera.");
                 return;
             }
-            List<Integer> iOrderNumbers = new ArrayList<Integer>(iResult.keySet());
+            List<Integer> iOrderNumbers = new ArrayList<>(iResult.keySet());
 
             Collections.sort(iOrderNumbers);
             Integer iOrderCount = 0;
@@ -928,7 +928,7 @@ public class SSOrderImporter {
                                 try {
                                     iFields[6] = iFields[6].replace(",", ".");
                                     iRow.setUnitprice(new BigDecimal(iFields[6]));
-                                } catch (Exception e) {
+                                } catch (NumberFormatException e) {
                                     iRow.setUnitprice(new BigDecimal(0));
                                 }
                             }
@@ -941,7 +941,7 @@ public class SSOrderImporter {
                             try {
                                 iFields[6] = iFields[6].replace(",", ".");
                                 iProduct.setSellingPrice(new BigDecimal(iFields[6]));
-                            } catch (Exception e) {
+                            } catch (NumberFormatException e) {
                                 iProduct.setSellingPrice(new BigDecimal(0));
                             }
                             try {
@@ -956,12 +956,12 @@ public class SSOrderImporter {
                                 iTaxPercent = iTaxPercent.setScale(0);
                                 iProduct.setTaxCode(
                                         SSTaxCode.decode2(iTaxPercent.toString()));
-                            } catch (Exception e) {
+                            } catch (NumberFormatException | ArithmeticException e) {
                                 iProduct.setTaxCode(SSTaxCode.TAXRATE_1);
                             }
                             try {
                                 iProduct.setWeight(new BigDecimal(iFields[9]));
-                            } catch (Exception e) {
+                            } catch (NumberFormatException e) {
                                 e.printStackTrace();
                             }
                             iRow.setProduct(iProduct);
@@ -974,7 +974,7 @@ public class SSOrderImporter {
 
                     try {
                         iRow.setQuantity(Integer.parseInt(iFields[5]));
-                    } catch (Exception e) {
+                    } catch (NumberFormatException e) {
                         iRow.setQuantity(0);
                     }
 
@@ -997,7 +997,7 @@ public class SSOrderImporter {
                         iRow.setUnitprice(iFee);
                         iRow.setQuantity(1);
                         iOrder.getRows().add(iRow);
-                    } catch (Exception e) {
+                    } catch (RuntimeException e) {
                         iBadOrders.add(
                                 iOrderNumber
                                         + " - Kunde inte skapa produktrad för avgift");
@@ -1016,7 +1016,7 @@ public class SSOrderImporter {
                         iRow.setUnitprice(iFreight);
                         iRow.setQuantity(1);
                         iOrder.getRows().add(iRow);
-                    } catch (Exception e) {
+                    } catch (RuntimeException e) {
                         iBadOrders.add(
                                 iOrderNumber + " - Kunde inte skapa produktrad för frakt");
                         continue;

@@ -46,8 +46,8 @@ public class SSAccountingYear implements Serializable, SSTableSearchable {
         iId = new UID();
         iFrom = new Date();
         iTo = new Date();
-        iInBalance = new HashMap<SSAccount, BigDecimal>();
-        iVouchers = new LinkedList<SSVoucher>();
+        iInBalance = new HashMap<>();
+        iVouchers = new LinkedList<>();
         iBudget = new SSBudget();
     }
 
@@ -268,7 +268,7 @@ public class SSAccountingYear implements Serializable, SSTableSearchable {
      */
     public void setInBalance(SSAccount pAccount, BigDecimal pAmount) {
         if (iInBalance == null) {
-            iInBalance = new HashMap<SSAccount, BigDecimal>();
+            iInBalance = new HashMap<>();
         }
         iInBalance.put(pAccount, pAmount);
     }
@@ -281,7 +281,7 @@ public class SSAccountingYear implements Serializable, SSTableSearchable {
      */
     public BigDecimal getInBalance(SSAccount pAccount) {
         if (iInBalance == null) {
-            iInBalance = new HashMap<SSAccount, BigDecimal>();
+            iInBalance = new HashMap<>();
         }
         BigDecimal amount = iInBalance.get(pAccount);
 
@@ -330,7 +330,7 @@ public class SSAccountingYear implements Serializable, SSTableSearchable {
      public void yearLoaded(SSCompany iCompany, SSAccountingYear iAccountingYear);
      }
 
-     private static List<SSAccountingYearListener> iListeners = new LinkedList<SSAccountingYearListener>();
+     private static List<SSAccountingYearListener> iListeners = new LinkedList<>();
 
      public void addListener(SSAccountingYearListener iListener){
      iListeners.add(iListener);

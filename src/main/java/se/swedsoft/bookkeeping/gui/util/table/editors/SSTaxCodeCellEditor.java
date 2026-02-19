@@ -25,7 +25,7 @@ public class SSTaxCodeCellEditor extends SSTableComboBox.CellEditor<SSTaxCode> {
     public SSTaxCodeCellEditor() {
         setModel(SSTaxCodeTableModel.getDropDownModel());
 
-        iValues = new HashMap<SSTaxCode, BigDecimal>();
+        iValues = new HashMap<>();
     }
 
     /**

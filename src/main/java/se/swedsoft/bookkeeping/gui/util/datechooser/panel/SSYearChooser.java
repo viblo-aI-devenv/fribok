@@ -42,7 +42,7 @@ public class SSYearChooser extends JPanel implements ChangeListener, CaretListen
 
         Calendar iCalendar = Calendar.getInstance();
 
-        iChangeListeners = new LinkedList<ActionListener>();
+        iChangeListeners = new LinkedList<>();
 
         iTextField = new JTextField();
         iTextField.setBorder(BorderFactory.createEmptyBorder());

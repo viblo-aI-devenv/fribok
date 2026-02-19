@@ -118,23 +118,23 @@ public class SSDialog extends JDialog implements KeyEventDispatcher, ActionListe
 
         // make the OptionPane close the window
         pOptionPane.addPropertyChangeListener(
-                new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent event) {
-                String iEvent = event.getPropertyName();
+                event -> {
 
-                if (iEvent.equals(JOptionPane.VALUE_PROPERTY)
-                        || iEvent.equals(JOptionPane.INPUT_VALUE_PROPERTY)) {
+                        String iEvent = event.getPropertyName();
 
-                    if (pOptionPane.getValue() instanceof Integer) {
-                        Integer iModalresult = (Integer) pOptionPane.getValue();
+                        if (iEvent.equals(JOptionPane.VALUE_PROPERTY)
+                                || iEvent.equals(JOptionPane.INPUT_VALUE_PROPERTY)) {
 
-                        setModalResult(iModalresult);
-                    }
+                            if (pOptionPane.getValue() instanceof Integer) {
+                                Integer iModalresult = (Integer) pOptionPane.getValue();
 
-                    closeDialog();
-                }
-            }
-        });
+                                setModalResult(iModalresult);
+                            }
+
+                            closeDialog();
+                        }
+
+                    });
     }
 
     /**

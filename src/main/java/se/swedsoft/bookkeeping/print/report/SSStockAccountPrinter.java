@@ -85,12 +85,12 @@ public class SSStockAccountPrinter extends SSPrinter {
     @Override
     protected SSDefaultTableModel getModel() {
 
-        SSDefaultTableModel<SSProduct> iModel = new SSDefaultTableModel<SSProduct>() {
+        SSDefaultTableModel<SSProduct> iModel = new SSDefaultTableModel<>() {
 
             DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSAccount.class;
             }
 
@@ -141,11 +141,7 @@ public class SSStockAccountPrinter extends SSPrinter {
         iModel.addColumn("product.reserved");
         iModel.addColumn("product.ordered");
 
-        Collections.sort(iProducts, new Comparator<SSProduct>() {
-            public int compare(SSProduct o1, SSProduct o2) {
-                return o1.getNumber().compareTo(o2.getNumber());
-            }
-        });
+        Collections.sort(iProducts, (o1, o2) -> o1.getNumber().compareTo(o2.getNumber()));
 
         iModel.setObjects(iProducts);
 

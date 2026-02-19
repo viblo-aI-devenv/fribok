@@ -57,35 +57,31 @@ public class SSAutoDistDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSAutoDist iAutoDist = iPanel.getAutoDist();
+        final ActionListener iSaveAction = e -> {
+
+                SSAutoDist iAutoDist1 = iPanel.getAutoDist();
 
                 for (SSAutoDist iCurrentAutoDist : SSDB.getInstance().getAutoDists()) {
-                    if (iCurrentAutoDist.getNumber().equals(iAutoDist.getNumber())) {
+                    if (iCurrentAutoDist.getNumber().equals(iAutoDist1.getNumber())) {
                         new SSErrorDialog(iMainFrame, "autodistframe.autodistaccexists");
                         return;
                     }
                 }
-                for (SSAutoDistRow iRow : iAutoDist.getRows()) {
+                for (SSAutoDistRow iRow : iAutoDist1.getRows()) {
                     if (iRow.getAccount() == null) {
                         new SSErrorDialog(iMainFrame, "autodistframe.autodistrownoacc");
                         return;
                     }
                 }
-                SSDB.getInstance().addAutoDist(iAutoDist);
+                SSDB.getInstance().addAutoDist(iAutoDist1);
 
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkActionListener(iSaveAction);
 
-        iPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iDialog.closeDialog();
-            }
-        });
+        iPanel.addCancelActionListener(e -> iDialog.closeDialog());
 
         iDialog.addWindowListener(
                 new WindowAdapter() {
@@ -131,41 +127,41 @@ public class SSAutoDistDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSAutoDist iAutoDist = iPanel.getAutoDist();
+        final ActionListener iSaveAction = e -> {
+
+                SSAutoDist iAutoDist1 = iPanel.getAutoDist();
 
                 for (SSAutoDist iCurrentAutoDist : SSDB.getInstance().getAutoDists()) {
-                    if (iCurrentAutoDist.getNumber().equals(iAutoDist.getNumber())
-                            && !iAutoDist.getNumber().equals(iOriginal.getNumber())) {
+                    if (iCurrentAutoDist.getNumber().equals(iAutoDist1.getNumber())
+                            && !iAutoDist1.getNumber().equals(iOriginal.getNumber())) {
                         new SSErrorDialog(iMainFrame, "autodistframe.autodistaccexists");
                         return;
                     }
                 }
-                for (SSAutoDistRow iRow : iAutoDist.getRows()) {
+                for (SSAutoDistRow iRow : iAutoDist1.getRows()) {
                     if (iRow.getAccount() == null) {
                         new SSErrorDialog(iMainFrame, "autodistframe.autodistrownoacc");
                         return;
                     }
                 }
-                SSDB.getInstance().updateAutoDist(iAutoDist, iOriginal);
+                SSDB.getInstance().updateAutoDist(iAutoDist1, iOriginal);
 
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
                 }
                 SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkActionListener(iSaveAction);
 
-        iPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addCancelActionListener(e -> {
+
                 SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
-            }
-        });
+
+            });
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override
@@ -200,8 +196,8 @@ public class SSAutoDistDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        final ActionListener iSaveAction = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        final ActionListener iSaveAction = e -> {
+
                 SSAutoDist iAutoDist = iPanel.getAutoDist();
 
                 for (SSAutoDist iCurrentAutoDist : SSDB.getInstance().getAutoDists()) {
@@ -219,16 +215,12 @@ public class SSAutoDistDialog {
                 SSDB.getInstance().addAutoDist(iAutoDist);
 
                 iDialog.closeDialog();
-            }
-        };
+
+            };
 
         iPanel.addOkActionListener(iSaveAction);
 
-        iPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iDialog.closeDialog();
-            }
-        });
+        iPanel.addCancelActionListener(e -> iDialog.closeDialog());
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override

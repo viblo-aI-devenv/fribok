@@ -39,7 +39,7 @@ public class SSAccountTableModel extends SSTableModel<SSAccount> {
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSAccount.class;
     }
 
@@ -81,7 +81,7 @@ public class SSAccountTableModel extends SSTableModel<SSAccount> {
     /**
      *  Nummer
      */
-    public static SSTableColumn<SSAccount> COLUMN_NUMBER = new SSTableColumn<SSAccount>(
+    public static SSTableColumn<SSAccount> COLUMN_NUMBER = new SSTableColumn<>(
             SSBundle.getBundle().getString("accounttable.column.1")) {
         @Override
         public Object getValue(SSAccount iAccount) {
@@ -107,7 +107,7 @@ public class SSAccountTableModel extends SSTableModel<SSAccount> {
     /**
      *  beskrivning
      */
-    public static SSTableColumn<SSAccount> COLUMN_DESCRIPTION = new SSTableColumn<SSAccount>(
+    public static SSTableColumn<SSAccount> COLUMN_DESCRIPTION = new SSTableColumn<>(
             SSBundle.getBundle().getString("accounttable.column.2")) {
         @Override
         public Object getValue(SSAccount iAccount) {
@@ -133,7 +133,7 @@ public class SSAccountTableModel extends SSTableModel<SSAccount> {
     /**
      *  Aktivt
      */
-    public static SSTableColumn<SSAccount> COLUMN_ACTIVE = new SSTableColumn<SSAccount>(
+    public static SSTableColumn<SSAccount> COLUMN_ACTIVE = new SSTableColumn<>(
             SSBundle.getBundle().getString("accounttable.column.3")) {
         @Override
         public Object getValue(SSAccount iAccount) {
@@ -159,7 +159,7 @@ public class SSAccountTableModel extends SSTableModel<SSAccount> {
     /**
      *  Momskod
      */
-    public static SSTableColumn<SSAccount> COLUMN_VATCODE = new SSTableColumn<SSAccount>(
+    public static SSTableColumn<SSAccount> COLUMN_VATCODE = new SSTableColumn<>(
             SSBundle.getBundle().getString("accounttable.column.4")) {
         @Override
         public Object getValue(SSAccount iAccount) {
@@ -185,7 +185,7 @@ public class SSAccountTableModel extends SSTableModel<SSAccount> {
     /**
      *  SRU
      */
-    public static SSTableColumn<SSAccount> COLUMN_SRUCODE = new SSTableColumn<SSAccount>(
+    public static SSTableColumn<SSAccount> COLUMN_SRUCODE = new SSTableColumn<>(
             SSBundle.getBundle().getString("accounttable.column.5")) {
         @Override
         public Object getValue(SSAccount iAccount) {
@@ -211,7 +211,7 @@ public class SSAccountTableModel extends SSTableModel<SSAccount> {
     /**
      *  Rapportkod
      */
-    public static SSTableColumn<SSAccount> COLUMN_REPORTCODE = new SSTableColumn<SSAccount>(
+    public static SSTableColumn<SSAccount> COLUMN_REPORTCODE = new SSTableColumn<>(
             SSBundle.getBundle().getString("accounttable.column.6")) {
         @Override
         public Object getValue(SSAccount iAccount) {

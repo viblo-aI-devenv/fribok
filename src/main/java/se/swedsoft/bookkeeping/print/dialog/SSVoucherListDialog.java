@@ -68,27 +68,19 @@ public class SSVoucherListDialog extends SSDialog {
         iButtonGroup.add(iRadioDate);
         iButtonGroup.add(iRadioAll);
 
-        ChangeListener iChangeListener = new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
+        ChangeListener iChangeListener = e -> {
+
                 iFromVoucher.setEnabled(iRadioNumber.isSelected());
                 iToVoucher.setEnabled(iRadioNumber.isSelected());
 
                 iFromDate.setEnabled(iRadioDate.isSelected());
                 iToDate.setEnabled(iRadioDate.isSelected());
-            }
-        };
 
-        iButtonPanel.addOkActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                closeDialog(JOptionPane.OK_OPTION);
-            }
-        });
+            };
 
-        iButtonPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                closeDialog(JOptionPane.CANCEL_OPTION);
-            }
-        });
+        iButtonPanel.addOkActionListener(e -> closeDialog(JOptionPane.OK_OPTION));
+
+        iButtonPanel.addCancelActionListener(e -> closeDialog(JOptionPane.CANCEL_OPTION));
 
 	getRootPane().setDefaultButton(iButtonPanel.getOkButton());
 
@@ -213,7 +205,7 @@ public class SSVoucherListDialog extends SSDialog {
             final Integer iNumberFrom = iFromVoucher.getSelected().getNumber();
             final Integer iNumberTo = iToVoucher.getSelected().getNumber();
 
-            iVouchers = SSFilterFactory.doFilter(iVouchers, new SSFilter<SSVoucher>() {
+            iVouchers = SSFilterFactory.doFilter(iVouchers, new SSFilter<>() {
                 public boolean applyFilter(SSVoucher iObject) {
                     Integer iNumber = iObject.getNumber();
 
@@ -227,7 +219,7 @@ public class SSVoucherListDialog extends SSDialog {
             final Date iDateFrom = iFromDate.getDate();
             final Date iDateTo = iToDate.getDate();
 
-            iVouchers = SSFilterFactory.doFilter(iVouchers, new SSFilter<SSVoucher>() {
+            iVouchers = SSFilterFactory.doFilter(iVouchers, new SSFilter<>() {
                 public boolean applyFilter(SSVoucher iInvoice) {
                     return SSVoucherMath.inPeriod(iInvoice, iDateFrom, iDateTo);
                 }

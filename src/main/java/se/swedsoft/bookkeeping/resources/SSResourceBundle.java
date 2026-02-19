@@ -54,7 +54,7 @@ public class SSResourceBundle extends ResourceBundle {
 
         try {
             iObject = iBundle.getObject(key);
-        } catch (Exception e) {
+        } catch (MissingResourceException e) {
             return null;
         }
         return iObject;

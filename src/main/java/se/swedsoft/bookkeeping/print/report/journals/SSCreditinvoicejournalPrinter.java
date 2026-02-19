@@ -75,18 +75,14 @@ public class SSCreditinvoicejournalPrinter extends SSPrinter {
         iDataSource = new SSDefaultJasperDataSource(iPrinter.getModel());
 
         // Sort the invoices
-        Collections.sort(iCreditInvoices, new Comparator<SSInvoice>() {
-            public int compare(SSInvoice o1, SSInvoice o2) {
-                return o1.getNumber() - o2.getNumber();
-            }
-        });
+        Collections.sort(iCreditInvoices, (o1, o2) -> o1.getNumber() - o2.getNumber());
 
-        SSDefaultTableModel<SSCreditInvoice> iModel = new SSDefaultTableModel<SSCreditInvoice>() {
+        SSDefaultTableModel<SSCreditInvoice> iModel = new SSDefaultTableModel<>() {
 
             DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSInvoice.class;
             }
 
@@ -181,12 +177,12 @@ public class SSCreditinvoicejournalPrinter extends SSPrinter {
             setDetail("journals/creditinvoicejournal.rows.jrxml");
             // setSummary("journals/invoicejournal.rows.jrxml");
 
-            iModel = new SSDefaultTableModel<SSVoucherRow>() {
+            iModel = new SSDefaultTableModel<>() {
 
                 DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
                 @Override
-                public Class getType() {
+                public Class<?> getType() {
                     return SSVoucherRow.class;
                 }
 

@@ -30,7 +30,7 @@ public class SSAutoDistRowTableModel extends SSTableModel<SSAutoDistRow> {
     }
 
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSAutoDistRow.class;
     }
 
@@ -63,7 +63,7 @@ public class SSAutoDistRowTableModel extends SSTableModel<SSAutoDistRow> {
     /**
      * Account column
      */
-    public static SSTableColumn<SSAutoDistRow> COLUMN_ACCOUNT = new SSTableColumn<SSAutoDistRow>(
+    public static SSTableColumn<SSAutoDistRow> COLUMN_ACCOUNT = new SSTableColumn<>(
             SSBundle.getBundle().getString("autodistrowtable.column.1")) {
         @Override
         public Object getValue(SSAutoDistRow iAutoDistRow) {
@@ -98,7 +98,7 @@ public class SSAutoDistRowTableModel extends SSTableModel<SSAutoDistRow> {
     /**
      * Account column
      */
-    public static SSTableColumn<SSAutoDistRow> COLUMN_DESCRIPTION = new SSTableColumn<SSAutoDistRow>(
+    public static SSTableColumn<SSAutoDistRow> COLUMN_DESCRIPTION = new SSTableColumn<>(
             SSBundle.getBundle().getString("autodistrowtable.column.2")) {
         @Override
         public Object getValue(SSAutoDistRow iAutoDistRow) {
@@ -131,7 +131,7 @@ public class SSAutoDistRowTableModel extends SSTableModel<SSAutoDistRow> {
     /**
      * % column
      */
-    public static SSTableColumn<SSAutoDistRow> COLUMN_PERCENTAGE = new SSTableColumn<SSAutoDistRow>(
+    public static SSTableColumn<SSAutoDistRow> COLUMN_PERCENTAGE = new SSTableColumn<>(
             SSBundle.getBundle().getString("autodistrowtable.column.3")) {
         @Override
         public Object getValue(SSAutoDistRow iAutoDistRow) {
@@ -165,7 +165,7 @@ public class SSAutoDistRowTableModel extends SSTableModel<SSAutoDistRow> {
     /**
      * Debet column
      */
-    public static SSTableColumn<SSAutoDistRow> COLUMN_DEBET = new SSTableColumn<SSAutoDistRow>(
+    public static SSTableColumn<SSAutoDistRow> COLUMN_DEBET = new SSTableColumn<>(
             SSBundle.getBundle().getString("autodistrowtable.column.4")) {
         @Override
         public Object getValue(SSAutoDistRow iAutoDistRow) {
@@ -198,7 +198,7 @@ public class SSAutoDistRowTableModel extends SSTableModel<SSAutoDistRow> {
     /**
      * Credit column
      */
-    public static SSTableColumn<SSAutoDistRow> COLUMN_CREDIT = new SSTableColumn<SSAutoDistRow>(
+    public static SSTableColumn<SSAutoDistRow> COLUMN_CREDIT = new SSTableColumn<>(
             SSBundle.getBundle().getString("autodistrowtable.column.5")) {
         @Override
         public Object getValue(SSAutoDistRow iAutoDistRow) {
@@ -231,7 +231,7 @@ public class SSAutoDistRowTableModel extends SSTableModel<SSAutoDistRow> {
     /**
      * Project column
      */
-    public static SSTableColumn<SSAutoDistRow> COLUMN_PROJECT = new SSTableColumn<SSAutoDistRow>(
+    public static SSTableColumn<SSAutoDistRow> COLUMN_PROJECT = new SSTableColumn<>(
             SSBundle.getBundle().getString("autodistrowtable.column.6")) {
         @Override
         public Object getValue(SSAutoDistRow iAutoDistRow) {
@@ -264,7 +264,7 @@ public class SSAutoDistRowTableModel extends SSTableModel<SSAutoDistRow> {
     /**
      * Result unit column
      */
-    public static SSTableColumn<SSAutoDistRow> COLUMN_RESULTUNIT = new SSTableColumn<SSAutoDistRow>(
+    public static SSTableColumn<SSAutoDistRow> COLUMN_RESULTUNIT = new SSTableColumn<>(
             SSBundle.getBundle().getString("autodistrowtable.column.7")) {
         @Override
         public Object getValue(SSAutoDistRow iAutoDistRow) {

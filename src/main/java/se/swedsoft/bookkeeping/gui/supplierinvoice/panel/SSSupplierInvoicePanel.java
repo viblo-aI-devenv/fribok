@@ -134,11 +134,7 @@ public class SSSupplierInvoicePanel implements ActionListener {
 
         iModel.setupTable(iTable);
 
-        iModel.addTableModelListener(new TableModelListener() {
-            public void tableChanged(TableModelEvent e) {
-                updateSumFields();
-            }
-        });
+        iModel.addTableModelListener(e -> updateSumFields());
         iVoucherTableModel = new SSVoucherRowTableModelOld(false, true);
 
         iVoucherTable.setModel(iVoucherTableModel);
@@ -201,7 +197,7 @@ public class SSSupplierInvoicePanel implements ActionListener {
         iSupplier.setAllowCustomValues(false);
 
         iSupplier.addSelectionListener(
-                new SSSelectionListener<SSSupplier>() {
+                new SSSelectionListener<>() {
             public void selected(SSSupplier selected) {
                 if (selected != null) {
                     iSupplierInvoice.setSupplier(selected);
@@ -266,7 +262,7 @@ public class SSSupplierInvoicePanel implements ActionListener {
         iCurrency.setEditingFactory(SSCurrencyTableModel.getEditingFactory(iOwner));
 
         iCurrency.getComboBox().addSelectionListener(
-                new SSSelectionListener<SSCurrency>() {
+                new SSSelectionListener<>() {
             public void selected(SSCurrency selected) {
                 if (selected != null) {
                     iCurrencyRate.setValue(selected.getExchangeRate());
@@ -276,34 +272,34 @@ public class SSSupplierInvoicePanel implements ActionListener {
             }
         });
 
-        iCurrencyRate.addPropertyChangeListener("value", new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent evt) {
+        iCurrencyRate.addPropertyChangeListener("value", evt -> {
+
                 iSupplierInvoice.setCurrencyRate(iCurrencyRate.getValue());
                 updateSumFields();
-            }
-        });
 
-        iRefreshVoucher.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            });
+
+        iRefreshVoucher.addActionListener(e -> {
+
                 SSVoucher iVoucher = iSupplierInvoice.generateVoucher();
 
                 iVoucherTableModel.setVoucher(iVoucher);
-            }
-        });
 
-        iTaxSum.addPropertyChangeListener("value", new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent evt) {
+            });
+
+        iTaxSum.addPropertyChangeListener("value", evt -> {
+
                 iSupplierInvoice.setTaxSum(iTaxSum.getValue());
                 updateSumFields();
-            }
-        });
 
-        iRoundingSum.addPropertyChangeListener("value", new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent evt) {
+            });
+
+        iRoundingSum.addPropertyChangeListener("value", evt -> {
+
                 iSupplierInvoice.setRoundingSum(iRoundingSum.getValue());
                 updateSumFields();
-            }
-        });
+
+            });
 
         iInputVerifier = new SSInputVerifier();
 
@@ -565,21 +561,13 @@ public class SSSupplierInvoicePanel implements ActionListener {
 
     public void addKeyListeners() {
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                iSupplier.getComponent(0).requestFocusInWindow();
-            }
-        });
+        SwingUtilities.invokeLater(() -> iSupplier.getComponent(0).requestFocusInWindow());
 
         iSupplier.getComponent(0).addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iReferencenumber.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iReferencenumber.requestFocusInWindow());
                 }
             }
         });
@@ -588,11 +576,7 @@ public class SSSupplierInvoicePanel implements ActionListener {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iDate.getEditor().getComponent(0).requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iDate.getEditor().getComponent(0).requestFocusInWindow());
                 }
             }
         });
@@ -601,11 +585,7 @@ public class SSSupplierInvoicePanel implements ActionListener {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iDueDate.getEditor().getComponent(0).requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iDueDate.getEditor().getComponent(0).requestFocusInWindow());
                 }
             }
         });
@@ -615,11 +595,7 @@ public class SSSupplierInvoicePanel implements ActionListener {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     SwingUtilities.invokeLater(
-                            new Runnable() {
-                        public void run() {
-                            iCurrency.getComboBox().getComponent(0).requestFocusInWindow();
-                        }
-                    });
+                            () -> iCurrency.getComboBox().getComponent(0).requestFocusInWindow());
                 }
             }
         });
@@ -628,11 +604,7 @@ public class SSSupplierInvoicePanel implements ActionListener {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iCurrencyRate.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iCurrencyRate.requestFocusInWindow());
                 }
             }
         });
@@ -641,11 +613,7 @@ public class SSSupplierInvoicePanel implements ActionListener {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iTaxSum.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iTaxSum.requestFocusInWindow());
                 }
             }
         });
@@ -654,11 +622,7 @@ public class SSSupplierInvoicePanel implements ActionListener {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iRoundingSum.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iRoundingSum.requestFocusInWindow());
                 }
             }
         });
@@ -667,12 +631,12 @@ public class SSSupplierInvoicePanel implements ActionListener {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
+                    SwingUtilities.invokeLater(() -> {
+
                             iTable.requestFocusInWindow();
                             iTable.changeSelection(0, 0, false, false);
-                        }
-                    });
+
+                        });
                 }
             }
         });
@@ -681,11 +645,7 @@ public class SSSupplierInvoicePanel implements ActionListener {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iButtonPanel.getCancelButton().requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iButtonPanel.getCancelButton().requestFocusInWindow());
                 }
             }
         });
@@ -694,11 +654,7 @@ public class SSSupplierInvoicePanel implements ActionListener {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iButtonPanel.getOkButton().requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iButtonPanel.getOkButton().requestFocusInWindow());
                 }
             }
         });
@@ -706,11 +662,7 @@ public class SSSupplierInvoicePanel implements ActionListener {
         iNumber.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
-                        iSupplier.getComponent(0).requestFocusInWindow();
-                    }
-                });
+                SwingUtilities.invokeLater(() -> iSupplier.getComponent(0).requestFocusInWindow());
             }
         });
 
@@ -728,11 +680,7 @@ public class SSSupplierInvoicePanel implements ActionListener {
             return "Fakturan har inga ordrar";
         }
 
-        Collections.sort(iOrders, new Comparator<SSPurchaseOrder>() {
-            public int compare(SSPurchaseOrder o1, SSPurchaseOrder o2) {
-                return o1.getNumber() - o2.getNumber();
-            }
-        });
+        Collections.sort(iOrders, (o1, o2) -> o1.getNumber() - o2.getNumber());
 
         StringBuilder sb = new StringBuilder();
 

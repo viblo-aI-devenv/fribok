@@ -16,7 +16,7 @@ import java.util.Collection;
  * usage threshold can only be set to one number.
  */
 public class SSMemoryWarning {
-    private final Collection<Listener> listeners = new ArrayList<Listener>();
+    private final Collection<Listener> listeners = new ArrayList<>();
 
     public interface Listener {
         void memoryUsageLow(long usedMemory, long maxMemory);

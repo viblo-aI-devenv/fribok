@@ -19,7 +19,7 @@ import java.net.URL;
 public class SSImage {
 
     // Library of all graphics
-    private static Map<String, BufferedImage> graphics = new HashMap<String, BufferedImage>();
+    private static Map<String, BufferedImage> graphics = new HashMap<>();
 
     // Ensure non-instantiability
     private SSImage() {

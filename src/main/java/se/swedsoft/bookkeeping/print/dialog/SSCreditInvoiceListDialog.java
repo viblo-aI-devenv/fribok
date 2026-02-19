@@ -51,16 +51,8 @@ public class SSCreditInvoiceListDialog extends SSDialog {
 
         setPanel(iPanel);
 
-        iButtonPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setModalResult(JOptionPane.CANCEL_OPTION, true);
-            }
-        });
-        iButtonPanel.addOkActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setModalResult(JOptionPane.OK_OPTION, true);
-            }
-        });
+        iButtonPanel.addCancelActionListener(e -> setModalResult(JOptionPane.CANCEL_OPTION, true));
+        iButtonPanel.addOkActionListener(e -> setModalResult(JOptionPane.OK_OPTION, true));
 
 	getRootPane().setDefaultButton(iButtonPanel.getOkButton());
 
@@ -69,14 +61,14 @@ public class SSCreditInvoiceListDialog extends SSDialog {
         iCustomer.setColumnWidths(60, 200);
         iCustomer.setPopupSize(250, 150);
 
-        ChangeListener iChangeListener = new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
+        ChangeListener iChangeListener = e -> {
+
                 iCustomer.setEnabled(iCheckCustomer.isSelected());
 
                 iFromDate.setEnabled(iCheckDate.isSelected());
                 iToDate.setEnabled(iCheckDate.isSelected());
-            }
-        };
+
+            };
 
         iCheckDate.addChangeListener(iChangeListener);
         iCheckCustomer.addChangeListener(iChangeListener);
@@ -104,14 +96,14 @@ public class SSCreditInvoiceListDialog extends SSDialog {
 
         List<SSCreditInvoice> iInvoices = SSDB.getInstance().getCreditInvoices();
 
-        SSFilterFactory<SSCreditInvoice> iFactory = new SSFilterFactory<SSCreditInvoice>(
+        SSFilterFactory<SSCreditInvoice> iFactory = new SSFilterFactory<>(
                 iInvoices);
 
         // Filter by a customer
         if (iCheckCustomer.isSelected() && iCustomer.hasSelected()) {
             final SSCustomer iCustomer = this.iCustomer.getSelected();
 
-            iFactory.applyFilter(new SSFilter<SSCreditInvoice>() {
+            iFactory.applyFilter(new SSFilter<>() {
                 public boolean applyFilter(SSCreditInvoice iInvoice) {
                     return iCustomer.equals(iInvoice.getCustomer(iCustomers));
                 }
@@ -123,7 +115,7 @@ public class SSCreditInvoiceListDialog extends SSDialog {
             final Date iDateFrom = iFromDate.getDate();
             final Date iDateTo = iToDate.getDate();
 
-            iFactory.applyFilter(new SSFilter<SSCreditInvoice>() {
+            iFactory.applyFilter(new SSFilter<>() {
                 public boolean applyFilter(SSCreditInvoice iInvoice) {
                     return SSCreditInvoiceMath.inPeriod(iInvoice, iDateFrom, iDateTo);
                 }

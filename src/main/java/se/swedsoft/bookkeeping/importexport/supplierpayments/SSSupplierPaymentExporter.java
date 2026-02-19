@@ -70,7 +70,7 @@ public class SSSupplierPaymentExporter {
      * @return
      */
     public static List<LBinPost> getPosts(List<SupplierPayment> iPayments) {
-        List<LBinPost> iPosts = new LinkedList<LBinPost>();
+        List<LBinPost> iPosts = new LinkedList<>();
 
         iPosts.addAll(getAvsnitt(iPayments, "SEK"));
 	// fixme! - endast SEK från 20161031
@@ -89,7 +89,7 @@ public class SSSupplierPaymentExporter {
     public static List<LBinPost> getAvsnitt(List<SupplierPayment> iPayments, String iCurrency) {
         List<SupplierPayment> iFiltered = SupplierPayment.getPayments(iPayments, iCurrency);
 
-        List<LBinPost> iPosts = new LinkedList<LBinPost>();
+        List<LBinPost> iPosts = new LinkedList<>();
 
         // Cant add empty sections
         if (iPayments.isEmpty()) {

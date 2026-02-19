@@ -62,7 +62,7 @@ public class SSOwnReportPrinter extends SSPrinter {
 
         iAccountSchema = SSOwnReportAccountSchema.getSchema(iOwnReport);
 
-        iSummaries = new HashMap<Integer, String>();
+        iSummaries = new HashMap<>();
 
         setPageHeader("header_period.jrxml");
         setColumnHeader("resultcolumns.jrxml");
@@ -150,7 +150,7 @@ public class SSOwnReportPrinter extends SSPrinter {
 
         List<SSAccount> iAccounts = SSDB.getInstance().getCurrentYear().getAccounts();
 
-        List<ResultRow> iRows = new LinkedList<ResultRow>();
+        List<ResultRow> iRows = new LinkedList<>();
 
         ResultRow iLastVisibleRow = null;
 
@@ -177,10 +177,10 @@ public class SSOwnReportPrinter extends SSPrinter {
             }
         }
 
-        SSDefaultTableModel<ResultRow> iModel = new SSDefaultTableModel<ResultRow>() {
+        SSDefaultTableModel<ResultRow> iModel = new SSDefaultTableModel<>() {
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return ResultRow.class;
 
             }
@@ -333,7 +333,7 @@ public class SSOwnReportPrinter extends SSPrinter {
     private List<ResultRow> getRows(SSOwnReportAccountGroup iGroup, List<SSAccount> iAccounts, int iLevel) {
         List<SSAccount> iGroupAccounts = iGroup.getAccounts();
 
-        List<ResultRow> iRows = new LinkedList<ResultRow>();
+        List<ResultRow> iRows = new LinkedList<>();
 
         // This is a leaf node, add this node's groups to the list
         if (iGroup.getGroups() == null && iGroup.getAccounts() != null) {

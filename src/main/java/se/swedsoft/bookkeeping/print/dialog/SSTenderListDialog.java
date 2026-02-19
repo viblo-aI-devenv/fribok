@@ -53,16 +53,8 @@ public class SSTenderListDialog extends SSDialog {
 
         setPanel(iPanel);
 
-        iButtonPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setModalResult(JOptionPane.CANCEL_OPTION, true);
-            }
-        });
-        iButtonPanel.addOkActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setModalResult(JOptionPane.OK_OPTION, true);
-            }
-        });
+        iButtonPanel.addCancelActionListener(e -> setModalResult(JOptionPane.CANCEL_OPTION, true));
+        iButtonPanel.addOkActionListener(e -> setModalResult(JOptionPane.OK_OPTION, true));
 
 	getRootPane().setDefaultButton(iButtonPanel.getOkButton());
 
@@ -71,14 +63,14 @@ public class SSTenderListDialog extends SSDialog {
         iCustomer.setColumnWidths(60, 200);
         iCustomer.setPopupSize(250, 150);
 
-        ChangeListener iChangeListener = new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
+        ChangeListener iChangeListener = e -> {
+
                 iCustomer.setEnabled(iCheckCustomer.isSelected());
 
                 iFromDate.setEnabled(iCheckDate.isSelected());
                 iToDate.setEnabled(iCheckDate.isSelected());
-            }
-        };
+
+            };
 
         iCheckDate.addChangeListener(iChangeListener);
         iCheckCustomer.addChangeListener(iChangeListener);
@@ -109,12 +101,12 @@ public class SSTenderListDialog extends SSDialog {
 
         List<SSTender> iTenders = SSDB.getInstance().getTenders();
 
-        SSFilterFactory<SSTender> iFactory = new SSFilterFactory<SSTender>(iTenders);
+        SSFilterFactory<SSTender> iFactory = new SSFilterFactory<>(iTenders);
 
         // Filter by non payed invoices
         if (iRadioActive.isSelected()) {
 
-            iFactory.applyFilter(new SSFilter<SSTender>() {
+            iFactory.applyFilter(new SSFilter<>() {
                 public boolean applyFilter(SSTender iTender) {
                     return !iTender.isExpired();
                 }
@@ -125,7 +117,7 @@ public class SSTenderListDialog extends SSDialog {
         if (iCheckCustomer.isSelected() && iCustomer.hasSelected()) {
             final SSCustomer iCustomer = this.iCustomer.getSelected();
 
-            iFactory.applyFilter(new SSFilter<SSTender>() {
+            iFactory.applyFilter(new SSFilter<>() {
                 public boolean applyFilter(SSTender iTender) {
                     return iCustomer.equals(iTender.getCustomer(iCustomers));
                 }
@@ -137,7 +129,7 @@ public class SSTenderListDialog extends SSDialog {
             final Date iDateFrom = iFromDate.getDate();
             final Date iDateTo = iToDate.getDate();
 
-            iFactory.applyFilter(new SSFilter<SSTender>() {
+            iFactory.applyFilter(new SSFilter<>() {
                 public boolean applyFilter(SSTender iTender) {
                     return SSInvoiceMath.inPeriod(iTender, iDateFrom, iDateTo);
                 }

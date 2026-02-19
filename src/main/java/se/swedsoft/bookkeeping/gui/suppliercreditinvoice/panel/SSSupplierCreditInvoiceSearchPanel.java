@@ -41,7 +41,7 @@ public class SSSupplierCreditInvoiceSearchPanel extends JPanel {
     }
 
     public void ApplyFilter() {
-        List<SSSupplierCreditInvoice> iFiltered = new LinkedList<SSSupplierCreditInvoice>();
+        List<SSSupplierCreditInvoice> iFiltered = new LinkedList<>();
         List<SSSupplierCreditInvoice> iInvoices = SSDB.getInstance().getSupplierCreditInvoices();
         String iText = iTextField.getText();
 

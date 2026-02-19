@@ -6,6 +6,7 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -149,7 +150,7 @@ public class SSVoucherMath {
      * @return
      */
     public static Map<SSAccount, BigDecimal>  getCreditMinusDebetSum(List<SSVoucher> pVouchers) {
-        Map<SSAccount, BigDecimal> iSums = new HashMap<SSAccount, BigDecimal>();
+        Map<SSAccount, BigDecimal> iSums = new HashMap<>();
 
         for (SSVoucher iVoucher: pVouchers) {
             for (SSVoucherRow iVoucherRow: iVoucher.getRows()) {
@@ -175,7 +176,7 @@ public class SSVoucherMath {
      * @return
      */
     public static Map<SSAccount, BigDecimal>  getDebetMinusCreditSum(List<SSVoucher> pVouchers) {
-        Map<SSAccount, BigDecimal> iSums = new HashMap<SSAccount, BigDecimal>();
+        Map<SSAccount, BigDecimal> iSums = new HashMap<>();
 
         for (SSVoucher iVoucher: pVouchers) {
             for (SSVoucherRow iVoucherRow: iVoucher.getRows()) {
@@ -371,15 +372,9 @@ public class SSVoucherMath {
      */
     public static List<SSVoucher> getVouchers(List<SSVoucher> pVouchers, Date pFrom, Date pTo) {
 
-        List<SSVoucher> iFiltered = new LinkedList<SSVoucher>();
-
-        for (SSVoucher iVoucher : pVouchers) {
-            if (inPeriod(iVoucher, pFrom, pTo)) {
-                iFiltered.add(iVoucher);
-            }
-        }
-
-        return iFiltered;
+        return pVouchers.stream()
+                .filter(iVoucher -> inPeriod(iVoucher, pFrom, pTo))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -584,11 +579,11 @@ public class SSVoucherMath {
      * @return The previous voucher.
      */
     public static Date getNextVoucherDate() {
-        List<SSVoucher> iVouchers = new LinkedList<SSVoucher>(
+        List<SSVoucher> iVouchers = new LinkedList<>(
                 SSDB.getInstance().getVouchers());
 
-        Collections.sort(iVouchers, new Comparator<SSVoucher>() {
-            public int compare(SSVoucher iVoucher1, SSVoucher iVoucher2) {
+        Collections.sort(iVouchers, (iVoucher1, iVoucher2) -> {
+
                 Date iDate1 = iVoucher1.getDate();
                 Date iDate2 = iVoucher2.getDate();
 
@@ -597,8 +592,8 @@ public class SSVoucherMath {
                 }
 
                 return iDate2.compareTo(iDate1);
-            }
-        });
+
+            });
         if (!iVouchers.isEmpty()) {
             Date iDate = iVouchers.get(0).getDate();
 
@@ -625,7 +620,7 @@ public class SSVoucherMath {
     public static void copyRows(SSVoucher iFrom, SSVoucher iTo, boolean iReverse) {
         List<SSVoucherRow> iRows = iFrom.getRows();
 
-        List<SSVoucherRow> iNew = new LinkedList<SSVoucherRow>();
+        List<SSVoucherRow> iNew = new LinkedList<>();
 
         for (SSVoucherRow iRow : iRows) {
 

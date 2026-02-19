@@ -117,33 +117,29 @@ public class SSInvoiceFrame extends SSDefaultTableFrame {
         // New
         // ***************************
         SSButton iButton = new SSButton("ICON_NEWITEM", "invoiceframe.newbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSInvoiceDialog.newDialog(getMainFrame(), iModel);
-            }
-        });
+                e -> SSInvoiceDialog.newDialog(getMainFrame(), iModel));
 
         toolBar.add(iButton);
 
         // Edit
         // ***************************
         iButton = new SSButton("ICON_EDITITEM", "invoiceframe.editbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSInvoice iSelected = iModel.getSelectedRow(iTable);
-                Integer iNumber = null;
+                e -> {
 
-                if (iSelected != null) {
-                    iNumber = iSelected.getNumber();
-                    iSelected = getInvoice(iSelected);
-                }
-                if (iSelected != null) {
-                    SSInvoiceDialog.editDialog(getMainFrame(), iSelected, iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "invoiceframe.invoicegone", iNumber);
-                }
-            }
-        });
+                        SSInvoice iSelected = iModel.getSelectedRow(iTable);
+                        Integer iNumber = null;
+
+                        if (iSelected != null) {
+                            iNumber = iSelected.getNumber();
+                            iSelected = getInvoice(iSelected);
+                        }
+                        if (iSelected != null) {
+                            SSInvoiceDialog.editDialog(getMainFrame(), iSelected, iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "invoiceframe.invoicegone", iNumber);
+                        }
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         toolBar.add(iButton);
         toolBar.addSeparator();
@@ -151,22 +147,22 @@ public class SSInvoiceFrame extends SSDefaultTableFrame {
         // Copy
         // ***************************
         iButton = new SSButton("ICON_COPYITEM", "invoiceframe.copybutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSInvoice iSelected = iModel.getSelectedRow(iTable);
-                Integer iNumber = null;
+                e -> {
 
-                if (iSelected != null) {
-                    iNumber = iSelected.getNumber();
-                    iSelected = getInvoice(iSelected);
-                }
-                if (iSelected != null) {
-                    SSInvoiceDialog.copyDialog(getMainFrame(), iSelected, iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "invoiceframe.invoicegone", iNumber);
-                }
-            }
-        });
+                        SSInvoice iSelected = iModel.getSelectedRow(iTable);
+                        Integer iNumber = null;
+
+                        if (iSelected != null) {
+                            iNumber = iSelected.getNumber();
+                            iSelected = getInvoice(iSelected);
+                        }
+                        if (iSelected != null) {
+                            SSInvoiceDialog.copyDialog(getMainFrame(), iSelected, iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "invoiceframe.invoicegone", iNumber);
+                        }
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         toolBar.add(iButton);
         toolBar.addSeparator();
@@ -174,14 +170,14 @@ public class SSInvoiceFrame extends SSDefaultTableFrame {
         // Delete
         // ***************************
         iButton = new SSButton("ICON_DELETEITEM", "invoiceframe.deletebutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                int[] selected = iTable.getSelectedRows();
-                List<SSInvoice> toDelete = iModel.getObjects(selected);
+                e -> {
 
-                deleteSelectedInvoice(toDelete);
-            }
-        });
+                        int[] selected = iTable.getSelectedRows();
+                        List<SSInvoice> toDelete = iModel.getObjects(selected);
+
+                        deleteSelectedInvoice(toDelete);
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         toolBar.add(iButton);
         toolBar.addSeparator();
@@ -189,153 +185,145 @@ public class SSInvoiceFrame extends SSDefaultTableFrame {
         // Create inpayment for sales
         // ***************************
         iButton = new SSButton("ICON_COINS24", "invoiceframe.inpaymentbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (iTable.getSelectedRowCount() > 0) {
-                    List<SSInvoice> iSelected = iModel.getObjects(iTable.getSelectedRows());
+                e -> {
 
-                    iSelected = getInvoices(iSelected);
-                    SSInpayment iInpayment = new SSInpayment();
+                        if (iTable.getSelectedRowCount() > 0) {
+                            List<SSInvoice> iSelected = iModel.getObjects(iTable.getSelectedRows());
 
-                    if (!iSelected.isEmpty()) {
-                        iInpayment.addInvoices(iSelected);
+                            iSelected = getInvoices(iSelected);
+                            SSInpayment iInpayment = new SSInpayment();
 
-                        if (SSInpaymentFrame.getInstance() != null) {
-                            SSInpaymentDialog.newDialog(getMainFrame(), iInpayment,
-                                    SSInpaymentFrame.getInstance().getModel());
-                        } else {
-                            SSInpaymentDialog.newDialog(getMainFrame(), iInpayment, null);
+                            if (!iSelected.isEmpty()) {
+                                iInpayment.addInvoices(iSelected);
+
+                                if (SSInpaymentFrame.getInstance() != null) {
+                                    SSInpaymentDialog.newDialog(getMainFrame(), iInpayment,
+                                            SSInpaymentFrame.getInstance().getModel());
+                                } else {
+                                    SSInpaymentDialog.newDialog(getMainFrame(), iInpayment, null);
+                                }
+                            }
                         }
-                    }
-                }
-            }
-        });
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         toolBar.add(iButton);
 
         // Create creditinvoice for sales
         // ***************************
         iButton = new SSButton("ICON_CREATECHANGE", "invoiceframe.creditinvoicebutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSInvoice iSelected = iModel.getSelectedRow(iTable);
-                Integer iNumber = null;
+                e -> {
 
-                if (iSelected != null) {
-                    iNumber = iSelected.getNumber();
-                    iSelected = getInvoice(iSelected);
-                }
-                if (iSelected != null) {
+                        SSInvoice iSelected = iModel.getSelectedRow(iTable);
+                        Integer iNumber = null;
 
-                    if (SSCreditInvoiceFrame.getInstance() != null) {
-                        SSCreditInvoiceDialog.newDialog(getMainFrame(), iSelected,
-                                SSCreditInvoiceFrame.getInstance().getModel());
-                    } else {
-                        SSCreditInvoiceDialog.newDialog(getMainFrame(), iSelected, null);
-                    }
-                } else {
-                    new SSErrorDialog(getMainFrame(), "invoiceframe.invoicegone", iNumber);
-                }
-            }
-        });
+                        if (iSelected != null) {
+                            iNumber = iSelected.getNumber();
+                            iSelected = getInvoice(iSelected);
+                        }
+                        if (iSelected != null) {
+
+                            if (SSCreditInvoiceFrame.getInstance() != null) {
+                                SSCreditInvoiceDialog.newDialog(getMainFrame(), iSelected,
+                                        SSCreditInvoiceFrame.getInstance().getModel());
+                            } else {
+                                SSCreditInvoiceDialog.newDialog(getMainFrame(), iSelected, null);
+                            }
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "invoiceframe.invoicegone", iNumber);
+                        }
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         toolBar.add(iButton);
 
         // Skriv ut påminellse för valda fakturor
         // ***************************
         iButton = new SSButton("ICON_EXCLAMATION24", "invoiceframe.reminderbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                List<SSInvoice> iSelected = iModel.getObjects(iTable.getSelectedRows());
+                e -> {
 
-                iSelected = getInvoices(iSelected);
-                if (!iSelected.isEmpty()) {
-                    SSReportFactory.ReminderReport(getMainFrame(), iSelected);
-                    // updateFrame();
-                }
-                // iModel.fireTableDataChanged();
-            }
-        });
+                        List<SSInvoice> iSelected = iModel.getObjects(iTable.getSelectedRows());
+
+                        iSelected = getInvoices(iSelected);
+                        if (!iSelected.isEmpty()) {
+                            SSReportFactory.ReminderReport(getMainFrame(), iSelected);
+                            // updateFrame();
+                        }
+                        // iModel.fireTableDataChanged();
+
+                    });
         iTable.addSelectionDependentComponent(iButton);
         toolBar.add(iButton);
 
         // Skapa räntefakturor
         // ***************************
         iButton = new SSButton("ICON_INVOICE24", "invoiceframe.interestinvoicebutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSInterestInvoiceDialog.showDialog(getMainFrame(), iModel);
-            }
-        });
+                e -> SSInterestInvoiceDialog.showDialog(getMainFrame(), iModel));
         toolBar.add(iButton);
 
         toolBar.addSeparator();
 
         // Print
         // ***************************
-        SSMenuButton<SSButton> iMenuButton = new SSMenuButton<SSButton>("ICON_PRINT",
+        SSMenuButton<SSButton> iMenuButton = new SSMenuButton<>("ICON_PRINT",
                 "invoiceframe.printbutton");
         JMenuItem iMenuItem = iMenuButton.add("invoiceframe.print.invoicereport",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                List<SSInvoice> iSelected = iModel.getSelectedRows(iTable);
+                e -> {
 
-                iSelected = getInvoices(iSelected);
-                if (!iSelected.isEmpty()) {
-                    SSReportFactory.InvoiceReport(getMainFrame(), iSelected);
-                }
-            }
-        });
+                        List<SSInvoice> iSelected = iModel.getSelectedRows(iTable);
+
+                        iSelected = getInvoices(iSelected);
+                        if (!iSelected.isEmpty()) {
+                            SSReportFactory.InvoiceReport(getMainFrame(), iSelected);
+                        }
+
+                    });
 
         iTable.addSelectionDependentComponent(iMenuItem);
         iMenuItem = iMenuButton.add("invoiceframe.print.emailinvoicereport",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSInvoice iSelected = iModel.getSelectedRow(iTable);
+                e -> {
 
-                iSelected = getInvoice(iSelected);
-                if (iSelected == null) {
-                    return;
-                }
-                if (!SSMail.isOk(iSelected.getCustomer())) {
-                    return;
-                }
-                SSReportFactory.EmailInvoiceReport(getMainFrame(), iSelected);
-            }
-        });
+                        SSInvoice iSelected = iModel.getSelectedRow(iTable);
+
+                        iSelected = getInvoice(iSelected);
+                        if (iSelected == null) {
+                            return;
+                        }
+                        if (!SSMail.isOk(iSelected.getCustomer())) {
+                            return;
+                        }
+                        SSReportFactory.EmailInvoiceReport(getMainFrame(), iSelected);
+
+                    });
         iTable.addSelectionDependentComponent(iMenuItem);
-        iMenuItem = iMenuButton.add("invoiceframe.print.reminder", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMenuItem = iMenuButton.add("invoiceframe.print.reminder", e -> {
+
                 List<SSInvoice> iSelected = iModel.getObjects(iTable.getSelectedRows());
 
                 iSelected = getInvoices(iSelected);
                 if (!iSelected.isEmpty()) {
                     SSReportFactory.ReminderReport(getMainFrame(), iSelected);
                 }
-            }
-        });
+
+            });
         iTable.addSelectionDependentComponent(iMenuItem);
 
         iMenuButton.addSeparator();
         iMenuItem = iMenuButton.add("invoiceframe.print.ocrinvoicereport",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                List<SSInvoice> iSelected = iModel.getSelectedRows(iTable);
+                e -> {
 
-                iSelected = getInvoices(iSelected);
-                if (!iSelected.isEmpty()) {
-                    SSReportFactory.OCRInvoiceReport(getMainFrame(), iSelected);
-                }
-            }
-        });
+                        List<SSInvoice> iSelected = iModel.getSelectedRows(iTable);
+
+                        iSelected = getInvoices(iSelected);
+                        if (!iSelected.isEmpty()) {
+                            SSReportFactory.OCRInvoiceReport(getMainFrame(), iSelected);
+                        }
+
+                    });
         iTable.addSelectionDependentComponent(iMenuItem);
 
         iMenuButton.addSeparator();
-        iMenuButton.add("invoiceframe.print.invoicelistreport", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSReportFactory.InvoiceListReport(getMainFrame());
-            }
-        });
+        iMenuButton.add("invoiceframe.print.invoicelistreport", e -> SSReportFactory.InvoiceListReport(getMainFrame()));
         toolBar.add(iMenuButton);
 
         return toolBar;
@@ -371,24 +359,24 @@ public class SSInvoiceFrame extends SSDefaultTableFrame {
         iModel.setupTable(iTable);
 
         iTable.addDblClickListener(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSInvoice iSelected = iModel.getSelectedRow(iTable);
-                Integer iNumber;
+                e -> {
 
-                if (iSelected != null) {
-                    iNumber = iSelected.getNumber();
-                    iSelected = getInvoice(iSelected);
-                } else {
-                    return;
-                }
-                if (iSelected != null) {
-                    SSInvoiceDialog.editDialog(getMainFrame(), iSelected, iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "invoiceframe.invoicegone", iNumber);
-                }
-            }
-        });
+                        SSInvoice iSelected = iModel.getSelectedRow(iTable);
+                        Integer iNumber;
+
+                        if (iSelected != null) {
+                            iNumber = iSelected.getNumber();
+                            iSelected = getInvoice(iSelected);
+                        } else {
+                            return;
+                        }
+                        if (iSelected != null) {
+                            SSInvoiceDialog.editDialog(getMainFrame(), iSelected, iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "invoiceframe.invoicegone", iNumber);
+                        }
+
+                    });
 
         iTabbedPane = new JTabbedPane();
 
@@ -399,11 +387,7 @@ public class SSInvoiceFrame extends SSDefaultTableFrame {
         iTabbedPane.add(SSBundle.getBundle().getString("invoiceframe.filter.3"),
                 new SSTabbedPanePanel());
 
-        iTabbedPane.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                iSearchPanel.ApplyFilter(SSDB.getInstance().getInvoices());
-            }
-        });
+        iTabbedPane.addChangeListener(e -> iSearchPanel.ApplyFilter(SSDB.getInstance().getInvoices()));
         // setFilterIndex(0);
 
         JPanel iPanel = new JPanel();
@@ -440,7 +424,7 @@ public class SSInvoiceFrame extends SSDefaultTableFrame {
 
         // Obetalda
         case 1:
-            iFiltered = new LinkedList<SSInvoice>();
+            iFiltered = new LinkedList<>();
             for (SSInvoice iInvoice : iInvoices) {
 
                 /* if( SSInvoiceMath.getSaldo(iInvoice).signum() != 0){
@@ -456,7 +440,7 @@ public class SSInvoiceFrame extends SSDefaultTableFrame {
 
         // Förfallna
         case 2:
-            iFiltered = new LinkedList<SSInvoice>();
+            iFiltered = new LinkedList<>();
             for (SSInvoice iInvoice : iInvoices) {
                 if (SSInvoiceMath.iSaldoMap.containsKey(iInvoice.getNumber())) {
                     if (SSInvoiceMath.iSaldoMap.get(iInvoice.getNumber()).signum() != 0
@@ -533,7 +517,7 @@ public class SSInvoiceFrame extends SSDefaultTableFrame {
                     new SSErrorDialog(getMainFrame(), "invoiceframe.invoiceopen",
                             iInvoice.getNumber());
                 } else {
-                    List<SSOrder> iOrdersToUpdate = new LinkedList<SSOrder>();
+                    List<SSOrder> iOrdersToUpdate = new LinkedList<>();
 
                     for (SSOrder iOrder : SSDB.getInstance().getOrders()) {
                         if (iOrder.hasInvoice(iInvoice)) {

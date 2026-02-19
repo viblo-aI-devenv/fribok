@@ -37,7 +37,7 @@ public class SSInvoiceRowTableModel extends SSEditableTableModel<SSSaleRow> {
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSSaleRow.class;
     }
 
@@ -48,7 +48,7 @@ public class SSInvoiceRowTableModel extends SSEditableTableModel<SSSaleRow> {
     /**
      * Product column
      */
-    public static SSTableColumn<SSSaleRow> COLUMN_PRODUCT = new SSTableColumn<SSSaleRow>(
+    public static SSTableColumn<SSSaleRow> COLUMN_PRODUCT = new SSTableColumn<>(
             SSBundle.getBundle().getString("salerowtable.column.1")) {
         @Override
         public Object getValue(SSSaleRow iObject) {
@@ -125,7 +125,7 @@ public class SSInvoiceRowTableModel extends SSEditableTableModel<SSSaleRow> {
     /**
      * Description column
      */
-    public static SSTableColumn<SSSaleRow> COLUMN_DESCRIPTION = new SSTableColumn<SSSaleRow>(
+    public static SSTableColumn<SSSaleRow> COLUMN_DESCRIPTION = new SSTableColumn<>(
             SSBundle.getBundle().getString("salerowtable.column.2")) {
         @Override
         public Object getValue(SSSaleRow iObject) {
@@ -160,7 +160,7 @@ public class SSInvoiceRowTableModel extends SSEditableTableModel<SSSaleRow> {
     /**
      * Unit price
      */
-    public static SSTableColumn<SSSaleRow> COLUMN_UNITPRICE = new SSTableColumn<SSSaleRow>(
+    public static SSTableColumn<SSSaleRow> COLUMN_UNITPRICE = new SSTableColumn<>(
             SSBundle.getBundle().getString("salerowtable.column.3")) {
         @Override
         public Object getValue(SSSaleRow iObject) {
@@ -186,7 +186,7 @@ public class SSInvoiceRowTableModel extends SSEditableTableModel<SSSaleRow> {
     /**
      * Quantity
      */
-    public static SSTableColumn<SSSaleRow> COLUMN_QUANTITY = new SSTableColumn<SSSaleRow>(
+    public static SSTableColumn<SSSaleRow> COLUMN_QUANTITY = new SSTableColumn<>(
             SSBundle.getBundle().getString("salerowtable.column.4")) {
         @Override
         public Object getValue(SSSaleRow iObject) {
@@ -212,7 +212,7 @@ public class SSInvoiceRowTableModel extends SSEditableTableModel<SSSaleRow> {
     /**
      * Quantity
      */
-    public static SSTableColumn<SSSaleRow> COLUMN_UNIT = new SSTableColumn<SSSaleRow>(
+    public static SSTableColumn<SSSaleRow> COLUMN_UNIT = new SSTableColumn<>(
             SSBundle.getBundle().getString("salerowtable.column.5")) {
         @Override
         public Object getValue(SSSaleRow iObject) {
@@ -238,7 +238,7 @@ public class SSInvoiceRowTableModel extends SSEditableTableModel<SSSaleRow> {
     /**
      * Sum
      */
-    public static SSTableColumn<SSSaleRow> COLUMN_DISCOUNT = new SSTableColumn<SSSaleRow>(
+    public static SSTableColumn<SSSaleRow> COLUMN_DISCOUNT = new SSTableColumn<>(
             SSBundle.getBundle().getString("salerowtable.column.6")) {
         @Override
         public Object getValue(SSSaleRow iObject) {
@@ -264,7 +264,7 @@ public class SSInvoiceRowTableModel extends SSEditableTableModel<SSSaleRow> {
     /**
      * Sum
      */
-    public static SSTableColumn<SSSaleRow> COLUMN_SUM = new SSTableColumn<SSSaleRow>(
+    public static SSTableColumn<SSSaleRow> COLUMN_SUM = new SSTableColumn<>(
             SSBundle.getBundle().getString("salerowtable.column.7")) {
         @Override
         public Object getValue(SSSaleRow iObject) {
@@ -288,7 +288,7 @@ public class SSInvoiceRowTableModel extends SSEditableTableModel<SSSaleRow> {
     /**
      * Moms
      */
-    public static SSTableColumn<SSSaleRow> COLUMN_TAX = new SSTableColumn<SSSaleRow>(
+    public static SSTableColumn<SSSaleRow> COLUMN_TAX = new SSTableColumn<>(
             SSBundle.getBundle().getString("salerowtable.column.8")) {
         @Override
         public Object getValue(SSSaleRow iObject) {
@@ -314,7 +314,7 @@ public class SSInvoiceRowTableModel extends SSEditableTableModel<SSSaleRow> {
     /**
      * Account
      */
-    public static SSTableColumn<SSSaleRow> COLUMN_ACCOUNT = new SSTableColumn<SSSaleRow>(
+    public static SSTableColumn<SSSaleRow> COLUMN_ACCOUNT = new SSTableColumn<>(
             SSBundle.getBundle().getString("salerowtable.column.9")) {
         @Override
         public Object getValue(SSSaleRow iObject) {
@@ -343,7 +343,7 @@ public class SSInvoiceRowTableModel extends SSEditableTableModel<SSSaleRow> {
     /**
      * Account
      */
-    public static SSTableColumn<SSSaleRow> COLUMN_RESULTUNIT = new SSTableColumn<SSSaleRow>(
+    public static SSTableColumn<SSSaleRow> COLUMN_RESULTUNIT = new SSTableColumn<>(
             SSBundle.getBundle().getString("salerowtable.column.10")) {
         @Override
         public Object getValue(SSSaleRow iObject) {
@@ -369,7 +369,7 @@ public class SSInvoiceRowTableModel extends SSEditableTableModel<SSSaleRow> {
     /**
      * Project
      */
-    public static SSTableColumn<SSSaleRow> COLUMN_PROJECT = new SSTableColumn<SSSaleRow>(
+    public static SSTableColumn<SSSaleRow> COLUMN_PROJECT = new SSTableColumn<>(
             SSBundle.getBundle().getString("salerowtable.column.11")) {
         @Override
         public Object getValue(SSSaleRow iObject) {

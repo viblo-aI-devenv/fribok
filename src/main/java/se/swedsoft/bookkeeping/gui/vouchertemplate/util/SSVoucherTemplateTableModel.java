@@ -38,7 +38,7 @@ public class SSVoucherTemplateTableModel extends SSTableModel<SSVoucherTemplate>
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSVoucherTemplate.class;
     }
 
@@ -57,7 +57,7 @@ public class SSVoucherTemplateTableModel extends SSTableModel<SSVoucherTemplate>
     /**
      *  Beskrivning
      */
-    public static SSTableColumn<SSVoucherTemplate> COLUMN_DESCRIPTION = new SSTableColumn<SSVoucherTemplate>(
+    public static SSTableColumn<SSVoucherTemplate> COLUMN_DESCRIPTION = new SSTableColumn<>(
             SSBundle.getBundle().getString("vouchertable.column.3")) {
         @Override
         public Object getValue(SSVoucherTemplate iVoucher) {
@@ -81,7 +81,7 @@ public class SSVoucherTemplateTableModel extends SSTableModel<SSVoucherTemplate>
     /**
      *  Date
      */
-    public static SSTableColumn<SSVoucherTemplate> COLUMN_DATE = new SSTableColumn<SSVoucherTemplate>(
+    public static SSTableColumn<SSVoucherTemplate> COLUMN_DATE = new SSTableColumn<>(
             SSBundle.getBundle().getString("vouchertable.column.2")) {
         @Override
         public Object getValue(SSVoucherTemplate iVoucher) {

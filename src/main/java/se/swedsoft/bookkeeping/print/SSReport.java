@@ -77,8 +77,8 @@ public class SSReport {
         iColumnCount = 1;
         iColumnSpacing = 0;
         iColumnWidth = 555;
-        iParameters = new HashMap<String, Object>();
-        iFields = new HashMap<ReportField, String>();
+        iParameters = new HashMap<>();
+        iFields = new HashMap<>();
     }
 
     /**
@@ -189,16 +189,16 @@ public class SSReport {
      * @throws SSException
      */
     private void compileDesign() throws SSException {
-        List<JRStyle>    theStyles = new LinkedList<JRStyle>();
+        List<JRStyle>    theStyles = new LinkedList<>();
 
         // Contains the fields from all subreports
-        List<JRField>     theFields = new LinkedList<JRField>();
+        List<JRField>     theFields = new LinkedList<>();
         // Contains the parameters from all subreport
-        List<JRParameter> theParameters = new LinkedList<JRParameter>();
+        List<JRParameter> theParameters = new LinkedList<>();
 
-        List<JRVariable> theVariables = new LinkedList<JRVariable>();
+        List<JRVariable> theVariables = new LinkedList<>();
 
-        List<JRGroup>    theGroups = new LinkedList<JRGroup>();
+        List<JRGroup>    theGroups = new LinkedList<>();
 
         JRBand iPageHeader = null;
 
@@ -377,7 +377,7 @@ public class SSReport {
                     iDesign.getMainDesignDataset().getGroupsMap().put(iGroup.getName(),
                             iGroup);
 
-                } catch (Exception ignored) {}
+                } catch (RuntimeException ignored) {}
             }
 
             // Add all variables to the design
@@ -392,7 +392,7 @@ public class SSReport {
                     iDesign.getMainDesignDataset().getVariablesMap().put(
                             iVariable.getName(), iVariable);
 
-                } catch (Exception ignored) {}
+                } catch (RuntimeException ignored) {}
             }
 
         } catch (Throwable t) {

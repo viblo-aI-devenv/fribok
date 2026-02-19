@@ -55,7 +55,7 @@ public class SSDateChooser extends JPanel implements ActionListener, ChangeListe
      * and a flow layout.
      */
     public SSDateChooser() {
-        iChangeListeners = new LinkedList<ActionListener>();
+        iChangeListeners = new LinkedList<>();
 
         iDateFormatString = "yyyy-MM-dd";
         iCalendarField = Calendar.DAY_OF_MONTH;
@@ -94,8 +94,8 @@ public class SSDateChooser extends JPanel implements ActionListener, ChangeListe
         iCalendarButton.setMaximumSize(new Dimension(20, 20));
         iCalendarButton.setMinimumSize(new Dimension(20, 20));
 
-        iCalendarButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iCalendarButton.addActionListener(e -> {
+
                 if (iPopup == null) {
                     createPopup(SSDateChooser.this);
                 }
@@ -109,8 +109,8 @@ public class SSDateChooser extends JPanel implements ActionListener, ChangeListe
 
                 // iPopup
                 show(iCalendarButton, x, y);
-            }
-        });
+
+            });
 
         setLayout(new BorderLayout());
         add(iSpinner, BorderLayout.CENTER);

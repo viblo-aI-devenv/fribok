@@ -97,9 +97,9 @@ public class SSDefaultAccountPanel extends JPanel {
 
         add(iPanel, BorderLayout.CENTER);
 
-        iDefaultAccounts = new HashMap<SSDefaultAccount, Integer>();
+        iDefaultAccounts = new HashMap<>();
 
-        iComboBoxes = new HashMap<SSDefaultAccount, SSTableComboBox<SSAccount>>();
+        iComboBoxes = new HashMap<>();
 
         // Kundfodran
         iComboBoxes.put(SSDefaultAccount.CustomerClaim, iCustomerClaim);
@@ -132,7 +132,7 @@ public class SSDefaultAccountPanel extends JPanel {
         // Ingående moms
         iComboBoxes.put(SSDefaultAccount.IncommingTax, iIncommingTax);
 
-        iTextFields = new HashMap<SSDefaultAccount, JTextField>();
+        iTextFields = new HashMap<>();
 
         // Kundfodran
         iTextFields.put(SSDefaultAccount.CustomerClaim, iCustomerClaimText);

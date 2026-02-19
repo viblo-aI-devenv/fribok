@@ -130,7 +130,7 @@ public class SSVoucherPanel implements TableModelListener, ListSelectionListener
         iDescription.setAllowCustomValues(true);
 
         // Event for selecting a template
-        iDescription.addSelectionListener(new SSSelectionListener<SSVoucherTemplate>() {
+        iDescription.addSelectionListener(new SSSelectionListener<>() {
             public void selected(SSVoucherTemplate template) {
                 if (template != null) {
                     // Remove empty rows.
@@ -151,12 +151,12 @@ public class SSVoucherPanel implements TableModelListener, ListSelectionListener
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     iDescription.cancelCellEditing();
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
+                    SwingUtilities.invokeLater(() -> {
+
                             iTable.requestFocusInWindow();
                             iTable.changeSelection(0, 0, false, false);
-                        }
-                    });
+
+                        });
                 }
             }
         });
@@ -211,66 +211,54 @@ public class SSVoucherPanel implements TableModelListener, ListSelectionListener
         };
 
         iTable.addSelectionListener(
-                new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                if (iTable.getSelectedRow() != -1) {
-                    SSVoucherRow iRow = iModel.getObject(iTable.getSelectedRow());
+                e -> {
 
-                    if (iRow.getAccount() != null) {
-                        List<SSVoucher> iVouchers = SSDB.getInstance().getVouchers();
-                        SSNewAccountingYear iYear = SSDB.getInstance().getCurrentYear();
-                        BigDecimal iInbalanceSum = iYear.getInBalance(iRow.getAccount());
-                        BigDecimal iDebetSum = new BigDecimal(0);
-                        BigDecimal iCreditSum = new BigDecimal(0);
+                        if (iTable.getSelectedRow() != -1) {
+                            SSVoucherRow iRow = iModel.getObject(iTable.getSelectedRow());
 
-                        for (SSVoucher iTempVoucher : iVouchers) {
-                            for (SSVoucherRow iTempRow : iTempVoucher.getRows()) {
-                                if (iTempRow.getAccountNr() != null) {
-                                    if (iTempRow.getAccountNr().equals(iRow.getAccountNr())
-                                            && !iTempRow.isCrossed()) {
-                                        if (iTempRow.isDebet()) {
-                                            iDebetSum = iDebetSum.add(iTempRow.getDebet());
-                                        } else {
-                                            iCreditSum = iCreditSum.add(
-                                                    iTempRow.getCredit());
+                            if (iRow.getAccount() != null) {
+                                List<SSVoucher> iVouchers = SSDB.getInstance().getVouchers();
+                                SSNewAccountingYear iYear = SSDB.getInstance().getCurrentYear();
+                                BigDecimal iInbalanceSum = iYear.getInBalance(iRow.getAccount());
+                                BigDecimal iDebetSum = new BigDecimal(0);
+                                BigDecimal iCreditSum = new BigDecimal(0);
+
+                                for (SSVoucher iTempVoucher : iVouchers) {
+                                    for (SSVoucherRow iTempRow : iTempVoucher.getRows()) {
+                                        if (iTempRow.getAccountNr() != null) {
+                                            if (iTempRow.getAccountNr().equals(iRow.getAccountNr())
+                                                    && !iTempRow.isCrossed()) {
+                                                if (iTempRow.isDebet()) {
+                                                    iDebetSum = iDebetSum.add(iTempRow.getDebet());
+                                                } else {
+                                                    iCreditSum = iCreditSum.add(
+                                                            iTempRow.getCredit());
+                                                }
+                                            }
                                         }
                                     }
                                 }
+                                BigDecimal iTotalSum = iInbalanceSum.add(
+                                        iDebetSum.subtract(iCreditSum));
+
+                                iTotalSum = iTotalSum.setScale(2, RoundingMode.HALF_UP);
+                                iSaldo.setValue(iTotalSum);
+                            } else {
+                                iSaldo.setValue(new BigDecimal(0));
                             }
                         }
-                        BigDecimal iTotalSum = iInbalanceSum.add(
-                                iDebetSum.subtract(iCreditSum));
 
-                        iTotalSum = iTotalSum.setScale(2, RoundingMode.HALF_UP);
-                        iSaldo.setValue(iTotalSum);
-                    } else {
-                        iSaldo.setValue(new BigDecimal(0));
-                    }
-                }
-            }
-        });
+                    });
 
-        iDescription.addChangeListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iVoucher.setDescription(iDescription.getText());
-            }
-        });
+        iDescription.addChangeListener(e -> iVoucher.setDescription(iDescription.getText()));
 
-        iDate.addChangeListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                iVoucher.setDate(iDate.getDate());
-            }
-        });
+        iDate.addChangeListener(e -> iVoucher.setDate(iDate.getDate()));
 
         iDate.getEditor().getComponent(0).addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iDescription.getComponent(0).requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iDescription.getComponent(0).requestFocusInWindow());
                 }
             }
         });
@@ -279,11 +267,7 @@ public class SSVoucherPanel implements TableModelListener, ListSelectionListener
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iOkButton.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iOkButton.requestFocusInWindow());
                 }
             }
         });
@@ -292,11 +276,7 @@ public class SSVoucherPanel implements TableModelListener, ListSelectionListener
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iCancelButton.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iCancelButton.requestFocusInWindow());
                 }
             }
         });
@@ -305,18 +285,14 @@ public class SSVoucherPanel implements TableModelListener, ListSelectionListener
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            iOkButton.requestFocusInWindow();
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> iOkButton.requestFocusInWindow());
                 }
             }
         });
 
         // iMarkRowButton.setVisible( ! iNewVoucher   );
-        iMarkRowButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iMarkRowButton.addActionListener(e -> {
+
                 SSVoucherRow iSelected = iModel.getSelectedRow(iTable);
 
                 String iSignature = getSignature();
@@ -328,28 +304,28 @@ public class SSVoucherPanel implements TableModelListener, ListSelectionListener
                 iSelected.setCrossed(iSignature);
 
                 iModel.fireTableDataChanged();
-            }
-        });
+
+            });
 
         // iDeleteRowButton.setVisible(  iNewVoucher   );
         iDeleteRowButton.addActionListener(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSVoucherRow iSelected = iModel.getSelectedRow(iTable);
+                e -> {
 
-                if (iSelected != null && iModel.allowDeletion(iSelected)) {
+                        SSVoucherRow iSelected = iModel.getSelectedRow(iTable);
 
-                    if (SSQueryDialog.showDialog(SSMainFrame.getInstance(),
-                            SSBundle.getBundle(), "voucherframe.deleterow",
-                            iSelected.toString())
-                            != JOptionPane.YES_OPTION) {
-                        return;
-                    }
+                        if (iSelected != null && iModel.allowDeletion(iSelected)) {
 
-                    iModel.deleteRow(iSelected);
-                }
-            }
-        });
+                            if (SSQueryDialog.showDialog(SSMainFrame.getInstance(),
+                                    SSBundle.getBundle(), "voucherframe.deleterow",
+                                    iSelected.toString())
+                                    != JOptionPane.YES_OPTION) {
+                                return;
+                            }
+
+                            iModel.deleteRow(iSelected);
+                        }
+
+                    });
 
         iErrorLabel.setVisible(false);
         iErrorLabel.setForeground(Color.RED);
@@ -369,58 +345,58 @@ public class SSVoucherPanel implements TableModelListener, ListSelectionListener
         iReopenDialog.setSelected(
                 (Boolean) SSConfig.getInstance().get("reopen_voucher_dialog", true));
         iReopenDialog.addChangeListener(
-                new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                SSConfig.getInstance().set("reopen_voucher_dialog",
-                        iReopenDialog.isSelected());
-            }
-        });
+                e -> {
+
+                        SSConfig.getInstance().set("reopen_voucher_dialog",
+                                iReopenDialog.isSelected());
+
+                    });
 
         iModel.addTableModelListener(
-                new TableModelListener() {
-            public void tableChanged(TableModelEvent l) {
+                l -> {
 
-                int iRow = l.getFirstRow();
-                SSVoucherRow iVoucherRow = iModel.getObject(iRow);
 
-                if (iAccountChanged) {
-                    iAccountChanged = false;
-                    SSAutoDist iAutoDist = getAutoDistForAccount(iVoucherRow);
+                        int iRow = l.getFirstRow();
+                        SSVoucherRow iVoucherRow = iModel.getObject(iRow);
 
-                    if (iAutoDist != null) {
-                        if (!iAutoDist.getAmount().equals(new BigDecimal(0))) {
-                            if (SSQueryDialog.showDialog(SSMainFrame.getInstance(),
-                                    SSBundle.getBundle(), "voucherframe.doautodist")
-                                    == JOptionPane.YES_OPTION) {
-                                doAutoDistributionForAmount(iAutoDist, iVoucherRow);
+                        if (iAccountChanged) {
+                            iAccountChanged = false;
+                            SSAutoDist iAutoDist = getAutoDistForAccount(iVoucherRow);
+
+                            if (iAutoDist != null) {
+                                if (!iAutoDist.getAmount().equals(new BigDecimal(0))) {
+                                    if (SSQueryDialog.showDialog(SSMainFrame.getInstance(),
+                                            SSBundle.getBundle(), "voucherframe.doautodist")
+                                            == JOptionPane.YES_OPTION) {
+                                        doAutoDistributionForAmount(iAutoDist, iVoucherRow);
+                                    }
+                                }
+                            }
+                        } else if (iDebetChanged) {
+                            iDebetChanged = false;
+                            SSAutoDist iAutoDist = getAutoDistForAccount(iVoucherRow);
+
+                            if (iAutoDist != null) {
+                                if (SSQueryDialog.showDialog(SSMainFrame.getInstance(),
+                                        SSBundle.getBundle(), "voucherframe.doautodist")
+                                        == JOptionPane.YES_OPTION) {
+                                    doAutoDistributionForRows(iAutoDist, iVoucherRow.getDebet());
+                                }
+                            }
+                        } else if (iCreditChanged) {
+                            iCreditChanged = false;
+                            SSAutoDist iAutoDist = getAutoDistForAccount(iVoucherRow);
+
+                            if (iAutoDist != null) {
+                                if (SSQueryDialog.showDialog(SSMainFrame.getInstance(),
+                                        SSBundle.getBundle(), "voucherframe.doautodist")
+                                        == JOptionPane.YES_OPTION) {
+                                    doAutoDistributionForRows(iAutoDist, iVoucherRow.getCredit());
+                                }
                             }
                         }
-                    }
-                } else if (iDebetChanged) {
-                    iDebetChanged = false;
-                    SSAutoDist iAutoDist = getAutoDistForAccount(iVoucherRow);
 
-                    if (iAutoDist != null) {
-                        if (SSQueryDialog.showDialog(SSMainFrame.getInstance(),
-                                SSBundle.getBundle(), "voucherframe.doautodist")
-                                == JOptionPane.YES_OPTION) {
-                            doAutoDistributionForRows(iAutoDist, iVoucherRow.getDebet());
-                        }
-                    }
-                } else if (iCreditChanged) {
-                    iCreditChanged = false;
-                    SSAutoDist iAutoDist = getAutoDistForAccount(iVoucherRow);
-
-                    if (iAutoDist != null) {
-                        if (SSQueryDialog.showDialog(SSMainFrame.getInstance(),
-                                SSBundle.getBundle(), "voucherframe.doautodist")
-                                == JOptionPane.YES_OPTION) {
-                            doAutoDistributionForRows(iAutoDist, iVoucherRow.getCredit());
-                        }
-                    }
-                }
-            }
-        });
+                    });
 
     }
 

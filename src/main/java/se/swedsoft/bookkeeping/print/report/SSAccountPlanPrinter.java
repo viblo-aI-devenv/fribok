@@ -62,10 +62,10 @@ public class SSAccountPlanPrinter extends SSPrinter {
     @Override
     protected SSDefaultTableModel getModel() {
 
-        SSDefaultTableModel<SSAccount> iModel = new SSDefaultTableModel<SSAccount>() {
+        SSDefaultTableModel<SSAccount> iModel = new SSDefaultTableModel<>() {
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSAccount.class;
             }
 

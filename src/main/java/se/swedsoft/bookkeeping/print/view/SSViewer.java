@@ -1,6 +1,7 @@
 package se.swedsoft.bookkeeping.print.view;
 
 
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperPrintManager;
 
@@ -41,7 +42,7 @@ public class SSViewer extends JPanel {
      *
      */
     public SSViewer() {
-        iListenerMap = new HashMap<String, List<PropertyChangeListener>>();
+        iListenerMap = new HashMap<>();
 
         iPagePanel.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
         iPagePanel.add(iDocumentPanel.getPanel());
@@ -174,7 +175,7 @@ public class SSViewer extends JPanel {
         List<PropertyChangeListener> iPropertyChangeListeners = iListenerMap.get(pProperty);
 
         if (iPropertyChangeListeners == null) {
-            iPropertyChangeListeners = new LinkedList<PropertyChangeListener>();
+            iPropertyChangeListeners = new LinkedList<>();
             iListenerMap.put(pProperty, iPropertyChangeListeners);
         }
         iPropertyChangeListeners.add(pPropertyChangeListener);
@@ -222,7 +223,7 @@ public class SSViewer extends JPanel {
             setMaximumSize(iPageSize);
             setMinimumSize(iPageSize);
             setPreferredSize(iPageSize);
-        } catch (Exception e) {
+        } catch (JRException e) {
             e.printStackTrace();
         }
 
@@ -232,11 +233,7 @@ public class SSViewer extends JPanel {
             ((JViewport) container).setViewPosition(new Point(0, 0));
         }
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                getParent().repaint();
-            }
-        });
+        SwingUtilities.invokeLater(() -> getParent().repaint());
 
     }
 

@@ -44,7 +44,7 @@ public class SSInpaymentTableModel extends SSDefaultTableModel<SSInpayment> {
     }
 
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSProduct.class;
     }
 

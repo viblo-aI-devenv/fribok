@@ -16,13 +16,13 @@ import java.awt.event.ActionListener;
  */
 public class SSHelpButton extends SSButton implements ActionListener {
 
-    private Class iHelpClass;
+    private Class<?> iHelpClass;
 
     /**
      *
      * @param pHelpClass
      */
-    public SSHelpButton(Class pHelpClass) {
+    public SSHelpButton(Class<?> pHelpClass) {
         super("ICON_HELP24", "toolbar.helpbutton");
 
         iHelpClass = pHelpClass;
@@ -42,7 +42,7 @@ public class SSHelpButton extends SSButton implements ActionListener {
      * @param iToolBar
      * @param pHelpClass
      */
-    public static void addButton(JToolBar iToolBar, Class pHelpClass) {
+    public static void addButton(JToolBar iToolBar, Class<?> pHelpClass) {
         iToolBar.addSeparator();
         iToolBar.add(new SSHelpButton(pHelpClass));
     }

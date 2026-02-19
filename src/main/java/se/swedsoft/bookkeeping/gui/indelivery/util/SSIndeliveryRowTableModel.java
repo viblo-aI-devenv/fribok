@@ -22,7 +22,7 @@ public class SSIndeliveryRowTableModel extends SSEditableTableModel<SSIndelivery
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSInventory.class;
     }
 
@@ -37,7 +37,7 @@ public class SSIndeliveryRowTableModel extends SSEditableTableModel<SSIndelivery
     /**
      * Product
      */
-    public static SSTableColumn<SSIndeliveryRow> COLUMN_PRODUCT = new SSTableColumn<SSIndeliveryRow>(
+    public static SSTableColumn<SSIndeliveryRow> COLUMN_PRODUCT = new SSTableColumn<>(
             SSBundle.getBundle().getString("indeliveryrowtable.column.1")) {
         @Override
         public Object getValue(SSIndeliveryRow iRow) {
@@ -65,7 +65,7 @@ public class SSIndeliveryRowTableModel extends SSEditableTableModel<SSIndelivery
     /**
      * Product beskrivning
      */
-    public static SSTableColumn<SSIndeliveryRow> COLUMN_DESCRIPTION = new SSTableColumn<SSIndeliveryRow>(
+    public static SSTableColumn<SSIndeliveryRow> COLUMN_DESCRIPTION = new SSTableColumn<>(
             SSBundle.getBundle().getString("indeliveryrowtable.column.2")) {
         @Override
         public Object getValue(SSIndeliveryRow iRow) {
@@ -91,7 +91,7 @@ public class SSIndeliveryRowTableModel extends SSEditableTableModel<SSIndelivery
     /**
      * Skillnad
      */
-    public static SSTableColumn<SSIndeliveryRow> COLUMN_CHANGE = new SSTableColumn<SSIndeliveryRow>(
+    public static SSTableColumn<SSIndeliveryRow> COLUMN_CHANGE = new SSTableColumn<>(
             SSBundle.getBundle().getString("indeliveryrowtable.column.3")) {
         @Override
         public Object getValue(SSIndeliveryRow iRow) {

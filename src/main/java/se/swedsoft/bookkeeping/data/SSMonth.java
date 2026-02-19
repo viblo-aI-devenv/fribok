@@ -151,7 +151,7 @@ public class SSMonth  implements Serializable {
      * @return List of months
      */
     public static List<SSMonth> splitYearIntoMonths(Date iFrom, Date iTo) {
-        List<SSMonth> iMonths = new LinkedList<SSMonth>();
+        List<SSMonth> iMonths = new LinkedList<>();
 
         Calendar iCalendar = Calendar.getInstance();
 

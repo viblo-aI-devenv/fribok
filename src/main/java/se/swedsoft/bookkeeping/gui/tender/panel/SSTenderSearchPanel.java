@@ -42,7 +42,7 @@ public class SSTenderSearchPanel extends JPanel {
     }
 
     public void ApplyFilter(List<SSTender> iList) {
-        List<SSTender> iFiltered = new LinkedList<SSTender>();
+        List<SSTender> iFiltered = new LinkedList<>();
 
         String iText = iTextField.getText();
 

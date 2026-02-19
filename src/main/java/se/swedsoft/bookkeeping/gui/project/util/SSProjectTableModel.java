@@ -41,7 +41,7 @@ public class SSProjectTableModel extends SSTableModel<SSNewProject> {
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSNewProject.class;
     }
 
@@ -101,7 +101,7 @@ public class SSProjectTableModel extends SSTableModel<SSNewProject> {
     /**
      *  Nummer
      */
-    public static SSTableColumn<SSNewProject> COLUMN_NUMBER = new SSTableColumn<SSNewProject>(
+    public static SSTableColumn<SSNewProject> COLUMN_NUMBER = new SSTableColumn<>(
             SSBundle.getBundle().getString("projecttable.column.1")) {
         @Override
         public Object getValue(SSNewProject iProject) {
@@ -128,7 +128,7 @@ public class SSProjectTableModel extends SSTableModel<SSNewProject> {
     /**
      *  Nummer
      */
-    public static SSTableColumn<SSNewProject> COLUMN_NAME = new SSTableColumn<SSNewProject>(
+    public static SSTableColumn<SSNewProject> COLUMN_NAME = new SSTableColumn<>(
             SSBundle.getBundle().getString("projecttable.column.2")) {
         @Override
         public Object getValue(SSNewProject iProject) {
@@ -155,7 +155,7 @@ public class SSProjectTableModel extends SSTableModel<SSNewProject> {
     /**
      *  Beskrivning
      */
-    public static SSTableColumn<SSNewProject> COLUMN_DESCRIPTION = new SSTableColumn<SSNewProject>(
+    public static SSTableColumn<SSNewProject> COLUMN_DESCRIPTION = new SSTableColumn<>(
             SSBundle.getBundle().getString("projecttable.column.3")) {
         @Override
         public Object getValue(SSNewProject iProject) {
@@ -182,7 +182,7 @@ public class SSProjectTableModel extends SSTableModel<SSNewProject> {
     /**
      *  Beskrivning
      */
-    public static SSTableColumn<SSNewProject> COLUMN_CONCLUDED = new SSTableColumn<SSNewProject>(
+    public static SSTableColumn<SSNewProject> COLUMN_CONCLUDED = new SSTableColumn<>(
             SSBundle.getBundle().getString("projecttable.column.4")) {
         @Override
         public Object getValue(SSNewProject iProject) {

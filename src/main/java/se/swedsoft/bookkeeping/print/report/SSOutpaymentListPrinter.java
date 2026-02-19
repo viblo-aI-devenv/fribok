@@ -74,12 +74,12 @@ public class SSOutpaymentListPrinter extends SSPrinter {
 
         iDataSource = new SSDefaultJasperDataSource(iPrinter.getModel());
 
-        SSDefaultTableModel<SSOutpayment> iModel = new SSDefaultTableModel<SSOutpayment>() {
+        SSDefaultTableModel<SSOutpayment> iModel = new SSDefaultTableModel<>() {
 
             DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSAccount.class;
             }
 
@@ -124,11 +124,7 @@ public class SSOutpaymentListPrinter extends SSPrinter {
         iModel.addColumn("outpayment.sum");
         iModel.addColumn("outpayment.rows");
 
-        Collections.sort(iOutpayments, new Comparator<SSOutpayment>() {
-            public int compare(SSOutpayment o1, SSOutpayment o2) {
-                return o1.getNumber() - o2.getNumber();
-            }
-        });
+        Collections.sort(iOutpayments, (o1, o2) -> o1.getNumber() - o2.getNumber());
 
         iModel.setObjects(iOutpayments);
 
@@ -148,10 +144,10 @@ public class SSOutpaymentListPrinter extends SSPrinter {
             setDetail("outpaymentlist.row.jrxml");
             setSummary("outpaymentlist.row.jrxml");
 
-            iModel = new SSDefaultTableModel<SSOutpaymentRow>() {
+            iModel = new SSDefaultTableModel<>() {
 
                 @Override
-                public Class getType() {
+                public Class<?> getType() {
                     return SSOutpaymentRow.class;
                 }
 

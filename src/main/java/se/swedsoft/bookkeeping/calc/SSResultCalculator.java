@@ -73,17 +73,17 @@ public class SSResultCalculator {
         iProject = pProject;
         iResultUnit = pResultUnit;
 
-        iChange = new HashMap<SSAccount, BigDecimal>();
-        iChangePeriod = new HashMap<SSAccount, BigDecimal>();
+        iChange = new HashMap<>();
+        iChangePeriod = new HashMap<>();
 
-        iChangePrevYear = new HashMap<SSAccount, BigDecimal>();
-        iChangeBudget = new HashMap<SSAccount, BigDecimal>();
+        iChangePrevYear = new HashMap<>();
+        iChangeBudget = new HashMap<>();
 
-        iProjectChange = new HashMap<SSAccount, BigDecimal>();
-        iProjectChangePeriod = new HashMap<SSAccount, BigDecimal>();
+        iProjectChange = new HashMap<>();
+        iProjectChangePeriod = new HashMap<>();
 
-        iResultunitChange = new HashMap<SSAccount, BigDecimal>();
-        iResultunitChangePeriod = new HashMap<SSAccount, BigDecimal>();
+        iResultunitChange = new HashMap<>();
+        iResultunitChangePeriod = new HashMap<>();
     }
 
     /**
@@ -97,7 +97,7 @@ public class SSResultCalculator {
         List<SSNewAccountingYear> iAllYearData = SSDB.getInstance().getYears();
 
         // All vouchers
-        List<SSVoucher> iVouchers = new LinkedList<SSVoucher>();
+        List<SSVoucher> iVouchers = new LinkedList<>();
 
         // Add the vouchers for all years to the list
         for (SSNewAccountingYear iCurrent : iAllYearData) {
@@ -273,7 +273,7 @@ public class SSResultCalculator {
      */
     public Map<SSAccount, BigDecimal> getDeviation(Map<SSAccount, BigDecimal> a, Map<SSAccount, BigDecimal> b) {
 
-        Map<SSAccount, BigDecimal> iResult = new HashMap<SSAccount, BigDecimal>();
+        Map<SSAccount, BigDecimal> iResult = new HashMap<>();
 
         for (Map.Entry<SSAccount, BigDecimal> ssAccountBigDecimalEntry1 : b.entrySet()) {
             iResult.put(ssAccountBigDecimalEntry1.getKey(),
@@ -333,7 +333,7 @@ public class SSResultCalculator {
     public static Map<SSAccount, BigDecimal> getResult(SSNewAccountingYear pYearData) {
         List<SSVoucher> iVouchers = pYearData.getVouchers();
 
-        Map<SSAccount, BigDecimal> iResult = new HashMap<SSAccount, BigDecimal>();
+        Map<SSAccount, BigDecimal> iResult = new HashMap<>();
 
         // Loop through all vouchers
         for (SSVoucher iVoucher: iVouchers) {

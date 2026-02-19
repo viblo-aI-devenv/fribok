@@ -61,8 +61,8 @@ public class SSInterestInvoiceDialog {
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
 
-        iPanel.addOkAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iPanel.addOkAction(e -> {
+
                 List<SSInvoice> iInterestInvoices = iPanel.getInterestInvoices();
 
                 for (SSInvoice iInvoice : iInterestInvoices) {
@@ -76,15 +76,15 @@ public class SSInterestInvoiceDialog {
                 SSPostLock.removeLock(lockString);
                 // iDialog.setVisible(false);
                 iDialog.closeDialog();
-            }
-        });
 
-        iPanel.addCancelAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            });
+
+        iPanel.addCancelAction(e -> {
+
                 SSPostLock.removeLock(lockString);
                 iDialog.setVisible(false);
-            }
-        });
+
+            });
 
         iDialog.addWindowListener(new WindowAdapter() {
             @Override

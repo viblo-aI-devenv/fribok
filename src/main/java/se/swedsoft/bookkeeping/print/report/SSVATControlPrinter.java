@@ -62,10 +62,10 @@ public class SSVATControlPrinter extends SSPrinter {
 
         List<SSVATControlGroup> iControlGroups = iCalculator.getControlGroups();
 
-        SSDefaultTableModel<SSVATControlGroup> iModel = new SSDefaultTableModel<SSVATControlGroup>() {
+        SSDefaultTableModel<SSVATControlGroup> iModel = new SSDefaultTableModel<>() {
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSVATControlGroup.class;
             }
 

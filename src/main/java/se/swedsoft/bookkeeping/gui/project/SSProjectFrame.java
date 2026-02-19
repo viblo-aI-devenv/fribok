@@ -89,33 +89,29 @@ public class SSProjectFrame extends SSDefaultTableFrame {
         // Nytt projekt
         // ***************************
         SSButton iButton = new SSButton("ICON_NEWITEM", "projectframe.newbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                newProject();
-            }
-        });
+                e -> newProject());
 
         iToolBar.add(iButton);
 
         // Ändra projekt
         // ***************************
         iButton = new SSButton("ICON_EDITITEM", "projectframe.editbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSNewProject iSelected = getSelected();
-                String iNumber = null;
+                e -> {
 
-                if (iSelected != null) {
-                    iNumber = iSelected.getNumber();
-                    iSelected = getProject(iSelected);
-                }
-                if (iSelected != null) {
-                    SSProjectDialog.editDialog(getMainFrame(), iSelected, iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "projectframe.projectgone", iNumber);
-                }
-            }
-        });
+                        SSNewProject iSelected = getSelected();
+                        String iNumber = null;
+
+                        if (iSelected != null) {
+                            iNumber = iSelected.getNumber();
+                            iSelected = getProject(iSelected);
+                        }
+                        if (iSelected != null) {
+                            SSProjectDialog.editDialog(getMainFrame(), iSelected, iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "projectframe.projectgone", iNumber);
+                        }
+
+                    });
         iToolBar.add(iButton);
         iToolBar.addSeparator();
         iTable.addSelectionDependentComponent(iButton);
@@ -123,14 +119,14 @@ public class SSProjectFrame extends SSDefaultTableFrame {
         // Ta bort projekt
         // ***************************
         iButton = new SSButton("ICON_DELETEITEM", "projectframe.deletebutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                int[] selected = iTable.getSelectedRows();
-                List<SSNewProject> toDelete = iModel.getObjects(selected);
+                e -> {
 
-                deleteSelectedProjects(toDelete);
-            }
-        });
+                        int[] selected = iTable.getSelectedRows();
+                        List<SSNewProject> toDelete = iModel.getObjects(selected);
+
+                        deleteSelectedProjects(toDelete);
+
+                    });
         iToolBar.add(iButton);
         iToolBar.addSeparator();
         iTable.addSelectionDependentComponent(iButton);
@@ -139,16 +135,8 @@ public class SSProjectFrame extends SSDefaultTableFrame {
         // ***************************
         SSMenuButton iButton2 = new SSMenuButton("ICON_PRINT", "projectframe.printbutton");
 
-        iButton2.add("projectframe.print.projectrevenue", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                ProjectRevenueReport();
-            }
-        });
-        iButton2.add("projectframe.print.projectlist", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                printProjects();
-            }
-        });
+        iButton2.add("projectframe.print.projectrevenue", e -> ProjectRevenueReport());
+        iButton2.add("projectframe.print.projectlist", e -> printProjects());
         iToolBar.add(iButton2);
 
         return iToolBar;
@@ -172,24 +160,24 @@ public class SSProjectFrame extends SSDefaultTableFrame {
         iModel.setupTable(iTable);
 
         iTable.addDblClickListener(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSNewProject iSelected = getSelected();
+                e -> {
 
-                if (iSelected == null) {
-                    return;
-                }
+                        SSNewProject iSelected = getSelected();
 
-                String iNumber = iSelected.getNumber();
+                        if (iSelected == null) {
+                            return;
+                        }
 
-                iSelected = getProject(iSelected);
-                if (iSelected != null) {
-                    SSProjectDialog.editDialog(getMainFrame(), iSelected, iModel);
-                } else {
-                    new SSErrorDialog(getMainFrame(), "projectframe.projectgone", iNumber);
-                }
-            }
-        });
+                        String iNumber = iSelected.getNumber();
+
+                        iSelected = getProject(iSelected);
+                        if (iSelected != null) {
+                            SSProjectDialog.editDialog(getMainFrame(), iSelected, iModel);
+                        } else {
+                            new SSErrorDialog(getMainFrame(), "projectframe.projectgone", iNumber);
+                        }
+
+                    });
 
         JPanel iPanel = new JPanel();
 
@@ -338,11 +326,7 @@ public class SSProjectFrame extends SSDefaultTableFrame {
         final SSProjectRevenuePrinter iPrinter = new SSProjectRevenuePrinter(iProjects,
                 iFrom, iTo);
 
-        SSProgressDialog.runProgress(getMainFrame(), new Runnable() {
-            public void run() {
-                iPrinter.preview(getMainFrame());
-            }
-        });
+        SSProgressDialog.runProgress(getMainFrame(), () -> iPrinter.preview(getMainFrame()));
     }
 
     private void printProjects() {
@@ -374,11 +358,7 @@ public class SSProjectFrame extends SSDefaultTableFrame {
             iPrinter = new SSProjectsPrinter(iProjects);
         }
 
-        SSProgressDialog.runProgress(getMainFrame(), new Runnable() {
-            public void run() {
-                iPrinter.preview(getMainFrame());
-            }
-        });
+        SSProgressDialog.runProgress(getMainFrame(), () -> iPrinter.preview(getMainFrame()));
     }
 
     public void updateFrame() {

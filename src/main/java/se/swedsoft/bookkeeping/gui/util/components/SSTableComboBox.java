@@ -62,7 +62,7 @@ public class SSTableComboBox<T extends SSTableSearchable> extends JPanel {
      * and a flow layout.
      */
     public SSTableComboBox() {
-        iSelectionListeners = new LinkedList<SSSelectionListener>();
+        iSelectionListeners = new LinkedList<>();
         iSelected = null;
         iSearchColumns = EMPTY_INT_ARRAY;
         iAllowCustomValues = false;
@@ -86,16 +86,16 @@ public class SSTableComboBox<T extends SSTableSearchable> extends JPanel {
         iPopup.setPreferredSize(new Dimension(350, 200));
 
         // Listener for pressing the button
-        iDropdownButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        iDropdownButton.addActionListener(e -> {
+
 
                 if (!iPopup.isVisible()) {
                     iPopup.show(iTextField, 0, getHeight());
                 }
 
                 iModel.setObjects(iObjects);
-            }
-        });
+
+            });
 
         // Select the null value
         Action iSelectNull = new AbstractAction() {
@@ -184,13 +184,13 @@ public class SSTableComboBox<T extends SSTableSearchable> extends JPanel {
         });
 
         iTable.addDblClickListener(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // iSelectAndClose.actionPerformed(null);
-                iTextField.getActionMap().get("SELECT_ROW_AND_CLOSE_DROP_DOWN").actionPerformed(
-                        null);
-            }
-        });
+                e -> {
+
+                        // iSelectAndClose.actionPerformed(null);
+                        iTextField.getActionMap().get("SELECT_ROW_AND_CLOSE_DROP_DOWN").actionPerformed(
+                                null);
+
+                    });
 
         iTextField.getInputMap(WHEN_FOCUSED).put(
                 KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "SELECT_NULL");
@@ -222,9 +222,9 @@ public class SSTableComboBox<T extends SSTableSearchable> extends JPanel {
      * @return the model
      */
     private SSTableModel<T> createDefaultModel() {
-        return new SSTableModel<T>() {
+        return new SSTableModel<>() {
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return null;
             }
 
@@ -435,7 +435,7 @@ public class SSTableComboBox<T extends SSTableSearchable> extends JPanel {
         if (iSearchColumns.length == 0) {
             return true;
         }
-        List<T> iVisible = new LinkedList<T>();
+        List<T> iVisible = new LinkedList<>();
 
         // Restore the models objects
         iModel.setObjects(iObjects);
@@ -486,11 +486,7 @@ public class SSTableComboBox<T extends SSTableSearchable> extends JPanel {
     public void startEdit() {
         iPopup.show(iTextField, 0, getHeight());
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                iTextField.requestFocusInWindow();
-            }
-        });
+        SwingUtilities.invokeLater(() -> iTextField.requestFocusInWindow());
     }
 
     /**
@@ -648,7 +644,7 @@ public class SSTableComboBox<T extends SSTableSearchable> extends JPanel {
          *
          */
         public CellEditor() {
-            iComboBox = new SSTableComboBox<T>();
+            iComboBox = new SSTableComboBox<>();
             iComboBox.iEditor = this;
         }
 
@@ -695,11 +691,7 @@ public class SSTableComboBox<T extends SSTableSearchable> extends JPanel {
                     iComboBox.searchTable();
                 }
             }
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    iComboBox.iTextField.requestFocusInWindow();
-                }
-            });
+            SwingUtilities.invokeLater(() -> iComboBox.iTextField.requestFocusInWindow());
             iComboBox.iTextField.selectAll();
 
             return iComboBox;

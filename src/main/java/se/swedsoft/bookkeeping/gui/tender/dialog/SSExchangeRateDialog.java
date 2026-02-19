@@ -40,17 +40,8 @@ public class SSExchangeRateDialog extends SSDialog {
 
         setPanel(iPanel);
 
-        iButtonPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                closeDialog(JOptionPane.CANCEL_OPTION);
-            }
-        });
-        iButtonPanel.addOkActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                closeDialog(JOptionPane.OK_OPTION);
-
-            }
-        });
+        iButtonPanel.addCancelActionListener(e -> closeDialog(JOptionPane.CANCEL_OPTION));
+        iButtonPanel.addOkActionListener(e -> closeDialog(JOptionPane.OK_OPTION));
 
         getRootPane().setDefaultButton(iButtonPanel.getOkButton());
 

@@ -28,14 +28,14 @@ public class SSBudgetTableModels {
     public static SSDefaultTableModel<SSAccount> createBudgetTableModel(final SSBudget pBudget) {
         List<SSAccount> iAccounts = pBudget.getAccounts();
 
-        SSDefaultTableModel<SSAccount> iTableModel = new SSDefaultTableModel<SSAccount>() {
+        SSDefaultTableModel<SSAccount> iTableModel = new SSDefaultTableModel<>() {
 
             /**
              *
              * @return Class
              */
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSAccount.class;
             }
 
@@ -145,11 +145,7 @@ public class SSBudgetTableModels {
         iTableModel.addColumn(
                 SSBundle.getBundle().getString("budgetframe.monthlytable.column.2"));
 
-        Collections.sort(iMonths, new Comparator<SSMonth>() {
-            public int compare(SSMonth o1, SSMonth o2) {
-                return o1.getDate().compareTo(o2.getDate());
-            }
-        });
+        Collections.sort(iMonths, (o1, o2) -> o1.getDate().compareTo(o2.getDate()));
 
         iTableModel.setObjects(iMonths);
         return iTableModel;

@@ -94,11 +94,7 @@ public class SSCompanyFrame extends SSDefaultTableFrame {
         // Open
         // ***************************
         SSButton iButton = new SSButton("ICON_OPENITEM", "companyframe.openbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                openSelectedCompany();
-            }
-        });
+                e -> openSelectedCompany());
 
         iToolBar.add(iButton);
         iToolBar.addSeparator();
@@ -107,34 +103,26 @@ public class SSCompanyFrame extends SSDefaultTableFrame {
         // New
         // ***************************
         iButton = new SSButton("ICON_NEWITEM", "companyframe.newbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                updateFrame();
-                SSCompanyDialog.newDialog(getMainFrame(), iModel);
-            }
-        });
+                e -> {
+
+                        updateFrame();
+                        SSCompanyDialog.newDialog(getMainFrame(), iModel);
+
+                    });
         iButton.setEnabled(true);
         iToolBar.add(iButton);
 
         // Edit
         // ***************************
         iButton = new SSButton("ICON_EDITITEM", "companyframe.editbutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                editSelectedCompany();
-            }
-        });
+                e -> editSelectedCompany());
         iToolBar.add(iButton);
         iTable.addSelectionDependentComponent(iButton);
 
         // Delete
         // ***************************
         iButton = new SSButton("ICON_DELETEITEM", "companyframe.deletebutton",
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                deleteSelectedCompany();
-            }
-        });
+                e -> deleteSelectedCompany());
         iToolBar.add(iButton);
         iTable.addSelectionDependentComponent(iButton);
 
@@ -158,12 +146,12 @@ public class SSCompanyFrame extends SSDefaultTableFrame {
                 (Boolean) SSConfig.getInstance().get("companyframe.showatstart", true));
 
         iShowAtStartup.addActionListener(
-                new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SSConfig.getInstance().set("companyframe.showatstart",
-                        iShowAtStartup.isSelected());
-            }
-        });
+                e -> {
+
+                        SSConfig.getInstance().set("companyframe.showatstart",
+                                iShowAtStartup.isSelected());
+
+                    });
 
         iTable = new SSTable();
 
@@ -174,11 +162,7 @@ public class SSCompanyFrame extends SSDefaultTableFrame {
         iTable.getColumnModel().getColumn(0).setPreferredWidth(70);
         iTable.getColumnModel().getColumn(0).setMaxWidth(70);
 
-        iTable.addDblClickListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                openSelectedCompany();
-            }
-        });
+        iTable.addDblClickListener(e -> openSelectedCompany());
         JPanel iPanel = new JPanel();
 
         iPanel.setLayout(new BorderLayout());

@@ -53,16 +53,8 @@ public class SSOrderListDialog extends SSDialog {
 
         setPanel(iPanel);
 
-        iButtonPanel.addCancelActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setModalResult(JOptionPane.CANCEL_OPTION, true);
-            }
-        });
-        iButtonPanel.addOkActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setModalResult(JOptionPane.OK_OPTION, true);
-            }
-        });
+        iButtonPanel.addCancelActionListener(e -> setModalResult(JOptionPane.CANCEL_OPTION, true));
+        iButtonPanel.addOkActionListener(e -> setModalResult(JOptionPane.OK_OPTION, true));
 
 	getRootPane().setDefaultButton(iButtonPanel.getOkButton());
 
@@ -71,14 +63,14 @@ public class SSOrderListDialog extends SSDialog {
         iCustomer.setColumnWidths(60, 200);
         iCustomer.setPopupSize(250, 150);
 
-        ChangeListener iChangeListener = new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
+        ChangeListener iChangeListener = e -> {
+
                 iCustomer.setEnabled(iCheckCustomer.isSelected());
 
                 iFromDate.setEnabled(iCheckDate.isSelected());
                 iToDate.setEnabled(iCheckDate.isSelected());
-            }
-        };
+
+            };
 
         iCheckDate.addChangeListener(iChangeListener);
         iCheckCustomer.addChangeListener(iChangeListener);
@@ -111,12 +103,12 @@ public class SSOrderListDialog extends SSDialog {
 
         List<SSOrder> iOrders = SSDB.getInstance().getOrders();
 
-        SSFilterFactory<SSOrder> iFactory = new SSFilterFactory<SSOrder>(iOrders);
+        SSFilterFactory<SSOrder> iFactory = new SSFilterFactory<>(iOrders);
 
         // Filter by orders with invoices
         if (iRadioInvoice.isSelected()) {
 
-            iFactory.applyFilter(new SSFilter<SSOrder>() {
+            iFactory.applyFilter(new SSFilter<>() {
                 public boolean applyFilter(SSOrder iOrder) {
                     return iOrder.getInvoice(iInvoices) == null;
                 }
@@ -127,7 +119,7 @@ public class SSOrderListDialog extends SSDialog {
         if (iCheckCustomer.isSelected() && iCustomer.hasSelected()) {
             final SSCustomer iCustomer = this.iCustomer.getSelected();
 
-            iFactory.applyFilter(new SSFilter<SSOrder>() {
+            iFactory.applyFilter(new SSFilter<>() {
                 public boolean applyFilter(SSOrder iOrder) {
                     return iCustomer.equals(iOrder.getCustomer(iCustomers));
                 }
@@ -139,7 +131,7 @@ public class SSOrderListDialog extends SSDialog {
             final Date iDateFrom = iFromDate.getDate();
             final Date iDateTo = iToDate.getDate();
 
-            iFactory.applyFilter(new SSFilter<SSOrder>() {
+            iFactory.applyFilter(new SSFilter<>() {
                 public boolean applyFilter(SSOrder iOrder) {
                     return SSOrderMath.inPeriod(iOrder, iDateFrom, iDateTo);
                 }

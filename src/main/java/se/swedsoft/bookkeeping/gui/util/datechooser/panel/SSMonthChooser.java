@@ -35,7 +35,7 @@ public class SSMonthChooser implements ItemListener {
      *
      */
     public SSMonthChooser() {
-        iChangeListeners = new LinkedList<ActionListener>();
+        iChangeListeners = new LinkedList<>();
 
         iComboBox = new JComboBox();
         iComboBox.addItemListener(this);

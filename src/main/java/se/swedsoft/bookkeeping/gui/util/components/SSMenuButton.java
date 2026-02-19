@@ -44,12 +44,7 @@ public class SSMenuButton<T extends JButton> extends SSButton {
     private void createPopup() {
         iPopup = new JPopupMenu();
 
-        addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-
-                iPopup.show(SSMenuButton.this, 0, getHeight());
-            }
-        });
+        addActionListener(e -> iPopup.show(SSMenuButton.this, 0, getHeight()));
     }
 
     /**

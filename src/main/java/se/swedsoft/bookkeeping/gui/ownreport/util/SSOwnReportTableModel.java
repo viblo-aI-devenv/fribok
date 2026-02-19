@@ -40,11 +40,11 @@ public class SSOwnReportTableModel extends SSTableModel<SSOwnReport> {
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSOwnReport.class;
     }
 
-    public static SSTableColumn<SSOwnReport> COLUMN_NAME = new SSTableColumn<SSOwnReport>(
+    public static SSTableColumn<SSOwnReport> COLUMN_NAME = new SSTableColumn<>(
             SSBundle.getBundle().getString("ownreporttable.column.1")) {
         @Override
         public Object getValue(SSOwnReport iOwnReport) {
@@ -67,7 +67,7 @@ public class SSOwnReportTableModel extends SSTableModel<SSOwnReport> {
         }
     };
 
-    public static SSTableColumn<SSOwnReport> COLUMN_PROJECT = new SSTableColumn<SSOwnReport>(
+    public static SSTableColumn<SSOwnReport> COLUMN_PROJECT = new SSTableColumn<>(
             SSBundle.getBundle().getString("ownreporttable.column.2")) {
         @Override
         public Object getValue(SSOwnReport iOwnReport) {
@@ -90,7 +90,7 @@ public class SSOwnReportTableModel extends SSTableModel<SSOwnReport> {
         }
     };
 
-    public static SSTableColumn<SSOwnReport> COLUMN_RESULTUNIT = new SSTableColumn<SSOwnReport>(
+    public static SSTableColumn<SSOwnReport> COLUMN_RESULTUNIT = new SSTableColumn<>(
             SSBundle.getBundle().getString("ownreporttable.column.3")) {
         @Override
         public Object getValue(SSOwnReport iOwnReport) {

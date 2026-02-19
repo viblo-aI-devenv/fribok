@@ -35,14 +35,14 @@ public class SSOwnReportAccountTableModel extends SSEditableTableModel<SSOwnRepo
      * @return The current data type.
      */
     @Override
-    public Class getType() {
+    public Class<?> getType() {
         return SSOwnReportAccountRow.class;
     }
 
     /**
      * Account column
      */
-    public static SSTableColumn<SSOwnReportAccountRow> COLUMN_ACCOUNT = new SSTableColumn<SSOwnReportAccountRow>(
+    public static SSTableColumn<SSOwnReportAccountRow> COLUMN_ACCOUNT = new SSTableColumn<>(
             SSBundle.getBundle().getString("ownreport.accounttable.column.1")) {
         @Override
         public Object getValue(SSOwnReportAccountRow iObject) {
@@ -77,7 +77,7 @@ public class SSOwnReportAccountTableModel extends SSEditableTableModel<SSOwnRepo
     /**
      * Description column
      */
-    public static SSTableColumn<SSOwnReportAccountRow> COLUMN_DESCRIPTION = new SSTableColumn<SSOwnReportAccountRow>(
+    public static SSTableColumn<SSOwnReportAccountRow> COLUMN_DESCRIPTION = new SSTableColumn<>(
             SSBundle.getBundle().getString("ownreport.accounttable.column.2")) {
         @Override
         public Object getValue(SSOwnReportAccountRow iObject) {
@@ -103,7 +103,7 @@ public class SSOwnReportAccountTableModel extends SSEditableTableModel<SSOwnRepo
     /**
      * Unit price
      */
-    public static SSTableColumn<SSOwnReportAccountRow> COLUMN_BUDGET = new SSTableColumn<SSOwnReportAccountRow>(
+    public static SSTableColumn<SSOwnReportAccountRow> COLUMN_BUDGET = new SSTableColumn<>(
             SSBundle.getBundle().getString("ownreport.accounttable.column.3")) {
         @Override
         public Object getValue(SSOwnReportAccountRow iObject) {

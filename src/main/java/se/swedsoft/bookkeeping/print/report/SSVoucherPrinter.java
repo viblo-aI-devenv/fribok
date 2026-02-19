@@ -57,7 +57,7 @@ public class SSVoucherPrinter extends SSPrinter {
     public SSVoucherPrinter(SSVoucher pVoucher, String pTitle, SSAccount... pMarkedAccounts) {
         this(pVoucher, pTitle);
 
-        iMarkedAccounts = new LinkedList<SSAccount>();
+        iMarkedAccounts = new LinkedList<>();
         iMarkedAccounts.addAll(Arrays.asList(pMarkedAccounts));
     }
 
@@ -94,12 +94,12 @@ public class SSVoucherPrinter extends SSPrinter {
         addParameter("Parameters", iPrinter.getParameters());
 
         iDataSource = new SSDefaultJasperDataSource(iPrinter.getModel());
-        SSDefaultTableModel<SSVoucher> iModel = new SSDefaultTableModel<SSVoucher>() {
+        SSDefaultTableModel<SSVoucher> iModel = new SSDefaultTableModel<>() {
 
             DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSInvoice.class;
             }
 
@@ -172,12 +172,12 @@ public class SSVoucherPrinter extends SSPrinter {
             setDetail("voucher.rows.jrxml");
             setSummary("voucher.rows.jrxml");
 
-            iModel = new SSDefaultTableModel<SSVoucherRow>() {
+            iModel = new SSDefaultTableModel<>() {
 
                 DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
                 @Override
-                public Class getType() {
+                public Class<?> getType() {
                     return SSVoucherRow.class;
                 }
 

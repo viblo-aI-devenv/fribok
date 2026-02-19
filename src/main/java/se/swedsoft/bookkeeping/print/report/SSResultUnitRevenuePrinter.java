@@ -79,9 +79,9 @@ public class SSResultUnitRevenuePrinter extends SSPrinter {
 
         iDataSource = new SSDefaultJasperDataSource(iPrinter.getModel());
 
-        SSDefaultTableModel<SSNewResultUnit> iModel = new SSDefaultTableModel<SSNewResultUnit>() {
+        SSDefaultTableModel<SSNewResultUnit> iModel = new SSDefaultTableModel<>() {
             @Override
-            public Class getType() {
+            public Class<?> getType() {
                 return SSNewResultUnit.class;
             }
 
@@ -121,7 +121,7 @@ public class SSResultUnitRevenuePrinter extends SSPrinter {
     }
 
     private void calculate() {
-        iResultUnitRevenue = new HashMap<String, Map<SSMonth, BigDecimal>>();
+        iResultUnitRevenue = new HashMap<>();
         List<SSInvoice> iInvoices = SSDB.getInstance().getInvoices();
 
         for (SSInvoice iInvoice : iInvoices) {
@@ -153,7 +153,7 @@ public class SSResultUnitRevenuePrinter extends SSPrinter {
                                 iRevenueInMonth.put(iMonth, iSum);
                             }
                         } else {
-                            iRevenueInMonth = new HashMap<SSMonth, BigDecimal>();
+                            iRevenueInMonth = new HashMap<>();
                             iRevenueInMonth.put(iMonth, iSum);
                         }
                         iResultUnitRevenue.put(iRow.getResultUnitNr(), iRevenueInMonth);
@@ -194,7 +194,7 @@ public class SSResultUnitRevenuePrinter extends SSPrinter {
                                 iRevenueInMonth.put(iMonth, iSum.negate());
                             }
                         } else {
-                            iRevenueInMonth = new HashMap<SSMonth, BigDecimal>();
+                            iRevenueInMonth = new HashMap<>();
                             iRevenueInMonth.put(iMonth, iSum.negate());
                         }
                         iResultUnitRevenue.put(iRow.getResultUnitNr(), iRevenueInMonth);
@@ -228,11 +228,11 @@ public class SSResultUnitRevenuePrinter extends SSPrinter {
             setDetail("resultunitrevenue.monthly.jrxml");
             setSummary("resultunitrevenue.monthly.jrxml");
 
-            iModel = new SSDefaultTableModel<SSMonth>(
+            iModel = new SSDefaultTableModel<>(
                     SSMonth.splitYearIntoMonths(iFrom, iTo)) {
 
                 @Override
-                public Class getType() {
+                public Class<?> getType() {
                     return SSMonth.class;
                 }
 
@@ -302,7 +302,7 @@ public class SSResultUnitRevenuePrinter extends SSPrinter {
             iResultUnit = pResultUnit;
             iRevenue = iMap;
             if (iRevenue == null) {
-                iRevenue = new HashMap<SSMonth, BigDecimal>();
+                iRevenue = new HashMap<>();
             }
         }
 

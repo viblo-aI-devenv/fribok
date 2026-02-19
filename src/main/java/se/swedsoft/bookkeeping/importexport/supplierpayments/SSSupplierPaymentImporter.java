@@ -34,7 +34,7 @@ public class SSSupplierPaymentImporter {
      * @return
      */
     public static List<SSOutpayment> Import(File iFile) throws SSImportException {
-        List<String> iLines = new LinkedList<String>();
+        List<String> iLines = new LinkedList<>();
 
         try {
             BufferedReader iReader = new BufferedReader(new FileReader(iFile));
@@ -47,7 +47,7 @@ public class SSSupplierPaymentImporter {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        List<LBinPost> iPosts = new LinkedList<LBinPost>();
+        List<LBinPost> iPosts = new LinkedList<>();
 
         for (String iLine : iLines) {
 
@@ -66,7 +66,7 @@ public class SSSupplierPaymentImporter {
                 System.out.println("Oidentifierad posttyp: " + iPostTyp);
             }
         }
-        List<SSOutpayment> iOutpayments = new LinkedList<SSOutpayment>();
+        List<SSOutpayment> iOutpayments = new LinkedList<>();
 
         SSOutpayment iOutpayment = null;
         boolean paymentRead = false;
