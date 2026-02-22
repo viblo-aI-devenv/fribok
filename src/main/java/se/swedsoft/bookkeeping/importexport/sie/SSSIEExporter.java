@@ -15,13 +15,16 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Date: 2006-feb-20
  * Time: 14:16:55
  */
-public class SSSIEExporter {
+public class SSSIEExporter {    private static final Logger LOG = LoggerFactory.getLogger(SSSIEExporter.class);
+
 
     private List<String> iLines;
 
@@ -73,7 +76,7 @@ public class SSSIEExporter {
         // Get the exporter factory
         SIEFactory iFactory = SIEFactory.getExportInstance(iType);
 
-        // System.out.println( iFactory.toString() );
+        // LOG.info(iFactory.toString());
 
         for (SIELabel iLabel : iFactory.getLabels()) {
             SIEEntry iEntry = iLabel.getEntry();
@@ -107,10 +110,10 @@ public class SSSIEExporter {
         try {
             iLines = SIEFile.readFile(pFile);
         } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
             throw new SSExportException(ex.getMessage());
         } catch (IOException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
             throw new SSExportException(ex.getMessage());
         }
     }
@@ -125,10 +128,10 @@ public class SSSIEExporter {
         try {
             SIEFile.writeFile(pFile, iLines);
         } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
             throw new SSExportException(ex.getMessage());
         } catch (IOException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
             throw new SSExportException(ex.getMessage());
         }
     }

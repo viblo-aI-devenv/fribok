@@ -6,6 +6,8 @@ import se.swedsoft.bookkeeping.data.SSNewAccountingYear;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -15,7 +17,8 @@ import java.io.PrintWriter;
  * Denna klass används för att låsa öppnade företag, så att ett öppet företag
  * inte kan tas bort av en annan användare.
  */
-public class SSYearLock {
+public class SSYearLock {    private static final Logger LOG = LoggerFactory.getLogger(SSYearLock.class);
+
     private SSYearLock() {}
 
     /**
@@ -42,7 +45,7 @@ public class SSYearLock {
 
             return iReply.equals("goahead");
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             return false;
         }
     }
@@ -91,7 +94,7 @@ public class SSYearLock {
 
             return iReply.equals("true");
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             return false;
         }
     }

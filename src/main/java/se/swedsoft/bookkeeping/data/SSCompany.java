@@ -15,12 +15,15 @@ import java.math.BigDecimal;
 import java.rmi.server.UID;
 import java.util.*;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * @author Roger Björnstedt
  */
-public class SSCompany implements Serializable {
+public class SSCompany implements Serializable {    private static final Logger LOG = LoggerFactory.getLogger(SSCompany.class);
+
 
     // Constant for serialization versioning.
     static final long serialVersionUID = 1L;
@@ -1790,7 +1793,7 @@ public class SSCompany implements Serializable {
         try {
             iImage = ImageIO.read(iFile);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
         return iImage;
 

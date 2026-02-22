@@ -19,13 +19,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
 import java.util.Date;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * $Id$
  *
  */
-public class SSVATReportDialog extends SSDialog {
+public class SSVATReportDialog extends SSDialog {    private static final Logger LOG = LoggerFactory.getLogger(SSVATReportDialog.class);
+
 
     private JPanel iPanel;
 
@@ -164,7 +167,7 @@ public class SSVATReportDialog extends SSDialog {
         try {
             startVoucher = Integer.parseInt(txtStartVoucher.getText());
         } catch (NumberFormatException e) {
-	    System.err.println("Kunde inte hantera som siffra: "  + txtStartVoucher.getText());
+	    LOG.error("Kunde inte hantera som siffra: " + txtStartVoucher.getText());
         }
         return startVoucher;
     }

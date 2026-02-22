@@ -21,6 +21,8 @@ import java.util.List;
 
 import static se.swedsoft.bookkeeping.importexport.sie.util.SIEReader.SIEDataType.INT;
 import static se.swedsoft.bookkeeping.importexport.sie.util.SIEReader.SIEDataType.STRING;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -28,7 +30,8 @@ import static se.swedsoft.bookkeeping.importexport.sie.util.SIEReader.SIEDataTyp
  * Date: 2006-feb-23
  * Time: 12:25:13
  */
-public class SIEEntryObjekt implements SIEEntry {
+public class SIEEntryObjekt implements SIEEntry {    private static final Logger LOG = LoggerFactory.getLogger(SIEEntryObjekt.class);
+
 
     /**
      * Imports the entry
@@ -56,7 +59,7 @@ public class SIEEntryObjekt implements SIEEntry {
         SIEDimension iDimension = iImporter.getDimension(iNumber);
 
         if (iDimension == null) {
-            System.out.println("No dimension:" + iNumber);
+            LOG.info("No dimension:" + iNumber);
             return false;
         }
 

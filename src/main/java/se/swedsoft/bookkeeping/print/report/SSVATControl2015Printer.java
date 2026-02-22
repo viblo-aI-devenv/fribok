@@ -16,6 +16,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -23,7 +25,8 @@ import java.util.*;
  *
  * Med importmoms gällade från 1 januari 2015
  */
-public class SSVATControl2015Printer extends SSPrinter {
+public class SSVATControl2015Printer extends SSPrinter {    private static final Logger LOG = LoggerFactory.getLogger(SSVATControl2015Printer.class);
+
 
     private SSNewAccountingYear iAccountingYear;
 
@@ -84,7 +87,7 @@ public class SSVATControl2015Printer extends SSPrinter {
 	if (iStartVoucherIndex >= 0 && iStartVoucherIndex < iVouchers.size()) {
 	    iVouchers2 = iVouchers.subList(iStartVoucherIndex, iVouchers.size());
 	} else {
-	    System.err.println("Använder hela periodens verifikat då börja-med-verifikat ligger utanför giltigt intervall.");
+	    LOG.error("Använder hela periodens verifikat då börja-med-verifikat ligger utanför giltigt intervall.");
 	}
         iCreditMinusDebetSum = SSVoucherMath.getCreditMinusDebetSum(iVouchers2);
         iDebetMinusCreditSum = SSVoucherMath.getDebetMinusCreditSum(iVouchers2);

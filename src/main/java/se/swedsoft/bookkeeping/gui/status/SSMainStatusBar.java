@@ -12,6 +12,8 @@ import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -19,7 +21,8 @@ import java.text.DateFormat;
  * Date: 2006-mar-22
  * Time: 11:02:56
  */
-public class SSMainStatusBar {
+public class SSMainStatusBar {    private static final Logger LOG = LoggerFactory.getLogger(SSMainStatusBar.class);
+
 
     private JLabel iNameLabel;
 
@@ -80,13 +83,13 @@ public class SSMainStatusBar {
                  try {
                  Thread.sleep(1000);
                  } catch (InterruptedException e) {
-                 e.printStackTrace();
+                 LOG.error("Unexpected error", e);
                  }
                  iMemLabel.setVisible(false);
                  try {
                  Thread.sleep(1000);
                  } catch (InterruptedException e) {
-                 e.printStackTrace();
+                 LOG.error("Unexpected error", e);
                  }
                  }
 

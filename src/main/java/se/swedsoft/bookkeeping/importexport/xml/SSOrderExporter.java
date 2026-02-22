@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -24,7 +26,8 @@ import java.util.List;
  * Time: 15:16:52
  * $Id$
  */
-public class SSOrderExporter {
+public class SSOrderExporter {    private static final Logger LOG = LoggerFactory.getLogger(SSOrderExporter.class);
+
 
     private List<SSOrder> iItems;
 
@@ -369,7 +372,7 @@ public class SSOrderExporter {
             fos.close();
             osw.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
     }
 

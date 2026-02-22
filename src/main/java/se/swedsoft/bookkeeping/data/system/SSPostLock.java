@@ -4,6 +4,8 @@ package se.swedsoft.bookkeeping.data.system;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -13,7 +15,8 @@ import java.io.PrintWriter;
  * Denna klass används för att låsa poster i databasen så att samma objekt
  * inte kan ändras samtidigt av olika instanser av programmet.
  */
-public class SSPostLock {
+public class SSPostLock {    private static final Logger LOG = LoggerFactory.getLogger(SSPostLock.class);
+
     private SSPostLock() {}
 
     /**
@@ -30,9 +33,9 @@ public class SSPostLock {
          oos.writeObject(O);
 
          } catch (FileNotFoundException e) {
-         e.printStackTrace();
+         LOG.error("Unexpected error", e);
          } catch (IOException e) {
-         e.printStackTrace();
+         LOG.error("Unexpected error", e);
          }
          finally{
          try {
@@ -60,7 +63,7 @@ public class SSPostLock {
 
             return iReply.equals("true");
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             return false;
         }
     }
@@ -91,9 +94,9 @@ public class SSPostLock {
          }
 
          } catch (IOException e) {
-         e.printStackTrace();
+         LOG.error("Unexpected error", e);
          } catch (ClassNotFoundException e) {
-         e.printStackTrace();
+         LOG.error("Unexpected error", e);
          }
          finally{
          try {
@@ -197,7 +200,7 @@ public class SSPostLock {
 
             return iReply.equals("true");
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             return false;
         }
     }

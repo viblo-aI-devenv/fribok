@@ -10,6 +10,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -17,7 +19,8 @@ import java.util.stream.Collectors;
  * Date: 2006-mar-27
  * Time: 15:42:39
  */
-public class SSInvoiceMath extends SSSaleMath {
+public class SSInvoiceMath extends SSSaleMath {    private static final Logger LOG = LoggerFactory.getLogger(SSInvoiceMath.class);
+
 
     /**
      *
@@ -468,7 +471,7 @@ public class SSInvoiceMath extends SSSaleMath {
     public static BigDecimal getInterestSum(SSInvoice iInvoice, BigDecimal iSaldo, int iNumDays) {
         BigDecimal iInterest = iInvoice.getDelayInterest();
 
-        // System.out.println(iInterest);
+        // LOG.info(iInterest);
         BigDecimal iNormalisedInterest = iInterest.scaleByPowerOfTen(-2);
 
         BigDecimal iDay = new BigDecimal(iNumDays).divide(new BigDecimal(365), 16,

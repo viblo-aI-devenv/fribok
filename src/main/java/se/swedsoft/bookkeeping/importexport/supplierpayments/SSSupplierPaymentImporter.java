@@ -19,12 +19,15 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * $Id$
  */
-public class SSSupplierPaymentImporter {
+public class SSSupplierPaymentImporter {    private static final Logger LOG = LoggerFactory.getLogger(SSSupplierPaymentImporter.class);
+
     private SSSupplierPaymentImporter() {}
 
     /**
@@ -45,7 +48,7 @@ public class SSSupplierPaymentImporter {
                 iLines.add(iLine);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
         List<LBinPost> iPosts = new LinkedList<>();
 
@@ -58,12 +61,12 @@ public class SSSupplierPaymentImporter {
             LBinPost iPost = getPost(iPostTyp);
 
             if (iPost != null) {
-                // System.out.println(iLine);
+                // LOG.info(iLine);
                 iPost.read(iReader);
 
                 iPosts.add(iPost);
             } else {
-                System.out.println("Oidentifierad posttyp: " + iPostTyp);
+                LOG.info("Oidentifierad posttyp: " + iPostTyp);
             }
         }
         List<SSOutpayment> iOutpayments = new LinkedList<>();

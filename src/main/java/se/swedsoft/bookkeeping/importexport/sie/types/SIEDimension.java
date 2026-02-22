@@ -3,13 +3,16 @@ package se.swedsoft.bookkeeping.importexport.sie.types;
 
 import java.util.LinkedList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Date: 2006-feb-23
  * Time: 11:24:31
  */
-public class SIEDimension {
+public class SIEDimension {    private static final Logger LOG = LoggerFactory.getLogger(SIEDimension.class);
+
 
     private Integer iNumber;
 
@@ -87,7 +90,7 @@ public class SIEDimension {
      * @param pDimension
      */
     public void setSuperDimension(Integer pDimension) {
-        System.out.println("SIEDimension.setSuperDimension(" + pDimension + ')');
+        LOG.info("SIEDimension.setSuperDimension(" + pDimension + ')');
     }
 
     /**

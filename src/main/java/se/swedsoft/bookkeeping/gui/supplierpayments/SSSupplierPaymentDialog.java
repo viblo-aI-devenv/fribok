@@ -26,13 +26,16 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * $Id$
  *
  */
-public class SSSupplierPaymentDialog extends SSDialog {
+public class SSSupplierPaymentDialog extends SSDialog {    private static final Logger LOG = LoggerFactory.getLogger(SSSupplierPaymentDialog.class);
+
 
     private JPanel iPanel;
 
@@ -143,7 +146,7 @@ public class SSSupplierPaymentDialog extends SSDialog {
                                     SSBundle.getBundle().getString("supplierpaymentframe.error"),
                                     e1.getMessage());
 
-                            e1.printStackTrace();
+                            LOG.error("Unexpected error", e1);
 
                             return;
                         }

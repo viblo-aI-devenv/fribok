@@ -31,6 +31,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.List;
 import java.util.Locale;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -39,7 +41,8 @@ import java.util.Locale;
  * Time: 11:32:25
  * $Id$
  */
-public class SSProductExporter {
+public class SSProductExporter {    private static final Logger LOG = LoggerFactory.getLogger(SSProductExporter.class);
+
     public static final String PRODUKTNUMMER = "Produkt-id";
     public static final String BESKRIVNING = "Beskrivning";
     public static final String FORSALJNINGSPRIS = "Försäljningspris";
@@ -346,7 +349,7 @@ public class SSProductExporter {
             fos.close();
             osw.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
     }
 

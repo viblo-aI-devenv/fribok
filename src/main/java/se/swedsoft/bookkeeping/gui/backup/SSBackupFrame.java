@@ -30,11 +30,14 @@ import java.awt.event.ActionListener;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  */
-public class SSBackupFrame extends SSDefaultTableFrame {
+public class SSBackupFrame extends SSDefaultTableFrame {    private static final Logger LOG = LoggerFactory.getLogger(SSBackupFrame.class);
+
 
     private static SSBackupFrame cInstance;
 
@@ -256,7 +259,7 @@ public class SSBackupFrame extends SSDefaultTableFrame {
 
             iModel.fireTableDataChanged();
         } catch (RuntimeException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
         }
 
     }

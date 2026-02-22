@@ -15,13 +15,16 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Date: 2006-feb-27
  * @version $Id$
  */
-public class SSMenuLoader {
+public class SSMenuLoader {    private static final Logger LOG = LoggerFactory.getLogger(SSMenuLoader.class);
+
 
     private static String cParserClass = "org.apache.xerces.parsers.SAXParser";
 
@@ -59,7 +62,7 @@ public class SSMenuLoader {
         try {
             iReader = XMLReaderFactory.createXMLReader(cParserClass);
         } catch (SAXException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             return;
         }
 
@@ -68,9 +71,9 @@ public class SSMenuLoader {
         try {
             iReader.parse(new InputSource(stream));
         } catch (SAXException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
         }
     }
 
@@ -155,7 +158,7 @@ public class SSMenuLoader {
                 iListener.actionPerformed(pAction);
             }
         } else {
-            System.out.println("(SSMenuLoader)No listeners for " + pName);
+            LOG.info("(SSMenuLoader)No listeners for " + pName);
         }
 
     }

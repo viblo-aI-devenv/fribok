@@ -6,13 +6,16 @@ import jxl.write.Number;
 import jxl.write.WritableSheet;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Date: 2006-feb-14
  * Time: 11:57:23
  */
-public class SSWritableExcelCell {
+public class SSWritableExcelCell {    private static final Logger LOG = LoggerFactory.getLogger(SSWritableExcelCell.class);
+
 
     private int iRow;
 
@@ -42,7 +45,7 @@ public class SSWritableExcelCell {
         try {
             iSheet.addCell(new Label(iColumn, iRow, pValue));
         } catch (RowsExceededException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
     }
 
@@ -55,7 +58,7 @@ public class SSWritableExcelCell {
         try {
             iSheet.addCell(new Number(iColumn, iRow, pValue));
         } catch (RowsExceededException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
     }
 
@@ -68,7 +71,7 @@ public class SSWritableExcelCell {
         try {
             iSheet.addCell(new Number(iColumn, iRow, pValue));
         } catch (RowsExceededException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
     }
 

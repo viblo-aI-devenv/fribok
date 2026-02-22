@@ -21,13 +21,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributeListImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  *
  * $Id$
  */
-public class SSDBConfig {
+public class SSDBConfig {    private static final Logger LOG = LoggerFactory.getLogger(SSDBConfig.class);
+
 
     private static final File CONFIG_FILE = new File(Path.get(Path.APP_BASE),
             "database.config");
@@ -66,7 +69,7 @@ public class SSDBConfig {
 
             serializer.serialize(iParser.getDocument());
         } catch (IOException | SAXException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
         }
     }
 
@@ -118,7 +121,7 @@ public class SSDBConfig {
             serializer.serialize(iParser.getDocument());
 
         } catch (IOException | SAXException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
         }
     }
 
@@ -156,7 +159,7 @@ public class SSDBConfig {
             }
 
         } catch (IOException | SAXException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
         }
         return null;
     }
@@ -191,7 +194,7 @@ public class SSDBConfig {
             serializer.serialize(iParser.getDocument());
 
         } catch (IOException | SAXException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
         }
 
     }
@@ -212,7 +215,7 @@ public class SSDBConfig {
 
             serializer.serialize(iParser.getDocument());
         } catch (IOException | SAXException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
         }
     }
 
@@ -228,7 +231,7 @@ public class SSDBConfig {
     */
     private static void createIfNotExists() throws IOException {
         if (CONFIG_FILE.createNewFile()) {
-            System.out.println("Creating database config file.");
+            LOG.info("Creating database config file.");
             
             XMLSerializer serializer = new XMLSerializer(new FileOutputStream(CONFIG_FILE),
                 new OutputFormat("XML", "UTF-8", true));
@@ -297,7 +300,7 @@ public class SSDBConfig {
             iServerAddress = iServer;
 
         } catch (IOException | SAXException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
         }
     }
 }

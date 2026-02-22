@@ -9,13 +9,16 @@ import se.swedsoft.bookkeeping.importexport.sie.util.SIEReader;
 import se.swedsoft.bookkeeping.importexport.sie.util.SIEWriter;
 import se.swedsoft.bookkeeping.importexport.util.SSExportException;
 import se.swedsoft.bookkeeping.importexport.util.SSImportException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Date: 2006-feb-20
  * Time: 12:40:17
  */
-public class SIEEntryFlagga implements SIEEntry {
+public class SIEEntryFlagga implements SIEEntry {    private static final Logger LOG = LoggerFactory.getLogger(SIEEntryFlagga.class);
+
 
     /**
      * Imports the field
@@ -29,8 +32,7 @@ public class SIEEntryFlagga implements SIEEntry {
         }
 
         if (iReader.nextInteger() == 1) {
-            System.out.println(
-                    "(SIEEntryFlagga) The file has already been imported, ignored.");
+            LOG.info("(SIEEntryFlagga) The file has already been imported, ignored.");
         }
         return true;
     }

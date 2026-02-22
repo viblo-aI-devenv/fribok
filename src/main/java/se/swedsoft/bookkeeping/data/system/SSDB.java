@@ -49,13 +49,16 @@ import java.util.Date;
 import se.swedsoft.bookkeeping.importexport.excel.SSAccountPlanImporter;
 import se.swedsoft.bookkeeping.importexport.util.SSImportException;
 import se.swedsoft.bookkeeping.util.SSUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  *
  * $Id$
  */
-public class SSDB {
+public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger(SSDB.class);
+
 
     // The instance of the database
     private static SSDB cInstance;
@@ -207,7 +210,7 @@ public class SSDB {
 
             iTriggerHandler.start();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             // Kunde inte ansluta.
             // Borde inte kunna komma hit då det borde kommit SQLEXCEPTION före!!
         }
@@ -362,7 +365,7 @@ public class SSDB {
                     iConnection.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                LOG.error("Unexpected error", e);
             }
         } else {
             SSCompanyLock.removeLock(iCurrentCompany);
@@ -379,7 +382,7 @@ public class SSDB {
                 iStatement.close();
                 iConnection.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                LOG.error("Unexpected error", e);
             }
         } else {
             SSCompanyLock.removeLock(iCurrentCompany);
@@ -418,7 +421,7 @@ public class SSDB {
                 iStatement.close();
                 iConnection.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                LOG.error("Unexpected error", e);
                 try {
                     iConnection.rollback();
                 } catch (SQLException ignored) {}
@@ -430,8 +433,8 @@ public class SSDB {
         try {
             Class.forName("org.hsqldb.jdbcDriver");
         } catch (ClassNotFoundException e) {
-            System.out.println("ERROR: failed to load HSQLDB JDBC driver.");
-            e.printStackTrace();
+            LOG.info("ERROR: failed to load HSQLDB JDBC driver.");
+            LOG.error("Unexpected error", e);
             return;
         }
 
@@ -465,7 +468,7 @@ public class SSDB {
 
             iTriggerHandler.start();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -480,13 +483,13 @@ public class SSDB {
                 iConnection.close();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
         try {
             Class.forName("org.hsqldb.jdbcDriver");
         } catch (ClassNotFoundException e) {
-            System.out.println("ERROR: failed to load HSQLDB JDBC driver.");
-            e.printStackTrace();
+            LOG.info("ERROR: failed to load HSQLDB JDBC driver.");
+            LOG.error("Unexpected error", e);
             return;
         }
 
@@ -511,9 +514,9 @@ public class SSDB {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
         }
 
     }
@@ -533,7 +536,7 @@ public class SSDB {
                 return;
             }
 
-            System.out.println("Creating example company.");
+            LOG.info("Creating example company.");
 
             String q = SSUtil.readResourceToString("sql/example.sql");
 
@@ -541,7 +544,7 @@ public class SSDB {
             iConnection.commit();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
     }
     
@@ -561,7 +564,7 @@ public class SSDB {
             }
             iStatement.close();
 
-            System.out.println("Creating default account plans.");  
+            LOG.info("Creating default account plans.");  
 
             String[] defaults = new String[]{
                 "BAS96(07)-AB & EF.xls",
@@ -573,7 +576,7 @@ public class SSDB {
                 "Bas2007(K1)-Enskild näringsidkare.xls",};
 
             for (String s : defaults) {
-                System.out.println(s);
+                LOG.info(s);
                 String path = "account/default/" + s;
                 InputStream is = ClassLoader.getSystemResourceAsStream(path);
                 if (is == null) {
@@ -582,13 +585,13 @@ public class SSDB {
                 try {
                     SSAccountPlanImporter.doImport(is);
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    LOG.error("Unexpected error", ex);
                 } catch (SSImportException ex) {
-                    ex.printStackTrace();
+                    LOG.error("Unexpected error", ex);
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
     }
 
@@ -606,7 +609,7 @@ public class SSDB {
             iStatement.close();
             iConnection.commit();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
     }
 
@@ -620,7 +623,7 @@ public class SSDB {
             iStatement.close();
             iConnection.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -681,9 +684,9 @@ public class SSDB {
                 return true;
             }
         } catch (SocketException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             return false;
         }
         return false;
@@ -783,7 +786,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -815,7 +818,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -854,7 +857,7 @@ public class SSDB {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                LOG.error("Unexpected error", e);
             }
             iStatement = iConnection.prepareStatement(
                     "UPDATE tbl_company SET company=? WHERE id=?");
@@ -864,7 +867,7 @@ public class SSDB {
             iConnection.commit();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -887,7 +890,7 @@ public class SSDB {
             notifyListeners("COMPANY", iCompany, null);
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -1057,7 +1060,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -1084,7 +1087,7 @@ public class SSDB {
                 iResultSet.close();
                 iStatement.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                LOG.error("Unexpected error", e);
                 try {
                     iConnection.rollback();
                 } catch (SQLException ignored) {}
@@ -1113,7 +1116,7 @@ public class SSDB {
                 iResultSet.close();
                 iStatement.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                LOG.error("Unexpected error", e);
                 try {
                     iConnection.rollback();
                 } catch (SQLException ignored) {}
@@ -1147,7 +1150,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -1196,7 +1199,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -1225,7 +1228,7 @@ public class SSDB {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -1255,7 +1258,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -1327,7 +1330,7 @@ public class SSDB {
                 }
                 return iAccountingYear;
             } catch (SQLException e) {
-                e.printStackTrace();
+                LOG.error("Unexpected error", e);
                 try {
                     iConnection.rollback();
                 } catch (SQLException ignored) {}
@@ -1421,7 +1424,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -1464,7 +1467,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -1496,7 +1499,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -1529,7 +1532,7 @@ public class SSDB {
 
             return iVouchers;
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -1574,7 +1577,7 @@ public class SSDB {
             iStatement.close();
             UnlockDatabase();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             UnlockDatabase();
             try {
                 iConnection.rollback();
@@ -1605,7 +1608,7 @@ public class SSDB {
 
             return iNumber;
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -1631,7 +1634,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -1655,7 +1658,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -1685,7 +1688,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -1721,7 +1724,7 @@ public class SSDB {
 
             return iVoucherTemplates;
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -1749,7 +1752,7 @@ public class SSDB {
             iConnection.commit();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -1773,7 +1776,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -1815,7 +1818,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -1846,7 +1849,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -1890,7 +1893,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -1915,7 +1918,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -1938,7 +1941,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -1961,7 +1964,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -1985,7 +1988,7 @@ public class SSDB {
             iConnection.commit();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2009,7 +2012,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2032,7 +2035,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2062,7 +2065,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2088,7 +2091,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2112,7 +2115,7 @@ public class SSDB {
             iConnection.commit();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2136,7 +2139,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2159,7 +2162,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2189,7 +2192,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2213,7 +2216,7 @@ public class SSDB {
             iConnection.commit();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2237,7 +2240,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2260,7 +2263,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2290,7 +2293,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2314,7 +2317,7 @@ public class SSDB {
             iConnection.commit();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2338,7 +2341,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2361,7 +2364,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2391,7 +2394,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2415,7 +2418,7 @@ public class SSDB {
             iConnection.commit();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2439,7 +2442,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2462,7 +2465,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2492,7 +2495,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2527,7 +2530,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2562,7 +2565,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2598,7 +2601,7 @@ public class SSDB {
 
             return iResultUnits;
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2626,7 +2629,7 @@ public class SSDB {
             iConnection.commit();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2651,7 +2654,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2675,7 +2678,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2705,7 +2708,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2739,7 +2742,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2773,7 +2776,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2809,7 +2812,7 @@ public class SSDB {
 
             return iProjects;
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2837,7 +2840,7 @@ public class SSDB {
             iConnection.commit();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2862,7 +2865,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -2886,7 +2889,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -3903,7 +3906,7 @@ public class SSDB {
                 }
             }
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
     }
 
@@ -3942,7 +3945,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -3976,7 +3979,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4010,7 +4013,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4054,7 +4057,7 @@ public class SSDB {
 
             return iProducts;
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4082,7 +4085,7 @@ public class SSDB {
             iConnection.commit();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4107,7 +4110,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4131,7 +4134,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4181,7 +4184,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4215,7 +4218,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4249,7 +4252,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4293,7 +4296,7 @@ public class SSDB {
 
             return iCustomers;
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4321,7 +4324,7 @@ public class SSDB {
             iConnection.commit();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4346,7 +4349,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4370,7 +4373,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4420,7 +4423,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4451,7 +4454,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4495,7 +4498,7 @@ public class SSDB {
 
             return iSuppliers;
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4520,7 +4523,7 @@ public class SSDB {
             iConnection.commit();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4545,7 +4548,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4569,7 +4572,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4621,7 +4624,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4652,7 +4655,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4696,7 +4699,7 @@ public class SSDB {
 
             return iAutoDists;
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4721,7 +4724,7 @@ public class SSDB {
             iConnection.commit();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4747,7 +4750,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4774,7 +4777,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4825,7 +4828,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4856,7 +4859,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4901,7 +4904,7 @@ public class SSDB {
 
             return iTenders;
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4950,7 +4953,7 @@ public class SSDB {
             iStatement.close();
             UnlockDatabase();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             UnlockDatabase();
             try {
                 iConnection.rollback();
@@ -4976,7 +4979,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -5000,7 +5003,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -5046,7 +5049,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -5077,7 +5080,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -5121,7 +5124,7 @@ public class SSDB {
 
             return iOrders;
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -5170,7 +5173,7 @@ public class SSDB {
             iStatement.close();
             UnlockDatabase();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             UnlockDatabase();
             try {
                 iConnection.rollback();
@@ -5196,7 +5199,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -5220,7 +5223,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -5271,7 +5274,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -5302,7 +5305,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -5346,7 +5349,7 @@ public class SSDB {
 
             return iInvoices;
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -5395,7 +5398,7 @@ public class SSDB {
             iStatement.close();
             UnlockDatabase();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             UnlockDatabase();
             try {
                 iConnection.rollback();
@@ -5421,7 +5424,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -5445,7 +5448,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -5496,7 +5499,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -5527,7 +5530,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -5576,7 +5579,7 @@ public class SSDB {
             iStatement.close();
             UnlockDatabase();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             UnlockDatabase();
             try {
                 iConnection.rollback();
@@ -5602,7 +5605,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -5626,7 +5629,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -5675,7 +5678,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -5706,7 +5709,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -5755,7 +5758,7 @@ public class SSDB {
             iStatement.close();
             UnlockDatabase();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             UnlockDatabase();
             try {
                 iConnection.rollback();
@@ -5781,7 +5784,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -5805,7 +5808,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -5856,7 +5859,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -5887,7 +5890,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -5931,7 +5934,7 @@ public class SSDB {
 
             return iCreditInvoices;
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -5980,7 +5983,7 @@ public class SSDB {
             iStatement.close();
             UnlockDatabase();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             UnlockDatabase();
             try {
                 iConnection.rollback();
@@ -6006,7 +6009,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -6030,7 +6033,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -6081,7 +6084,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -6113,7 +6116,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -6162,7 +6165,7 @@ public class SSDB {
             iStatement.close();
             UnlockDatabase();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             UnlockDatabase();
             try {
                 iConnection.rollback();
@@ -6188,7 +6191,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -6212,7 +6215,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -6263,7 +6266,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -6294,7 +6297,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -6338,7 +6341,7 @@ public class SSDB {
 
             return iPurchaseOrders;
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -6387,7 +6390,7 @@ public class SSDB {
             iStatement.close();
             UnlockDatabase();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             UnlockDatabase();
             try {
                 iConnection.rollback();
@@ -6413,7 +6416,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -6437,7 +6440,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -6488,7 +6491,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -6520,7 +6523,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -6564,7 +6567,7 @@ public class SSDB {
 
             return iSupplierInvoices;
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -6613,7 +6616,7 @@ public class SSDB {
             iStatement.close();
             UnlockDatabase();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             UnlockDatabase();
             try {
                 iConnection.rollback();
@@ -6639,7 +6642,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -6663,7 +6666,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -6715,7 +6718,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -6747,7 +6750,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -6796,7 +6799,7 @@ public class SSDB {
             iStatement.close();
             UnlockDatabase();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             UnlockDatabase();
             try {
                 iConnection.rollback();
@@ -6822,7 +6825,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -6846,7 +6849,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -6896,7 +6899,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -6927,7 +6930,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -6976,7 +6979,7 @@ public class SSDB {
             iStatement.close();
             UnlockDatabase();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             UnlockDatabase();
             try {
                 iConnection.rollback();
@@ -7002,7 +7005,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -7026,7 +7029,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -7076,7 +7079,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -7107,7 +7110,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -7156,7 +7159,7 @@ public class SSDB {
             iStatement.close();
             UnlockDatabase();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             UnlockDatabase();
             try {
                 iConnection.rollback();
@@ -7182,7 +7185,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -7206,7 +7209,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -7256,7 +7259,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -7287,7 +7290,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -7336,7 +7339,7 @@ public class SSDB {
             iStatement.close();
             UnlockDatabase();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             UnlockDatabase();
             try {
                 iConnection.rollback();
@@ -7362,7 +7365,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -7386,7 +7389,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -7431,7 +7434,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -7465,7 +7468,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -7499,7 +7502,7 @@ public class SSDB {
             iResultSet.close();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -7543,7 +7546,7 @@ public class SSDB {
 
             return iOwnReports;
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -7583,7 +7586,7 @@ public class SSDB {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                LOG.error("Unexpected error", e);
             }
             iStatement = iConnection.prepareStatement(
                     "UPDATE tbl_ownreport SET ownreport=? WHERE id=?");
@@ -7593,7 +7596,7 @@ public class SSDB {
             iConnection.commit();
             iStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -7618,7 +7621,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -7642,7 +7645,7 @@ public class SSDB {
             iStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -7727,8 +7730,8 @@ public class SSDB {
             iConnection.commit();
             iStatement.close();
 
-        } catch (SQLException e) {// System.out.println("Triggers fanns redan vi remote tilläggning");
-            // e.printStackTrace();
+        } catch (SQLException e) {// LOG.info("Triggers fanns redan vi remote tilläggning");
+            // LOG.error("Unexpected error", e);
         }
     }
 
@@ -7806,8 +7809,8 @@ public class SSDB {
             iConnection.commit();
             iStatement.close();
 
-        } catch (SQLException e) {// System.out.println("Triggers fanns redan vi lokal tilläggning");
-            // e.printStackTrace();
+        } catch (SQLException e) {// LOG.info("Triggers fanns redan vi lokal tilläggning");
+            // LOG.error("Unexpected error", e);
         }
     }
 
@@ -7867,7 +7870,7 @@ public class SSDB {
             iConnection.commit();
             iStatement.close();
 
-        } catch (SQLException e) {// System.out.println("Triggers fanns inte vid borttagning");
+        } catch (SQLException e) {// LOG.info("Triggers fanns inte vid borttagning");
         }
     }
 
@@ -7894,7 +7897,7 @@ public class SSDB {
                             iData = (SSSystemData) SSDBUtils.LoadFromFile(iFile);
                             SSDBUtils.removeBackup(iFile);
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            LOG.error("Unexpected error", e);
                             SSDBUtils.restoreBackup(iFile);
                         }
 
@@ -7928,7 +7931,7 @@ public class SSDB {
                                 iStatement.close();
                                 iConnection.commit();
                             } catch (SQLException e) {
-                                e.printStackTrace();
+                                LOG.error("Unexpected error", e);
                                 try {
                                     iConnection.rollback();
                                 } catch (SQLException ignored) {}
@@ -7945,7 +7948,7 @@ public class SSDB {
                             SSBackupZip.compressFiles(
                                     Path.get(Path.APP_BASE) + "/db/databas_v1.zip", iFiles);
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            LOG.error("Unexpected error", e);
                         }
                         for (ArchiveFile iArchiveFile : iFiles) {
                             if (iArchiveFile.getFile().exists()) {
@@ -8086,7 +8089,7 @@ public class SSDB {
                 addInventory(iInventory);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             SSDBUtils.restoreBackup(iFile);
         }
     }
@@ -8116,10 +8119,10 @@ public class SSDB {
 
             SSDBUtils.removeBackup(iFile);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             SSDBUtils.restoreBackup(iFile);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             SSDBUtils.restoreBackup(iFile);
         }
     }
@@ -8148,7 +8151,7 @@ public class SSDB {
             iStatement.close();
 
             dropTriggers();
-        } catch (SQLException e) {// e.printStackTrace();
+        } catch (SQLException e) {// LOG.error("Unexpected error", e);
         }
     }
 

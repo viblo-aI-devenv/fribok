@@ -9,6 +9,8 @@ import se.swedsoft.bookkeeping.importexport.sie.util.SIEReader;
 import se.swedsoft.bookkeeping.importexport.sie.util.SIEWriter;
 import se.swedsoft.bookkeeping.importexport.util.SSExportException;
 import se.swedsoft.bookkeeping.importexport.util.SSImportException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -16,7 +18,8 @@ import se.swedsoft.bookkeeping.importexport.util.SSImportException;
  * Date: 2006-feb-20
  * Time: 15:30:33
  */
-public class SIEEntryFormat implements SIEEntry {
+public class SIEEntryFormat implements SIEEntry {    private static final Logger LOG = LoggerFactory.getLogger(SIEEntryFormat.class);
+
 
     /**
      * Imports the field
@@ -28,7 +31,7 @@ public class SIEEntryFormat implements SIEEntry {
         String iFormat = iReader.next();
 
         if (!iFormat.equals("PC8")) {
-            System.out.println("Unexpected character encoding");
+            LOG.info("Unexpected character encoding");
         }
         return true;
     }

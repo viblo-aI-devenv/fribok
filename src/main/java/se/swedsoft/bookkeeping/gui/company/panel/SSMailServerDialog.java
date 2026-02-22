@@ -14,6 +14,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -29,7 +31,8 @@ import java.awt.event.ItemListener;
  * $Id$
  *
  */
-public class SSMailServerDialog extends SSDialog {
+public class SSMailServerDialog extends SSDialog {    private static final Logger LOG = LoggerFactory.getLogger(SSMailServerDialog.class);
+
 
     private JPanel contentPane;
     private JTextField addressText;
@@ -91,7 +94,7 @@ public class SSMailServerDialog extends SSDialog {
 	try {
 	    connectionSecurityCombobox.setSelectedIndex(server.getConnectionSecurity().getIndex());
 	} catch (NullPointerException ex) { 
-	    System.out.println("Just missing new connection security values of dialogue. Nothing to worry about.");
+	    LOG.info("Just missing new connection security values of dialogue. Nothing to worry about.");
 	}
         usernameText.setText(server.getUsername());
         passwordField.setText(SSMail.crypter.decrypt(server.getPassword()));
