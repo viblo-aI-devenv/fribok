@@ -76,13 +76,9 @@ public class SSBackupDatabase {
      *
      */
     private void storeDatabase() {
-        try {
-            ObjectOutputStream iObjectOutputStream = new ObjectOutputStream(
-                    new BufferedOutputStream(new FileOutputStream(iFile)));
-
+        try (ObjectOutputStream iObjectOutputStream = new ObjectOutputStream(
+                new BufferedOutputStream(new FileOutputStream(iFile)))) {
             iObjectOutputStream.writeObject(iData);
-            iObjectOutputStream.flush();
-            iObjectOutputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
