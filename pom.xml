@@ -87,6 +87,36 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>3.5.2</version>
+        <executions>
+          <!-- Disable the default-test execution so it does not run all tests -->
+          <execution>
+            <id>default-test</id>
+            <phase>none</phase>
+          </execution>
+          <!-- Unit tests only: exclude integration tag -->
+          <execution>
+            <id>unit-tests</id>
+            <phase>test</phase>
+            <goals><goal>test</goal></goals>
+            <configuration>
+              <argLine>-Djava.awt.headless=true -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8</argLine>
+              <excludedGroups>integration</excludedGroups>
+            </configuration>
+          </execution>
+          <!-- Integration tests only: run in a fresh forked JVM so SSDB state
+               never leaks into the unit-test JVM. -->
+          <execution>
+            <id>integration-tests</id>
+            <phase>test</phase>
+            <goals><goal>test</goal></goals>
+            <configuration>
+              <argLine>-Djava.awt.headless=true -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8</argLine>
+              <groups>integration</groups>
+              <forkCount>1</forkCount>
+              <reuseForks>false</reuseForks>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>io.github.git-commit-id</groupId>
