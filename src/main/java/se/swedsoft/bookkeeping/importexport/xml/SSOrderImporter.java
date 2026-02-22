@@ -27,9 +27,12 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
-public class SSOrderImporter {
+public class SSOrderImporter {    private static final Logger LOG = LoggerFactory.getLogger(SSOrderImporter.class);
+
 
     private File iFile;
 
@@ -50,7 +53,7 @@ public class SSOrderImporter {
             DocumentBuilder iDocBuilder = iDocBuilderFactory.newDocumentBuilder();
             Document iDoc = iDocBuilder.parse(iFile.getAbsolutePath());
 
-            // System.out.println(iDoc.getXmlEncoding());
+            // LOG.info(iDoc.getXmlEncoding());
             iDoc.getDocumentElement().normalize();
 
             if (!iDoc.getDocumentElement().getNodeName().equals("Orders")) {
@@ -962,7 +965,7 @@ public class SSOrderImporter {
                             try {
                                 iProduct.setWeight(new BigDecimal(iFields[9]));
                             } catch (NumberFormatException e) {
-                                e.printStackTrace();
+                                LOG.error("Unexpected error", e);
                             }
                             iRow.setProduct(iProduct);
                             SSDB.getInstance().addProduct(iProduct);

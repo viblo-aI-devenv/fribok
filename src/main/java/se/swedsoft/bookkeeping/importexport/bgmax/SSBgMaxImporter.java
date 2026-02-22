@@ -24,6 +24,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -31,7 +33,8 @@ import java.util.List;
  * Date: 2006-aug-22
  * Time: 15:00:47
  */
-public class SSBgMaxImporter {
+public class SSBgMaxImporter {    private static final Logger LOG = LoggerFactory.getLogger(SSBgMaxImporter.class);
+
     private SSBgMaxImporter() {}
 
     /**
@@ -53,14 +56,14 @@ public class SSBgMaxImporter {
                 iLines.add(iLine);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
 
         BgMaxFile iBgMaxFile = new BgMaxFile();
 
         iBgMaxFile.parse(iLines);
 
-        System.out.println(iBgMaxFile);
+        LOG.info("{}", iBgMaxFile);
 
         return iBgMaxFile;
     }
@@ -87,7 +90,7 @@ public class SSBgMaxImporter {
             try {
                 iInpayment.setDate(iDateFormat.parse(iAvsnitt.iBetalningsdag));
             } catch (ParseException e) {
-                e.printStackTrace();
+                LOG.error("Unexpected error", e);
             }
 
             for (BgMaxBetalning iBetalning : iAvsnitt.iBetalningar) {

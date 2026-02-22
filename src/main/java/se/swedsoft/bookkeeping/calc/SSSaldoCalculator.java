@@ -8,13 +8,16 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Date: 2006-feb-23
  * Time: 15:39:06
  */
-public class SSSaldoCalculator {
+public class SSSaldoCalculator {    private static final Logger LOG = LoggerFactory.getLogger(SSSaldoCalculator.class);
+
     private SSSaldoCalculator() {}
 
     /**
@@ -182,7 +185,7 @@ public class SSSaldoCalculator {
         Map<SSMonth, Map<SSAccount, BigDecimal>> iResult = new HashMap<>();
 
         for (SSMonth iMonth: iMonths) {
-            System.out.println(iMonth);
+            LOG.info("{}", iMonth);
             Map<SSAccount, BigDecimal> iSaldo = getSaldo(pYearData, pProject, iMonth);
 
             iResult.put(iMonth, iSaldo);
@@ -202,7 +205,7 @@ public class SSSaldoCalculator {
         Map<SSMonth, Map<SSAccount, BigDecimal>> iResult = new HashMap<>();
 
         for (SSMonth iMonth: iMonths) {
-            System.out.println(iMonth);
+            LOG.info("{}", iMonth);
             Map<SSAccount, BigDecimal> iSaldo = getSaldo(pYearData, pResultUnit, iMonth);
 
             iResult.put(iMonth, iSaldo);

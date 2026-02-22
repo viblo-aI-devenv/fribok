@@ -36,6 +36,8 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -43,7 +45,8 @@ import java.util.*;
  * Date: 2006-aug-01
  * Time: 11:32:25
  */
-public class SSProductImporter {
+public class SSProductImporter {    private static final Logger LOG = LoggerFactory.getLogger(SSProductImporter.class);
+
 
     private File iFile;
 
@@ -264,10 +267,10 @@ public class SSProductImporter {
                     }
 
                 } catch (ParseException e) {
-                    e.printStackTrace();
+                    LOG.error("Unexpected error", e);
                     throw new SSImportException(e.getLocalizedMessage());
                 } catch (NumberFormatException e) {
-                    e.printStackTrace();
+                    LOG.error("Unexpected error", e);
                     throw new SSImportException(e.getLocalizedMessage());
                 }
 

@@ -39,6 +39,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -46,7 +48,8 @@ import java.util.Map;
  * Date: 2006-mar-21
  * Time: 10:47:21
  */
-public class SSOrderFrame extends SSDefaultTableFrame {
+public class SSOrderFrame extends SSDefaultTableFrame {    private static final Logger LOG = LoggerFactory.getLogger(SSOrderFrame.class);
+
 
     private static SSOrderFrame cInstance;
 
@@ -304,7 +307,7 @@ public class SSOrderFrame extends SSDefaultTableFrame {
                                 SSErrorDialog.showDialog(getMainFrame(), "",
                                         e1.getLocalizedMessage());
                             } catch (RuntimeException e2) {
-                                e2.printStackTrace();
+                                LOG.error("Unexpected error", e2);
                             }
                         }
 
@@ -328,7 +331,7 @@ public class SSOrderFrame extends SSDefaultTableFrame {
                                 SSErrorDialog.showDialog(getMainFrame(), "",
                                         e1.getLocalizedMessage());
                             } catch (RuntimeException e2) {
-                                e2.printStackTrace();
+                                LOG.error("Unexpected error", e2);
                             }
                         }
 

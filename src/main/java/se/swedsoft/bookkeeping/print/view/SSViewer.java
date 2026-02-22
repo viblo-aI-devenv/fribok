@@ -16,9 +16,12 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
-public class SSViewer extends JPanel {
+public class SSViewer extends JPanel {    private static final Logger LOG = LoggerFactory.getLogger(SSViewer.class);
+
 
     public static final int REPORT_RESOLUTION = 72;
 
@@ -224,7 +227,7 @@ public class SSViewer extends JPanel {
             setMinimumSize(iPageSize);
             setPreferredSize(iPageSize);
         } catch (JRException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
 
         Container container = getParent();

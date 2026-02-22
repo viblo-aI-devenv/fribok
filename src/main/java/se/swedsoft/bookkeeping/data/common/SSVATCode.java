@@ -16,13 +16,16 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.io.InputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Date: 2006-mar-01
  * Time: 09:36:34
  */
-public class SSVATCode implements SSTableSearchable {
+public class SSVATCode implements SSTableSearchable {    private static final Logger LOG = LoggerFactory.getLogger(SSVATCode.class);
+
 
     private String iName;
 
@@ -148,7 +151,7 @@ public class SSVATCode implements SSTableSearchable {
                     iValues.add(iVatCode);
                 }
             } catch (IOException | SAXException ex) {
-                ex.printStackTrace();
+                LOG.error("Unexpected error", ex);
             }
         }
         return iValues;

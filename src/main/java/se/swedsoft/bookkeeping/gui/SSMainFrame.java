@@ -19,6 +19,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyVetoException;
 import java.util.ResourceBundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -26,7 +28,8 @@ import java.util.ResourceBundle;
  *
  * $Id$
  */
-public class SSMainFrame extends JFrame {
+public class SSMainFrame extends JFrame {    private static final Logger LOG = LoggerFactory.getLogger(SSMainFrame.class);
+
 
     private static SSMainFrame cInstance;
 
@@ -145,7 +148,7 @@ public class SSMainFrame extends JFrame {
         try {
             SSCompanyFrame.getInstance().setSelected(true);
         } catch (PropertyVetoException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
     }
 

@@ -6,6 +6,8 @@ import org.fribok.bookkeeping.app.Path;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -13,7 +15,8 @@ import java.util.Map;
  * Time: 09:11:46
  * @version $Id$
  */
-public class SSConfig implements Serializable {
+public class SSConfig implements Serializable {    private static final Logger LOG = LoggerFactory.getLogger(SSConfig.class);
+
 
     // / Constant for serialization versioning.
     static final long serialVersionUID = 1L;
@@ -100,9 +103,9 @@ public class SSConfig implements Serializable {
                 new BufferedInputStream(new FileInputStream(CONFIG_FILE)))) {
             cInstance = (SSConfig) iObjectInputStream.readObject();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
     }
 
@@ -115,7 +118,7 @@ public class SSConfig implements Serializable {
                 new BufferedOutputStream(new FileOutputStream(CONFIG_FILE)))) {
             iObjectOutputStream.writeObject(cInstance);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
     }
 

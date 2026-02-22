@@ -11,13 +11,16 @@ import java.text.ParseException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Date: 2006-feb-23
  * Time: 09:13:04
  */
-public class SIEIterator implements Iterator<String> {
+public class SIEIterator implements Iterator<String> {    private static final Logger LOG = LoggerFactory.getLogger(SIEIterator.class);
+
 
     private static DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
@@ -303,7 +306,7 @@ public class SIEIterator implements Iterator<String> {
             try {
                 return formatter.parse(iValue);
             } catch (ParseException ex) {
-                ex.printStackTrace();
+                LOG.error("Unexpected error", ex);
             }
         }
         return new Date();
@@ -323,7 +326,7 @@ public class SIEIterator implements Iterator<String> {
             try {
                 return new SSMonth(iFormat.parse(iValue));
             } catch (ParseException ex) {
-                ex.printStackTrace();
+                LOG.error("Unexpected error", ex);
             }
         }
         return new SSMonth(new Date());

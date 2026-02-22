@@ -23,13 +23,16 @@ import javax.swing.event.InternalFrameListener;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Date: 2006-feb-16
  * Time: 10:50:24
  */
-public class SSReport {
+public class SSReport {    private static final Logger LOG = LoggerFactory.getLogger(SSReport.class);
+
 
     private static SSReportCache cReportCache = SSReportCache.getInstance();
 
@@ -179,7 +182,7 @@ public class SSReport {
             }
 
         } catch (JRException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
 
     }
@@ -306,42 +309,31 @@ public class SSReport {
         iDesign.setBackground(iBackground);
         iDesign.setLastPageFooter(iLastPageFooter);
 
-        System.out.println("Report:");
-        System.out.println("  Height: " + iSize.y);
-        System.out.println("  Width : " + iSize.x);
-        System.out.println("Margins:");
-        System.out.println("  Top   : " + iMargins.top);
-        System.out.println("  Bottom: " + iMargins.bottom);
-        System.out.println("  Left  : " + iMargins.left);
-        System.out.println("  Right : " + iMargins.right);
-        System.out.println("Band heights:");
-        System.out.println(
-                "  PageHeader    : " + (iPageHeader == null ? 0 : iPageHeader.getHeight()));
-        System.out.println(
-                "  PageFooter    : " + (iPageFooter == null ? 0 : iPageFooter.getHeight()));
-        System.out.println(
-                "  ColumnHeader  : "
-                        + (iColumnHeader == null ? 0 : iColumnHeader.getHeight()));
-        System.out.println(
-                "  ColumnFooter  : "
-                        + (iColumnFooter == null ? 0 : iColumnFooter.getHeight()));
+        LOG.info("Report:");
+        LOG.info(" Height: " + iSize.y);
+        LOG.info(" Width : " + iSize.x);
+        LOG.info("Margins:");
+        LOG.info(" Top : " + iMargins.top);
+        LOG.info(" Bottom: " + iMargins.bottom);
+        LOG.info(" Left : " + iMargins.left);
+        LOG.info(" Right : " + iMargins.right);
+        LOG.info("Band heights:");
+        LOG.info(" PageHeader : " + (iPageHeader == null ? 0 : iPageHeader.getHeight()));
+        LOG.info(" PageFooter : " + (iPageFooter == null ? 0 : iPageFooter.getHeight()));
+        LOG.info(" ColumnHeader : " + (iColumnHeader == null ? 0 : iColumnHeader.getHeight()));
+        LOG.info(" ColumnFooter : " + (iColumnFooter == null ? 0 : iColumnFooter.getHeight()));
         if (iDetail != null) {
             int detailHeight = 0;
             for (JRBand band: iDetail.getBands()) {
                 detailHeight += band.getHeight();
             }
-            System.out.println(
-                    "  Detail       : " + detailHeight);
+            LOG.info(" Detail : " + detailHeight);
 	} else {
-            System.out.println("  Detail        : 0");
+            LOG.info(" Detail : 0");
         }
-        System.out.println(
-                "  Summary       : " + (iSummary == null ? 0 : iSummary.getHeight()));
-        System.out.println(
-                "  Background    : " + (iBackground == null ? 0 : iBackground.getHeight()));
-        System.out.println(
-                "  LastPageFooter: "
-                        + (iLastPageFooter == null ? 0 : iLastPageFooter.getHeight()));
+        LOG.info(" Summary : " + (iSummary == null ? 0 : iSummary.getHeight()));
+        LOG.info(" Background : " + (iBackground == null ? 0 : iBackground.getHeight()));
+        LOG.info(" LastPageFooter: " + (iLastPageFooter == null ? 0 : iLastPageFooter.getHeight()));
 
         try {
 
@@ -396,7 +388,7 @@ public class SSReport {
             }
 
         } catch (Throwable t) {
-            t.printStackTrace();
+            LOG.error("Unexpected error", t);
 
         }
 
@@ -476,7 +468,7 @@ public class SSReport {
         } catch (SSException ex) {
             throw ex;
         } catch (Throwable ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
         }
         return null;
     }
@@ -531,7 +523,7 @@ public class SSReport {
         } catch (SSException ex) {
             throw ex;
         } catch (Throwable ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
         }
         return null;
     }
@@ -579,7 +571,7 @@ public class SSReport {
             return JasperFillManager.fillReport(iReport, iParameters, iDataSource);
 
         } catch (Throwable t) {
-            t.printStackTrace();
+            LOG.error("Unexpected error", t);
         }
         return null;
     }
@@ -602,7 +594,7 @@ public class SSReport {
             return JasperFillManager.fillReport(iReport, iParameters, iDataSource);
 
         } catch (Throwable t) {
-            t.printStackTrace();
+            LOG.error("Unexpected error", t);
         }
         return null;
     }
@@ -656,7 +648,7 @@ public class SSReport {
         try {
             generateReport();
         } catch (SSException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
         }
 
         JasperViewer.viewReport(iPrinter, false);

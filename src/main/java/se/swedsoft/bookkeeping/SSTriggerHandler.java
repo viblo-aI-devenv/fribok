@@ -7,6 +7,8 @@ import se.swedsoft.bookkeeping.data.system.SSDBConfig;
 
 import java.io.*;
 import java.net.Socket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -14,14 +16,15 @@ import java.net.Socket;
  * Date: 2007-apr-19
  * Time: 16:21:55
  */
-public class SSTriggerHandler extends Thread implements Trigger {
+public class SSTriggerHandler extends Thread implements Trigger {    private static final Logger LOG = LoggerFactory.getLogger(SSTriggerHandler.class);
+
     Socket iSocket;
     public SSTriggerHandler() {
         if (SSDB.getInstance().getLocking()) {
             try {
                 iSocket = new Socket(SSDBConfig.getServerAddress(), 2223);
             } catch (IOException e) {
-                e.printStackTrace();
+                LOG.error("Unexpected error", e);
             }
         }
     }
@@ -47,7 +50,7 @@ public class SSTriggerHandler extends Thread implements Trigger {
                 if (SSDB.getInstance().getCurrentCompany() == null) {
                     continue;
                 }
-                // System.out.println("Trigger: "+iTableName+" ; "+iTriggerName+" ; "+iNumber+" ; "+iCompanyId);
+                // LOG.info("Trigger: "+iTableName+" ; "+iTriggerName+" ; "+iNumber+" ; "+iCompanyId);
                 if (iCompanyId != null) {
                     Integer iId = Integer.parseInt(iCompanyId);
 
@@ -64,7 +67,7 @@ public class SSTriggerHandler extends Thread implements Trigger {
             iIn.close();
             iSocket.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
     }
 
@@ -98,7 +101,7 @@ public class SSTriggerHandler extends Thread implements Trigger {
                 iCompanyId = (Integer) newRow[3];
             }
         }
-        // System.out.println("Trigger: " + trigName + "\nNummer: " + iNumber + "\n\n");
+        // LOG.info("Trigger: " + trigName + "\nNummer: " + iNumber + "\n\n");
 
         if (iCompanyId != null && SSDB.getInstance().getCurrentCompany() != null) {
 

@@ -12,13 +12,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Date: 2006-feb-14
  * Time: 11:36:34
  */
-public class SSWritableExcelRow {
+public class SSWritableExcelRow {    private static final Logger LOG = LoggerFactory.getLogger(SSWritableExcelRow.class);
+
 
     private int iRow;
 
@@ -66,7 +69,7 @@ public class SSWritableExcelRow {
         try {
             iSheet.addCell(new Label(iColumn, iRow, pValue == null ? "" : pValue));
         } catch (RowsExceededException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
     }
 
@@ -82,7 +85,7 @@ public class SSWritableExcelRow {
             iSheet.addCell(
                     new Label(iColumn, iRow, pValue == null ? "" : pValue, iCellFormat));
         } catch (RowsExceededException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
     }
 
@@ -100,7 +103,7 @@ public class SSWritableExcelRow {
                 iSheet.addCell(new Number(iColumn, iRow, pValue.doubleValue()));
             }
         } catch (RowsExceededException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
 
     }
@@ -121,7 +124,7 @@ public class SSWritableExcelRow {
                         new Number(iColumn, iRow, pValue.doubleValue(), iCellFormat));
             }
         } catch (RowsExceededException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
     }
 
@@ -142,7 +145,7 @@ public class SSWritableExcelRow {
             }
 
         } catch (RowsExceededException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
     }
 
@@ -164,7 +167,7 @@ public class SSWritableExcelRow {
                         new Label(iColumn, iRow, iFormat.format(pValue), iCellFormat));
             }
         } catch (RowsExceededException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
     }
 

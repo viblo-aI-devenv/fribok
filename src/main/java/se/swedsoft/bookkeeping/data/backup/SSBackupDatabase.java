@@ -5,13 +5,16 @@ import org.fribok.bookkeeping.app.Path;
 
 import java.io.*;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Date: 2006-mar-03
  * Time: 09:39:32
  */
-public class SSBackupDatabase {
+public class SSBackupDatabase {    private static final Logger LOG = LoggerFactory.getLogger(SSBackupDatabase.class);
+
     private static final File iFile = new File(Path.get(Path.USER_DATA), "backup.history");
 
     private static SSBackupDatabase cInstance;
@@ -65,9 +68,9 @@ public class SSBackupDatabase {
                 new BufferedInputStream(new FileInputStream(iFile)))) {
             iData = (SSBackupData) iObjectInputStream.readObject();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
     }
 
@@ -80,7 +83,7 @@ public class SSBackupDatabase {
                 new BufferedOutputStream(new FileOutputStream(iFile)))) {
             iObjectOutputStream.writeObject(iData);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
     }
 

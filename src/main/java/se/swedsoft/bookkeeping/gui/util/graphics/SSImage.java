@@ -10,13 +10,16 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.net.URL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Date: 2006-feb-08
  * Time: 10:51:02
  */
-public class SSImage {
+public class SSImage {    private static final Logger LOG = LoggerFactory.getLogger(SSImage.class);
+
 
     // Library of all graphics
     private static Map<String, BufferedImage> graphics = new HashMap<>();
@@ -44,7 +47,7 @@ public class SSImage {
      */
     private static void loadImage(String name, String filename) {
         if (graphics.containsKey(name)) {
-            System.out.println("(SSImage): Already loaded image: " + name);
+            LOG.info("(SSImage): Already loaded image: " + name);
             return;
         }
 
@@ -55,13 +58,13 @@ public class SSImage {
         try {
             image = ImageIO.read(url);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
 
         if (image != null) {
             graphics.put(name, image);
         } else {
-            System.out.println("(SSImage): Failed to load image: " + filename);
+            LOG.info("(SSImage): Failed to load image: " + filename);
         }
     }
 
@@ -81,7 +84,7 @@ public class SSImage {
      */
     public static BufferedImage getImage(String name) {
         if (!graphics.containsKey(name)) {
-            System.out.println("(SSImage): Image not found: " + name);
+            LOG.info("(SSImage): Image not found: " + name);
         }
         return graphics.get(name);
     }

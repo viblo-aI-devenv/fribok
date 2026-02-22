@@ -13,6 +13,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -20,7 +22,8 @@ import java.util.List;
  * Date: 2006-apr-04
  * Time: 12:40:37
  */
-public class SSYearChooser extends JPanel implements ChangeListener, CaretListener, ActionListener {
+public class SSYearChooser extends JPanel implements ChangeListener, CaretListener, ActionListener {    private static final Logger LOG = LoggerFactory.getLogger(SSYearChooser.class);
+
 
     private JPanel iPanel;
 
@@ -179,7 +182,7 @@ public class SSYearChooser extends JPanel implements ChangeListener, CaretListen
             iModel.setValue(iValue);
 
         } catch (NumberFormatException e1) {
-            e1.printStackTrace();
+            LOG.error("Unexpected error", e1);
         }
     }
 

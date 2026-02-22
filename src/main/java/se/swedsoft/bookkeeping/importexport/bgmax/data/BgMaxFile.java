@@ -6,6 +6,8 @@ import se.swedsoft.bookkeeping.importexport.util.SSImportException;
 
 import java.util.LinkedList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -19,7 +21,8 @@ import java.util.List;
  * Date: 2006-aug-23
  * Time: 09:09:20
  */
-public class BgMaxFile {
+public class BgMaxFile {    private static final Logger LOG = LoggerFactory.getLogger(BgMaxFile.class);
+
 
     public String iLayoutnamn;
     public String iVersion;
@@ -64,7 +67,7 @@ public class BgMaxFile {
             if (line.length() == 0) {
                 foundEmptyLine = true;
             } else if (foundEmptyLine) {
-                System.err.println("Empty line in the middle of the file");
+                LOG.error("Empty line in the middle of the file");
                 throw new SSImportException(SSBundle.getBundle(),
                         "bgmaximport.error.parseerror");
             } // Line is non-empty and not preceeded by any empty lines:
@@ -160,7 +163,7 @@ public class BgMaxFile {
         } else if (iTransaktionsKod.equals("29")) {
             readOrgnummerPost(iLine, iBetalning);
         } else {
-            System.out.println("No reader for: " + iTransaktionsKod);
+            LOG.info("No reader for: " + iTransaktionsKod);
         }
     }
 

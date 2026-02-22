@@ -10,13 +10,16 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Date: 2006-mar-14
  * Time: 15:15:51
  */
-public class SSAboutPanel {
+public class SSAboutPanel {    private static final Logger LOG = LoggerFactory.getLogger(SSAboutPanel.class);
+
 
     private JPanel iPanel;
 
@@ -125,15 +128,15 @@ public class SSAboutPanel {
      }
      }
      catch(InterruptedException x)  {
-     System.err.println("Error bringing up browser, cmd='" + cmd + "'");
-     System.err.println("Caught: " + x);
+     LOG.error("Error bringing up browser, cmd='" + cmd + "'");
+     LOG.error("Caught: " + x);
      }
      }
      }
      catch(IOException x) {
      // couldn't exec browser
-     System.err.println("Could not invoke browser, command=" + cmd);
-     System.err.println("Caught: " + x);
+     LOG.error("Could not invoke browser, command=" + cmd);
+     LOG.error("Caught: " + x);
      }
      }
 

@@ -16,13 +16,16 @@ import java.util.Date;
 import java.util.List;
 
 import static se.swedsoft.bookkeeping.data.backup.util.SSBackupZip.ArchiveFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Date: 2006-mar-03
  * Time: 11:14:09
  */
-public class SSBackupFactory {
+public class SSBackupFactory {    private static final Logger LOG = LoggerFactory.getLogger(SSBackupFactory.class);
+
     private SSBackupFactory() {}
 
     /**
@@ -88,18 +91,18 @@ public class SSBackupFactory {
 
             iFiles.add(new ArchiveFile(iBackupFile, "backup.info"));
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             return null;
         }
 
-        System.out.println("Creating backup, adding files {");
+        LOG.info("Creating backup, adding files {");
         printFiles(iFiles);
-        System.out.println("}");
+        LOG.info("}");
 
         try {
             SSBackupZip.compressFiles(pFilename, iFiles);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
         // Delete the temporary backupfile
         // iBackupFile.delete();
@@ -147,9 +150,9 @@ public class SSBackupFactory {
             iBackupFile.delete();
 
         } catch (IOException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
         } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
         }
 
     }
@@ -178,7 +181,7 @@ public class SSBackupFactory {
         try {
             SSDB.getInstance().loadLocalDatabase();
         } catch (RuntimeException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
 
     }
@@ -222,7 +225,7 @@ public class SSBackupFactory {
     private static void printFiles(List<ArchiveFile> iFiles) {
 
         for (ArchiveFile iFile: iFiles) {
-            System.out.println("  " + iFile);
+            LOG.info(" " + iFile);
         }
 
     }

@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.List;
 import java.util.Locale;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -35,7 +37,8 @@ import java.util.Locale;
  * Time: 11:32:25
  * $Id$
  */
-public class SSCustomerExporter {
+public class SSCustomerExporter {    private static final Logger LOG = LoggerFactory.getLogger(SSCustomerExporter.class);
+
     // Column names
     public static final String KUNDNUMMER = "Kund-id";
     public static final String NAMN = "Namn";
@@ -460,7 +463,7 @@ public class SSCustomerExporter {
             fos.close();
             osw.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
     }
 

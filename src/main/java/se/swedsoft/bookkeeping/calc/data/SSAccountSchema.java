@@ -15,13 +15,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Date: 2006-feb-27
  * Time: 12:48:13
  */
-public class SSAccountSchema implements Serializable {
+public class SSAccountSchema implements Serializable {    private static final Logger LOG = LoggerFactory.getLogger(SSAccountSchema.class);
+
 
     private static String cParserClass = "org.apache.xerces.parsers.SAXParser";
 
@@ -118,7 +121,7 @@ public class SSAccountSchema implements Serializable {
         try {
             iReader = XMLReaderFactory.createXMLReader(cParserClass);
         } catch (SAXException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             return iSchema;
         }
 
@@ -127,9 +130,9 @@ public class SSAccountSchema implements Serializable {
         try {
             iReader.parse(new InputSource(is));
         } catch (SAXException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
         }
         return iSchema;
     }

@@ -25,6 +25,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.LinkedList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -32,7 +34,8 @@ import java.util.LinkedList;
  * Date: 2006-nov-03
  * Time: 15:48:37
  */
-public class SSVoucherDialog {
+public class SSVoucherDialog {    private static final Logger LOG = LoggerFactory.getLogger(SSVoucherDialog.class);
+
     private SSVoucherDialog() {}
 
     /**
@@ -85,7 +88,7 @@ public class SSVoucherDialog {
                             try {
                                 Thread.sleep(500);
                             } catch (InterruptedException e1) {
-                                e1.printStackTrace();
+                                LOG.error("Unexpected error", e1);
                             }
                             iPanel.setVoucher(new SSVoucher(), false, false);
                             return;
@@ -196,7 +199,7 @@ public class SSVoucherDialog {
                             try {
                                 Thread.sleep(500);
                             } catch (InterruptedException e1) {
-                                e1.printStackTrace();
+                                LOG.error("Unexpected error", e1);
                             }
                             newDialog(iMainFrame, pModel);
                         }
@@ -345,7 +348,7 @@ public class SSVoucherDialog {
                             try {
                                 Thread.sleep(500);
                             } catch (InterruptedException e1) {
-                                e1.printStackTrace();
+                                LOG.error("Unexpected error", e1);
                             }
                             newDialog(iMainFrame, pModel);
                         }

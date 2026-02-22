@@ -18,12 +18,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * @author Roger Björnstedt
  */
-public class SSNewCompany implements Serializable {
+public class SSNewCompany implements Serializable {    private static final Logger LOG = LoggerFactory.getLogger(SSNewCompany.class);
+
 
     // Constant for serialization versioning.
     static final long serialVersionUID = 1L;
@@ -1051,7 +1054,7 @@ public class SSNewCompany implements Serializable {
         try {
             iImage = ImageIO.read(iFile);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
         return iImage;
 

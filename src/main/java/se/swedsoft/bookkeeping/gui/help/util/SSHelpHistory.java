@@ -9,13 +9,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Date: 2006-mar-06
  * Time: 10:17:11
  */
-public class SSHelpHistory {
+public class SSHelpHistory {    private static final Logger LOG = LoggerFactory.getLogger(SSHelpHistory.class);
+
 
     private JHelpContentViewer   iViewer;
 
@@ -132,7 +135,7 @@ public class SSHelpHistory {
             }
 
         } catch (InvalidHelpSetContextException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
 
         iUpdating = false;

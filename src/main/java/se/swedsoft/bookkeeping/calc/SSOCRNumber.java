@@ -2,6 +2,8 @@ package se.swedsoft.bookkeeping.calc;
 
 
 import se.swedsoft.bookkeeping.data.SSInvoice;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -11,7 +13,8 @@ import se.swedsoft.bookkeeping.data.SSInvoice;
  * Date: 2006-aug-24
  * Time: 11:16:16
  */
-public class SSOCRNumber {
+public class SSOCRNumber {    private static final Logger LOG = LoggerFactory.getLogger(SSOCRNumber.class);
+
     private SSOCRNumber() {}
 
     /**
@@ -61,7 +64,7 @@ public class SSOCRNumber {
             try {
                 iValue = Integer.decode(String.valueOf(iChar));
             } catch (NumberFormatException e) {
-                e.printStackTrace();
+                LOG.error("Unexpected error", e);
             }
 
             int iSum = iValue * iWeight;

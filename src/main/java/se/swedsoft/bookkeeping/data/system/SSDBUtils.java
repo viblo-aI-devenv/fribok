@@ -8,13 +8,16 @@ import se.swedsoft.bookkeeping.gui.util.dialogs.SSErrorDialog;
 
 import java.io.*;
 import java.net.SocketException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Date: 2006-feb-28
  * Time: 16:37:12
  */
-public class SSDBUtils {
+public class SSDBUtils {    private static final Logger LOG = LoggerFactory.getLogger(SSDBUtils.class);
+
     private static Integer iLocalRevisionNumber = 1;
 
     private SSDBUtils() {}
@@ -46,8 +49,8 @@ public class SSDBUtils {
             try {
                 copyFile(iFile, iBackupFile);
             } catch (IOException e) {
-                e.printStackTrace();
-                System.out.println("Failed to copy " + iFile + " to " + iBackupFile);
+                LOG.error("Unexpected error", e);
+                LOG.info("Failed to copy " + iFile + " to " + iBackupFile);
             }
         }
     }
@@ -102,7 +105,7 @@ public class SSDBUtils {
             System.exit(0);
             return 0;
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
             return 0;
         }
     }
@@ -217,7 +220,7 @@ public class SSDBUtils {
             iObjectOutputStream.flush();
             iObjectOutputStream.close();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         } catch (IOException e1) {
             if (fos != null) {
                 fos.close();
@@ -253,13 +256,13 @@ public class SSDBUtils {
             try {
                 iObject = iObjectInputStream.readObject();
             } catch (ClassNotFoundException ex) {
-                ex.printStackTrace();
+                LOG.error("Unexpected error", ex);
             }
             iObjectInputStream.close();
 
             return iObject;
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         } catch (IOException e1) {
             if (fis != null) {
                 fis.close();
@@ -295,9 +298,9 @@ public class SSDBUtils {
 
             return (SSNewCompany) iObjectInputStream.readObject();
         } catch (IOException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
         } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
         }
         return null;
     }
@@ -347,9 +350,9 @@ public class SSDBUtils {
             }
 
         } catch (IOException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
         } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
         }
         return null;
     }

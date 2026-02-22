@@ -15,6 +15,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PropertyResourceBundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -22,7 +24,8 @@ import java.util.PropertyResourceBundle;
  * Time: 17:01:15
  * @version $Id$
  */
-public class SSReportCache {
+public class SSReportCache {    private static final Logger LOG = LoggerFactory.getLogger(SSReportCache.class);
+
     private static final File REPORT_DIR = new File(Path.get(Path.APP_DATA), "report");
     private static final File COMPILED_DIR = new File(REPORT_DIR, "compiled");
     private static final String REPORT_RESOURCE = "/reports/report/";
@@ -104,10 +107,10 @@ public class SSReportCache {
 		    }
 		} catch (ParseException ex)  {
 		    // ta bort den kompilerade versionen?
-		    System.out.println(ex.getMessage());
+		    LOG.info(ex.getMessage());
 		}
 		
-                System.out.println("Precompiled report exists, but report is changed ...");
+                LOG.info("Precompiled report exists, but report is changed ...");
             }
 
             // .. we need to recompile the report
@@ -121,7 +124,7 @@ public class SSReportCache {
 
             return saveCompiledReport(iCompiledFile, iReport);
         } catch (JRException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
         }
         return null;
     }
@@ -142,9 +145,9 @@ public class SSReportCache {
             return (JasperReport) iObjectInputStream.readObject();
 
         } catch (IOException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
         } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
         }
         return null;
     }
@@ -168,7 +171,7 @@ public class SSReportCache {
 
             return pReport;
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
         return null;
     }

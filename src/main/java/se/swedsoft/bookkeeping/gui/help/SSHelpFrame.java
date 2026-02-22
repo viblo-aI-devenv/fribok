@@ -16,13 +16,16 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Date: 2006-mar-06
  * Time: 09:43:04
  */
-public class SSHelpFrame extends JFrame {
+public class SSHelpFrame extends JFrame {    private static final Logger LOG = LoggerFactory.getLogger(SSHelpFrame.class);
+
 
     private static SSHelpFrame cInstance;
 
@@ -100,7 +103,7 @@ public class SSHelpFrame extends JFrame {
 
                 iHelpSet = new HelpSet(null, iHelpSetUrl);
             } catch (HelpSetException ex) {
-                ex.printStackTrace();
+                LOG.error("Unexpected error", ex);
 
             }
         }
@@ -130,7 +133,7 @@ public class SSHelpFrame extends JFrame {
                         try {
                             iViewer.setCurrentID(iHelpSet.getHomeID());
                         } catch (InvalidHelpSetContextException ex) {
-                            ex.printStackTrace();
+                            LOG.error("Unexpected error", ex);
                         }
 
                     });
@@ -182,7 +185,7 @@ public class SSHelpFrame extends JFrame {
         try {
             iViewer.setCurrentID(iHelpSet.getHomeID());
         } catch (InvalidHelpSetContextException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
 
         SSHelpPanel iHelpPanel = new SSHelpPanel(iHelpSet, iViewer, iViewer.getModel());
@@ -203,7 +206,7 @@ public class SSHelpFrame extends JFrame {
      */
     private void setHelpClass(Class<?> pHelpClass) {
         // @todo Restructure help file to be able to connect a frame to a help topic.
-        System.out.println(pHelpClass);
+        LOG.info("{}", pHelpClass);
         // iViewer.setCurrentID();
     }
 

@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -21,7 +23,8 @@ import java.util.Map;
 *
 * $Id$
 */
-public class CreateQRCode {
+public class CreateQRCode {    private static final Logger LOG = LoggerFactory.getLogger(CreateQRCode.class);
+
     /**
      *
      * @param uqrData
@@ -38,7 +41,7 @@ public class CreateQRCode {
         // fixme! - We go UTF-8 here specifically (due to spec) from windows-1252, 
         // but in general for v3 this should be changed all over 
         final String uqrEncoding = "UTF-8";
-        System.out.println("Original UsingQR data: " + uqrData);
+        LOG.info("Original UsingQR data: " + uqrData);
 
         BitMatrix matrix = new MultiFormatWriter().encode(new String(uqrData.getBytes(uqrEncoding), uqrEncoding), BarcodeFormat.QR_CODE, width, height, encodeHintMap);
 

@@ -10,13 +10,16 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.net.URL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Date: 2006-feb-02
  * Time: 10:11:34
  */
-public class SSIcon {
+public class SSIcon {    private static final Logger LOG = LoggerFactory.getLogger(SSIcon.class);
+
 
     // Ensure non-instantiability
     private SSIcon() {
@@ -251,7 +254,7 @@ public class SSIcon {
      */
     private static void loadIcon(String name, String filename) {
         if (icons.containsKey(name)) {
-            System.out.println("(SSIcon): Already loaded icon: " + name);
+            LOG.info("(SSIcon): Already loaded icon: " + name);
             return;
         }
 
@@ -262,13 +265,13 @@ public class SSIcon {
         try {
             icon = new ImageIcon(ImageIO.read(url));
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
 
         if (icon != null) {
             icons.put(name, icon);
         } else {
-            System.out.println("(SSIcon): Failed to load icon: " + filename);
+            LOG.info("(SSIcon): Failed to load icon: " + filename);
         }
     }
 
@@ -325,7 +328,7 @@ public class SSIcon {
         String iIconName = name + '_' + pState.getName();
 
         if (!icons.containsKey(iIconName)) {
-            System.out.println("(SSIcon): Icon not found: " + iIconName);
+            LOG.info("(SSIcon): Icon not found: " + iIconName);
         }
         return icons.get(iIconName);
     }

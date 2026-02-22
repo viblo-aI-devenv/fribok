@@ -9,13 +9,16 @@ import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Date: 2006-feb-03
  * Time: 15:02:18
  */
-public class SSCurrencyTextField extends JFormattedTextField {
+public class SSCurrencyTextField extends JFormattedTextField {    private static final Logger LOG = LoggerFactory.getLogger(SSCurrencyTextField.class);
+
 
     /**
      *
@@ -74,7 +77,7 @@ public class SSCurrencyTextField extends JFormattedTextField {
         }
 
         if (iValue != null) {
-            System.out.println("(SSCurrencyTextField) " + iValue.getClass().getName());
+            LOG.info("(SSCurrencyTextField) " + iValue.getClass().getName());
         }
 
         return null;

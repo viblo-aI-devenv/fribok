@@ -11,11 +11,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * $Id$
  */
-public class SSSalePrinterUtils {
+public class SSSalePrinterUtils {    private static final Logger LOG = LoggerFactory.getLogger(SSSalePrinterUtils.class);
+
     private SSSalePrinterUtils() {}
 
     /**
@@ -75,9 +78,9 @@ public class SSSalePrinterUtils {
         try {
             CreateQRCode.createQRCode(uqrData, uqrFile, 200, 200);
         } catch (WriterException we) {
-            System.out.println("Something in the uqr data cannot be encoded as QR-code: " + uqrData.toString());
+            LOG.info("Something in the uqr data cannot be encoded as QR-code: " + uqrData.toString());
         } catch (UnsupportedEncodingException uee) {
-            System.out.println("Unexpected character encoding: " + uqrData.toString());
+            LOG.info("Unexpected character encoding: " + uqrData.toString());
         }
 
         iPrinter.addParameter("invoice.qrcode", SSSalePrinterUtils.getImage(uqrFile));
@@ -102,7 +105,7 @@ public class SSSalePrinterUtils {
         try {
             iImage = ImageIO.read(iImageFile);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
         return iImage;
 

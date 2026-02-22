@@ -79,12 +79,15 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @version $Id$
  */
-public class SSMainMenu {
+public class SSMainMenu {    private static final Logger LOG = LoggerFactory.getLogger(SSMainMenu.class);
+
 
     private static final String MENU_RES = "/MainMenu.xml";
 
@@ -202,7 +205,7 @@ public class SSMainMenu {
                         iShowDialog = false;
                         new SSErrorDialog(iMainFrame, "importexceptiondialog", ex.getMessage());
                     } catch (RuntimeException ex) {
-                        ex.printStackTrace();
+                        LOG.error("Unexpected error", ex);
                         iShowDialog = false;
                         SSPostLock.removeLock("sieimport"+iCurrentCompany.getId());
                     }
@@ -262,7 +265,7 @@ public class SSMainMenu {
                     } catch (SSExportException ex ) {
                         new SSErrorDialog(iMainFrame, "exportexceptiondialog", ex.getMessage());
                     } catch (RuntimeException ex) {
-                        ex.printStackTrace();
+                        LOG.error("Unexpected error", ex);
                     }
                 }
 

@@ -14,13 +14,16 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Date: 2006-mar-09
  * Time: 10:35:03
  */
-public class SSSalesTaxCalculator {
+public class SSSalesTaxCalculator {    private static final Logger LOG = LoggerFactory.getLogger(SSSalesTaxCalculator.class);
+
 
     private SSNewAccountingYear iAccountingYear;
 
@@ -56,9 +59,9 @@ public class SSSalesTaxCalculator {
         List<SSVoucher> iVouchers = SSVoucherMath.getVouchers(
                 iAccountingYear.getVouchers(), iDateFrom, iDateTo);
 
-        // System.out.println("Momsrapport, verifikationer:");
+        // LOG.info("Momsrapport, verifikationer:");
         // for(SSVoucher iVoucher : iVouchers){
-        // System.out.println(iVoucher);
+        // LOG.info(iVoucher);
         // }
 
         Map<SSAccount, BigDecimal> creditMinusDebetSum = SSVoucherMath.getCreditMinusDebetSum(

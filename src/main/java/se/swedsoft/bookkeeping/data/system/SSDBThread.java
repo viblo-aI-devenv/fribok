@@ -1,11 +1,14 @@
 package se.swedsoft.bookkeeping.data.system;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Date: 2006-feb-24
  * Time: 17:13:25
  */
-public class SSDBThread extends Thread {
+public class SSDBThread extends Thread {    private static final Logger LOG = LoggerFactory.getLogger(SSDBThread.class);
+
 
     private static long iStorePeriod = 10;
 
@@ -49,7 +52,7 @@ public class SSDBThread extends Thread {
          iDatabase.SaveDatabase();
          /*
          if(!iDatabase.isReadonly()){
-         System.out.println(getClass().getName() + ": Saving database...");
+         LOG.info(getClass().getName() + ": Saving database...");
 
          SSSystemCompany iSystemCompany = iData.getCurrentCompany();
          SSSystemYear    iSystemYear    = iData.getCurrentYear();

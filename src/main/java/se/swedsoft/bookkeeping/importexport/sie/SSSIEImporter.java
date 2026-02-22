@@ -19,13 +19,16 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Date: 2006-feb-20
  * Time: 12:52:32
  */
-public class SSSIEImporter {
+public class SSSIEImporter {    private static final Logger LOG = LoggerFactory.getLogger(SSSIEImporter.class);
+
 
     private List<String> iLines;
 
@@ -91,7 +94,7 @@ public class SSSIEImporter {
             SSDB.getInstance().deleteResultUnit(iResultUnit);
         }
         resultUnitsToDelete = null;
-        // System.out.println( iFactory.toString() );
+        // LOG.info(iFactory.toString());
 
         List<List<String>> iParsedLines = getParsedLines(iLines);
 
@@ -106,7 +109,7 @@ public class SSSIEImporter {
             if (iEntry != null) {
                 iEntry.importEntry(this, iReader, iAccountingYear);
             } else {
-                System.out.println("(SSSIEImporter)Missing reader for: " + iLabel);
+                LOG.info("(SSSIEImporter)Missing reader for: " + iLabel);
             }
         }
         SSDB.getInstance().updateAccountingYear(iAccountingYear);
@@ -214,10 +217,10 @@ public class SSSIEImporter {
         try {
             iLines = SIEFile.readFile(pFile);
         } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
             throw new SSImportException(ex.getMessage());
         } catch (IOException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
             throw new SSImportException(ex.getMessage());
         }
     }
@@ -232,10 +235,10 @@ public class SSSIEImporter {
         try {
             SIEFile.writeFile(pFile, iLines);
         } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
             throw new SSExportException(ex.getMessage());
         } catch (IOException ex) {
-            ex.printStackTrace();
+            LOG.error("Unexpected error", ex);
             throw new SSExportException(ex.getMessage());
         }
     }

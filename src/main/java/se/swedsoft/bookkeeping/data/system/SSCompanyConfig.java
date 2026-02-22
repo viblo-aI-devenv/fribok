@@ -7,6 +7,8 @@ import se.swedsoft.bookkeeping.data.SSNewCompany;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -14,7 +16,8 @@ import java.util.Collection;
  * Date: 2007-jan-26
  * Time: 11:40:47
  */
-public class SSCompanyConfig {
+public class SSCompanyConfig {    private static final Logger LOG = LoggerFactory.getLogger(SSCompanyConfig.class);
+
     private SSCompanyConfig() {}
 
     public static void saveLastOpenCompany(SSSystemCompany iLastCompany) {
@@ -30,7 +33,7 @@ public class SSCompanyConfig {
                 oos.writeObject(iLastCompany.getCurrentYear());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
     }
 
@@ -60,7 +63,7 @@ public class SSCompanyConfig {
             iFile.delete();
             return iSystemCompany;
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
         return iSystemCompany;
     }
@@ -92,9 +95,9 @@ public class SSCompanyConfig {
                     }
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                LOG.error("Unexpected error", e);
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                LOG.error("Unexpected error", e);
             }
         }
 
@@ -109,7 +112,7 @@ public class SSCompanyConfig {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
     }
 
@@ -146,7 +149,7 @@ public class SSCompanyConfig {
         } catch (IOException e) {
             return null;
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
         return iSystemCompany;
     }

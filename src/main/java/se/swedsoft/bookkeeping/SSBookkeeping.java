@@ -21,13 +21,16 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  *
  * @version $Id$
  */
-public class SSBookkeeping {
+public class SSBookkeeping {    private static final Logger LOG = LoggerFactory.getLogger(SSBookkeeping.class);
+
 
     public static boolean iRunning;
 
@@ -40,8 +43,8 @@ public class SSBookkeeping {
         try {
             Class.forName("org.hsqldb.jdbcDriver");
         } catch (ClassNotFoundException e) {
-            System.out.println("ERROR: failed to load HSQLDB JDBC driver.");
-            e.printStackTrace();
+            LOG.info("ERROR: failed to load HSQLDB JDBC driver.");
+            LOG.error("Unexpected error", e);
             return;
         }
 
@@ -90,22 +93,22 @@ public class SSBookkeeping {
         try {
             UIManager.setLookAndFeel(new Plastic3DLookAndFeel());
         } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
         iRunning = true;
 
         // Print information to ease debugging
-        System.out.println("Starting up...");
-        System.out.println("Title     : " + Version.APP_TITLE);
-        System.out.println("Version   : " + Version.APP_VERSION);
-        System.out.println("Build     : " + Version.APP_BUILD);
-        System.out.println("Directory : " + Path.get(Path.APP_BASE));
-        System.out.println("");
-        System.out.println("Operating system: " + System.getProperty("os.name"));
-        System.out.println("Architecture    : " + System.getProperty("os.arch"));
-        System.out.println("Java version    : " + System.getProperty("java.version"));
-        System.out.println("");
-        System.out.println("Paths:");
+        LOG.info("Starting up...");
+        LOG.info("Title : " + Version.APP_TITLE);
+        LOG.info("Version : " + Version.APP_VERSION);
+        LOG.info("Build : " + Version.APP_BUILD);
+        LOG.info("Directory : " + Path.get(Path.APP_BASE));
+        LOG.info("");
+        LOG.info("Operating system: " + System.getProperty("os.name"));
+        LOG.info("Architecture : " + System.getProperty("os.arch"));
+        LOG.info("Java version : " + System.getProperty("java.version"));
+        LOG.info("");
+        LOG.info("Paths:");
         for (Path name : Path.values()) {
             System.out.printf("   %-12s = %s\n", name, Path.get(name));
         }
@@ -119,18 +122,18 @@ public class SSBookkeeping {
             if (!dir.exists()) {
                 try {
                     if (dir.mkdirs()) {
-                        System.out.println("Created " + dir);
+                        LOG.info("Created " + dir);
                     } else {
                         warning = "unable to create";
                     }
                 } catch (SecurityException e) {
-                    e.printStackTrace();
+                    LOG.error("Unexpected error", e);
                 }
             } else if (!dir.isDirectory()) {
                 warning = "exists but is not a directory";
             }
             if (warning != null) {
-                System.out.println(" !! WARNING: " + dir + ' ' + warning);
+                LOG.info(" !! WARNING: " + dir + ' ' + warning);
                 warning = null;
             }
         }
@@ -183,7 +186,7 @@ public class SSBookkeeping {
                                     }
 
                                 } catch (IOException e) {
-                                    e.printStackTrace();
+                                    LOG.error("Unexpected error", e);
                                 }
 
                             }));

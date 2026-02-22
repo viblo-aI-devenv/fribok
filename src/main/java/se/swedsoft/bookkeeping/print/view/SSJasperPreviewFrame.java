@@ -29,13 +29,16 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * $Id$
  *
  */
-public class SSJasperPreviewFrame extends SSDefaultTableFrame implements PropertyChangeListener {
+public class SSJasperPreviewFrame extends SSDefaultTableFrame implements PropertyChangeListener {    private static final Logger LOG = LoggerFactory.getLogger(SSJasperPreviewFrame.class);
+
 
     public static ResourceBundle bundle = SSBundle.getBundle();
 
@@ -121,7 +124,7 @@ public class SSJasperPreviewFrame extends SSDefaultTableFrame implements Propert
                         try {
                             JasperPrintManager.printReport(iPrinter, true);
                         } catch (JRException ex) {
-                            ex.printStackTrace();
+                            LOG.error("Unexpected error", ex);
                         }
 
                     });
@@ -344,7 +347,7 @@ public class SSJasperPreviewFrame extends SSDefaultTableFrame implements Propert
 
                 JasperExportManager.exportReportToPdfFile(iPrinter, iFileName);
             } catch (JRException ex) {
-                ex.printStackTrace();
+                LOG.error("Unexpected error", ex);
             }
         }
         // html
@@ -357,7 +360,7 @@ public class SSJasperPreviewFrame extends SSDefaultTableFrame implements Propert
 
                 JasperExportManager.exportReportToHtmlFile(iPrinter, iFileName);
             } catch (JRException ex) {
-                ex.printStackTrace();
+                LOG.error("Unexpected error", ex);
             }
         }
 
@@ -369,7 +372,7 @@ public class SSJasperPreviewFrame extends SSDefaultTableFrame implements Propert
 
                 iSaver.save(iPrinter, pSelectedFile);
             } catch (JRException ex) {
-                ex.printStackTrace();
+                LOG.error("Unexpected error", ex);
             }
         }
 
@@ -382,7 +385,7 @@ public class SSJasperPreviewFrame extends SSDefaultTableFrame implements Propert
 
                 iSaver.save(iPrinter, pSelectedFile);
             } catch (JRException ex) {
-                ex.printStackTrace();
+                LOG.error("Unexpected error", ex);
             }
         }
 

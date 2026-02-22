@@ -33,13 +33,16 @@ import java.text.DateFormat;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * $Id$
  *
  */
-public class SSReportFactory {
+public class SSReportFactory {    private static final Logger LOG = LoggerFactory.getLogger(SSReportFactory.class);
+
     private static final File PDF_FILE_DIR = new File(Path.get(Path.APP_DATA), "pdftoemail");
     private SSReportFactory() {}
 
@@ -1418,7 +1421,7 @@ public class SSReportFactory {
                                           JasperExportManager.exportReportToPdfFile(iPrinter.getPrinter(),
                                                   new File(PDF_FILE_DIR, iFileName).getPath());
                                       } catch (JRException e) {
-                                          e.printStackTrace();
+                                          LOG.error("Unexpected error", e);
                                       }
                                       String iSubject = "Faktura " + iInvoice.getNumber() + " från "
                                               + SSDB.getInstance().getCurrentCompany().getName();
@@ -1429,7 +1432,7 @@ public class SSReportFactory {
                                               return;
                                           }
                                       } catch (MessagingException e) {
-                                          e.printStackTrace();
+                                          LOG.error("Unexpected error", e);
                                           new SSErrorDialog(SSMainFrame.getInstance(), "mail.somethingwrong");
                                           return;
                                       }
@@ -1552,7 +1555,7 @@ public class SSReportFactory {
                                           JasperExportManager.exportReportToPdfFile(iPrinter.getPrinter(),
                                                   new File(PDF_FILE_DIR, iFileName).getPath());
                                       } catch (JRException e) {
-                                          e.printStackTrace();
+                                          LOG.error("Unexpected error", e);
                                       }
                                       String iSubject = "Kreditfaktura " + iCreditInvoice.getNumber()
                                               + " från " + SSDB.getInstance().getCurrentCompany().getName();
@@ -1563,7 +1566,7 @@ public class SSReportFactory {
                                               return;
                                           }
                                       } catch (MessagingException e) {
-                                          e.printStackTrace();
+                                          LOG.error("Unexpected error", e);
                                           new SSErrorDialog(SSMainFrame.getInstance(), "mail.somethingwrong");
                                           return;
                                       }
@@ -1646,7 +1649,7 @@ public class SSReportFactory {
                                           JasperExportManager.exportReportToPdfFile(iPrinter.getPrinter(),
                                                   new File(PDF_FILE_DIR, iFileName).getPath());
                                       } catch (JRException e) {
-                                          e.printStackTrace();
+                                          LOG.error("Unexpected error", e);
                                       }
                                       String iSubject = "Order " + iOrder.getNumber() + " från "
                                               + SSDB.getInstance().getCurrentCompany().getName();
@@ -1659,7 +1662,7 @@ public class SSReportFactory {
                                               }
                                           }
                                       } catch (MessagingException e) {
-                                          e.printStackTrace();
+                                          LOG.error("Unexpected error", e);
                                           new SSErrorDialog(SSMainFrame.getInstance(), "mail.somethingwrong");
                                           return;
                                       }
@@ -1744,7 +1747,7 @@ public class SSReportFactory {
                                           JasperExportManager.exportReportToPdfFile(iPrinter.getPrinter(),
                                                   new File(PDF_FILE_DIR, iFileName).getPath());
                                       } catch (JRException e) {
-                                          e.printStackTrace();
+                                          LOG.error("Unexpected error", e);
                                       }
                                       String iSubject = "Offert " + iTender.getNumber() + " från "
                                               + SSDB.getInstance().getCurrentCompany().getName();
@@ -1757,7 +1760,7 @@ public class SSReportFactory {
                                               }
                                           }
                                       } catch (MessagingException e) {
-                                          e.printStackTrace();
+                                          LOG.error("Unexpected error", e);
                                           new SSErrorDialog(SSMainFrame.getInstance(), "mail.somethingwrong");
                                           return;
                                       }
@@ -1907,7 +1910,7 @@ public class SSReportFactory {
                                           JasperExportManager.exportReportToPdfFile(iPrinter.getPrinter(),
                                                   new File(PDF_FILE_DIR, iFileName).getPath());
                                       } catch (JRException e) {
-                                          e.printStackTrace();
+                                          LOG.error("Unexpected error", e);
                                       }
                                       String iSubject = "Inköpsorder " + iPurchaseOrder.getNumber() + " från "
                                               + SSDB.getInstance().getCurrentCompany().getName();
@@ -1918,7 +1921,7 @@ public class SSReportFactory {
                                               return;
                                           }
                                       } catch (MessagingException e) {
-                                          e.printStackTrace();
+                                          LOG.error("Unexpected error", e);
                                           new SSErrorDialog(SSMainFrame.getInstance(), "mail.somethingwrong");
                                           return;
                                       }
@@ -1990,7 +1993,7 @@ public class SSReportFactory {
                                           JasperExportManager.exportReportToPdfFile(iPrinter.getPrinter(),
                                                   new File(PDF_FILE_DIR, iFileName).getPath());
                                       } catch (JRException e) {
-                                          e.printStackTrace();
+                                          LOG.error("Unexpected error", e);
                                       }
                                       String iSubject = "Förfrågan från "
                                               + SSDB.getInstance().getCurrentCompany().getName();
@@ -2001,7 +2004,7 @@ public class SSReportFactory {
                                               return;
                                           }
                                       } catch (MessagingException e) {
-                                          e.printStackTrace();
+                                          LOG.error("Unexpected error", e);
                                           new SSErrorDialog(SSMainFrame.getInstance(), "mail.somethingwrong");
                                           return;
                                       }

@@ -18,6 +18,8 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -25,7 +27,8 @@ import java.util.List;
  * Date: 2006-aug-28
  * Time: 11:57:35
  */
-public class SSSupplierPaymentExporter {
+public class SSSupplierPaymentExporter {    private static final Logger LOG = LoggerFactory.getLogger(SSSupplierPaymentExporter.class);
+
     private SSSupplierPaymentExporter() {}
 
     /**
@@ -60,7 +63,7 @@ public class SSSupplierPaymentExporter {
             iWriter.close();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unexpected error", e);
         }
     }
 

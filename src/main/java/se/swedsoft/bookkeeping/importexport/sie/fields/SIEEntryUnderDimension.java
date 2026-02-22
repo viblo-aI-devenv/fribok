@@ -15,13 +15,16 @@ import java.util.List;
 
 import static se.swedsoft.bookkeeping.importexport.sie.util.SIEReader.SIEDataType.INT;
 import static se.swedsoft.bookkeeping.importexport.sie.util.SIEReader.SIEDataType.STRING;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Date: 2006-feb-23
  * Time: 12:18:47
  */
-public class SIEEntryUnderDimension implements SIEEntry {
+public class SIEEntryUnderDimension implements SIEEntry {    private static final Logger LOG = LoggerFactory.getLogger(SIEEntryUnderDimension.class);
+
 
     /**
      * Imports the entry
@@ -48,7 +51,7 @@ public class SIEEntryUnderDimension implements SIEEntry {
         iDimension.setSuperDimension(iReader.nextInteger());
 
         if (iDimensions.contains(iDimension)) {
-            System.out.println("Duplicate dimension:" + iDimension);
+            LOG.info("Duplicate dimension:" + iDimension);
             return false;
         }
 
