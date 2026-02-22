@@ -57,6 +57,25 @@ keeping the application functional throughout.
      `SSSupplier`)
    - Import/export (`SIEReader`, `SIEWriter`, `BgMaxFile`, Excel importers)
    - Utility classes (`SSUtil`, `SSAutoIncrement`, `SSConfig`)
+   - **DB integration tests** (`SSCustomer`, `SSInvoice`, `SSSupplier`,
+     `SSVoucher` CRUD operations against an in-memory HSQLDB instance).
+     These are tagged `@Tag("integration")` and run in a separate surefire
+     execution with a forked JVM to prevent SSDB singleton state from leaking.
+
+   > **Important:** The HSQLDB account-plan seed step loads three XLS files
+   > whose names contain the Swedish character `ä`.  Maven must be run with
+   > `LANG=C.UTF-8 LC_ALL=C.UTF-8` so that the JVM's native encoding is UTF-8
+   > and the resource files are copied into `target/classes` correctly.
+   > Without this, three of the seven account plans are silently missing.
+   >
+   > ```
+   > LANG=C.UTF-8 LC_ALL=C.UTF-8 mvn clean install
+   > ```
+   >
+   > The `-Dsun.jnu.encoding=UTF-8` JVM arg does **not** work on Java 21
+   > because `sun.jnu.encoding` is derived from the OS/JVM native locale at
+   > startup and is read-only.  The locale environment variable is the only
+   > reliable fix.
 
 4. **Add `.editorconfig`** -- Enforce 4-space indentation, UTF-8, LF line
    endings, 120-character line width.

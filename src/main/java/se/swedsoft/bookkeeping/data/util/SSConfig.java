@@ -111,13 +111,9 @@ public class SSConfig implements Serializable {
      *
      */
     private static synchronized void storeConfig() {
-        try {
-            ObjectOutputStream iObjectOutputStream = new ObjectOutputStream(
-                    new BufferedOutputStream(new FileOutputStream(CONFIG_FILE)));
-
+        try (ObjectOutputStream iObjectOutputStream = new ObjectOutputStream(
+                new BufferedOutputStream(new FileOutputStream(CONFIG_FILE)))) {
             iObjectOutputStream.writeObject(cInstance);
-            iObjectOutputStream.flush();
-            iObjectOutputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

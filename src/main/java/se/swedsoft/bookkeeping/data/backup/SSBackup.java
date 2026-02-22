@@ -130,12 +130,10 @@ public class SSBackup implements Serializable {
      * @throws IOException
      */
     public static void storeBackup(File iFile, SSBackup iBackup) throws IOException {
-        ObjectOutputStream iObjectOutputStream = new ObjectOutputStream(
-                new BufferedOutputStream(new FileOutputStream(iFile)));
-
-        iObjectOutputStream.writeObject(iBackup);
-        iObjectOutputStream.flush();
-        iObjectOutputStream.close();
+        try (ObjectOutputStream iObjectOutputStream = new ObjectOutputStream(
+                new BufferedOutputStream(new FileOutputStream(iFile)))) {
+            iObjectOutputStream.writeObject(iBackup);
+        }
     }
 
     public String toString() {
