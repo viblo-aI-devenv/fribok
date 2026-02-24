@@ -584,6 +584,10 @@ public class SSVoucherMath {
 
         Collections.sort(iVouchers, (iVoucher1, iVoucher2) -> {
 
+                if (iVoucher1 == null || iVoucher2 == null) {
+                    return 0;
+                }
+
                 Date iDate1 = iVoucher1.getDate();
                 Date iDate2 = iVoucher2.getDate();
 
