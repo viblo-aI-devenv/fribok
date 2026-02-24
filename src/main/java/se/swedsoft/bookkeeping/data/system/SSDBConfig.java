@@ -230,6 +230,10 @@ public class SSDBConfig {    private static final Logger LOG = LoggerFactory.get
      * Create a config file if not found
     */
     private static void createIfNotExists() throws IOException {
+        File parent = CONFIG_FILE.getParentFile();
+        if (parent != null && !parent.exists()) {
+            parent.mkdirs();
+        }
         if (CONFIG_FILE.createNewFile()) {
             LOG.info("Creating database config file.");
             

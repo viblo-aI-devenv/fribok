@@ -569,17 +569,17 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
 
             String[] defaults = new String[]{
                 "BAS96(07)-AB & EF.xls",
-                "BAS96(07)-Enskild näringsidkare.xls",
+                "BAS96(07)-Enskild-naringsidkare.xls",
                 "BAS96(07)-HB & KB.xls",
                 "Bas2006(07)-AB & EF.xls",
-                "Bas2006(07)-Enskild näringsidkare.xls",
+                "Bas2006(07)-Enskild-naringsidkare.xls",
                 "Bas2006(07)-HB & KB.xls",
-                "Bas2007(K1)-Enskild näringsidkare.xls",};
+                "Bas2007(K1)-Enskild-naringsidkare.xls",};
 
             for (String s : defaults) {
                 LOG.info(s);
                 String path = "account/default/" + s;
-                InputStream is = ClassLoader.getSystemResourceAsStream(path);
+                InputStream is = SSDB.class.getClassLoader().getResourceAsStream(path);
                 if (is == null) {
                     throw new RuntimeException("Resource not found: " + path);
                 }
