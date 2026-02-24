@@ -494,8 +494,9 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         }
 
         try {
+            File dbDir = new File(Path.get(Path.USER_DATA), "db");
             iConnection = DriverManager.getConnection(
-                    "jdbc:hsqldb:file:db" + File.separator + "JFSDB", "sa", "");
+                    "jdbc:hsqldb:file:" + dbDir.getAbsolutePath() + File.separator + "JFSDB", "sa", "");
             iConnection.setAutoCommit(false);
             iLocking = false;
             createNewTables();
@@ -630,11 +631,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        File iPropFile = new File("db" + File.separator + "JFSDB.properties");
-        File iScriptFile = new File("db" + File.separator + "JFSDB.script");
-        File iDataFile = new File("db" + File.separator + "JFSDB.data");
-        File iBackupFile = new File("db" + File.separator + "JFSDB.backup");
-        File iLogFile = new File("db" + File.separator + "JFSDB.log");
+        File iDbDir = new File(Path.get(Path.USER_DATA), "db");
+        File iPropFile = new File(iDbDir, "JFSDB.properties");
+        File iScriptFile = new File(iDbDir, "JFSDB.script");
+        File iDataFile = new File(iDbDir, "JFSDB.data");
+        File iBackupFile = new File(iDbDir, "JFSDB.backup");
+        File iLogFile = new File(iDbDir, "JFSDB.log");
 
         if (iPropFile.exists()) {
             iPropFile.delete();
@@ -7880,7 +7882,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
      * zippas ner.
      */
     public void readOldDatabase() {
-        final File iFile = new File(Path.get(Path.APP_BASE), "db/bookkeeper.db");
+        final File iFile = new File(Path.get(Path.USER_DATA), "db/bookkeeper.db");
 
         if (!iFile.exists()) {
             return;
@@ -8133,7 +8135,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         iFileName = iFileName.replace(":", ".");
         iFileName = iFileName.replace("-", ".");
 
-        return new File(Path.get(Path.APP_BASE), "db/" + iFileName + ".data");
+        return new File(Path.get(Path.USER_DATA), "db/" + iFileName + ".data");
     }
 
     public void createNewTables() {

@@ -52,9 +52,10 @@ public class SSBookkeeping {    private static final Logger LOG = LoggerFactory.
             String iServerAddress = SSDBConfig.getServerAddress();
 
             if (iServerAddress.length() == 0) {
-                // K�r mot lokal databas! Ingen l�sning m.m.
+                // Kör mot lokal databas! Ingen låsning m.m.
+                File dbDir = new File(Path.get(Path.USER_DATA), "db");
                 Connection iConnection = DriverManager.getConnection(
-                        "jdbc:hsqldb:file:db" + File.separator + "JFSDB", "sa", "");
+                        "jdbc:hsqldb:file:" + dbDir.getAbsolutePath() + File.separator + "JFSDB", "sa", "");
 
                 SSDB.getInstance().startupLocal(iConnection);
             } else {

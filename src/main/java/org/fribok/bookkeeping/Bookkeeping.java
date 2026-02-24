@@ -59,8 +59,9 @@ public class Bookkeeping {    private static final Logger LOG = LoggerFactory.ge
 
             if (iServerAddress.length() == 0) {
                 // Kör mot lokal databas! Ingen låsning m.m.
+                File dbDir = new File(Path.get(Path.USER_DATA), "db");
                 Connection iConnection = DriverManager.getConnection(
-                        "jdbc:hsqldb:file:db" + File.separator + "JFSDB", "sa", "");
+                        "jdbc:hsqldb:file:" + dbDir.getAbsolutePath() + File.separator + "JFSDB", "sa", "");
 
                 SSDB.getInstance().startupLocal(iConnection);
             } else {

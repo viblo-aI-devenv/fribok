@@ -1,6 +1,7 @@
 package se.swedsoft.bookkeeping.data.backup.util;
 
 
+import org.fribok.bookkeeping.app.Path;
 import se.swedsoft.bookkeeping.data.SSNewCompany;
 import se.swedsoft.bookkeeping.data.backup.SSBackup;
 import se.swedsoft.bookkeeping.data.system.SSDB;
@@ -168,7 +169,7 @@ public class SSBackupFactory {    private static final Logger LOG = LoggerFactor
         SSInternalFrame.closeAllFrames();
 
         // Get the database directory
-        String iDirectory = "db" + File.separator;
+        String iDirectory = new File(Path.get(Path.USER_DATA), "db").getAbsolutePath() + File.separator;
 
         // Delete all old files
         SSDB.getInstance().delete();

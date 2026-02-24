@@ -50,19 +50,28 @@ public enum Path {
         path.put(APP_DATA, new File(base, "data"));
 
         String os = System.getProperty("os.name");
-        
+
         if (os.startsWith("Windows")) {
-            // TODO: migration to new path? %LOCALAPPDATA%/fribok is good on windows
-//            String appdata = System.getenv("LOCALAPPDATA");
-//            path.put(USER_DATA, new File(appdata, APP_SUBDIR));
-//            path.put(USER_CONF, new File(appdata, APP_SUBDIR));
-            path.put(USER_DATA, base);
-            path.put(USER_CONF, base);
+            // Use %LOCALAPPDATA%\fribok so data is stored in a writable,
+            // per-user location regardless of the working directory at launch
+            // (e.g. when started via an installer shortcut from C:\Windows\System32).
+            String appdata = System.getenv("LOCALAPPDATA");
+            if (appdata == null || appdata.isEmpty()) {
+                // Fallback: %APPDATA% (roaming), then home dir
+                appdata = System.getenv("APPDATA");
+            }
+            if (appdata == null || appdata.isEmpty()) {
+                appdata = System.getProperty("user.home");
+            }
+            File winDataDir = new File(appdata, APP_SUBDIR);
+            path.put(USER_DATA, winDataDir);
+            path.put(USER_CONF, winDataDir);
         } else if (os.startsWith("Mac OS")) {
-            // TODO: Decide locations for MacOSX and Windows. This should
-            // probably be done by someone with access to a MacOSX/Windows box.
-            path.put(USER_DATA, base);
-            path.put(USER_CONF, base);
+            // Use ~/Library/Application Support/fribok on macOS
+            String home = System.getProperty("user.home");
+            File macDataDir = new File(home, "Library/Application Support/" + APP_SUBDIR);
+            path.put(USER_DATA, macDataDir);
+            path.put(USER_CONF, macDataDir);
         } else { // assume freedesktop.org compliance
             BaseDirs iBaseDirs = new BaseDirs();
             String userData = iBaseDirs.getUserPath(BaseDirs.Resource.DATA);
