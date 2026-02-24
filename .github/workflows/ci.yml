@@ -42,6 +42,9 @@ jobs:
         distribution: 'temurin'
         java-version: '21'
 
+    - name: Test
+      run: mvn test
+
     - name: Build
       shell: bash
       run: |
@@ -49,7 +52,7 @@ jobs:
         RAW=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
         VERSION="${RAW%-SNAPSHOT}"
         [[ "$VERSION" != *.*.* ]] && VERSION="${VERSION}.0"
-        mvn clean package -Djpackage.profile=true -Djpackage.appVersion="$VERSION"
+        mvn clean package -DskipTests -Djpackage.profile=true -Djpackage.appVersion="$VERSION"
 
     - name: List dist contents
       shell: bash
