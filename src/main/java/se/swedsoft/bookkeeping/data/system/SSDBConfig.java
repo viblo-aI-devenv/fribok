@@ -28,7 +28,7 @@ import org.xml.sax.helpers.AttributeListImpl;
  */
 public class SSDBConfig {
 
-    private static final File CONFIG_FILE = new File(Path.get(Path.APP_BASE),
+    private static final File CONFIG_FILE = new File(Path.get(Path.USER_CONF),
             "database.config");
 
     private static String iClientKey;

@@ -1,6 +1,7 @@
 package se.swedsoft.bookkeeping.data.backup.util;
 
 
+import org.fribok.bookkeeping.app.Path;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.data.system.SSSystemCompany;
 import se.swedsoft.bookkeeping.data.system.SSSystemYear;
@@ -31,12 +32,13 @@ public class SSBackupUtils {
 
         if (!SSDB.getInstance().getLocking()) {
             // Add the database files
+            File dbDir = new File(Path.get(Path.USER_DATA), "db");
             iFiles.add(
-                    new ArchiveFile(new File("db" + File.separator + "JFSDB.properties")));
-            iFiles.add(new ArchiveFile(new File("db" + File.separator + "JFSDB.script")));
-            iFiles.add(new ArchiveFile(new File("db" + File.separator + "JFSDB.data")));
-            iFiles.add(new ArchiveFile(new File("db" + File.separator + "JFSDB.backup")));
-            iFiles.add(new ArchiveFile(new File("db" + File.separator + "JFSDB.log")));
+                    new ArchiveFile(new File(dbDir, "JFSDB.properties")));
+            iFiles.add(new ArchiveFile(new File(dbDir, "JFSDB.script")));
+            iFiles.add(new ArchiveFile(new File(dbDir, "JFSDB.data")));
+            iFiles.add(new ArchiveFile(new File(dbDir, "JFSDB.backup")));
+            iFiles.add(new ArchiveFile(new File(dbDir, "JFSDB.log")));
         }
 
         return iFiles;
