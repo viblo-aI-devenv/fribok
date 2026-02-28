@@ -4,6 +4,8 @@ package se.swedsoft.bookkeeping.data;
 import se.swedsoft.bookkeeping.data.base.SSSale;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.math.BigDecimal;
 import se.swedsoft.bookkeeping.util.SSDateUtil;
 
@@ -222,5 +224,17 @@ public class SSTender extends SSSale {
         sb.append('}');
         return sb.toString();
     }
-}
 
+    /**
+     * Custom deserialization to handle backward compatibility.
+     * Pre-migration serialized streams stored {@code iExpires} as
+     * {@code java.util.Date}.  This method reads it as a raw object and converts
+     * via {@link SSDateUtil#readLocalDate(Object)}.
+     */
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        ObjectInputStream.GetField fields = in.readFields();
+        iExpires = SSDateUtil.readLocalDate(fields.get("iExpires", null));
+        iOrderNr = (Integer) fields.get("iOrderNr", null);
+        iCurrencyRate = (BigDecimal) fields.get("iCurrencyRate", null);
+    }
+}

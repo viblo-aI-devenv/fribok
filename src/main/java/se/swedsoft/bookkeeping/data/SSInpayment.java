@@ -9,6 +9,8 @@ import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.table.SSTableSearchable;
 import se.swedsoft.bookkeeping.util.SSDateUtil;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -459,6 +461,25 @@ public class SSInpayment implements SSTableSearchable, Serializable {
         iVoucher = SSVoucherMath.compress(iVoucher);
 
         return iVoucher;
+    }
+
+    /**
+     * Custom deserialization to handle backward compatibility.
+     * Pre-migration serialized streams stored {@code iDate} as {@code java.util.Date}.
+     * This method reads it as a raw object and converts via
+     * {@link SSDateUtil#readLocalDate(Object)}.
+     */
+    @SuppressWarnings("unchecked")
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        ObjectInputStream.GetField fields = in.readFields();
+        iNumber = (Integer) fields.get("iNumber", null);
+        iDate = SSDateUtil.readLocalDate(fields.get("iDate", null));
+        iText = (String) fields.get("iText", null);
+        iRows = (List<SSInpaymentRow>) fields.get("iRows", null);
+        iVoucher = (SSVoucher) fields.get("iVoucher", null);
+        iDifference = (SSVoucher) fields.get("iDifference", null);
+        iEntered = fields.get("iEntered", false);
+        iDefaultAccounts = (Map<SSDefaultAccount, Integer>) fields.get("iDefaultAccounts", null);
     }
 
 }

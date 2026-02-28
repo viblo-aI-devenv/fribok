@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import se.swedsoft.bookkeeping.data.SSInvoice;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -105,8 +106,18 @@ class SSInvoiceIntegrationTest {
             SSDBTestFixture.resetCaches();
             SSInvoice fetched = SSDB.getInstance().getInvoice(inv);
 
+            // Date fields are now LocalDate internally, so the time portion
+            // is truncated to midnight on round-trip.
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+            Date expectedDate = cal.getTime();
+
             assertThat(fetched).isNotNull();
-            assertThat(fetched.getDate()).isEqualTo(date);
+            assertThat(fetched.getDate()).isEqualTo(expectedDate);
         } finally {
             SSDB.getInstance().deleteInvoice(inv);
         }

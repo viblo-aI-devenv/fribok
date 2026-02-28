@@ -9,6 +9,8 @@ import se.swedsoft.bookkeeping.calc.math.SSVoucherMath;
 import se.swedsoft.bookkeeping.gui.util.table.SSTableSearchable;
 import se.swedsoft.bookkeeping.util.SSDateUtil;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -349,5 +351,22 @@ public class SSVoucher implements Serializable, Cloneable, SSTableSearchable {
         // iCorrects=null;
         // iCorrectedBy=null;
         // iVoucherRows.removeAll(iVoucherRows);
+    }
+
+    /**
+     * Custom deserialization to handle backward compatibility.
+     * Pre-migration serialized streams stored {@code iDate} as {@code java.util.Date}.
+     * This method reads it as a raw object and converts via
+     * {@link SSDateUtil#readLocalDate(Object)}.
+     */
+    @SuppressWarnings("unchecked")
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        ObjectInputStream.GetField fields = in.readFields();
+        iNumber = fields.get("iNumber", 0);
+        iDate = SSDateUtil.readLocalDate(fields.get("iDate", null));
+        iDescription = (String) fields.get("iDescription", null);
+        iCorrects = (SSVoucher) fields.get("iCorrects", null);
+        iCorrectedBy = (SSVoucher) fields.get("iCorrectedBy", null);
+        iVoucherRows = (List<SSVoucherRow>) fields.get("iVoucherRows", null);
     }
 }

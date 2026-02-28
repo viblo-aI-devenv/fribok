@@ -7,6 +7,8 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.table.SSTableSearchable;
 import se.swedsoft.bookkeeping.util.SSDateUtil;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -799,6 +801,40 @@ public abstract class SSSale implements SSTableSearchable, Serializable {
      */
     public String toRenderString() {
         return iNumber == null ? "" : iNumber.toString();
+    }
+
+    /**
+     * Custom deserialization to handle backward compatibility.
+     * Pre-migration serialized streams stored {@code iDate} as {@code java.util.Date}.
+     * This method reads it as a raw object and converts via
+     * {@link SSDateUtil#readLocalDate(Object)}.
+     */
+    @SuppressWarnings("unchecked")
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        ObjectInputStream.GetField fields = in.readFields();
+        iNumber = (Integer) fields.get("iNumber", null);
+        iDate = SSDateUtil.readLocalDate(fields.get("iDate", null));
+        iCustomerNr = (String) fields.get("iCustomerNr", null);
+        iCustomerName = (String) fields.get("iCustomerName", null);
+        iOurContactPerson = (String) fields.get("iOurContactPerson", null);
+        iYourContactPerson = (String) fields.get("iYourContactPerson", null);
+        iDelayInterest = (BigDecimal) fields.get("iDelayInterest", null);
+        iCurrency = (SSCurrency) fields.get("iCurrency", null);
+        iPaymentTerm = (SSPaymentTerm) fields.get("iPaymentTerm", null);
+        iDeliveryTerm = (SSDeliveryTerm) fields.get("iDeliveryTerm", null);
+        iDeliveryWay = (SSDeliveryWay) fields.get("iDeliveryWay", null);
+        iTaxFree = fields.get("iTaxFree", false);
+        iText = (String) fields.get("iText", null);
+        iTaxRate1 = (BigDecimal) fields.get("iTaxRate1", null);
+        iTaxRate2 = (BigDecimal) fields.get("iTaxRate2", null);
+        iTaxRate3 = (BigDecimal) fields.get("iTaxRate3", null);
+        iEuSaleCommodity = fields.get("iEuSaleCommodity", false);
+        iEuSaleYhirdPartCommodity = fields.get("iEuSaleYhirdPartCommodity", false);
+        iInvoiceAddress = (SSAddress) fields.get("iInvoiceAddress", null);
+        iDeliveryAddress = (SSAddress) fields.get("iDeliveryAddress", null);
+        iPrinted = fields.get("iPrinted", false);
+        iDefaultAccounts = (Map<SSDefaultAccount, Integer>) fields.get("iDefaultAccounts", null);
+        iRows = (List<SSSaleRow>) fields.get("iRows", null);
     }
 
 }

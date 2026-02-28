@@ -11,6 +11,8 @@ import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.table.SSTableSearchable;
 import se.swedsoft.bookkeeping.util.SSDateUtil;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -833,6 +835,35 @@ public class SSSupplierInvoice implements SSTableSearchable, Serializable {
         iVoucher = SSVoucherMath.compress(iVoucher);
 
         return iVoucher;
+    }
+
+    /**
+     * Custom deserialization to handle backward compatibility.
+     * Pre-migration serialized streams stored {@code iDate} and {@code iDueDate} as
+     * {@code java.util.Date}.  This method reads them as raw objects and converts
+     * via {@link SSDateUtil#readLocalDate(Object)}.
+     */
+    @SuppressWarnings("unchecked")
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        ObjectInputStream.GetField fields = in.readFields();
+        iNumber = (Integer) fields.get("iNumber", null);
+        iDate = SSDateUtil.readLocalDate(fields.get("iDate", null));
+        iDueDate = SSDateUtil.readLocalDate(fields.get("iDueDate", null));
+        iPaymentTerm = (SSPaymentTerm) fields.get("iPaymentTerm", null);
+        iSupplierNr = (String) fields.get("iSupplierNr", null);
+        iSupplierName = (String) fields.get("iSupplierName", null);
+        iReferencenumber = (String) fields.get("iReferencenumber", null);
+        iCurrency = (SSCurrency) fields.get("iCurrency", null);
+        iCurrencyRate = (BigDecimal) fields.get("iCurrencyRate", null);
+        iTaxSum = (BigDecimal) fields.get("iTaxSum", null);
+        iRoundingSum = (BigDecimal) fields.get("iRoundingSum", null);
+        iVoucher = (SSVoucher) fields.get("iVoucher", null);
+        iCorrection = (SSVoucher) fields.get("iCorrection", null);
+        iEntered = fields.get("iEntered", false);
+        iStockInfluencing = fields.get("iStockInfluencing", false);
+        iBGCEntered = fields.get("iBGCEntered", false);
+        iRows = (List<SSSupplierInvoiceRow>) fields.get("iRows", null);
+        iDefaultAccounts = (Map<SSDefaultAccount, Integer>) fields.get("iDefaultAccounts", null);
     }
 
 }

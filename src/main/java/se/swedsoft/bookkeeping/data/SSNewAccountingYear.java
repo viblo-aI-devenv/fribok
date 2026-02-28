@@ -13,6 +13,7 @@ import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -314,12 +315,30 @@ public class SSNewAccountingYear implements Serializable, SSTableSearchable {
     }
 
     /**
+     * Custom deserialization that handles both old (Date) and new (LocalDate) field formats.
+     *
+     * <p>Pre-migration serialized streams stored {@code iFrom} and {@code iTo} as
+     * {@code java.util.Date}.  This method reads them as raw objects and converts
+     * via {@link SSDateUtil#readLocalDate(Object)}.
+     */
+    @SuppressWarnings("unchecked")
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        ObjectInputStream.GetField fields = in.readFields();
+        iId = (Integer) fields.get("iId", null);
+        iFrom = SSDateUtil.readLocalDate(fields.get("iFrom", null));
+        iTo = SSDateUtil.readLocalDate(fields.get("iTo", null));
+        iPlan = (SSAccountPlan) fields.get("iPlan", null);
+        iInBalance = (Map<SSAccount, BigDecimal>) fields.get("iInBalance", null);
+        iBudget = (SSBudget) fields.get("iBudget", null);
+    }
+
+    /**
      *
      * @param iObjectInputStream
      * @throws IOException
      * @throws ClassNotFoundException
 
-     private void readObject(ObjectInputStream iObjectInputStream) throws IOException, ClassNotFoundException{
+     private void readObject_old(ObjectInputStream iObjectInputStream) throws IOException, ClassNotFoundException{
      iObjectInputStream.defaultReadObject();
 
      SSNewCompany        iCompany        = SSDB.getInstance().getCurrentCompany();

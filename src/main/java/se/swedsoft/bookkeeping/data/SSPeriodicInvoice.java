@@ -9,6 +9,8 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.util.SSDateUtil;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.time.LocalDate;
@@ -605,5 +607,31 @@ public class SSPeriodicInvoice implements Serializable {
         sb.append(", iTemplate=").append(iTemplate);
         sb.append('}');
         return sb.toString();
+    }
+
+    /**
+     * Custom deserialization to handle backward compatibility.
+     * Pre-migration serialized streams stored {@code iDate}, {@code iPeriodStart}, and
+     * {@code iPeriodEnd} as {@code java.util.Date}.  This method reads them as raw
+     * objects and converts via {@link SSDateUtil#readLocalDate(Object)}.
+     * Fields {@code iAppendInformation} and {@code iInformation} may not exist in
+     * older serialized blobs, so they use safe defaults.
+     */
+    @SuppressWarnings("unchecked")
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        ObjectInputStream.GetField fields = in.readFields();
+        iNumber = (Integer) fields.get("iNumber", null);
+        iTemplate = (SSInvoice) fields.get("iTemplate", null);
+        iDate = SSDateUtil.readLocalDate(fields.get("iDate", null));
+        iCount = (Integer) fields.get("iCount", null);
+        iPeriod = (Integer) fields.get("iPeriod", null);
+        iDescription = (String) fields.get("iDescription", null);
+        iPeriodStart = SSDateUtil.readLocalDate(fields.get("iPeriodStart", null));
+        iPeriodEnd = SSDateUtil.readLocalDate(fields.get("iPeriodEnd", null));
+        iAppendPeriod = fields.get("iAppendPeriod", false);
+        iAppendInformation = fields.get("iAppendInformation", false);
+        iInformation = (String) fields.get("iInformation", null);
+        iInvoices = (List<SSInvoice>) fields.get("iInvoices", null);
+        iAdded = (Map<Integer, Boolean>) fields.get("iAdded", null);
     }
 }

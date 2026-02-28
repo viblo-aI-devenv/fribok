@@ -4,6 +4,8 @@ package se.swedsoft.bookkeeping.data;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.util.SSDateUtil;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
@@ -211,5 +213,20 @@ public class SSInventory implements Serializable {
         sb.append(", iText='").append(iText).append('\'');
         sb.append('}');
         return sb.toString();
+    }
+
+    /**
+     * Custom deserialization to handle backward compatibility.
+     * Pre-migration serialized streams stored {@code iDate} as {@code java.util.Date}.
+     * This method reads it as a raw object and converts via
+     * {@link SSDateUtil#readLocalDate(Object)}.
+     */
+    @SuppressWarnings("unchecked")
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        ObjectInputStream.GetField fields = in.readFields();
+        iNumber = (Integer) fields.get("iNumber", null);
+        iDate = SSDateUtil.readLocalDate(fields.get("iDate", null));
+        iText = (String) fields.get("iText", null);
+        iRows = (List<SSInventoryRow>) fields.get("iRows", null);
     }
 }
