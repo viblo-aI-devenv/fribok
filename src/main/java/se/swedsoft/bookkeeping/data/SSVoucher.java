@@ -7,10 +7,12 @@ package se.swedsoft.bookkeeping.data;
 
 import se.swedsoft.bookkeeping.calc.math.SSVoucherMath;
 import se.swedsoft.bookkeeping.gui.util.table.SSTableSearchable;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -28,7 +30,7 @@ public class SSVoucher implements Serializable, Cloneable, SSTableSearchable {
 
     private int iNumber;
 
-    private Date iDate;
+    private LocalDate iDate;
 
     private String iDescription;
 
@@ -42,13 +44,13 @@ public class SSVoucher implements Serializable, Cloneable, SSTableSearchable {
      * Default constructor.
      */
     public SSVoucher() {
-        iDate = SSVoucherMath.getNextVoucherDate();
+        iDate = SSDateUtil.toLocalDate(SSVoucherMath.getNextVoucherDate());
         iVoucherRows = new ArrayList<>();
         doAutoIncrecement();
     }
 
     public SSVoucher(Integer iNumber) {
-        iDate = SSVoucherMath.getNextVoucherDate();
+        iDate = SSDateUtil.toLocalDate(SSVoucherMath.getNextVoucherDate());
         iVoucherRows = new ArrayList<>();
         this.iNumber = iNumber;
     }
@@ -110,18 +112,38 @@ public class SSVoucher implements Serializable, Cloneable, SSTableSearchable {
     // //////////////////////////////////////////////////////////////////
 
     /**
-     *
-     * @return
+     * @return the date as a legacy {@link Date}
+     * @deprecated Use {@link #getLocalDate()} instead.
      */
+    @Deprecated
     public Date getDate() {
+        return SSDateUtil.toDate(iDate);
+    }
+
+    /**
+     * @param date the date as a legacy {@link Date}
+     * @deprecated Use {@link #setLocalDate(LocalDate)} instead.
+     */
+    @Deprecated
+    public void setDate(Date date) {
+        iDate = SSDateUtil.toLocalDate(date);
+    }
+
+    /**
+     * Returns the date as a {@link LocalDate}.
+     *
+     * @return the date
+     */
+    public LocalDate getLocalDate() {
         return iDate;
     }
 
     /**
+     * Sets the date as a {@link LocalDate}.
      *
-     * @param date
+     * @param date the date
      */
-    public void setDate(Date date) {
+    public void setLocalDate(LocalDate date) {
         iDate = date;
     }
 
@@ -277,7 +299,7 @@ public class SSVoucher implements Serializable, Cloneable, SSTableSearchable {
         sb.append(", ");
         sb.append(iDescription);
         sb.append(", ");
-        sb.append(iFormat.format(iDate)); /*
+        sb.append(iDate != null ? iFormat.format(SSDateUtil.toDate(iDate)) : "null"); /*
          sb.append( ", " );
          sb.append( iVoucherRows.size() );
          sb.append( " rows.{\n" );

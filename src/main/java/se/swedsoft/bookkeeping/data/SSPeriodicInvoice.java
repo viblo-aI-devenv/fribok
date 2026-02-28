@@ -7,9 +7,11 @@ import se.swedsoft.bookkeeping.data.base.SSSaleRow;
 import se.swedsoft.bookkeeping.data.common.SSInvoiceType;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.io.Serializable;
 import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -27,7 +29,7 @@ public class SSPeriodicInvoice implements Serializable {
     private SSInvoice iTemplate;
 
     // Start Datum
-    private Date iDate;
+    private LocalDate iDate;
     // Antal fakturor
     private Integer iCount;
     // Perioden i månader
@@ -35,9 +37,9 @@ public class SSPeriodicInvoice implements Serializable {
     // Beskrivning
     private String iDescription;
 
-    private Date iPeriodStart;
+    private LocalDate iPeriodStart;
 
-    private Date iPeriodEnd;
+    private LocalDate iPeriodEnd;
 
     private boolean iAppendPeriod;
 
@@ -56,14 +58,14 @@ public class SSPeriodicInvoice implements Serializable {
      *
      */
     public SSPeriodicInvoice() {
-        iDate = new Date();
+        iDate = SSDateUtil.today();
         iCount = 1;
         iPeriod = 1;
         iAppendPeriod = false;
         iAppendInformation = false;
         iInformation = "Detta är faktura [FAK] av [TOT].";
-        iPeriodStart = SSDateMath.getFirstDayInMonth(iDate);
-        iPeriodEnd = SSDateMath.getLastDayMonth(iDate);
+        iPeriodStart = SSDateUtil.toLocalDate(SSDateMath.getFirstDayInMonth(SSDateUtil.toDate(iDate)));
+        iPeriodEnd = SSDateUtil.toLocalDate(SSDateMath.getLastDayMonth(SSDateUtil.toDate(iDate)));
         iInvoices = new LinkedList<>();
         iAdded = new HashMap<>();
         doAutoIncrecement();
@@ -173,18 +175,34 @@ public class SSPeriodicInvoice implements Serializable {
      *
      * @return
      */
+    @Deprecated
     public Date getDate() {
-        return iDate;
+        return SSDateUtil.toDate(iDate);
     }
 
     /**
      *
      * @param iValue
      */
+    @Deprecated
     public void setDate(Date iValue) {
-        iDate = iValue;
+        iDate = SSDateUtil.toLocalDate(iValue);
 
         // createInvoices();
+    }
+
+    /**
+     * @return the date as a LocalDate
+     */
+    public LocalDate getLocalDate() {
+        return iDate;
+    }
+
+    /**
+     * @param iDate the date as a LocalDate
+     */
+    public void setLocalDate(LocalDate iDate) {
+        this.iDate = iDate;
     }
 
     // //////////////////////////////////////////////////
@@ -250,18 +268,34 @@ public class SSPeriodicInvoice implements Serializable {
      *
      * @return
      */
+    @Deprecated
     public Date getPeriodStart() {
-        return iPeriodStart;
+        return SSDateUtil.toDate(iPeriodStart);
     }
 
     /**
      *
      * @param iPeriodStart
      */
+    @Deprecated
     public void setPeriodStart(Date iPeriodStart) {
-        this.iPeriodStart = iPeriodStart;
+        this.iPeriodStart = SSDateUtil.toLocalDate(iPeriodStart);
 
         // createInvoices();
+    }
+
+    /**
+     * @return the period start date as a LocalDate
+     */
+    public LocalDate getLocalPeriodStart() {
+        return iPeriodStart;
+    }
+
+    /**
+     * @param iPeriodStart the period start date as a LocalDate
+     */
+    public void setLocalPeriodStart(LocalDate iPeriodStart) {
+        this.iPeriodStart = iPeriodStart;
     }
 
     // //////////////////////////////////////////////////
@@ -270,18 +304,34 @@ public class SSPeriodicInvoice implements Serializable {
      *
      * @return
      */
+    @Deprecated
     public Date getPeriodEnd() {
-        return iPeriodEnd;
+        return SSDateUtil.toDate(iPeriodEnd);
     }
 
     /**
      *
      * @param iPeriodEnd
      */
+    @Deprecated
     public void setPeriodEnd(Date iPeriodEnd) {
-        this.iPeriodEnd = iPeriodEnd;
+        this.iPeriodEnd = SSDateUtil.toLocalDate(iPeriodEnd);
 
         // createInvoices();
+    }
+
+    /**
+     * @return the period end date as a LocalDate
+     */
+    public LocalDate getLocalPeriodEnd() {
+        return iPeriodEnd;
+    }
+
+    /**
+     * @param iPeriodEnd the period end date as a LocalDate
+     */
+    public void setLocalPeriodEnd(LocalDate iPeriodEnd) {
+        this.iPeriodEnd = iPeriodEnd;
     }
 
     // //////////////////////////////////////////////////
@@ -452,9 +502,9 @@ public class SSPeriodicInvoice implements Serializable {
             return;
         }
 
-        Date iDate = this.iDate;
-        Date iPeriodStart = this.iPeriodStart;
-        Date iPeriodEnd = this.iPeriodEnd;
+        Date iDate = SSDateUtil.toDate(this.iDate);
+        Date iPeriodStart = SSDateUtil.toDate(this.iPeriodStart);
+        Date iPeriodEnd = SSDateUtil.toDate(this.iPeriodEnd);
 
         DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 

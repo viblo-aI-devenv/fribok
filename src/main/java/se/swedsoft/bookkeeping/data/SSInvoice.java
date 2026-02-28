@@ -10,8 +10,10 @@ import se.swedsoft.bookkeeping.data.common.SSInvoiceType;
 import se.swedsoft.bookkeeping.data.common.SSTaxCode;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -29,7 +31,7 @@ public class SSInvoice extends SSSale {
     // Valutakurs
     protected BigDecimal iCurrencyRate;
     // Förfallodag
-    protected Date iPaymentDay;
+    protected LocalDate iPaymentDay;
     // Kontering
     protected SSVoucher iVoucher;
     // Ert order/avtalsnummer
@@ -64,7 +66,7 @@ public class SSInvoice extends SSSale {
         iStockInfluencing = true;
         iNumReminders = 0;
         if (iPaymentTerm != null) {
-            iPaymentDay = iPaymentTerm.addDaysToDate(new Date());
+            iPaymentDay = SSDateUtil.toLocalDate(iPaymentTerm.addDaysToDate(SSDateUtil.toDate(SSDateUtil.today())));
         }
     }
 
@@ -115,7 +117,7 @@ public class SSInvoice extends SSSale {
 
         iCurrencyRate = iOrder.getCurrencyRate();
         iVoucher = new SSVoucher();
-        iDate = new Date();
+        iDate = SSDateUtil.today();
         iRows = new LinkedList<>();
 
         SSNewCompany iCompany = SSDB.getInstance().getCurrentCompany();
@@ -210,15 +212,31 @@ public class SSInvoice extends SSSale {
      *
      * @return
      */
+    @Deprecated
     public Date getDueDate() {
-        return iPaymentDay;
+        return SSDateUtil.toDate(iPaymentDay);
     }
 
     /**
      *
      * @param iPaymentDay
      */
+    @Deprecated
     public void setDueDate(Date iPaymentDay) {
+        this.iPaymentDay = SSDateUtil.toLocalDate(iPaymentDay);
+    }
+
+    /**
+     * @return the due date as a LocalDate
+     */
+    public LocalDate getLocalDueDate() {
+        return iPaymentDay;
+    }
+
+    /**
+     * @param iPaymentDay the due date as a LocalDate
+     */
+    public void setLocalDueDate(LocalDate iPaymentDay) {
         this.iPaymentDay = iPaymentDay;
     }
 
@@ -226,13 +244,8 @@ public class SSInvoice extends SSSale {
      * Set the duedate depending on the invoice date and the payment term
      */
     public void setDueDate() {
-        Calendar iCalendar = Calendar.getInstance();
-
         if (iPaymentTerm != null) {
-            iCalendar.setTime(iDate);
-            iCalendar.add(Calendar.DAY_OF_MONTH, iPaymentTerm.decodeValue());
-
-            iPaymentDay = iCalendar.getTime();
+            iPaymentDay = iDate.plusDays(iPaymentTerm.decodeValue());
         } else {
             iPaymentDay = iDate;
         }
@@ -457,7 +470,7 @@ public class SSInvoice extends SSSale {
         SSAccountPlan iAccountPlan = SSDB.getInstance().getCurrentAccountPlan();
 
         iVoucher = new SSVoucher();
-        iVoucher.setDate(new Date());
+        iVoucher.setDate(SSDateUtil.toDate(SSDateUtil.today()));
         iVoucher.setNumber(0);
         iVoucher.setDescription(String.format(iDescription, iNumber));
 

@@ -5,6 +5,9 @@ import se.swedsoft.bookkeeping.data.base.SSSale;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 
 import java.math.BigDecimal;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
+
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -20,7 +23,7 @@ public class SSTender extends SSSale {
     static final long serialVersionUID = 1L;
 
     // Giltig tom
-    private Date iExpires;
+    private LocalDate iExpires;
 
     public Integer getOrderNr() {
         return iOrderNr;
@@ -91,15 +94,31 @@ public class SSTender extends SSSale {
      *
      * @return
      */
+    @Deprecated
     public Date getExpires() {
-        return iExpires;
+        return SSDateUtil.toDate(iExpires);
     }
 
     /**
      *
      * @param iExpires
      */
+    @Deprecated
     public void setExpires(Date iExpires) {
+        this.iExpires = SSDateUtil.toLocalDate(iExpires);
+    }
+
+    /**
+     * @return the expiry date as a LocalDate
+     */
+    public LocalDate getLocalExpires() {
+        return iExpires;
+    }
+
+    /**
+     * @param iExpires the expiry date as a LocalDate
+     */
+    public void setLocalExpires(LocalDate iExpires) {
         this.iExpires = iExpires;
     }
 
@@ -181,7 +200,7 @@ public class SSTender extends SSSale {
             return false;
         }
 
-        return new Date().after(iExpires);
+        return LocalDate.now().isAfter(iExpires);
     }
 
     public boolean equals(Object obj) {

@@ -9,9 +9,11 @@ import se.swedsoft.bookkeeping.data.common.SSPaymentTerm;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.table.SSTableSearchable;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -29,9 +31,9 @@ public class SSSupplierInvoice implements SSTableSearchable, Serializable {
     // Nummer
     protected Integer iNumber;
     // Datum
-    protected Date iDate;
+    protected LocalDate iDate;
     // Förfallodatum
-    protected Date iDueDate;
+    protected LocalDate iDueDate;
     // Betalningsvillkor
     protected SSPaymentTerm iPaymentTerm;
     // Leverantörsnummer
@@ -72,8 +74,8 @@ public class SSSupplierInvoice implements SSTableSearchable, Serializable {
      */
     public SSSupplierInvoice() {
         iRows = new LinkedList<>();
-        iDate = getLastDate();
-        iDueDate = getLastDate();
+        iDate = getLastLocalDate();
+        iDueDate = getLastLocalDate();
         iCurrencyRate = new BigDecimal(1);
         iVoucher = new SSVoucher();
         iCorrection = new SSVoucher();
@@ -105,7 +107,7 @@ public class SSSupplierInvoice implements SSTableSearchable, Serializable {
      * @param iPurchaseOrder
      */
     public SSSupplierInvoice(SSPurchaseOrder iPurchaseOrder) {
-        iDate = getLastDate();
+        iDate = getLastLocalDate();
         iSupplier = iPurchaseOrder.iSupplier;
         iNumber = iPurchaseOrder.iNumber;
         iSupplier = iPurchaseOrder.iSupplier;
@@ -187,14 +189,27 @@ public class SSSupplierInvoice implements SSTableSearchable, Serializable {
         iNumber = iMax + 1;
     }
 
+    /**
+     * @deprecated Use {@link #getLastLocalDate()} instead.
+     */
+    @Deprecated
     public Date getLastDate() {
+        return SSDateUtil.toDate(getLastLocalDate());
+    }
+
+    /**
+     * Returns the date of the most recent supplier invoice.
+     *
+     * @return the most recent date, or {@code null} if no invoices exist
+     */
+    public LocalDate getLastLocalDate() {
         List<SSSupplierInvoice> iSupplierInvoices = SSDB.getInstance().getSupplierInvoices();
-        Date iMax = null;
+        LocalDate iMax = null;
 
         if (!iSupplierInvoices.isEmpty()) {
             iMax = iSupplierInvoices.get(0).iDate;
             for (SSSupplierInvoice iInvoice : iSupplierInvoices) {
-                if (iInvoice.iDate.after(iMax)) {
+                if (iInvoice.iDate != null && (iMax == null || iInvoice.iDate.isAfter(iMax))) {
                     iMax = iInvoice.iDate;
                 }
             }
@@ -226,15 +241,31 @@ public class SSSupplierInvoice implements SSTableSearchable, Serializable {
      *
      * @return
      */
+    @Deprecated
     public Date getDate() {
-        return iDate;
+        return SSDateUtil.toDate(iDate);
     }
 
     /**
      *
      * @param iDate
      */
+    @Deprecated
     public void setDate(Date iDate) {
+        this.iDate = SSDateUtil.toLocalDate(iDate);
+    }
+
+    /**
+     * @return the date as a LocalDate
+     */
+    public LocalDate getLocalDate() {
+        return iDate;
+    }
+
+    /**
+     * @param iDate the date as a LocalDate
+     */
+    public void setLocalDate(LocalDate iDate) {
         this.iDate = iDate;
     }
 
@@ -244,29 +275,40 @@ public class SSSupplierInvoice implements SSTableSearchable, Serializable {
      *
      * @return
      */
+    @Deprecated
     public Date getDueDate() {
-        return iDueDate;
+        return SSDateUtil.toDate(iDueDate);
     }
 
     /**
      *
      * @param iDueDate
      */
+    @Deprecated
     public void setDueDate(Date iDueDate) {
+        this.iDueDate = SSDateUtil.toLocalDate(iDueDate);
+    }
+
+    /**
+     * @return the due date as a LocalDate
+     */
+    public LocalDate getLocalDueDate() {
+        return iDueDate;
+    }
+
+    /**
+     * @param iDueDate the due date as a LocalDate
+     */
+    public void setLocalDueDate(LocalDate iDueDate) {
         this.iDueDate = iDueDate;
     }
 
     public void setDueDate() {
-        Calendar iCalendar = Calendar.getInstance();
-
         if (iPaymentTerm != null) {
             if (iDate == null) {
-                iDate = new Date();
+                iDate = SSDateUtil.today();
             }
-            iCalendar.setTime(iDate);
-            iCalendar.add(Calendar.DAY_OF_MONTH, iPaymentTerm.decodeValue());
-
-            iDueDate = iCalendar.getTime();
+            iDueDate = iDate.plusDays(iPaymentTerm.decodeValue());
         } else {
             iDueDate = iDate;
         }
@@ -727,7 +769,7 @@ public class SSSupplierInvoice implements SSTableSearchable, Serializable {
         SSAccountPlan iAccountPlan = SSDB.getInstance().getCurrentAccountPlan();
 
         iVoucher = new SSVoucher();
-        iVoucher.setDate(new Date());
+        iVoucher.setDate(SSDateUtil.toDate(SSDateUtil.today()));
         iVoucher.setNumber(0);
         iVoucher.setDescription(String.format(iDescription, iNumber));
 

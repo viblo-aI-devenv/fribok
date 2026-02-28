@@ -5,9 +5,11 @@ import se.swedsoft.bookkeeping.data.*;
 import se.swedsoft.bookkeeping.data.common.*;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.table.SSTableSearchable;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -24,7 +26,7 @@ public abstract class SSSale implements SSTableSearchable, Serializable {
     // Nummer
     protected Integer iNumber;
     // Datum
-    protected Date iDate;
+    protected LocalDate iDate;
 
     // Kund nummer
     protected String iCustomerNr;
@@ -80,7 +82,7 @@ public abstract class SSSale implements SSTableSearchable, Serializable {
      * Default constructor
      */
     public SSSale() {
-        iDate = new Date();
+        iDate = SSDateUtil.today();
         iInvoiceAddress = new SSAddress();
         iDeliveryAddress = new SSAddress();
         iRows = new LinkedList<>();
@@ -189,18 +191,38 @@ public abstract class SSSale implements SSTableSearchable, Serializable {
     // //////////////////////////////////////////////////
 
     /**
-     *
-     * @return
+     * @return the date as a legacy {@link Date}
+     * @deprecated Use {@link #getLocalDate()} instead.
      */
+    @Deprecated
     public Date getDate() {
+        return SSDateUtil.toDate(iDate);
+    }
+
+    /**
+     * @param iDate the date as a legacy {@link Date}
+     * @deprecated Use {@link #setLocalDate(LocalDate)} instead.
+     */
+    @Deprecated
+    public void setDate(Date iDate) {
+        this.iDate = SSDateUtil.toLocalDate(iDate);
+    }
+
+    /**
+     * Returns the date as a {@link LocalDate}.
+     *
+     * @return the date
+     */
+    public LocalDate getLocalDate() {
         return iDate;
     }
 
     /**
+     * Sets the date as a {@link LocalDate}.
      *
-     * @param iDate
+     * @param iDate the date
      */
-    public void setDate(Date iDate) {
+    public void setLocalDate(LocalDate iDate) {
         this.iDate = iDate;
     }
 

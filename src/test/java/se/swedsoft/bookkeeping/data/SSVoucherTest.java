@@ -1,8 +1,10 @@
 package se.swedsoft.bookkeeping.data;
 
 import org.junit.jupiter.api.Test;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -56,7 +58,8 @@ class SSVoucherTest {
     @Test
     void setDateUpdatesDate() {
         SSVoucher v = newVoucher(1);
-        Date d = new Date(1_000_000L);
+        // Use a day-boundary Date since fields are now LocalDate internally
+        Date d = SSDateUtil.toDate(LocalDate.of(2024, 6, 15));
         v.setDate(d);
 
         assertThat(v.getDate()).isEqualTo(d);
@@ -202,7 +205,8 @@ class SSVoucherTest {
     void copyFromCopiesAllScalarFields() {
         SSVoucher original = newVoucher(7);
         original.setDescription("Original");
-        Date date = new Date(5_000L);
+        // Use a day-boundary Date since fields are now LocalDate internally
+        Date date = SSDateUtil.toDate(LocalDate.of(2024, 3, 10));
         original.setDate(date);
 
         SSVoucher copy = new SSVoucher(original);

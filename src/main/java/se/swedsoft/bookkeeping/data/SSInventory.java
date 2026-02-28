@@ -2,8 +2,10 @@ package se.swedsoft.bookkeeping.data;
 
 
 import se.swedsoft.bookkeeping.data.system.SSDB;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,7 +22,7 @@ public class SSInventory implements Serializable {
 
     public Integer iNumber;
 
-    public Date iDate;
+    private LocalDate iDate;
 
     public String iText;
 
@@ -31,7 +33,7 @@ public class SSInventory implements Serializable {
      */
     public SSInventory() {
         iNumber = 0;
-        iDate = new Date();
+        iDate = SSDateUtil.today();
         iText = "";
         iRows = new LinkedList<>();
 
@@ -103,15 +105,31 @@ public class SSInventory implements Serializable {
      *
      * @return
      */
+    @Deprecated
     public Date getDate() {
-        return iDate;
+        return SSDateUtil.toDate(iDate);
     }
 
     /**
      *
      * @param iDate
      */
+    @Deprecated
     public void setDate(Date iDate) {
+        this.iDate = SSDateUtil.toLocalDate(iDate);
+    }
+
+    /**
+     * @return the date as a LocalDate
+     */
+    public LocalDate getLocalDate() {
+        return iDate;
+    }
+
+    /**
+     * @param iDate the date as a LocalDate
+     */
+    public void setLocalDate(LocalDate iDate) {
         this.iDate = iDate;
     }
 

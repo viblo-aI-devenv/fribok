@@ -7,9 +7,11 @@ import se.swedsoft.bookkeeping.data.common.SSDefaultAccount;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.table.SSTableSearchable;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -26,7 +28,7 @@ public class SSOutpayment implements SSTableSearchable, Serializable {
     // Inbetalningsnummer
     private Integer iNumber;
     // Inbetalningsdatum
-    private Date iDate;
+    private LocalDate iDate;
     // Text
     private String iText;
     // Rader
@@ -145,15 +147,31 @@ public class SSOutpayment implements SSTableSearchable, Serializable {
      *
      * @return
      */
+    @Deprecated
     public Date getDate() {
-        return iDate;
+        return SSDateUtil.toDate(iDate);
     }
 
     /**
      *
      * @param iDate
      */
+    @Deprecated
     public void setDate(Date iDate) {
+        this.iDate = SSDateUtil.toLocalDate(iDate);
+    }
+
+    /**
+     * @return the date as a LocalDate
+     */
+    public LocalDate getLocalDate() {
+        return iDate;
+    }
+
+    /**
+     * @param iDate the date as a LocalDate
+     */
+    public void setLocalDate(LocalDate iDate) {
         this.iDate = iDate;
     }
 
@@ -404,7 +422,7 @@ public class SSOutpayment implements SSTableSearchable, Serializable {
         iSum = iSum.add(iDifferenceSum);
 
         iVoucher = new SSVoucher();
-        iVoucher.setDate(new Date());
+        iVoucher.setDate(SSDateUtil.toDate(SSDateUtil.today()));
         iVoucher.setNumber(0);
         iVoucher.setDescription(String.format(iDescription, iNumber));
 
