@@ -8,8 +8,10 @@ import jxl.write.WritableSheet;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
 
-import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 import java.util.LinkedList;
 import java.util.List;
 import org.slf4j.Logger;
@@ -22,6 +24,8 @@ import org.slf4j.LoggerFactory;
  */
 public class SSWritableExcelRow {    private static final Logger LOG = LoggerFactory.getLogger(SSWritableExcelRow.class);
 
+
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     private int iRow;
 
@@ -135,13 +139,11 @@ public class SSWritableExcelRow {    private static final Logger LOG = LoggerFac
      * @throws WriteException
      */
     public void setDate(int iColumn, Date pValue) throws WriteException {
-        SimpleDateFormat iFormat = new SimpleDateFormat("yyyy-MM-dd");
-
         try {
             if (pValue == null) {
                 iSheet.addCell(new Label(iColumn, iRow, ""));
             } else {
-                iSheet.addCell(new Label(iColumn, iRow, iFormat.format(pValue)));
+                iSheet.addCell(new Label(iColumn, iRow, SSDateUtil.toLocalDate(pValue).format(DATE_FORMAT)));
             }
 
         } catch (RowsExceededException e) {
@@ -157,14 +159,12 @@ public class SSWritableExcelRow {    private static final Logger LOG = LoggerFac
      * @throws WriteException
      */
     public void setDate(int iColumn, Date pValue, CellFormat iCellFormat) throws WriteException {
-        SimpleDateFormat iFormat = new SimpleDateFormat("yyyy-MM-dd");
-
         try {
             if (pValue == null) {
                 iSheet.addCell(new Label(iColumn, iRow, "", iCellFormat));
             } else {
                 iSheet.addCell(
-                        new Label(iColumn, iRow, iFormat.format(pValue), iCellFormat));
+                        new Label(iColumn, iRow, SSDateUtil.toLocalDate(pValue).format(DATE_FORMAT), iCellFormat));
             }
         } catch (RowsExceededException e) {
             LOG.error("Unexpected error", e);

@@ -14,8 +14,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,10 +59,10 @@ public class SSOrderExporter {    private static final Logger LOG = LoggerFactor
 
             iSubElement = iXmlDoc.createElementNS(null, "OrderDate");
             iElement.appendChild(iSubElement);
-            SimpleDateFormat iFormat = new SimpleDateFormat("yyyy-MM-dd");
+            DateTimeFormatter iFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
             iNode = iXmlDoc.createTextNode(
-                    iOrder.getDate() == null ? "" : iFormat.format(iOrder.getDate()));
+                    iOrder.getDate() == null ? "" : SSDateUtil.toLocalDate(iOrder.getDate()).format(iFormat));
             iSubElement.appendChild(iNode);
 
             iSubElement = iXmlDoc.createElementNS(null, "CustomerNumber");

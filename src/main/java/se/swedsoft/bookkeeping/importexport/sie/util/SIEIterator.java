@@ -2,12 +2,13 @@ package se.swedsoft.bookkeeping.importexport.sie.util;
 
 
 import se.swedsoft.bookkeeping.data.SSMonth;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,7 +23,7 @@ import org.slf4j.LoggerFactory;
 public class SIEIterator implements Iterator<String> {    private static final Logger LOG = LoggerFactory.getLogger(SIEIterator.class);
 
 
-    private static DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+    private static final DateTimeFormatter ISO_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     private static Pattern IntegerPattern = Pattern.compile("([-+]?[0-9]*)+");
     private static Pattern FloatPattern = Pattern.compile("([-+]?[0-9]*.?[0-9]*)+");
@@ -296,16 +297,15 @@ public class SIEIterator implements Iterator<String> {    private static final L
     public Date nextDate() {
         String iValue = next();
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-
         if (iValue != null && iValue.length() == 8) {
 
             iValue = iValue.substring(0, 4) + '-' + iValue.substring(4, 6) + '-'
                     + iValue.substring(6, 8);
 
             try {
-                return formatter.parse(iValue);
-            } catch (ParseException ex) {
+                LocalDate localDate = LocalDate.parse(iValue, ISO_DATE_FORMAT);
+                return SSDateUtil.toDate(localDate);
+            } catch (DateTimeParseException ex) {
                 LOG.error("Unexpected error", ex);
             }
         }
@@ -324,12 +324,13 @@ public class SIEIterator implements Iterator<String> {    private static final L
             iValue = iValue.substring(0, 4) + '-' + iValue.substring(4, 6) + "-01";
 
             try {
-                return new SSMonth(iFormat.parse(iValue));
-            } catch (ParseException ex) {
+                LocalDate localDate = LocalDate.parse(iValue, ISO_DATE_FORMAT);
+                return new SSMonth(localDate);
+            } catch (DateTimeParseException ex) {
                 LOG.error("Unexpected error", ex);
             }
         }
-        return new SSMonth(new Date());
+        return new SSMonth(LocalDate.now());
     }
 
     /**

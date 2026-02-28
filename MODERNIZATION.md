@@ -16,13 +16,13 @@ keeping the application functional throughout.
 | Java target | 21 (code written in Java 5/6 style) |
 | Logging | SLF4J + Logback (done; 4 stray `System.out.printf` remain in 3 files) |
 | Persistence | Java serialization into HSQLDB `OBJECT` columns |
-| Date/time | `java.util.Date` / `Calendar` / `SimpleDateFormat` (migration started) |
+| Date/time | `java.util.Date` / `Calendar` (migration started; `SimpleDateFormat` fully eliminated) |
 
 ### Key Issues by Count
 
 | Category | Occurrences | Notes |
 |----------|:-----------:|-------|
-| Old date/time API (`import java.util.Date`) | 143 files | 89 `new Date()`, 346 `Calendar.`, 33 `SimpleDateFormat` |
+| Old date/time API (`import java.util.Date`) | 143 files | 89 `new Date()`, 346 `Calendar.`, 0 `SimpleDateFormat` |
 | Java serialization (`implements Serializable`) | 46 classes | 181 total serialization-related references |
 | `return null` (no `Optional`) | ~418 | Increased slightly from new code |
 | Mutable public fields | ~51 | Concentrated in BgMax data classes |
@@ -171,7 +171,12 @@ keeping the application functional throughout.
 17. **Migrate import/export** -- Replace `SimpleDateFormat` with
     `DateTimeFormatter` (thread-safe) in SIE, BgMax, and Excel code. (33
     `SimpleDateFormat` usages remain; note `SIEWriter` has a static
-    `SimpleDateFormat` field — a potential concurrency bug.)
+    `SimpleDateFormat` field — a potential concurrency bug.) ✓ (All 13 files
+    migrated: SIEWriter, SIEIterator, SSBgMaxImporter, LBinLine,
+    SSWritableExcelRow, SSExcelCell, SSOrderImporter, SSOrderExporter,
+    SSDBConfig, SSReportCache, SSInvoicePrinter, SSCreditinvoicePrinter,
+    SSMainMenu. Zero `SimpleDateFormat` imports remain in codebase.
+    All 430 tests pass.)
 
 18. **Migrate GUI date components** -- Update date chooser panels and table
     renderers. (346 `Calendar.` calls remain, mostly in GUI.)

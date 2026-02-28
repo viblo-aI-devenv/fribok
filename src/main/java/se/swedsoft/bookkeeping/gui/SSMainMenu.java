@@ -77,8 +77,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -1026,7 +1028,7 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
                 final Date iDate = SSDateMath.ceil(iDialog.getDate());
                 SSConfirmDialog iConfirmDialog;
                 if (!SSDB.getInstance().getLocking() /*&& !SSVersion.app_title.contains("JFS Fakturering")*/) {
-                    iConfirmDialog = new SSConfirmDialog("helpmenu.cleartransactions.warning",new SimpleDateFormat("yyyy-MM-dd").format(iDate));
+                    iConfirmDialog = new SSConfirmDialog("helpmenu.cleartransactions.warning",SSDateUtil.toLocalDate(iDate).format(DateTimeFormatter.ISO_LOCAL_DATE));
                 }
                 // // Fakturering
                 // else if(!SSDB.getInstance().getLocking()){
@@ -1036,7 +1038,7 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
                 //     iConfirmDialog = new SSConfirmDialog("helpmenu.cleartransactions.wfs",new SimpleDateFormat("yyyy-MM-dd").format(iDate));
                 // }
                 else{
-                    iConfirmDialog = new SSConfirmDialog("helpmenu.cleartransactions.was",new SimpleDateFormat("yyyy-MM-dd").format(iDate));
+                    iConfirmDialog = new SSConfirmDialog("helpmenu.cleartransactions.was",SSDateUtil.toLocalDate(iDate).format(DateTimeFormatter.ISO_LOCAL_DATE));
                 }
                 if(iConfirmDialog.openDialog(iMainFrame)!=JOptionPane.OK_OPTION) return;
 

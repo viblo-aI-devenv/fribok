@@ -2,12 +2,13 @@ package se.swedsoft.bookkeeping.importexport.sie.util;
 
 
 import se.swedsoft.bookkeeping.data.SSMonth;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.text.DateFormat;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,7 +20,8 @@ import java.util.List;
  */
 public class SIEWriter {
 
-    private static DateFormat iFormat = new SimpleDateFormat("yyyyMMdd");
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyyMMdd");
+    private static final DateTimeFormatter MONTH_FORMAT = DateTimeFormatter.ofPattern("yyyyMM");
 
     private StringBuilder iStringBuilder;
 
@@ -109,12 +111,10 @@ public class SIEWriter {
      * @param pValue
      */
     public void append(SSMonth pValue) {
-        DateFormat iFormat = new SimpleDateFormat("yyyyMM");
-
         String iValue;
 
         if (pValue != null) {
-            iValue = iFormat.format(pValue.getDate());
+            iValue = pValue.getLocalFrom().format(MONTH_FORMAT);
         } else {
             iValue = "000000";
         }
@@ -139,7 +139,8 @@ public class SIEWriter {
         String iValue;
 
         if (pValue != null) {
-            iValue = iFormat.format(pValue).replace("-", "");
+            LocalDate localDate = SSDateUtil.toLocalDate(pValue);
+            iValue = localDate.format(DATE_FORMAT);
         } else {
             iValue = "00000000";
         }

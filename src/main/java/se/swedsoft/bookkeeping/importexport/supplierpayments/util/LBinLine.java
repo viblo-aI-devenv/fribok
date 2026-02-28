@@ -2,10 +2,12 @@ package se.swedsoft.bookkeeping.importexport.supplierpayments.util;
 
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
+
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 
 /**
@@ -143,9 +145,9 @@ public class LBinLine {
      * @return the new position
      */
     public int append(Date iDate, int iLength, String iFormat) {
-        DateFormat iDateFormat = new SimpleDateFormat(iFormat);
+        DateTimeFormatter iDateFormat = DateTimeFormatter.ofPattern(iFormat);
 
-        return append(iDateFormat.format(iDate), iLength, ' ');
+        return append(SSDateUtil.toLocalDate(iDate).format(iDateFormat), iLength, ' ');
     }
 
     /**
@@ -209,13 +211,13 @@ public class LBinLine {
      * @return
      */
     public Date readDate(int iStart, int iEnd, String iFormat) {
-        DateFormat iDateFormat = new SimpleDateFormat(iFormat);
+        DateTimeFormatter iDateFormat = DateTimeFormatter.ofPattern(iFormat);
 
         String iValue = readString(iStart, iEnd);
 
         try {
-            return iDateFormat.parse(iValue);
-        } catch (ParseException e) {
+            return SSDateUtil.toDate(LocalDate.parse(iValue, iDateFormat));
+        } catch (DateTimeParseException e) {
             return new Date();
         }
     }

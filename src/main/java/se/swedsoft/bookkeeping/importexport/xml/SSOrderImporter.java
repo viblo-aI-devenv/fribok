@@ -24,9 +24,13 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
+
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -110,12 +114,12 @@ public class SSOrderImporter {    private static final Logger LOG = LoggerFactor
                         iValue = iTextOrderAttList.item(0).getNodeValue() == null
                                 ? ""
                                 : iTextOrderAttList.item(0).getNodeValue().trim();
-                        SimpleDateFormat iFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        DateTimeFormatter iFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
                         try {
                             iOrder.setDate(
-                                    iValue == null ? new Date() : iFormat.parse(iValue));
-                        } catch (ParseException e) {
+                                    iValue == null ? new Date() : SSDateUtil.toDate(LocalDate.parse(iValue, iFormat)));
+                        } catch (DateTimeParseException e) {
                             iOrder.setDate(new Date());
                         }
                     }
@@ -909,11 +913,11 @@ public class SSOrderImporter {    private static final Logger LOG = LoggerFactor
                     }
 
                     if (iFields[1] != null) {
-                        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
                         try {
-                            iOrder.setDate(df.parse(iFields[1]));
-                        } catch (ParseException e) {
+                            iOrder.setDate(SSDateUtil.toDate(LocalDateTime.parse(iFields[1], df)));
+                        } catch (DateTimeParseException e) {
                             iBadOrders.add(iOrderNumber + " - Orderdatum är i fel format");
                             continue order;
                         }

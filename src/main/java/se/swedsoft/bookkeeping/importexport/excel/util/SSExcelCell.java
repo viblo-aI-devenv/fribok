@@ -6,9 +6,12 @@ import jxl.DateCell;
 import jxl.NumberCell;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
+
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 
 /**
@@ -83,11 +86,11 @@ public class SSExcelCell {
 
             return iDateCell.getDate();
         }
-        SimpleDateFormat iFormat = new SimpleDateFormat("yyyy-MM-dd");
+        DateTimeFormatter iFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         try {
-            return iFormat.parse(iCell.getContents());
-        } catch (ParseException e) {
+            return SSDateUtil.toDate(LocalDate.parse(iCell.getContents(), iFormat));
+        } catch (DateTimeParseException e) {
             return new Date();
         }
     }
