@@ -14,11 +14,12 @@ import se.swedsoft.bookkeeping.print.SSPrinter;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 
 /**
@@ -161,7 +162,7 @@ public class SSCreditinvoicePrinter extends SSPrinter {
         addParameter("creditinvoice.totalsum", iTotalSum);
 
         // QR-code 
-        DateFormat iFormat = new SimpleDateFormat("yyyyMMdd");
+        DateTimeFormatter iFormat = DateTimeFormatter.ofPattern("yyyyMMdd");
         final StringBuilder uqrData = new StringBuilder();
 
         uqrData.append("{\"uqr\": 2, \"tp\": 2, ");
@@ -176,9 +177,9 @@ public class SSCreditinvoicePrinter extends SSPrinter {
         uqrData.append("\", \"cr\": \"");
         uqrData.append(iCreditInvoice.getCreditingNr());
         uqrData.append("\", \"idt\": \"");
-        uqrData.append(iFormat.format(iCreditInvoice.getDate()));
+        uqrData.append(SSDateUtil.toLocalDate(iCreditInvoice.getDate()).format(iFormat));
         uqrData.append("\", \"ddt\": \"");
-        uqrData.append(iFormat.format(iCreditInvoice.getDueDate()));
+        uqrData.append(SSDateUtil.toLocalDate(iCreditInvoice.getDueDate()).format(iFormat));
         uqrData.append("\", \"due\": ");
         uqrData.append(iTotalSum.negate());
         uqrData.append(", \"vat\": ");

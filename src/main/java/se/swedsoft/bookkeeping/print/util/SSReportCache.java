@@ -9,12 +9,15 @@ import org.fribok.bookkeeping.app.Version;
 import se.swedsoft.bookkeeping.util.SSException;
 
 import java.io.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PropertyResourceBundle;
+
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +32,7 @@ public class SSReportCache {    private static final Logger LOG = LoggerFactory.
     private static final File REPORT_DIR = new File(Path.get(Path.APP_DATA), "report");
     private static final File COMPILED_DIR = new File(REPORT_DIR, "compiled");
     private static final String REPORT_RESOURCE = "/reports/report/";
-    private static final String DATE_TIME_FORMAT_NO_MS = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
     // The report cache with compiled report definitions.
     private Map<String, JasperReport> iReportCache;
@@ -94,9 +97,8 @@ public class SSReportCache {    private static final Logger LOG = LoggerFactory.
         try {
             // If the report exists on disk, load it...
             if (iCompiledFile.exists()) {
-		SimpleDateFormat sdf = new SimpleDateFormat(DATE_TIME_FORMAT_NO_MS);
 		try {
-		    Date iReportDate = sdf.parse(Version.APP_BUILD);
+		    Date iReportDate = SSDateUtil.toDate(LocalDateTime.parse(Version.APP_BUILD, DATE_TIME_FORMATTER));
 		    Date iCompiledDate = new Date(iCompiledFile.lastModified());
 		    // if the report file hasn't been changes since the last compile,
 		    // load the compiled file, else fall through to the compile code
@@ -105,7 +107,7 @@ public class SSReportCache {    private static final Logger LOG = LoggerFactory.
 					  iCompiledFile);
 			return loadCompiledReport(iCompiledFile);
 		    }
-		} catch (ParseException ex)  {
+		} catch (DateTimeParseException ex)  {
 		    // ta bort den kompilerade versionen?
 		    LOG.info(ex.getMessage());
 		}

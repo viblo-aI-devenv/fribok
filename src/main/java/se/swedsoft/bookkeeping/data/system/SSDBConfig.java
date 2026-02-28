@@ -16,9 +16,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributeListImpl;
 import org.slf4j.Logger;
@@ -294,9 +293,9 @@ public class SSDBConfig {    private static final Logger LOG = LoggerFactory.get
             if (iParser.getDocument().getDocumentElement().hasAttribute("clientkey")) {
                 iKey = iParser.getDocument().getDocumentElement().getAttribute("clientkey");
             } else {
-                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH.mm z");
+                DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH.mm z");
 
-                setClientKey(dateFormat.format(new Date()));
+                setClientKey(ZonedDateTime.now().format(dateFormat));
             }
 
             iClientKey = iKey;

@@ -19,11 +19,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.LinkedList;
 import java.util.List;
+
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,7 +81,7 @@ public class SSBgMaxImporter {    private static final Logger LOG = LoggerFactor
 
         iDialog.setLocationRelativeTo(iMainFrame);
 
-        DateFormat iDateFormat = new SimpleDateFormat("yyyyMMdd");
+        DateTimeFormatter iDateFormat = DateTimeFormatter.ofPattern("yyyyMMdd");
 
         List<SSInpayment> iInpayments = new LinkedList<>();
 
@@ -88,8 +90,9 @@ public class SSBgMaxImporter {    private static final Logger LOG = LoggerFactor
 
             iInpayment.setText("Bankgiro inbetalning " + iAvsnitt.iLopnummer);
             try {
-                iInpayment.setDate(iDateFormat.parse(iAvsnitt.iBetalningsdag));
-            } catch (ParseException e) {
+                LocalDate parsed = LocalDate.parse(iAvsnitt.iBetalningsdag, iDateFormat);
+                iInpayment.setDate(SSDateUtil.toDate(parsed));
+            } catch (DateTimeParseException e) {
                 LOG.error("Unexpected error", e);
             }
 
