@@ -7,9 +7,13 @@ import se.swedsoft.bookkeeping.data.common.SSDefaultAccount;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.table.SSTableSearchable;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -26,7 +30,7 @@ public class SSOutpayment implements SSTableSearchable, Serializable {
     // Inbetalningsnummer
     private Integer iNumber;
     // Inbetalningsdatum
-    private Date iDate;
+    private LocalDate iDate;
     // Text
     private String iText;
     // Rader
@@ -145,15 +149,31 @@ public class SSOutpayment implements SSTableSearchable, Serializable {
      *
      * @return
      */
+    @Deprecated
     public Date getDate() {
-        return iDate;
+        return SSDateUtil.toDate(iDate);
     }
 
     /**
      *
      * @param iDate
      */
+    @Deprecated
     public void setDate(Date iDate) {
+        this.iDate = SSDateUtil.toLocalDate(iDate);
+    }
+
+    /**
+     * @return the date as a LocalDate
+     */
+    public LocalDate getLocalDate() {
+        return iDate;
+    }
+
+    /**
+     * @param iDate the date as a LocalDate
+     */
+    public void setLocalDate(LocalDate iDate) {
         this.iDate = iDate;
     }
 
@@ -404,7 +424,7 @@ public class SSOutpayment implements SSTableSearchable, Serializable {
         iSum = iSum.add(iDifferenceSum);
 
         iVoucher = new SSVoucher();
-        iVoucher.setDate(new Date());
+        iVoucher.setDate(SSDateUtil.toDate(SSDateUtil.today()));
         iVoucher.setNumber(0);
         iVoucher.setDescription(String.format(iDescription, iNumber));
 
@@ -443,6 +463,25 @@ public class SSOutpayment implements SSTableSearchable, Serializable {
         iVoucher = SSVoucherMath.compress(iVoucher);
 
         return iVoucher;
+    }
+
+    /**
+     * Custom deserialization to handle backward compatibility.
+     * Pre-migration serialized streams stored {@code iDate} as {@code java.util.Date}.
+     * This method reads it as a raw object and converts via
+     * {@link SSDateUtil#readLocalDate(Object)}.
+     */
+    @SuppressWarnings("unchecked")
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        ObjectInputStream.GetField fields = in.readFields();
+        iNumber = (Integer) fields.get("iNumber", null);
+        iDate = SSDateUtil.readLocalDate(fields.get("iDate", null));
+        iText = (String) fields.get("iText", null);
+        iRows = (List<SSOutpaymentRow>) fields.get("iRows", null);
+        iVoucher = (SSVoucher) fields.get("iVoucher", null);
+        iDifference = (SSVoucher) fields.get("iDifference", null);
+        iEntered = fields.get("iEntered", false);
+        iDefaultAccounts = (Map<SSDefaultAccount, Integer>) fields.get("iDefaultAccounts", null);
     }
 
 }

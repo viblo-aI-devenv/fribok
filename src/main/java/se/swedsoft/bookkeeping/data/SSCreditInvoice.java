@@ -9,6 +9,7 @@ import se.swedsoft.bookkeeping.data.common.SSInvoiceType;
 import se.swedsoft.bookkeeping.data.common.SSTaxCode;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -50,7 +51,7 @@ public class SSCreditInvoice extends SSInvoice {
 
         this.iCrediting = iCrediting;
         iCreditingNr = iCrediting.getNumber();
-        iDate = new Date();
+        iDate = SSDateUtil.today();
         iEntered = false;
         iPrinted = false;
 
@@ -254,7 +255,7 @@ public class SSCreditInvoice extends SSInvoice {
         SSAccountPlan iAccountPlan = SSDB.getInstance().getCurrentAccountPlan();
 
         iVoucher = new SSVoucher();
-        iVoucher.setDate(new Date());
+        iVoucher.setDate(SSDateUtil.toDate(SSDateUtil.today()));
         iVoucher.setNumber(0);
         iVoucher.setDescription(String.format(iDescription, iNumber));
 

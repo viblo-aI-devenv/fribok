@@ -9,12 +9,15 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.table.SSTableSearchable;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -27,9 +30,9 @@ public class SSNewAccountingYear implements Serializable, SSTableSearchable {
 
     private Integer iId;
 
-    private Date iFrom;
+    private LocalDate iFrom;
 
-    private Date iTo;
+    private LocalDate iTo;
 
     private SSAccountPlan iPlan;
 
@@ -42,8 +45,8 @@ public class SSNewAccountingYear implements Serializable, SSTableSearchable {
      */
     public SSNewAccountingYear() {
         iId = 0;
-        iFrom = new Date();
-        iTo = new Date();
+        iFrom = SSDateUtil.today();
+        iTo = SSDateUtil.today();
         iInBalance = new HashMap<>();
         iBudget = new SSBudget();
     }
@@ -55,8 +58,8 @@ public class SSNewAccountingYear implements Serializable, SSTableSearchable {
      */
     public SSNewAccountingYear(Date pFrom, Date pTo) {
         this();
-        iFrom = pFrom;
-        iTo = pTo;
+        iFrom = SSDateUtil.toLocalDate(pFrom);
+        iTo = SSDateUtil.toLocalDate(pTo);
     }
 
     /**
@@ -69,8 +72,8 @@ public class SSNewAccountingYear implements Serializable, SSTableSearchable {
     }
 
     public SSNewAccountingYear(SSAccountingYear iOldYear) {
-        iFrom = iOldYear.getFrom();
-        iTo = iOldYear.getTo();
+        iFrom = SSDateUtil.toLocalDate(iOldYear.getFrom());
+        iTo = SSDateUtil.toLocalDate(iOldYear.getTo());
         iPlan = iOldYear.getAccountPlan();
         iInBalance = iOldYear.getInBalance();
         iBudget = iOldYear.getBudget();
@@ -108,15 +111,31 @@ public class SSNewAccountingYear implements Serializable, SSTableSearchable {
      *
      * @return the from date
      */
+    @Deprecated
     public Date getFrom() {
-        return iFrom;
+        return SSDateUtil.toDate(iFrom);
     }
 
     /**
      *
      * @param pFrom
      */
+    @Deprecated
     public void setFrom(Date pFrom) {
+        iFrom = SSDateUtil.toLocalDate(pFrom);
+    }
+
+    /**
+     * @return the from date as a LocalDate
+     */
+    public LocalDate getLocalFrom() {
+        return iFrom;
+    }
+
+    /**
+     * @param pFrom the from date as a LocalDate
+     */
+    public void setLocalFrom(LocalDate pFrom) {
         iFrom = pFrom;
     }
 
@@ -124,15 +143,31 @@ public class SSNewAccountingYear implements Serializable, SSTableSearchable {
      *
      * @return the todate
      */
+    @Deprecated
     public Date getTo() {
-        return iTo;
+        return SSDateUtil.toDate(iTo);
     }
 
     /**
      *
      * @param pTo
      */
+    @Deprecated
     public void setTo(Date pTo) {
+        iTo = SSDateUtil.toLocalDate(pTo);
+    }
+
+    /**
+     * @return the to date as a LocalDate
+     */
+    public LocalDate getLocalTo() {
+        return iTo;
+    }
+
+    /**
+     * @param pTo the to date as a LocalDate
+     */
+    public void setLocalTo(LocalDate pTo) {
         iTo = pTo;
     }
 
@@ -232,7 +267,7 @@ public class SSNewAccountingYear implements Serializable, SSTableSearchable {
     public String toRenderString() {
         DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
-        return iFormat.format(iFrom) + " - " + iFormat.format(iTo);
+        return iFormat.format(SSDateUtil.toDate(iFrom)) + " - " + iFormat.format(SSDateUtil.toDate(iTo));
     }
 
     public String toString() {
@@ -240,11 +275,11 @@ public class SSNewAccountingYear implements Serializable, SSTableSearchable {
 
         StringBuilder sb = new StringBuilder();
 
-        sb.append(iFormat.format(iFrom));
+        sb.append(iFormat.format(SSDateUtil.toDate(iFrom)));
         sb.append(' ');
         sb.append(SSBundle.getBundle().getString("date.separator"));
         sb.append(' ');
-        sb.append(iFormat.format(iTo));
+        sb.append(iFormat.format(SSDateUtil.toDate(iTo)));
 
         return sb.toString();
     }
@@ -280,12 +315,30 @@ public class SSNewAccountingYear implements Serializable, SSTableSearchable {
     }
 
     /**
+     * Custom deserialization that handles both old (Date) and new (LocalDate) field formats.
+     *
+     * <p>Pre-migration serialized streams stored {@code iFrom} and {@code iTo} as
+     * {@code java.util.Date}.  This method reads them as raw objects and converts
+     * via {@link SSDateUtil#readLocalDate(Object)}.
+     */
+    @SuppressWarnings("unchecked")
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        ObjectInputStream.GetField fields = in.readFields();
+        iId = (Integer) fields.get("iId", null);
+        iFrom = SSDateUtil.readLocalDate(fields.get("iFrom", null));
+        iTo = SSDateUtil.readLocalDate(fields.get("iTo", null));
+        iPlan = (SSAccountPlan) fields.get("iPlan", null);
+        iInBalance = (Map<SSAccount, BigDecimal>) fields.get("iInBalance", null);
+        iBudget = (SSBudget) fields.get("iBudget", null);
+    }
+
+    /**
      *
      * @param iObjectInputStream
      * @throws IOException
      * @throws ClassNotFoundException
 
-     private void readObject(ObjectInputStream iObjectInputStream) throws IOException, ClassNotFoundException{
+     private void readObject_old(ObjectInputStream iObjectInputStream) throws IOException, ClassNotFoundException{
      iObjectInputStream.defaultReadObject();
 
      SSNewCompany        iCompany        = SSDB.getInstance().getCurrentCompany();

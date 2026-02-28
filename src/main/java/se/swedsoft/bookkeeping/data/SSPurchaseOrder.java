@@ -5,8 +5,13 @@ import se.swedsoft.bookkeeping.data.common.*;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.table.SSTableSearchable;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
+
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -26,13 +31,13 @@ public class SSPurchaseOrder implements SSTableSearchable, Serializable {
     // Faktura nummer
     private Integer iInvoiceNr;
     // Datum
-    protected Date iDate;
+    protected LocalDate iDate;
     // Leverantörsnummer
     protected String iSupplierNr;
     // Leverantörsnamn
     protected String iSupplierName;
     // Väntat leveransdatum
-    protected Date iEstimatedDelivery;
+    protected LocalDate iEstimatedDelivery;
     // Betalningsvilkor
     protected SSPaymentTerm iPaymentTerm;
     // Leveransvilkor
@@ -79,7 +84,7 @@ public class SSPurchaseOrder implements SSTableSearchable, Serializable {
         iDeliveryAddress = new SSAddress();
         iSupplierAddress = new SSAddress();
         iDefaultAccounts = new HashMap<>();
-        iEstimatedDelivery = new Date();
+        iEstimatedDelivery = SSDateUtil.today();
         iStockInfluencing = true;
 
         SSNewCompany iCompany = SSDB.getInstance().getCurrentCompany();
@@ -136,8 +141,8 @@ public class SSPurchaseOrder implements SSTableSearchable, Serializable {
         iRows = new LinkedList<>();
         iDefaultAccounts = new HashMap<>();
         iStockInfluencing = true;
-        iEstimatedDelivery = Calendar.getInstance().getTime();
-        iDate = Calendar.getInstance().getTime();
+        iEstimatedDelivery = SSDateUtil.today();
+        iDate = SSDateUtil.today();
         SSNewCompany iCompany = SSDB.getInstance().getCurrentCompany();
 
         if (iCompany != null) {
@@ -202,15 +207,31 @@ public class SSPurchaseOrder implements SSTableSearchable, Serializable {
      *
      * @return
      */
+    @Deprecated
     public Date getDate() {
-        return iDate;
+        return SSDateUtil.toDate(iDate);
     }
 
     /**
      *
      * @param iDate
      */
+    @Deprecated
     public void setDate(Date iDate) {
+        this.iDate = SSDateUtil.toLocalDate(iDate);
+    }
+
+    /**
+     * @return the date as a LocalDate
+     */
+    public LocalDate getLocalDate() {
+        return iDate;
+    }
+
+    /**
+     * @param iDate the date as a LocalDate
+     */
+    public void setLocalDate(LocalDate iDate) {
         this.iDate = iDate;
     }
 
@@ -250,15 +271,31 @@ public class SSPurchaseOrder implements SSTableSearchable, Serializable {
      *
      * @return
      */
+    @Deprecated
     public Date getEstimatedDelivery() {
-        return iEstimatedDelivery;
+        return SSDateUtil.toDate(iEstimatedDelivery);
     }
 
     /**
      *
      * @param iEstimatedDelivery
      */
+    @Deprecated
     public void setEstimatedDelivery(Date iEstimatedDelivery) {
+        this.iEstimatedDelivery = SSDateUtil.toLocalDate(iEstimatedDelivery);
+    }
+
+    /**
+     * @return the estimated delivery date as a LocalDate
+     */
+    public LocalDate getLocalEstimatedDelivery() {
+        return iEstimatedDelivery;
+    }
+
+    /**
+     * @param iEstimatedDelivery the estimated delivery date as a LocalDate
+     */
+    public void setLocalEstimatedDelivery(LocalDate iEstimatedDelivery) {
         this.iEstimatedDelivery = iEstimatedDelivery;
     }
 
@@ -690,6 +727,37 @@ public class SSPurchaseOrder implements SSTableSearchable, Serializable {
      */
     public boolean hasSupplier(SSSupplier iSupplier) {
         return iSupplierNr != null && iSupplierNr.equals(iSupplier.getNumber());
+    }
+
+    /**
+     * Custom deserialization to handle backward compatibility.
+     * Pre-migration serialized streams stored {@code iDate} and {@code iEstimatedDelivery}
+     * as {@code java.util.Date}.  This method reads them as raw objects and converts
+     * via {@link SSDateUtil#readLocalDate(Object)}.
+     */
+    @SuppressWarnings("unchecked")
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        ObjectInputStream.GetField fields = in.readFields();
+        iNumber = (Integer) fields.get("iNumber", null);
+        iInvoiceNr = (Integer) fields.get("iInvoiceNr", null);
+        iDate = SSDateUtil.readLocalDate(fields.get("iDate", null));
+        iSupplierNr = (String) fields.get("iSupplierNr", null);
+        iSupplierName = (String) fields.get("iSupplierName", null);
+        iEstimatedDelivery = SSDateUtil.readLocalDate(fields.get("iEstimatedDelivery", null));
+        iPaymentTerm = (SSPaymentTerm) fields.get("iPaymentTerm", null);
+        iDeliveryTerm = (SSDeliveryTerm) fields.get("iDeliveryTerm", null);
+        iDeliveryWay = (SSDeliveryWay) fields.get("iDeliveryWay", null);
+        iOurContact = (String) fields.get("iOurContact", null);
+        iYourContact = (String) fields.get("iYourContact", null);
+        iCurrency = (SSCurrency) fields.get("iCurrency", null);
+        iCurrencyRate = (BigDecimal) fields.get("iCurrencyRate", null);
+        iDeliveryAddress = (SSAddress) fields.get("iDeliveryAddress", null);
+        iSupplierAddress = (SSAddress) fields.get("iSupplierAddress", null);
+        iText = (String) fields.get("iText", null);
+        iPrinted = fields.get("iPrinted", false);
+        iStockInfluencing = fields.get("iStockInfluencing", false);
+        iRows = (List<SSPurchaseOrderRow>) fields.get("iRows", null);
+        iDefaultAccounts = (Map<SSDefaultAccount, Integer>) fields.get("iDefaultAccounts", null);
     }
 
 }

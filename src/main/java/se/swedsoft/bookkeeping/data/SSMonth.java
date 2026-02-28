@@ -1,9 +1,14 @@
 package se.swedsoft.bookkeeping.data;
 
 
+import se.swedsoft.bookkeeping.util.SSDateUtil;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
@@ -16,30 +21,44 @@ import java.util.List;
  */
 public class SSMonth  implements Serializable {
 
-    private static Calendar cCalendar = Calendar.getInstance();
-
     // Constant for serialization versioning.
     static final long serialVersionUID = 1L;
 
-    private Date iFrom;
+    private LocalDate iFrom;
 
-    private Date iTo;
+    private LocalDate iTo;
 
     /**
-     *
-     * @param pFrom
+     * @deprecated Use {@link #SSMonth(LocalDate)} instead.
      */
+    @Deprecated
     public SSMonth(Date pFrom) {
+        iFrom = SSDateUtil.toLocalDate(pFrom);
+        iTo = null;
+    }
+
+    /**
+     * @param pFrom the start date as a LocalDate
+     */
+    public SSMonth(LocalDate pFrom) {
         iFrom = pFrom;
         iTo = null;
     }
 
     /**
-     *
-     * @param pFrom
-     * @param pTo
+     * @deprecated Use {@link #SSMonth(LocalDate, LocalDate)} instead.
      */
+    @Deprecated
     public SSMonth(Date pFrom, Date pTo) {
+        iFrom = SSDateUtil.toLocalDate(pFrom);
+        iTo = SSDateUtil.toLocalDate(pTo);
+    }
+
+    /**
+     * @param pFrom the start date as a LocalDate
+     * @param pTo the end date as a LocalDate
+     */
+    public SSMonth(LocalDate pFrom, LocalDate pTo) {
         iFrom = pFrom;
         iTo = pTo;
     }
@@ -48,15 +67,24 @@ public class SSMonth  implements Serializable {
      *
      * @return The date
      */
+    @Deprecated
     public Date getDate() {
-        return iFrom;
+        return SSDateUtil.toDate(iFrom);
     }
 
     /**
      *
      * @return The date
      */
+    @Deprecated
     public Date getFrom() {
+        return SSDateUtil.toDate(iFrom);
+    }
+
+    /**
+     * @return the from date as a LocalDate
+     */
+    public LocalDate getLocalFrom() {
         return iFrom;
     }
 
@@ -64,7 +92,15 @@ public class SSMonth  implements Serializable {
      *
      * @return The date
      */
+    @Deprecated
     public Date getTo() {
+        return SSDateUtil.toDate(iTo);
+    }
+
+    /**
+     * @return the to date as a LocalDate
+     */
+    public LocalDate getLocalTo() {
         return iTo;
     }
 
@@ -74,8 +110,20 @@ public class SSMonth  implements Serializable {
      * @param pTo
      * @return boolean
      */
+    @Deprecated
     public boolean isBetween(Date pFrom, Date pTo) {
-        return pFrom.compareTo(iFrom) <= 0 && pTo.compareTo(iFrom) >= 0;
+        LocalDate localFrom = SSDateUtil.toLocalDate(pFrom);
+        LocalDate localTo = SSDateUtil.toLocalDate(pTo);
+        return !iFrom.isBefore(localFrom) && !iFrom.isAfter(localTo);
+    }
+
+    /**
+     * @param pFrom the start date as a LocalDate
+     * @param pTo the end date as a LocalDate
+     * @return true if this month's from date is between pFrom and pTo (inclusive)
+     */
+    public boolean isBetween(LocalDate pFrom, LocalDate pTo) {
+        return !iFrom.isBefore(pFrom) && !iFrom.isAfter(pTo);
     }
 
     public int hashCode() {
@@ -83,9 +131,7 @@ public class SSMonth  implements Serializable {
             return super.hashCode();
         }
 
-        cCalendar.setTime(iFrom);
-
-        return  cCalendar.get(Calendar.YEAR) * 12 + cCalendar.get(Calendar.MONTH);
+        return iFrom.getYear() * 12 + iFrom.getMonthValue();
     }
 
     public boolean equals(Object obj) {
@@ -98,7 +144,7 @@ public class SSMonth  implements Serializable {
     public String toString() {
         DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT);
 
-        return format.format(iFrom).substring(0, 7);
+        return format.format(SSDateUtil.toDate(iFrom)).substring(0, 7);
     }
 
     /**
@@ -106,12 +152,8 @@ public class SSMonth  implements Serializable {
      * @return
      */
     public String getName() {
-        Calendar iCalendar = Calendar.getInstance();
-
-        iCalendar.setTime(iFrom);
-
-        int iMonth = iCalendar.get(Calendar.MONTH);
-        int iYear = iCalendar.get(Calendar.YEAR);
+        int iMonth = iFrom.getMonthValue() - 1;
+        int iYear = iFrom.getYear();
 
         DateFormatSymbols iSymbols = new DateFormatSymbols();
 
@@ -131,14 +173,10 @@ public class SSMonth  implements Serializable {
     }
 
     public boolean isDateInMonth(Date iDate) {
-        Calendar iCheckDate = Calendar.getInstance();
-        Calendar iMonthDate = Calendar.getInstance();
-
-        iCheckDate.setTime(iDate);
-        iMonthDate.setTime(iFrom);
-
-        return (iCheckDate.get(Calendar.MONTH) == iMonthDate.get(Calendar.MONTH))
-                && (iCheckDate.get(Calendar.YEAR) == iMonthDate.get(Calendar.YEAR));
+        LocalDate checkDate = SSDateUtil.toLocalDate(iDate);
+        return checkDate != null
+                && checkDate.getMonth() == iFrom.getMonth()
+                && checkDate.getYear() == iFrom.getYear();
     }
 
     /**
@@ -177,6 +215,18 @@ public class SSMonth  implements Serializable {
             iCalendar.add(Calendar.MONTH, 1);
         }
         return iMonths;
+    }
+
+    /**
+     * Custom deserialization to handle backward compatibility.
+     * Pre-migration serialized streams stored {@code iFrom} and {@code iTo} as
+     * {@code java.util.Date}.  This method reads them as raw objects and converts
+     * via {@link SSDateUtil#readLocalDate(Object)}.
+     */
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        ObjectInputStream.GetField fields = in.readFields();
+        iFrom = SSDateUtil.readLocalDate(fields.get("iFrom", null));
+        iTo = SSDateUtil.readLocalDate(fields.get("iTo", null));
     }
 
 }

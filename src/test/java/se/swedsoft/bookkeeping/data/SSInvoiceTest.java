@@ -3,8 +3,10 @@ package se.swedsoft.bookkeeping.data;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.swedsoft.bookkeeping.data.common.SSInvoiceType;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -96,7 +98,8 @@ class SSInvoiceTest {
 
     @Test
     void setDueDateStoresDate() {
-        Date d = new Date(86_400_000L);
+        // Use a day-boundary Date since fields are now LocalDate internally
+        Date d = SSDateUtil.toDate(LocalDate.of(1970, 1, 2));
         invoice.setDueDate(d);
 
         assertThat(invoice.getDueDate()).isEqualTo(d);
@@ -106,7 +109,8 @@ class SSInvoiceTest {
 
     @Test
     void setDueDateNoArgWithNoPaymentTermSetsDueDateToInvoiceDate() {
-        Date invoiceDate = new Date(1_000_000L);
+        // Use a day-boundary Date since fields are now LocalDate internally
+        Date invoiceDate = SSDateUtil.toDate(LocalDate.of(2024, 7, 20));
         invoice.setDate(invoiceDate);
         // iPaymentTerm is null by default when SSDB has no company
         invoice.setDueDate();

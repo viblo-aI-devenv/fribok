@@ -5,7 +5,7 @@ import se.swedsoft.bookkeeping.data.base.SSSale;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 import java.util.List;
 
 
@@ -93,7 +93,7 @@ public class SSOrder extends SSSale {
     public SSOrder(SSTender iTender) {
         copyFrom(iTender);
 
-        iDate = new Date();
+        iDate = SSDateUtil.today();
         iCurrencyRate = iTender.getCurrencyRate();
 
         SSNewCompany iCompany = SSDB.getInstance().getCurrentCompany();

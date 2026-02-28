@@ -163,7 +163,10 @@ keeping the application functional throughout.
 16. **Migrate data model classes** -- Change date fields in domain objects from
     `Date` to `LocalDate`/`LocalDateTime`. Use `SSDateUtil` for boundary
     conversion. (143 files still import `java.util.Date`; 89 `new Date()`
-    calls remain.)
+    calls remain.) ✓ (16 domain model classes migrated: internal fields changed
+    to `LocalDate`, deprecated `Date`-typed bridge getters/setters added for
+    backward compatibility with ~50 GUI/print callers, new `LocalDate`-typed
+    API added, `new Date()` replaced with `SSDateUtil.today()`, tests updated.)
 
 17. **Migrate import/export** -- Replace `SimpleDateFormat` with
     `DateTimeFormatter` (thread-safe) in SIE, BgMax, and Excel code. (33
