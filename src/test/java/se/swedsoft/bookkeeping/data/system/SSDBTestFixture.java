@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Shared in-memory HSQLDB fixture for integration tests.
@@ -31,6 +32,15 @@ public final class SSDBTestFixture {
     /** JDBC URL for the shared in-memory HSQLDB instance. */
     static final String JDBC_URL = "jdbc:hsqldb:mem:fribok_test";
 
+    /**
+     * Collects uncaught exceptions from background threads (e.g. HSQLDB
+     * trigger threads).  Tests should call {@link #drainUncaughtExceptions()}
+     * after exercising code that fires database triggers to ensure no
+     * exceptions were silently swallowed on a background thread.
+     */
+    private static final CopyOnWriteArrayList<Throwable> uncaughtExceptions =
+            new CopyOnWriteArrayList<>();
+
     private static boolean started = false;
 
     private SSDBTestFixture() {}
@@ -48,6 +58,12 @@ public final class SSDBTestFixture {
         if (started) {
             return;
         }
+
+        // Install a default handler that captures uncaught exceptions from
+        // background threads (such as HSQLDB trigger threads) so that tests
+        // can assert that no errors occurred asynchronously.
+        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) ->
+                uncaughtExceptions.add(throwable));
 
         // SSDBConfig.load() runs in a static initializer when SSDBConfig is
         // first touched (which happens inside startupLocal).  It reads/writes
@@ -131,6 +147,36 @@ public final class SSDBTestFixture {
         // Eagerly populate iVouchers from the DB so background triggers that
         // fire afterwards operate on a non-null list and cannot add nulls.
         db.getVouchers();
+    }
+
+    /**
+     * Drains all uncaught exceptions captured since the last call and throws
+     * an {@link AssertionError} if any were recorded.
+     *
+     * <p>Call this at the end of each test (e.g. in an {@code @AfterEach}
+     * method) to ensure that background-thread errors cause the test to
+     * fail.</p>
+     */
+    public static void drainUncaughtExceptions() {
+        // Give background trigger threads a moment to finish.
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        List<Throwable> captured = List.copyOf(uncaughtExceptions);
+        uncaughtExceptions.clear();
+
+        if (!captured.isEmpty()) {
+            AssertionError error = new AssertionError(
+                    "Background thread(s) threw " + captured.size()
+                    + " uncaught exception(s); first: " + captured.get(0));
+            for (Throwable t : captured) {
+                error.addSuppressed(t);
+            }
+            throw error;
+        }
     }
 
     // -------------------------------------------------------------------------

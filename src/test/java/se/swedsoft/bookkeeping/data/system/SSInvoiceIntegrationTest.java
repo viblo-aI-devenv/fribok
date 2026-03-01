@@ -1,5 +1,6 @@
 package se.swedsoft.bookkeeping.data.system;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -32,6 +33,11 @@ class SSInvoiceIntegrationTest {
     @BeforeEach
     void clearCaches() {
         SSDBTestFixture.resetCaches();
+    }
+
+    @AfterEach
+    void assertNoBackgroundErrors() {
+        SSDBTestFixture.drainUncaughtExceptions();
     }
 
     // ---- addInvoice / getInvoices ----
