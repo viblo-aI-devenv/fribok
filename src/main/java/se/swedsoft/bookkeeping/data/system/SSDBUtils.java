@@ -3,11 +3,8 @@ package se.swedsoft.bookkeeping.data.system;
 
 import se.swedsoft.bookkeeping.data.SSNewAccountingYear;
 import se.swedsoft.bookkeeping.data.SSNewCompany;
-import se.swedsoft.bookkeeping.gui.SSMainFrame;
-import se.swedsoft.bookkeeping.gui.util.dialogs.SSErrorDialog;
 
 import java.io.*;
-import java.net.SocketException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,40 +84,11 @@ public class SSDBUtils {    private static final Logger LOG = LoggerFactory.getL
     }
 
     public static Integer getRevisionNumber() {
-        try {
-            if (!SSDB.getInstance().getLocking()) {
-                return iLocalRevisionNumber;
-            }
-            PrintWriter iOut = SSDB.getInstance().getWriter();
-            BufferedReader iIn = SSDB.getInstance().getReader();
-
-            iOut.println("getrevisionnumber");
-            iOut.flush();
-            String iAnswer = iIn.readLine();
-
-            return Integer.parseInt(iAnswer);
-
-        } catch (SocketException e) {
-            new SSErrorDialog(SSMainFrame.getInstance(), "connectionlostrestart");
-            System.exit(0);
-            return 0;
-        } catch (IOException e) {
-            LOG.error("Unexpected error", e);
-            return 0;
-        }
+        return iLocalRevisionNumber;
     }
 
     public static void setRevisionNumber(Integer iNumber) {
-        if (!SSDB.getInstance().getLocking()) {
-            iLocalRevisionNumber = iNumber;
-            return;
-        }
-        PrintWriter iOut = SSDB.getInstance().getWriter();
-
-        iOut.println("setrevisionnumber");
-        iOut.flush();
-        iOut.println(iNumber.toString());
-        iOut.flush();
+        iLocalRevisionNumber = iNumber;
     }
 
     /**

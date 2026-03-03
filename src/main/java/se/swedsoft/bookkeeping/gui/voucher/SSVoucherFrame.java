@@ -4,7 +4,7 @@ package se.swedsoft.bookkeeping.gui.voucher;
 import org.fribok.bookkeeping.app.Version;
 import se.swedsoft.bookkeeping.data.SSVoucher;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
+
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.components.SSButton;
@@ -177,15 +177,6 @@ public class SSVoucherFrame extends SSDefaultTableFrame {
         iButton = new SSButton("ICON_IMPORT", "voucherframe.importbutton",
                 e -> {
 
-                        final String lockString = "voucher"
-                                + SSDB.getInstance().getCurrentCompany().getId()
-                                + SSDB.getInstance().getCurrentYear().getId();
-
-                        if (!SSPostLock.applyLock(lockString)) {
-                            new SSErrorDialog(getMainFrame(), "voucheriscreated");
-                            return;
-                        }
-
                         SSExcelFileChooser iFilechooser = SSExcelFileChooser.getInstance();
                         int iResponce = iFilechooser.showOpenDialog(getMainFrame());
 
@@ -197,17 +188,13 @@ public class SSVoucherFrame extends SSDefaultTableFrame {
                                 iImporter.Import();
 
                             } catch (IOException ex) {
-                                SSPostLock.removeLock(lockString);
                                 SSErrorDialog.showDialog(getMainFrame(), "",
                                         ex.getLocalizedMessage());
                             } catch (SSImportException ex) {
-                                SSPostLock.removeLock(lockString);
                                 SSErrorDialog.showDialog(getMainFrame(), "",
                                         ex.getLocalizedMessage());
                             }
                             iModel.fireTableDataChanged();
-                        } else {
-                            SSPostLock.removeLock(lockString);
                         }
 
                     });
@@ -274,14 +261,6 @@ public class SSVoucherFrame extends SSDefaultTableFrame {
         iButton = new SSButton("ICON_TASKLIST24", "voucherframe.importsiebutton",
                 e -> {
 
-                        final String lockString = "voucher"
-                                + SSDB.getInstance().getCurrentCompany().getId()
-                                + SSDB.getInstance().getCurrentYear().getId();
-
-                        if (!SSPostLock.applyLock(lockString)) {
-                            new SSErrorDialog(getMainFrame(), "voucheriscreated");
-                            return;
-                        }
                         SSSIEFileChooser iFileChooser = SSSIEFileChooser.getInstance();
                         int iResponce = iFileChooser.showOpenDialog(getMainFrame());
 
@@ -291,15 +270,11 @@ public class SSVoucherFrame extends SSDefaultTableFrame {
 
                             try {
                                 iImporter.doImportVouchers();
-                                SSPostLock.removeLock(lockString);
                             } catch (SSImportException ex) {
-                                SSPostLock.removeLock(lockString);
                                 SSErrorDialog.showDialog(getMainFrame(), "",
                                         ex.getLocalizedMessage());
                             }
                             iModel.fireTableDataChanged();
-                        } else {
-                            SSPostLock.removeLock(lockString);
                         }
 
                     });
@@ -422,14 +397,7 @@ public class SSVoucherFrame extends SSDefaultTableFrame {
 
         if (iResponce == JOptionPane.YES_OPTION) {
             for (SSVoucher iVoucher : delete) {
-                if (SSPostLock.isLocked(
-                        "voucher" + iVoucher.getNumber()
-                        + SSDB.getInstance().getCurrentCompany().getId())) {
-                    new SSErrorDialog(getMainFrame(), "voucherframe.voucheropen",
-                            iVoucher.getNumber());
-                } else {
-                    SSDB.getInstance().deleteVoucher(iVoucher);
-                }
+                SSDB.getInstance().deleteVoucher(iVoucher);
             }
         }
     }

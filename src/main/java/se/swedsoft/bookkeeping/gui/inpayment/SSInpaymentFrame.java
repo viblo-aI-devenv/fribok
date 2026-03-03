@@ -5,7 +5,6 @@ import se.swedsoft.bookkeeping.calc.math.SSInvoiceMath;
 import se.swedsoft.bookkeeping.data.SSInpayment;
 import se.swedsoft.bookkeeping.data.SSInpaymentRow;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.inpayment.panel.SSInpaymentSearchPanel;
 import se.swedsoft.bookkeeping.gui.inpayment.util.SSInpaymentTableModel;
@@ -242,12 +241,6 @@ public class SSInpaymentFrame extends SSDefaultTableFrame {
 
         if (iResponce == JOptionPane.YES_OPTION) {
             for (SSInpayment iInpayment : delete) {
-                if (SSPostLock.isLocked(
-                        "inpayment" + iInpayment.getNumber()
-                        + SSDB.getInstance().getCurrentCompany().getId())) {
-                    new SSErrorDialog(getMainFrame(), "inpaymentframe.inpaymentopen",
-                            iInpayment.getNumber());
-                } else {
                     for (SSInpaymentRow iRow : iInpayment.getRows()) {
                         if (iRow.getValue() != null && iRow.getInvoiceNr() != null) {
                             if (SSInvoiceMath.iSaldoMap.containsKey(iRow.getInvoiceNr())) {
@@ -258,7 +251,6 @@ public class SSInpaymentFrame extends SSDefaultTableFrame {
                         }
                     }
                     SSDB.getInstance().deleteInpayment(iInpayment);
-                }
             }
         }
     }

@@ -3,7 +3,6 @@ package se.swedsoft.bookkeeping.gui.project;
 
 import se.swedsoft.bookkeeping.data.SSNewProject;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.project.panel.SSProjectPanel;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
@@ -96,13 +95,6 @@ public class SSProjectDialog {
      * @param iModel
      */
     public static void editDialog(final SSMainFrame iMainFrame, SSNewProject pProject, final AbstractTableModel iModel) {
-        Integer iCompanyId = SSDB.getInstance().getCurrentCompany().getId();
-        final String lockString = "project" + pProject.getNumber() + iCompanyId;
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "projectframe.projectopen", pProject.getNumber());
-            return;
-        }
         final SSDialog       iDialog = new SSDialog(iMainFrame,
                 bundle.getString("projectframe.edit.title"));
         final SSProjectPanel iPanel = new SSProjectPanel(true);
@@ -117,7 +109,6 @@ public class SSProjectDialog {
                 if (iModel != null) {
                     iModel.fireTableDataChanged();
                 }
-                SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
 
             };
@@ -126,7 +117,6 @@ public class SSProjectDialog {
 
         iPanel.addCancelAction(e -> {
 
-                SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
 
             });
@@ -138,7 +128,6 @@ public class SSProjectDialog {
                 if (SSQueryDialog.showDialog(iMainFrame, SSBundle.getBundle(),
                         "projectframe.saveonclose")
                         != JOptionPane.OK_OPTION) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 

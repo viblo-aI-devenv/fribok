@@ -3,7 +3,6 @@ package se.swedsoft.bookkeeping.gui.autodist;
 
 import se.swedsoft.bookkeeping.data.SSAutoDist;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.autodist.util.SSAutoDistTableModel;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
@@ -250,14 +249,7 @@ public class SSAutoDistFrame extends SSDefaultTableFrame {
 
         if (iResponce == JOptionPane.YES_OPTION) {
             for (SSAutoDist iAutoDist : delete) {
-                if (SSPostLock.isLocked(
-                        "autodist" + iAutoDist.getNumber()
-                        + SSDB.getInstance().getCurrentCompany().getId())) {
-                    new SSErrorDialog(getMainFrame(), "autodistframe.autodistopen",
-                            iAutoDist.getNumber());
-                } else {
-                    SSDB.getInstance().deleteAutoDist(iAutoDist);
-                }
+                SSDB.getInstance().deleteAutoDist(iAutoDist);
             }
         }
     }

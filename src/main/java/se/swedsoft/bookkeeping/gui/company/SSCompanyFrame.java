@@ -250,16 +250,10 @@ public class SSCompanyFrame extends SSDefaultTableFrame {
             // Svarade inte ja. Avbryt funktionen
             return;
         }
-        // Lås upp det förra företaget
-        SSCompanyLock.removeLock(SSDB.getInstance().getCurrentCompany());
-        SSYearLock.removeLock(SSDB.getInstance().getCurrentYear());
-
         // Sätt det valda företaget som nuvarande företag
         SSDB.getInstance().setCurrentCompany(iNewCompany);
         SSDBConfig.setCompanyId(iNewCompany.getId());
 
-        // Lås det nya företaget
-        SSCompanyLock.applyLock(iNewCompany);
         SSDB.getInstance().setCurrentYear(null);
 
         // Stäng alla fönster
@@ -275,7 +269,6 @@ public class SSCompanyFrame extends SSDefaultTableFrame {
         } else {
             // Hittade ett sparat år. Sätt det som nuvarande
             SSDB.getInstance().setCurrentYear(iYear);
-            SSYearLock.applyLock(iYear);
             SSDBConfig.setYearId(iNewCompany.getId(), iYear.getId());
         }
         SSDB.getInstance().init(true);
@@ -300,11 +293,6 @@ public class SSCompanyFrame extends SSDefaultTableFrame {
         }
         // Ask the user if he want's to open the selected company to be able to edit it
         if (!pCompany.equals(SSDB.getInstance().getCurrentCompany())) {
-            if (SSPostLock.isLocked("sieimport" + pCompany.getId())) {
-                updateFrame();
-                new SSErrorDialog(getMainFrame(), "companyframe.sieimportopen");
-                return;
-            }
             // Ask to open the company
             String iCurrent = SSDB.getInstance().getCurrentCompany() == null
                     ? ""
@@ -323,15 +311,10 @@ public class SSCompanyFrame extends SSDefaultTableFrame {
             SSInternalFrame.closeAllFrames();
             // Select the company
 
-            SSCompanyLock.removeLock(SSDB.getInstance().getCurrentCompany());
-            SSYearLock.removeLock(SSDB.getInstance().getCurrentYear());
-
             // Sätt det valda företaget som nuvarande företag
             SSDB.getInstance().setCurrentCompany(pCompany);
             SSDBConfig.setCompanyId(pCompany.getId());
 
-            // Lås det nya företaget
-            SSCompanyLock.applyLock(pCompany);
             SSDB.getInstance().setCurrentYear(null);
 
             // Stäng alla fönster
@@ -347,7 +330,6 @@ public class SSCompanyFrame extends SSDefaultTableFrame {
             } else {
                 // Hittade ett sparat år. Sätt det som nuvarande
                 SSDB.getInstance().setCurrentYear(iYear);
-                SSYearLock.applyLock(iYear);
                 SSDBConfig.setYearId(pCompany.getId(), iYear.getId());
             }
             SSDB.getInstance().init(true);
@@ -368,35 +350,18 @@ public class SSCompanyFrame extends SSDefaultTableFrame {
             return;
         }
         updateFrame();
-        boolean lockRemoved = false;
-
-        if (pCompany.equals(SSDB.getInstance().getCurrentCompany())) {
-            SSCompanyLock.removeLock(pCompany);
-            lockRemoved = true;
-        }
 
         SSQueryDialog iDialog = new SSQueryDialog(getMainFrame(), SSBundle.getBundle(),
                 "companyframe.deletecompany", pCompany.getName());
 
         if (iDialog.getResponce() != JOptionPane.YES_OPTION) {
-            if (lockRemoved) {
-                SSCompanyLock.applyLock(pCompany);
-            }
             return;
         }
         updateFrame();
 
-        if (SSCompanyLock.isLocked(pCompany)) {
-            new SSErrorDialog(getMainFrame(), "companyframe.companyremoveopen");
-            if (lockRemoved) {
-                SSCompanyLock.applyLock(pCompany);
-            }
-            return;
-        }
         boolean iCurrentRemoved = false;
 
         if (pCompany.equals(SSDB.getInstance().getCurrentCompany())) {
-            SSYearLock.removeLock(SSDB.getInstance().getCurrentYear());
             SSFrameManager.getInstance().close();
             iCurrentRemoved = true;
         }

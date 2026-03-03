@@ -7,12 +7,10 @@ package se.swedsoft.bookkeeping.gui.accountingyear.dialog;
 
 import se.swedsoft.bookkeeping.data.SSNewAccountingYear;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.accountingyear.panel.SSAccountingYearPanel;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSDialog;
-import se.swedsoft.bookkeeping.gui.util.dialogs.SSErrorDialog;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 
 import java.awt.*;
@@ -36,12 +34,6 @@ public class SSEditAccountingYearDialog {
      * @param pModel
      */
     public static void showDialog(final SSMainFrame iMainFrame, final SSNewAccountingYear pAccountingYear, final SSDefaultTableModel<SSNewAccountingYear> pModel) {
-        if (SSPostLock.isLocked(pAccountingYear.getId())) {
-            new SSErrorDialog(iMainFrame, "postlock.accountingyear");
-            return;
-        }
-        SSPostLock.applyLock(pAccountingYear.getId());
-
         final SSDialog              iDialog = new SSDialog(iMainFrame,
                 bundle.getString("accountingyearframe.edit.title"));
         final SSAccountingYearPanel iPanel = new SSAccountingYearPanel();
@@ -57,23 +49,15 @@ public class SSEditAccountingYearDialog {
 
                 SSDB.getInstance().updateAccountingYear(iYear);
 
-                SSPostLock.removeLock(pAccountingYear.getId());
-
                 iDialog.closeDialog();
 
             });
 
-        iPanel.addCancelAction(e -> {
-
-                SSPostLock.removeLock(pAccountingYear.getId());
-                iDialog.closeDialog();
-
-            });
+        iPanel.addCancelAction(e -> iDialog.closeDialog());
 
         iDialog.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                SSPostLock.removeLock(pAccountingYear.getId());
             }
         });
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);

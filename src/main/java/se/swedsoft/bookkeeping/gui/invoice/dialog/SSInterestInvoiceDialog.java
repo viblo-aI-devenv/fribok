@@ -3,7 +3,6 @@ package se.swedsoft.bookkeeping.gui.invoice.dialog;
 
 import se.swedsoft.bookkeeping.data.SSInvoice;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.invoice.panel.SSInterestInvoicePanel;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
@@ -38,18 +37,9 @@ public class SSInterestInvoiceDialog {
      * @param pModel
      */
     public static void showDialog(final SSMainFrame iMainFrame, final AbstractTableModel pModel) {
-        final String lockString = "interestinvoice"
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "interestinvoice.open");
-            return;
-        }
-
         List<SSInvoice> iRows = SSInterestInvoicePanel.getRows();
 
         if (iRows.isEmpty()) {
-            SSPostLock.removeLock(lockString);
             new SSInformationDialog(iMainFrame, "interestinvoice.noinvoices");
             return;
         }
@@ -73,7 +63,6 @@ public class SSInterestInvoiceDialog {
                     pModel.fireTableDataChanged();
                 }
 
-                SSPostLock.removeLock(lockString);
                 // iDialog.setVisible(false);
                 iDialog.closeDialog();
 
@@ -81,7 +70,6 @@ public class SSInterestInvoiceDialog {
 
         iPanel.addCancelAction(e -> {
 
-                SSPostLock.removeLock(lockString);
                 iDialog.setVisible(false);
 
             });
@@ -89,7 +77,6 @@ public class SSInterestInvoiceDialog {
         iDialog.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                SSPostLock.removeLock(lockString);
             }
         });
 

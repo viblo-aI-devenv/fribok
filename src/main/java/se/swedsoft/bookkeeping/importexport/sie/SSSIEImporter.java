@@ -6,7 +6,6 @@ import se.swedsoft.bookkeeping.data.SSNewProject;
 import se.swedsoft.bookkeeping.data.SSNewResultUnit;
 import se.swedsoft.bookkeeping.data.SSVoucher;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.util.frame.SSFrameManager;
 import se.swedsoft.bookkeeping.importexport.sie.fields.SIEEntry;
 import se.swedsoft.bookkeeping.importexport.sie.types.SIEDimension;
@@ -129,14 +128,9 @@ public class SSSIEImporter {    private static final Logger LOG = LoggerFactory.
      */
     public void doImportVouchers() throws SSImportException {
         // Read the contents of the file
-        final String lockString = "voucher"
-                + SSDB.getInstance().getCurrentCompany().getId()
-                + SSDB.getInstance().getCurrentYear().getId();
-
         readFile(iFile);
 
         if (iLines.isEmpty()) {
-            SSPostLock.removeLock(lockString);
             return;
         }
 

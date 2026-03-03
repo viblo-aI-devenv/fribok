@@ -3,7 +3,6 @@ package se.swedsoft.bookkeeping.gui.ownreport;
 
 import se.swedsoft.bookkeeping.data.SSOwnReport;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.ownreport.util.SSOwnReportTableModel;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
@@ -248,14 +247,7 @@ public class SSOwnReportFrame extends SSDefaultTableFrame {
 
         if (iResponce == JOptionPane.YES_OPTION) {
             for (SSOwnReport iOwnReport : delete) {
-                if (SSPostLock.isLocked(
-                        "ownreport" + iOwnReport.getId()
-                        + SSDB.getInstance().getCurrentCompany().getId())) {
-                    new SSErrorDialog(getMainFrame(), "ownreportframe.ownreportopen",
-                            iOwnReport.getName());
-                } else {
-                    SSDB.getInstance().deleteOwnReport(iOwnReport);
-                }
+                SSDB.getInstance().deleteOwnReport(iOwnReport);
             }
         }
     }

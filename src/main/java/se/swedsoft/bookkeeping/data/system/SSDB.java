@@ -40,8 +40,6 @@ import se.swedsoft.bookkeeping.gui.vouchertemplate.SSVoucherTemplateFrame;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.*;
-import java.net.Socket;
-import java.net.SocketException;
 import java.rmi.server.UID;
 import java.sql.*;
 import java.util.*;
@@ -107,21 +105,11 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
 
     Connection iConnection;
 
-    private Socket iSocket;
-    private BufferedReader iIn;
-    private PrintWriter iOut;
-
-    private boolean iLocking;
-
     // Listeners
     private Map<String, List<PropertyChangeListener>> iListenerMap;
 
     private SSDB() {
         iListenerMap = new HashMap<>();
-    }
-
-    public boolean getLocking() {
-        return iLocking;
     }
 
     /**
@@ -133,7 +121,6 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
     public void startupLocal(Connection pConnection) throws SQLException {
         iConnection = pConnection;
         iConnection.setAutoCommit(false);
-        iLocking = false;
 
         createNewTables();
         // dropTriggers();
@@ -174,81 +161,6 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                         "accountingyear");
 
                 setCurrentYear(iYear);
-            }
-            iResultSet.close();
-            iStatement.close();
-        }
-    }
-
-    public void startupRemote(Connection pConnection, String iServerAddress) throws SQLException {
-        iConnection = pConnection;
-        iConnection.setAutoCommit(false);
-        createNewTables();
-        // dropTriggers();
-        createServerTriggers();
-        PreparedStatement iStatement;
-
-        String iKey = SSDBConfig.getClientkey();
-
-        try {
-            if (iKey != null && iKey.length() != 0) {
-                iStatement = iConnection.prepareStatement(
-                        "INSERT INTO tbl_license VALUES(?)");
-                iStatement.setObject(1, iKey);
-                iStatement.executeUpdate();
-                iStatement.close();
-            }
-        } catch (SQLException e) {
-            new SSErrorDialog(SSMainFrame.getInstance(), "database.duplicateclient");
-            System.exit(0);
-        }
-
-        try {
-            openSocket(iServerAddress);
-            iLocking = true;
-            SSTriggerHandler iTriggerHandler = new SSTriggerHandler();
-
-            iTriggerHandler.start();
-        } catch (IOException e) {
-            LOG.error("Unexpected error", e);
-            // Kunde inte ansluta.
-            // Borde inte kunna komma hit då det borde kommit SQLEXCEPTION före!!
-        }
-        iLocking = true;
-        // Läs in företaget och året som senast var öppet.
-        Integer iLastCompany = SSDBConfig.getCompanyId();
-        Integer iLastYear = SSDBConfig.getYearId();
-
-        ResultSet iResultSet;
-
-        if (iLastCompany != null) {
-            iStatement = iConnection.prepareStatement(
-                    "SELECT * FROM tbl_company WHERE id=?");
-            iStatement.setObject(1, iLastCompany);
-            iResultSet = iStatement.executeQuery();
-
-            if (iResultSet.next()) {
-                SSNewCompany iCompany = (SSNewCompany) iResultSet.getObject("company");
-
-                setCurrentCompany(iCompany);
-                SSCompanyLock.applyLock(iCompany);
-            }
-            iResultSet.close();
-            iStatement.close();
-        }
-
-        if (iLastYear != null && iCurrentCompany != null) {
-            iStatement = iConnection.prepareStatement(
-                    "SELECT * FROM tbl_accountingyear WHERE id=?");
-            iStatement.setObject(1, iLastYear);
-            iResultSet = iStatement.executeQuery();
-
-            if (iResultSet.next()) {
-                SSNewAccountingYear iYear = (SSNewAccountingYear) iResultSet.getObject(
-                        "accountingyear");
-
-                setCurrentYear(iYear);
-                SSYearLock.applyLock(iYear);
             }
             iResultSet.close();
             iStatement.close();
@@ -355,125 +267,28 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
     }
 
     public void shutdown() {
-        if (!iLocking) {
-            try {
-                if (!iConnection.isClosed()) {
-                    Statement iStatement = iConnection.createStatement();
-
-                    iStatement.executeQuery("SHUTDOWN");
-                    iStatement.close();
-                    iConnection.close();
-                }
-            } catch (SQLException e) {
-                LOG.error("Unexpected error", e);
-            }
-        } else {
-            SSCompanyLock.removeLock(iCurrentCompany);
-            SSYearLock.removeLock(iCurrentYear);
-        }
-    }
-
-    public void shutdownCompact() {
-        if (!iLocking) {
-            try {
-                Statement iStatement = iConnection.createStatement();
-
-                iStatement.executeQuery("SHUTDOWN COMPACT");
-                iStatement.close();
-                iConnection.close();
-            } catch (SQLException e) {
-                LOG.error("Unexpected error", e);
-            }
-        } else {
-            SSCompanyLock.removeLock(iCurrentCompany);
-            SSYearLock.removeLock(iCurrentYear);
-        }
-    }
-
-    public void openSocket(String iIpAddress) throws IOException {
-        Socket iOldSocket = iSocket;
-        PrintWriter iOldWriter = iOut;
-        BufferedReader iOldReader = iIn;
-
-        iSocket = new Socket(iIpAddress, 2222);
-        iOut = new PrintWriter(new OutputStreamWriter(iSocket.getOutputStream()));
-        iIn = new BufferedReader(new InputStreamReader(iSocket.getInputStream()));
-
-        if (iOldSocket != null) {
-            iOldWriter.println("disconnect");
-            iOldWriter.flush();
-            iOldWriter.close();
-            iOldReader.close();
-            iOldSocket.close();
-        }
-    }
-
-    public void setLocking(boolean iLock) {
-        iLocking = iLock;
-    }
-
-    public void loadSelectedDatabase(String iAddress) {
-        if (!iLocking && iConnection != null) {
-            try {
+        try {
+            if (!iConnection.isClosed()) {
                 Statement iStatement = iConnection.createStatement();
 
                 iStatement.executeQuery("SHUTDOWN");
                 iStatement.close();
                 iConnection.close();
-            } catch (SQLException e) {
-                LOG.error("Unexpected error", e);
-                try {
-                    iConnection.rollback();
-                } catch (SQLException ignored) {}
-                SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
-                        e.getMessage());
             }
-        }
-
-        try {
-            Class.forName("org.hsqldb.jdbcDriver");
-        } catch (ClassNotFoundException e) {
-            LOG.info("ERROR: failed to load HSQLDB JDBC driver.");
-            LOG.error("Unexpected error", e);
-            return;
-        }
-
-        try {
-            iConnection = DriverManager.getConnection(
-                    "jdbc:hsqldb:hsql://" + iAddress + "/JFSDB", "sa", "");
-            iLocking = true;
-            iConnection.setAutoCommit(false);
-
-            String iKey = SSDBConfig.getClientkey();
-
-            try {
-                if (iKey != null && iKey.length() != 0) {
-                    PreparedStatement iStatement = iConnection.prepareStatement(
-                            "INSERT INTO tbl_license VALUES(?)");
-
-                    iStatement.setObject(1, iKey);
-                    iStatement.executeUpdate();
-                    iConnection.commit();
-                    iStatement.close();
-                }
-            } catch (SQLException e) {
-                new SSErrorDialog(SSMainFrame.getInstance(), "database.duplicateclient");
-                System.exit(0);
-            }
-
-            createNewTables();
-            dropTriggers();
-            createServerTriggers();
-            SSTriggerHandler iTriggerHandler = new SSTriggerHandler();
-
-            iTriggerHandler.start();
         } catch (SQLException e) {
             LOG.error("Unexpected error", e);
-            try {
-                iConnection.rollback();
-            } catch (SQLException ignored) {}
-            SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
-                    e.getMessage());
+        }
+    }
+
+    public void shutdownCompact() {
+        try {
+            Statement iStatement = iConnection.createStatement();
+
+            iStatement.executeQuery("SHUTDOWN COMPACT");
+            iStatement.close();
+            iConnection.close();
+        } catch (SQLException e) {
+            LOG.error("Unexpected error", e);
         }
     }
 
@@ -498,28 +313,13 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             iConnection = DriverManager.getConnection(
                     "jdbc:hsqldb:file:" + dbDir.getAbsolutePath() + File.separator + "JFSDB", "sa", "");
             iConnection.setAutoCommit(false);
-            iLocking = false;
             createNewTables();
             dropTriggers();
             createLocalTriggers();
-            if (iOut != null) {
-                iOut.println("disconnect");
-                iOut.flush();
-                iOut.close();
-            }
-            if (iIn != null) {
-                iIn.close();
-            }
-            if (iSocket != null) {
-                iSocket.close();
-            }
 
         } catch (SQLException e) {
             LOG.error("Unexpected error", e);
-        } catch (IOException ex) {
-            LOG.error("Unexpected error", ex);
         }
-
     }
     
     /* skapa exempelföretaget i databasen */
@@ -596,24 +396,6 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         }
     }
 
-    public void removeClient() {
-        if (!iLocking || iConnection == null) {
-            return;
-        }
-
-        try {
-            PreparedStatement iStatement = iConnection.prepareStatement(
-                    "DELETE FROM tbl_license WHERE licensekey=?");
-
-            iStatement.setObject(1, SSDBConfig.getClientkey());
-            iStatement.executeUpdate();
-            iStatement.close();
-            iConnection.commit();
-        } catch (SQLException e) {
-            LOG.error("Unexpected error", e);
-        }
-    }
-
     public void restart() {}
 
     public void delete() {
@@ -656,58 +438,6 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
     }
 
     public void clear() {}
-
-    public BufferedReader getReader() {
-        return iIn;
-    }
-
-    public PrintWriter getWriter() {
-        return iOut;
-    }
-
-    public Socket getSocket() {
-        return iSocket;
-    }
-
-    public boolean LockDatabase() {
-        if (!iLocking) {
-            return true;
-        }
-        if (iOut == null || iIn == null || iSocket == null) {
-            return false;
-        }
-        try {
-            iOut.println("lockdatabase");
-            iOut.flush();
-
-            String iReply = iIn.readLine();
-
-            if (iReply.equals("goahead")) {
-                return true;
-            }
-        } catch (SocketException e) {
-            LOG.error("Unexpected error", e);
-        } catch (IOException e) {
-            LOG.error("Unexpected error", e);
-            return false;
-        }
-        return false;
-    }
-
-    /**
-     *
-     *
-     */
-    public void UnlockDatabase() {
-        if (!iLocking) {
-            return;
-        }
-        if (iOut == null || iIn == null || iSocket == null) {
-            return;
-        }
-        iOut.println("unlockdatabase");
-        iOut.flush();
-    }
 
     public void clearLists() {
         iProducts = null;
@@ -1549,7 +1279,6 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             return;
         }
         try {
-            LockDatabase();
             PreparedStatement iStatement;
 
             if (!iHasNumber) {
@@ -1577,10 +1306,8 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             iStatement.executeUpdate();
             iConnection.commit();
             iStatement.close();
-            UnlockDatabase();
         } catch (SQLException e) {
             LOG.error("Unexpected error", e);
-            UnlockDatabase();
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -4937,7 +4664,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             return;
         }
         try {
-            LockDatabase();
+
             PreparedStatement iStatement = iConnection.prepareStatement(
                     "SELECT MAX(number) AS maxnum FROM tbl_tender WHERE companyid=?");
 
@@ -4969,10 +4696,10 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             iStatement.executeUpdate();
             iConnection.commit();
             iStatement.close();
-            UnlockDatabase();
+
         } catch (SQLException e) {
             LOG.error("Unexpected error", e);
-            UnlockDatabase();
+
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -5157,7 +4884,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             return;
         }
         try {
-            LockDatabase();
+
             PreparedStatement iStatement = iConnection.prepareStatement(
                     "SELECT MAX(number) AS maxnum FROM tbl_order WHERE companyid=?");
 
@@ -5189,10 +4916,10 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             iStatement.executeUpdate();
             iConnection.commit();
             iStatement.close();
-            UnlockDatabase();
+
         } catch (SQLException e) {
             LOG.error("Unexpected error", e);
-            UnlockDatabase();
+
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -5382,7 +5109,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             return;
         }
         try {
-            LockDatabase();
+
             PreparedStatement iStatement = iConnection.prepareStatement(
                     "SELECT MAX(number) AS maxnum FROM tbl_invoice WHERE companyid=?");
 
@@ -5414,10 +5141,10 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             iStatement.executeUpdate();
             iConnection.commit();
             iStatement.close();
-            UnlockDatabase();
+
         } catch (SQLException e) {
             LOG.error("Unexpected error", e);
-            UnlockDatabase();
+
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -5563,7 +5290,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             return;
         }
         try {
-            LockDatabase();
+
             PreparedStatement iStatement = iConnection.prepareStatement(
                     "SELECT MAX(number) AS maxnum FROM tbl_inpayment WHERE companyid=?");
 
@@ -5595,10 +5322,10 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             iStatement.executeUpdate();
             iConnection.commit();
             iStatement.close();
-            UnlockDatabase();
+
         } catch (SQLException e) {
             LOG.error("Unexpected error", e);
-            UnlockDatabase();
+
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -5742,7 +5469,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             return;
         }
         try {
-            LockDatabase();
+
             PreparedStatement iStatement = iConnection.prepareStatement(
                     "SELECT MAX(number) AS maxnum FROM tbl_outpayment WHERE companyid=?");
 
@@ -5774,10 +5501,10 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             iStatement.executeUpdate();
             iConnection.commit();
             iStatement.close();
-            UnlockDatabase();
+
         } catch (SQLException e) {
             LOG.error("Unexpected error", e);
-            UnlockDatabase();
+
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -5967,7 +5694,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             return;
         }
         try {
-            LockDatabase();
+
             PreparedStatement iStatement = iConnection.prepareStatement(
                     "SELECT MAX(number) AS maxnum FROM tbl_creditinvoice WHERE companyid=?");
 
@@ -5999,10 +5726,10 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             iStatement.executeUpdate();
             iConnection.commit();
             iStatement.close();
-            UnlockDatabase();
+
         } catch (SQLException e) {
             LOG.error("Unexpected error", e);
-            UnlockDatabase();
+
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -6149,7 +5876,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             return;
         }
         try {
-            LockDatabase();
+
             PreparedStatement iStatement = iConnection.prepareStatement(
                     "SELECT MAX(number) AS maxnum FROM tbl_periodicinvoice WHERE companyid=?");
 
@@ -6181,10 +5908,10 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             iStatement.executeUpdate();
             iConnection.commit();
             iStatement.close();
-            UnlockDatabase();
+
         } catch (SQLException e) {
             LOG.error("Unexpected error", e);
-            UnlockDatabase();
+
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -6374,7 +6101,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             return;
         }
         try {
-            LockDatabase();
+
             PreparedStatement iStatement = iConnection.prepareStatement(
                     "SELECT MAX(number) AS maxnum FROM tbl_purchaseorder WHERE companyid=?");
 
@@ -6406,10 +6133,10 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             iStatement.executeUpdate();
             iConnection.commit();
             iStatement.close();
-            UnlockDatabase();
+
         } catch (SQLException e) {
             LOG.error("Unexpected error", e);
-            UnlockDatabase();
+
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -6600,7 +6327,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             return;
         }
         try {
-            LockDatabase();
+
             PreparedStatement iStatement = iConnection.prepareStatement(
                     "SELECT MAX(number) AS maxnum FROM tbl_supplierinvoice WHERE companyid=?");
 
@@ -6632,10 +6359,10 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             iStatement.executeUpdate();
             iConnection.commit();
             iStatement.close();
-            UnlockDatabase();
+
         } catch (SQLException e) {
             LOG.error("Unexpected error", e);
-            UnlockDatabase();
+
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -6783,7 +6510,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             return;
         }
         try {
-            LockDatabase();
+
             PreparedStatement iStatement = iConnection.prepareStatement(
                     "SELECT MAX(number) AS maxnum FROM tbl_suppliercreditinvoice WHERE companyid=?");
 
@@ -6815,10 +6542,10 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             iStatement.executeUpdate();
             iConnection.commit();
             iStatement.close();
-            UnlockDatabase();
+
         } catch (SQLException e) {
             LOG.error("Unexpected error", e);
-            UnlockDatabase();
+
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -6963,7 +6690,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             return;
         }
         try {
-            LockDatabase();
+
             PreparedStatement iStatement = iConnection.prepareStatement(
                     "SELECT MAX(number) AS maxnum FROM tbl_inventory WHERE companyid=?");
 
@@ -6995,10 +6722,10 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             iStatement.executeUpdate();
             iConnection.commit();
             iStatement.close();
-            UnlockDatabase();
+
         } catch (SQLException e) {
             LOG.error("Unexpected error", e);
-            UnlockDatabase();
+
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -7143,7 +6870,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             return;
         }
         try {
-            LockDatabase();
+
             PreparedStatement iStatement = iConnection.prepareStatement(
                     "SELECT MAX(number) AS maxnum FROM tbl_indelivery WHERE companyid=?");
 
@@ -7175,10 +6902,10 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             iStatement.executeUpdate();
             iConnection.commit();
             iStatement.close();
-            UnlockDatabase();
+
         } catch (SQLException e) {
             LOG.error("Unexpected error", e);
-            UnlockDatabase();
+
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -7323,7 +7050,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             return;
         }
         try {
-            LockDatabase();
+
             PreparedStatement iStatement = iConnection.prepareStatement(
                     "SELECT MAX(number) AS maxnum FROM tbl_outdelivery WHERE companyid=?");
 
@@ -7355,10 +7082,10 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             iStatement.executeUpdate();
             iConnection.commit();
             iStatement.close();
-            UnlockDatabase();
+
         } catch (SQLException e) {
             LOG.error("Unexpected error", e);
-            UnlockDatabase();
+
             try {
                 iConnection.rollback();
             } catch (SQLException ignored) {}
@@ -7674,85 +7401,6 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
 
     // /////////////////////////////////////////////////////////////////////////////
 
-    public void createServerTriggers() {
-
-        try {
-            PreparedStatement iStatement = iConnection.prepareStatement(
-                    "CREATE TRIGGER NEWPROJECT  AFTER INSERT ON tbl_project FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER EDITPROJECT  AFTER UPDATE ON tbl_project FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER DELETEPROJECT  AFTER DELETE ON tbl_project FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER NEWRESULTUNIT  AFTER INSERT ON tbl_resultunit FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER EDITRESULTUNIT  AFTER UPDATE ON tbl_resultunit FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER DELETERESULTUNIT  AFTER DELETE ON tbl_resultunit FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER NEWPRODUCT  AFTER INSERT ON tbl_product FOR EACH ROW QUEUE 10000 CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER EDITPRODUCT  AFTER UPDATE ON tbl_product FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER DELETEPRODUCT  AFTER DELETE ON tbl_product FOR EACH ROW QUEUE 10000 CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER NEWCUSTOMER  AFTER INSERT ON tbl_customer FOR EACH ROW QUEUE 10000 CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER EDITCUSTOMER  AFTER UPDATE ON tbl_customer FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER DELETECUSTOMER  AFTER DELETE ON tbl_customer FOR EACH ROW QUEUE 10000 CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER NEWSUPPLIER  AFTER INSERT ON tbl_supplier FOR EACH ROW QUEUE 10000 CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER EDITSUPPLIER  AFTER UPDATE ON tbl_supplier FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER DELETESUPPLIER  AFTER DELETE ON tbl_supplier FOR EACH ROW QUEUE 10000 CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER NEWVOUCHERTEMPLATE  AFTER INSERT ON tbl_vouchertemplate FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER DELETEVOUCHERTEMPLATE  AFTER DELETE ON tbl_vouchertemplate FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER NEWAUTODIST  AFTER INSERT ON tbl_autodist FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER EDITAUTODIST  AFTER UPDATE ON tbl_autodist FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER DELETEAUTODIST  AFTER DELETE ON tbl_autodist FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER NEWINPAYMENT  AFTER INSERT ON tbl_inpayment FOR EACH ROW QUEUE 10000 CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER EDITINPAYMENT  AFTER UPDATE ON tbl_inpayment FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER DELETEINPAYMENT  AFTER DELETE ON tbl_inpayment FOR EACH ROW QUEUE 10000 CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER NEWTENDER  AFTER INSERT ON tbl_tender FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER EDITTENDER  AFTER UPDATE ON tbl_tender FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER DELETETENDER  AFTER DELETE ON tbl_tender FOR EACH ROW QUEUE 10000 CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER NEWORDER  AFTER INSERT ON tbl_order FOR EACH ROW QUEUE 10000 CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER EDITORDER  AFTER UPDATE ON tbl_order FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER DELETEORDER  AFTER DELETE ON tbl_order FOR EACH ROW QUEUE 10000 CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER NEWINVOICE  AFTER INSERT ON tbl_invoice FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER EDITINVOICE  AFTER UPDATE ON tbl_invoice FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER DELETEINVOICE  AFTER DELETE ON tbl_invoice FOR EACH ROW QUEUE 10000 CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER NEWCREDITINVOICE  AFTER INSERT ON tbl_creditinvoice FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER EDITCREDITINVOICE  AFTER UPDATE ON tbl_creditinvoice FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER DELETECREDITINVOICE  AFTER DELETE ON tbl_creditinvoice FOR EACH ROW QUEUE 10000 CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER NEWPERIODICINVOICE  AFTER INSERT ON tbl_periodicinvoice FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER EDITPERIODICINVOICE  AFTER UPDATE ON tbl_periodicinvoice FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER DELETEPERIODICINVOICE  AFTER DELETE ON tbl_periodicinvoice FOR EACH ROW QUEUE 10000 CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER NEWOUTPAYMENT  AFTER INSERT ON tbl_outpayment FOR EACH ROW QUEUE 10000 CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER EDITOUTPAYMENT  AFTER UPDATE ON tbl_outpayment FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER DELETEOUTPAYMENT  AFTER DELETE ON tbl_outpayment FOR EACH ROW QUEUE 10000 CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER NEWPURCHASEORDER  AFTER INSERT ON tbl_purchaseorder FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER EDITPURCHASEORDER  AFTER UPDATE ON tbl_purchaseorder FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER DELETEPURCHASEORDER  AFTER DELETE ON tbl_purchaseorder FOR EACH ROW QUEUE 10000 CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER NEWSUPPLIERINVOICE  AFTER INSERT ON tbl_supplierinvoice FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER EDITSUPPLIERINVOICE  AFTER UPDATE ON tbl_supplierinvoice FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER DELETESUPPLIERINVOICE  AFTER DELETE ON tbl_supplierinvoice FOR EACH ROW QUEUE 10000 CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER NEWSUPPLIERCREDITINVOICE  AFTER INSERT ON tbl_suppliercreditinvoice FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER EDITSUPPLIERCREDITINVOICE  AFTER UPDATE ON tbl_suppliercreditinvoice FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER DELETESUPPLIERCREDITINVOICE  AFTER DELETE ON tbl_suppliercreditinvoice FOR EACH ROW QUEUE 10000 CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER NEWINVENTORY  AFTER INSERT ON tbl_inventory FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER EDITINVENTORY  AFTER UPDATE ON tbl_inventory FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER DELETEINVENTORY  AFTER DELETE ON tbl_inventory FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER NEWINDELIVERY  AFTER INSERT ON tbl_indelivery FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER EDITINDELIVERY  AFTER UPDATE ON tbl_indelivery FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER DELETEINDELIVERY  AFTER DELETE ON tbl_indelivery FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER NEWOUTDELIVERY  AFTER INSERT ON tbl_outdelivery FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER EDITOUTDELIVERY  AFTER UPDATE ON tbl_outdelivery FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER DELETEOUTDELIVERY  AFTER DELETE ON tbl_outdelivery FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER NEWVOUCHER  AFTER INSERT ON tbl_voucher FOR EACH ROW QUEUE 10000 CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER EDITVOUCHER  AFTER UPDATE ON tbl_voucher FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER DELETEVOUCHER  AFTER DELETE ON tbl_voucher FOR EACH ROW QUEUE 10000 CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER NEWOWNREPORT  AFTER INSERT ON tbl_ownreport FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER EDITOWNREPORT  AFTER UPDATE ON tbl_ownreport FOR EACH ROW CALL \"se.swedsoft.SSServer\";"
-                            + "CREATE TRIGGER DELETEOWNREPORT  AFTER DELETE ON tbl_ownreport FOR EACH ROW CALL \"se.swedsoft.SSServer\";");
-
-            iStatement.executeUpdate();
-            iConnection.commit();
-            iStatement.close();
-
-        } catch (SQLException e) {// LOG.info("Triggers fanns redan vi remote tilläggning");
-            // LOG.error("Unexpected error", e);
-        }
-    }
-
     public void createLocalTriggers() {
 
         try {
@@ -7833,11 +7481,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
     }
 
     public void createTriggers() {
-        if (iLocking) {
-            createServerTriggers();
-        } else {
-            createLocalTriggers();
-        }
+        createLocalTriggers();
     }
 
     public void dropTriggers() {
@@ -7973,11 +7617,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                                 iArchiveFile.getFile().delete();
                             }
                         }
-                        if (iLocking) {
-                            createServerTriggers();
-                        } else {
-                            createLocalTriggers();
-                        }
+                        createLocalTriggers();
                         SSFrameManager.getInstance().close();
 
                     });
@@ -8184,22 +7824,18 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         sb.append(", iCurrentCompany=").append(iCurrentCompany);
         sb.append(", iCurrentYear=").append(iCurrentYear);
         sb.append(", iCustomers=").append(iCustomers);
-        sb.append(", iIn=").append(iIn);
         sb.append(", iIndeliveries=").append(iIndeliveries);
         sb.append(", iInpayments=").append(iInpayments);
         sb.append(", iInventories=").append(iInventories);
         sb.append(", iInvoices=").append(iInvoices);
         sb.append(", iListenerMap=").append(iListenerMap);
-        sb.append(", iLocking=").append(iLocking);
         sb.append(", iOrders=").append(iOrders);
-        sb.append(", iOut=").append(iOut);
         sb.append(", iOutdeliveries=").append(iOutdeliveries);
         sb.append(", iOutpayments=").append(iOutpayments);
         sb.append(", iOwnReports=").append(iOwnReports);
         sb.append(", iPeriodicInvoices=").append(iPeriodicInvoices);
         sb.append(", iProducts=").append(iProducts);
         sb.append(", iPurchaseOrders=").append(iPurchaseOrders);
-        sb.append(", iSocket=").append(iSocket);
         sb.append(", iSupplierCreditInvoices=").append(iSupplierCreditInvoices);
         sb.append(", iSupplierInvoices=").append(iSupplierInvoices);
         sb.append(", iSuppliers=").append(iSuppliers);

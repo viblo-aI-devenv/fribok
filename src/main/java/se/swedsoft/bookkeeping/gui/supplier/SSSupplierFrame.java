@@ -3,7 +3,6 @@ package se.swedsoft.bookkeeping.gui.supplier;
 
 import se.swedsoft.bookkeeping.data.SSSupplier;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.supplier.panel.SSSupplierSearchPanel;
 import se.swedsoft.bookkeeping.gui.supplier.util.SSSupplierTableModel;
@@ -176,24 +175,17 @@ public class SSSupplierFrame extends SSDefaultTableFrame {
                             SSSupplierImporter iImporter = new SSSupplierImporter(
                                     iFilechooser.getSelectedFile());
 
-                            if (!SSPostLock.applyLock("importsupplier")) {
-                                new SSErrorDialog(getMainFrame(), "supplierframe.import.locked");
-                                return;
-                            }
                             try {
                                 iImporter.Import();
 
                             } catch (IOException ex) {
                                 SSErrorDialog.showDialog(getMainFrame(), "",
                                         ex.getLocalizedMessage());
-                                SSPostLock.removeLock("importsupplier");
                             } catch (SSImportException ex) {
                                 SSErrorDialog.showDialog(getMainFrame(), "",
                                         ex.getLocalizedMessage());
-                                SSPostLock.removeLock("importsupplier");
                             }
                             iModel.fireTableDataChanged();
-                            SSPostLock.removeLock("importsupplier");
                         }
 
                     });
@@ -360,14 +352,7 @@ public class SSSupplierFrame extends SSDefaultTableFrame {
 
         if (iResponce == JOptionPane.YES_OPTION) {
             for (SSSupplier iSupplier : delete) {
-                if (SSPostLock.isLocked(
-                        "supplier" + iSupplier.getNumber()
-                        + SSDB.getInstance().getCurrentCompany().getId())) {
-                    new SSErrorDialog(getMainFrame(), "supplierframe.supplieropen",
-                            iSupplier.getNumber());
-                } else {
-                    SSDB.getInstance().deleteSupplier(iSupplier);
-                }
+                SSDB.getInstance().deleteSupplier(iSupplier);
             }
         }
     }

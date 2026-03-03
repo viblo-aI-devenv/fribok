@@ -3,7 +3,6 @@ package se.swedsoft.bookkeeping.gui.product;
 
 import se.swedsoft.bookkeeping.data.SSProduct;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.product.panel.SSProductPanel;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
@@ -105,13 +104,6 @@ public class SSProductDialog {
      * @param pModel
      */
     public static void editDialog(final SSMainFrame iMainFrame, SSProduct iProduct, final AbstractTableModel pModel) {
-        final String lockString = "product" + iProduct.getNumber()
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "productframe.productopen", iProduct.getNumber());
-            return;
-        }
         final SSDialog       iDialog = new SSDialog(iMainFrame,
                 bundle.getString("productframe.edit.title"));
         final SSProductPanel iPanel = new SSProductPanel(iDialog, true);
@@ -131,7 +123,6 @@ public class SSProductDialog {
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
                 }
-                SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
 
             };
@@ -140,7 +131,6 @@ public class SSProductDialog {
 
         iPanel.addCancelAction(e -> {
 
-                SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
 
             });
@@ -149,14 +139,12 @@ public class SSProductDialog {
             @Override
             public void windowClosing(WindowEvent e) {
                 if (!iPanel.isValid()) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 
                 if (SSQueryDialog.showDialog(iMainFrame, SSBundle.getBundle(),
                         "productframe.saveonclose")
                         != JOptionPane.OK_OPTION) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 
@@ -175,13 +163,6 @@ public class SSProductDialog {
      * @param pModel
      */
     public static void copyDialog(final SSMainFrame iMainFrame, SSProduct iProduct, final AbstractTableModel pModel) {
-        final String lockString = "product" + iProduct.getNumber()
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (SSPostLock.isLocked(lockString)) {
-            new SSErrorDialog(iMainFrame, "productframe.productopen", iProduct.getNumber());
-            return;
-        }
         final SSDialog       iDialog = new SSDialog(iMainFrame,
                 bundle.getString("productframe.copy.title"));
         final SSProductPanel iPanel = new SSProductPanel(iDialog, false);

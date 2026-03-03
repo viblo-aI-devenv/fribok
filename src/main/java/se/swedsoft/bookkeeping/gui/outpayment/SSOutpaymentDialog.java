@@ -3,13 +3,11 @@ package se.swedsoft.bookkeeping.gui.outpayment;
 
 import se.swedsoft.bookkeeping.data.SSOutpayment;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.outpayment.panel.SSOutpaymentPanel;
 import se.swedsoft.bookkeeping.gui.supplierinvoice.SSSupplierInvoiceFrame;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSDialog;
-import se.swedsoft.bookkeeping.gui.util.dialogs.SSErrorDialog;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSQueryDialog;
 
 import javax.swing.*;
@@ -161,14 +159,6 @@ public class SSOutpaymentDialog {
      * @param pModel
      */
     public static void editDialog(final SSMainFrame iMainFrame, SSOutpayment iSelected, final AbstractTableModel pModel) {
-        final String lockString = "outpayment" + iSelected.getNumber()
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "outpaymentframe.outpaymentopen",
-                    iSelected.getNumber());
-            return;
-        }
         final SSDialog          iDialog = new SSDialog(iMainFrame,
                 SSOutpaymentDialog.bundle.getString("outpaymentframe.edit.title"));
         final SSOutpaymentPanel iPanel = new SSOutpaymentPanel(iDialog);
@@ -187,8 +177,6 @@ public class SSOutpaymentDialog {
                     pModel.fireTableDataChanged();
                 }
 
-                SSPostLock.removeLock(lockString);
-
                 if (SSSupplierInvoiceFrame.getInstance() != null) {
                     SSSupplierInvoiceFrame.getInstance().updateFrame();
                 }
@@ -201,7 +189,6 @@ public class SSOutpaymentDialog {
 
         iPanel.addCancelAction(e -> {
 
-                SSPostLock.removeLock(lockString);
                 iPanel.dispose();
                 iDialog.closeDialog();
 
@@ -213,7 +200,6 @@ public class SSOutpaymentDialog {
                 if (SSQueryDialog.showDialog(iMainFrame, SSBundle.getBundle(),
                         "outpaymentframe.saveonclose")
                         != JOptionPane.OK_OPTION) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 

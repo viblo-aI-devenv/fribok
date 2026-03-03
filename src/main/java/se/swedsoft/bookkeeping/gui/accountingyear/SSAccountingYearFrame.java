@@ -8,7 +8,6 @@ package se.swedsoft.bookkeeping.gui.accountingyear;
 import se.swedsoft.bookkeeping.data.SSNewAccountingYear;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.data.system.SSDBConfig;
-import se.swedsoft.bookkeeping.data.system.SSYearLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.accountingyear.dialog.SSEditAccountingYearDialog;
 import se.swedsoft.bookkeeping.gui.accountingyear.dialog.SSNewAccountingYearDialog;
@@ -281,15 +280,12 @@ public class SSAccountingYearFrame extends SSDefaultTableFrame {
             return;
         }
         // Lås upp förra året
-        SSYearLock.removeLock(SSDB.getInstance().getCurrentYear());
         // Sätt det valda året som nuvarande år
         SSDB.getInstance().setCurrentYear(iNewYear);
         SSDB.getInstance().initYear(true);
         SSDBConfig.setYearId(SSDB.getInstance().getCurrentCompany().getId(),
                 iNewYear.getId());
 
-        // Lås nya året
-        SSYearLock.applyLock(iNewYear);
         // Stäng alla fönster
         SSFrameManager.getInstance().close();
     }
@@ -331,15 +327,12 @@ public class SSAccountingYearFrame extends SSDefaultTableFrame {
             }
 
             // Lås upp förra året
-            SSYearLock.removeLock(SSDB.getInstance().getCurrentYear());
             // Sätt det valda året som nuvarande år
             SSDB.getInstance().setCurrentYear(iAccountingYear);
             SSDB.getInstance().initYear(true);
             SSDBConfig.setYearId(SSDB.getInstance().getCurrentCompany().getId(),
                     iAccountingYear.getId());
 
-            // Lås nya året
-            SSYearLock.applyLock(iAccountingYear);
             // Stäng alla fönster
             SSFrameManager.getInstance().close();
         }
@@ -361,33 +354,16 @@ public class SSAccountingYearFrame extends SSDefaultTableFrame {
             return;
         }
         updateFrame();
-        boolean lockRemoved = false;
-
-        if (pAccountingYear.equals(SSDB.getInstance().getCurrentYear())) {
-            SSYearLock.removeLock(pAccountingYear);
-            lockRemoved = true;
-        }
 
         SSQueryDialog iDialog = new SSQueryDialog(getMainFrame(), SSBundle.getBundle(),
                 "accountingyearframe.delete", pAccountingYear.toRenderString());
 
         if (iDialog.getResponce() != JOptionPane.YES_OPTION) {
-            if (lockRemoved) {
-                SSYearLock.applyLock(pAccountingYear);
-            }
             return;
         }
         updateFrame();
 
-        if (SSYearLock.isLocked(pAccountingYear)) {
-            new SSErrorDialog(getMainFrame(), "accountingyearframe.yearopen");
-            if (lockRemoved) {
-                SSYearLock.applyLock(pAccountingYear);
-            }
-            return;
-        }
         if (pAccountingYear.equals(SSDB.getInstance().getCurrentYear())) {
-            SSYearLock.removeLock(SSDB.getInstance().getCurrentYear());
             SSDBConfig.setYearId(SSDB.getInstance().getCurrentCompany().getId(), null);
             SSDB.getInstance().setCurrentYear(null);
         }

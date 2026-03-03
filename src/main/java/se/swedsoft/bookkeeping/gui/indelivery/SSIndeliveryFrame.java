@@ -3,7 +3,6 @@ package se.swedsoft.bookkeeping.gui.indelivery;
 
 import se.swedsoft.bookkeeping.data.SSIndelivery;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.indelivery.util.SSIndeliveryTableModel;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
@@ -262,14 +261,7 @@ public class SSIndeliveryFrame extends SSDefaultTableFrame {
 
         if (iResponce == JOptionPane.YES_OPTION) {
             for (SSIndelivery iIndelivery : delete) {
-                if (SSPostLock.isLocked(
-                        "indelivery" + iIndelivery.getNumber()
-                        + SSDB.getInstance().getCurrentCompany().getId())) {
-                    new SSErrorDialog(getMainFrame(), "indeliveryframe.indeliveryopen",
-                            iIndelivery.getNumber());
-                } else {
                     SSDB.getInstance().deleteIndelivery(iIndelivery);
-                }
             }
         }
     }

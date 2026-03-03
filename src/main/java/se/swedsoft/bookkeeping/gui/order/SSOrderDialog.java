@@ -5,7 +5,6 @@ import se.swedsoft.bookkeeping.calc.math.SSOrderMath;
 import se.swedsoft.bookkeeping.data.*;
 import se.swedsoft.bookkeeping.data.common.SSInvoiceType;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.invoice.SSInvoiceDialog;
 import se.swedsoft.bookkeeping.gui.invoice.SSInvoiceFrame;
@@ -111,15 +110,6 @@ public class SSOrderDialog {
      * @param iModel
      */
     public static void newDialog(final SSMainFrame iMainFrame, final SSTender iTender, final AbstractTableModel iModel) {
-        final String lockString = "tendertoorder" + iTender.getNumber()
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "orderframe.tendertoorderopen",
-                    iTender.getNumber());
-            return;
-        }
-
         final SSDialog      iDialog = new SSDialog(iMainFrame,
                 bundle.getString("orderframe.new.title"));
         final SSOrderPanel  iPanel = new SSOrderPanel(iDialog);
@@ -148,7 +138,6 @@ public class SSOrderDialog {
                 }
                 // iModel.setObjects(SSDB.getInstance().getOrders());
                 iPanel.dispose();
-                SSPostLock.removeLock(lockString);
 
                 iDialog.closeDialog();
 
@@ -159,7 +148,6 @@ public class SSOrderDialog {
         iPanel.addCancelAction(e -> {
 
                 iPanel.dispose();
-                SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
 
             });
@@ -168,14 +156,12 @@ public class SSOrderDialog {
             @Override
             public void windowClosing(WindowEvent e) {
                 if (!iPanel.isValid()) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 
                 if (SSQueryDialog.showDialog(iMainFrame, SSBundle.getBundle(),
                         "orderframe.saveonclose")
                         != JOptionPane.OK_OPTION) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 
@@ -194,14 +180,6 @@ public class SSOrderDialog {
      * @param pModel
      */
     public static void editDialog(final SSMainFrame iMainFrame, SSOrder iOrder, final SSOrderTableModel pModel) {
-        final String lockString = "order" + iOrder.getNumber()
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "orderframe.orderopen", iOrder.getNumber());
-            return;
-        }
-
         final SSDialog     iDialog = new SSDialog(iMainFrame,
                 bundle.getString("orderframe.edit.title"));
         final SSOrderPanel iPanel = new SSOrderPanel(iDialog);
@@ -221,7 +199,6 @@ public class SSOrderDialog {
                     SSOrderMath.addCustomerAndProducts(iOrder1);
                 }
 
-                SSPostLock.removeLock(lockString);
                 iPanel.dispose();
                 iDialog.closeDialog();
 
@@ -231,7 +208,6 @@ public class SSOrderDialog {
 
         iPanel.addCancelAction(e -> {
 
-                SSPostLock.removeLock(lockString);
                 iPanel.dispose();
                 iDialog.closeDialog();
 
@@ -241,14 +217,12 @@ public class SSOrderDialog {
             @Override
             public void windowClosing(WindowEvent e) {
                 if (!iPanel.isValid()) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 
                 if (SSQueryDialog.showDialog(iMainFrame, SSBundle.getBundle(),
                         "orderframe.saveonclose")
                         != JOptionPane.OK_OPTION) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 
@@ -267,13 +241,6 @@ public class SSOrderDialog {
      * @param pModel
      */
     public static void copyDialog(final SSMainFrame iMainFrame, SSOrder iOrder, final SSOrderTableModel pModel) {
-        final String lockString = "order" + iOrder.getNumber()
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (SSPostLock.isLocked(lockString)) {
-            new SSErrorDialog(iMainFrame, "orderframe.orderopen", iOrder.getNumber());
-            return;
-        }
         final SSDialog     iDialog = new SSDialog(iMainFrame,
                 bundle.getString("orderframe.copy.title"));
         final SSOrderPanel iPanel = new SSOrderPanel(iDialog);

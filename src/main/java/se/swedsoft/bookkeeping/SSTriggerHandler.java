@@ -3,73 +3,17 @@ package se.swedsoft.bookkeeping;
 
 import org.hsqldb.Trigger;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSDBConfig;
-
-import java.io.*;
-import java.net.Socket;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
- * User: Andreas Lago
- * Date: 2007-apr-19
- * Time: 16:21:55
+ * HSQLDB trigger handler for the local/embedded database.
+ *
+ * <p>Implements {@link Trigger} so that HSQLDB can call {@link #fire} when an
+ * {@code AFTER INSERT/UPDATE/DELETE} trigger fires.  The handler delegates to
+ * {@link SSDB#triggerAction} which updates the in-memory entity lists and
+ * refreshes any open GUI frames.</p>
  */
-public class SSTriggerHandler extends Thread implements Trigger {    private static final Logger LOG = LoggerFactory.getLogger(SSTriggerHandler.class);
-
-    Socket iSocket;
-    public SSTriggerHandler() {
-        if (SSDB.getInstance().getLocking()) {
-            try {
-                iSocket = new Socket(SSDBConfig.getServerAddress(), 2223);
-            } catch (IOException e) {
-                LOG.error("Unexpected error", e);
-            }
-        }
-    }
-
-    @Override
-    public void run() {
-        try {
-            PrintWriter iOut = new PrintWriter(
-                    new OutputStreamWriter(iSocket.getOutputStream()), true);
-            BufferedReader iIn = new BufferedReader(
-                    new InputStreamReader(iSocket.getInputStream()));
-
-            while (SSDB.getInstance().getLocking()) {
-
-                String iTriggerName = iIn.readLine();
-                String iTableName = iIn.readLine();
-
-                String iNumber = iIn.readLine();
-                String iCompanyId = iIn.readLine();
-
-                iOut.println("done");
-
-                if (SSDB.getInstance().getCurrentCompany() == null) {
-                    continue;
-                }
-                // LOG.info("Trigger: "+iTableName+" ; "+iTriggerName+" ; "+iNumber+" ; "+iCompanyId);
-                if (iCompanyId != null) {
-                    Integer iId = Integer.parseInt(iCompanyId);
-
-                    if (iId.equals(SSDB.getInstance().getCurrentCompany().getId())
-                            || (iTableName.equals("TBL_VOUCHER")
-                                    && SSDB.getInstance().getCurrentYear() != null
-                                    && iId.equals(
-                                            SSDB.getInstance().getCurrentYear().getId()))) {
-                        SSDB.getInstance().triggerAction(iTriggerName, iTableName, iNumber);
-                    }
-                }
-            }
-            iOut.close();
-            iIn.close();
-            iSocket.close();
-        } catch (IOException e) {
-            LOG.error("Unexpected error", e);
-        }
-    }
+public class SSTriggerHandler implements Trigger {
 
     public void fire(int type, String trigName, String tabName, Object[] oldRow, Object[] newRow) {
         if (type == UPDATE_BEFORE_ROW) {
@@ -101,7 +45,6 @@ public class SSTriggerHandler extends Thread implements Trigger {    private sta
                 iCompanyId = (Integer) newRow[3];
             }
         }
-        // LOG.info("Trigger: " + trigName + "\nNummer: " + iNumber + "\n\n");
 
         if (iCompanyId != null && SSDB.getInstance().getCurrentCompany() != null) {
 
@@ -113,15 +56,5 @@ public class SSTriggerHandler extends Thread implements Trigger {    private sta
             }
         }
 
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder();
-
-        sb.append("se.swedsoft.bookkeeping.SSTriggerHandler");
-        sb.append("{iSocket=").append(iSocket);
-        sb.append('}');
-        return sb.toString();
     }
 }

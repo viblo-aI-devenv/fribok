@@ -6,7 +6,7 @@ import se.swedsoft.bookkeeping.data.SSVoucher;
 import se.swedsoft.bookkeeping.data.SSVoucherRow;
 import se.swedsoft.bookkeeping.data.SSVoucherTemplate;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
+
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSDialog;
@@ -44,14 +44,6 @@ public class SSVoucherDialog {    private static final Logger LOG = LoggerFactor
      * @param pModel
      */
     public static void newDialog(final SSMainFrame iMainFrame, final AbstractTableModel pModel) {
-        final String lockString = "voucher"
-                + SSDB.getInstance().getCurrentCompany().getId()
-                + SSDB.getInstance().getCurrentYear().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "voucheriscreated");
-            return;
-        }
         final SSDialog       iDialog = new SSDialog(iMainFrame,
                 SSBundle.getBundle().getString("voucherframe.new.title"));
         final SSVoucherPanel iPanel = new SSVoucherPanel(iDialog);
@@ -93,14 +85,12 @@ public class SSVoucherDialog {    private static final Logger LOG = LoggerFactor
                             iPanel.setVoucher(new SSVoucher(), false, false);
                             return;
                         }
-                        SSPostLock.removeLock(lockString);
                         iDialog.closeDialog();
 
                     });
 
         iPanel.addCancelAction(e -> {
 
-                SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
 
             });
@@ -119,16 +109,13 @@ public class SSVoucherDialog {    private static final Logger LOG = LoggerFactor
                 if (SSQueryDialog.showDialog(iMainFrame, SSBundle.getBundle(),
                         "voucherframe.saveonclose")
                         != JOptionPane.OK_OPTION) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
                 if (!iPanel.isValid()) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
                 if (!iPanel.getDate().isInCurrentAccountYear()) {
                     new SSErrorDialog(new JFrame(), "voucherpanel.badyear");
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
                 SSVoucher iVoucher = iPanel.getVoucher();
@@ -138,7 +125,6 @@ public class SSVoucherDialog {    private static final Logger LOG = LoggerFactor
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
                 }
-                SSPostLock.removeLock(lockString);
             }
         });
         iDialog.setSize(800, 600);
@@ -153,14 +139,6 @@ public class SSVoucherDialog {    private static final Logger LOG = LoggerFactor
      * @param pModel
      */
     public static void editDialog(final SSMainFrame iMainFrame, SSVoucher iVoucher, final AbstractTableModel pModel) {
-        final String lockString = "voucher" + iVoucher.getNumber()
-                + SSDB.getInstance().getCurrentCompany().getId()
-                + SSDB.getInstance().getCurrentYear().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "voucherframe.voucheropen", iVoucher.getNumber());
-            return;
-        }
         final SSDialog       iDialog = new SSDialog(iMainFrame,
                 SSBundle.getBundle().getString("voucherframe.edit.title"));
         final SSVoucherPanel iPanel = new SSVoucherPanel(iDialog);
@@ -192,7 +170,6 @@ public class SSVoucherDialog {    private static final Logger LOG = LoggerFactor
                         if (pModel != null) {
                             pModel.fireTableDataChanged();
                         }
-                        SSPostLock.removeLock(lockString);
                         iDialog.closeDialog();
 
                         if (iPanel.doReopen()) {
@@ -208,7 +185,6 @@ public class SSVoucherDialog {    private static final Logger LOG = LoggerFactor
 
         iPanel.addCancelAction(e -> {
 
-                SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
 
             });
@@ -228,18 +204,15 @@ public class SSVoucherDialog {    private static final Logger LOG = LoggerFactor
                         || SSQueryDialog.showDialog(iMainFrame, SSBundle.getBundle(),
                         "voucherframe.saveonclose")
                                 != JOptionPane.OK_OPTION) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
                 if (!iPanel.getDate().isInCurrentAccountYear()) {
                     new SSErrorDialog(new JFrame(), "voucherpanel.badyear");
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
                 SSVoucher iVoucher = iPanel.getVoucher();
 
                 SSDB.getInstance().updateVoucher(iVoucher);
-                SSPostLock.removeLock(lockString);
 
             }
         });
@@ -255,23 +228,6 @@ public class SSVoucherDialog {    private static final Logger LOG = LoggerFactor
      * @param pModel
      */
     public static void copyDialog(final SSMainFrame iMainFrame, SSVoucher iVoucher, final AbstractTableModel pModel) {
-        final String lockString = "voucher"
-                + SSDB.getInstance().getCurrentCompany().getId()
-                + SSDB.getInstance().getCurrentYear().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "voucheriscreated");
-            return;
-        }
-        final String lockString2 = "voucher" + iVoucher.getNumber()
-                + SSDB.getInstance().getCurrentCompany().getId()
-                + SSDB.getInstance().getCurrentYear().getId();
-
-        if (!SSPostLock.applyLock(lockString2)) {
-            new SSErrorDialog(iMainFrame, "voucherframe.voucheropen", iVoucher.getNumber());
-            SSPostLock.removeLock(lockString);
-            return;
-        }
         final SSDialog       iDialog = new SSDialog(iMainFrame,
                 SSBundle.getBundle().getString("voucherframe.copy.title"));
         final SSVoucherPanel iPanel = new SSVoucherPanel(iDialog);
@@ -279,15 +235,11 @@ public class SSVoucherDialog {    private static final Logger LOG = LoggerFactor
         if (iVoucher.getCorrectedBy() != null) {
             SSInformationDialog.showDialog(iMainFrame, "voucherframe.alreadyedited",
                     iVoucher.getNumber());
-            SSPostLock.removeLock(lockString);
-            SSPostLock.removeLock(lockString2);
             return;
         }
         Boolean iCopyReverse = SSCopyReversedVoucherDialog.showDialog(iMainFrame, iVoucher);
 
         if (iCopyReverse == null) {
-            SSPostLock.removeLock(lockString);
-            SSPostLock.removeLock(lockString2);
             return;
         }
 
@@ -340,8 +292,6 @@ public class SSVoucherDialog {    private static final Logger LOG = LoggerFactor
                         if (pModel != null) {
                             pModel.fireTableDataChanged();
                         }
-                        SSPostLock.removeLock(lockString);
-                        SSPostLock.removeLock(lockString2);
                         iDialog.closeDialog();
 
                         if (iPanel.doReopen()) {
@@ -357,8 +307,6 @@ public class SSVoucherDialog {    private static final Logger LOG = LoggerFactor
 
         iPanel.addCancelAction(e -> {
 
-                SSPostLock.removeLock(lockString);
-                SSPostLock.removeLock(lockString2);
                 iDialog.closeDialog();
 
             });
@@ -378,15 +326,11 @@ public class SSVoucherDialog {    private static final Logger LOG = LoggerFactor
                         || SSQueryDialog.showDialog(iMainFrame, SSBundle.getBundle(),
                         "voucherframe.saveonclose")
                                 != JOptionPane.OK_OPTION) {
-                    SSPostLock.removeLock(lockString);
-                    SSPostLock.removeLock(lockString2);
                     return;
                 }
 
                 if (!iPanel.getDate().isInCurrentAccountYear()) {
                     new SSErrorDialog(new JFrame(), "voucherpanel.badyear");
-                    SSPostLock.removeLock(lockString);
-                    SSPostLock.removeLock(lockString2);
                     return;
                 }
                 SSVoucher iVoucher = iPanel.getVoucher();
@@ -396,8 +340,6 @@ public class SSVoucherDialog {    private static final Logger LOG = LoggerFactor
                 iOriginal.setCorrectedBy(iVoucher);
                 SSDB.getInstance().updateVoucher(iVoucher);
 
-                SSPostLock.removeLock(lockString);
-                SSPostLock.removeLock(lockString2);
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
                 }

@@ -7,7 +7,6 @@ package se.swedsoft.bookkeeping.gui.resultunit;
 
 import se.swedsoft.bookkeeping.data.SSNewResultUnit;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.resultunit.util.SSResultUnitTableModel;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
@@ -246,14 +245,7 @@ public class SSResultUnitFrame extends SSDefaultTableFrame {
 
         if (iResponce == JOptionPane.YES_OPTION) {
             for (SSNewResultUnit iResultUnit : delete) {
-                if (SSPostLock.isLocked(
-                        "resultunit" + iResultUnit.getNumber()
-                        + SSDB.getInstance().getCurrentCompany().getId())) {
-                    new SSErrorDialog(getMainFrame(), "resultunitframe.resultunitopen",
-                            iResultUnit.getNumber());
-                } else {
-                    SSDB.getInstance().deleteResultUnit(iResultUnit);
-                }
+                SSDB.getInstance().deleteResultUnit(iResultUnit);
             }
         }
     }

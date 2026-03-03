@@ -16,8 +16,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributeListImpl;
 import org.slf4j.Logger;
@@ -34,19 +32,11 @@ public class SSDBConfig {    private static final Logger LOG = LoggerFactory.get
     private static final File CONFIG_FILE = new File(Path.get(Path.USER_CONF),
             "database.config");
 
-    private static String iClientKey;
-
-    private static String iServerAddress;
-
     private static Integer iCompanyId;
 
     private static Integer iYearId;
 
     private SSDBConfig() {}
-
-    public static String getServerAddress() {
-        return iServerAddress == null ? "" : iServerAddress;
-    }
 
     public static Integer getCompanyId() {
         return iCompanyId;
@@ -163,64 +153,6 @@ public class SSDBConfig {    private static final Logger LOG = LoggerFactory.get
         return null;
     }
 
-    public static void setServerAddress(String iAddress) {
-        iServerAddress = iAddress;
-
-        DOMParser iParser = new DOMParser();
-
-        try {
-            iParser.parse(new InputSource(new FileInputStream(CONFIG_FILE)));
-
-            iParser.getDocument().getDocumentElement().setAttribute("server",
-                    iServerAddress == null ? "" : iServerAddress);
-            iParser.getDocument().getDocumentElement().setAttribute("company", "");
-            iParser.getDocument().getDocumentElement().setAttribute("year", "");
-
-            NodeList iCompanyElements = iParser.getDocument().getDocumentElement().getElementsByTagName(
-                    "company");
-
-            for (int i = 0; i < iCompanyElements.getLength(); i++) {
-                Node iCompanyNode = iCompanyElements.item(i);
-
-                iParser.getDocument().getDocumentElement().removeChild(iCompanyNode);
-            }
-
-            // Write back the database path to the config file.
-            OutputFormat iFormat = new OutputFormat(iParser.getDocument());
-            XMLSerializer serializer = new XMLSerializer(new FileOutputStream(CONFIG_FILE),
-                    iFormat);
-
-            serializer.serialize(iParser.getDocument());
-
-        } catch (IOException | SAXException ex) {
-            LOG.error("Unexpected error", ex);
-        }
-
-    }
-
-    public static void setClientKey(String iKey) {
-        iClientKey = iKey;
-        DOMParser iParser = new DOMParser();
-
-        try {
-            iParser.parse(new InputSource(new FileInputStream(CONFIG_FILE)));
-            iParser.getDocument().getDocumentElement().setAttribute("clientkey",
-                    iClientKey == null ? "" : iClientKey);
-
-            // Write back the database path to the config file.
-            OutputFormat iFormat = new OutputFormat(iParser.getDocument());
-            XMLSerializer serializer = new XMLSerializer(new FileOutputStream(CONFIG_FILE),
-                    iFormat);
-
-            serializer.serialize(iParser.getDocument());
-        } catch (IOException | SAXException ex) {
-            LOG.error("Unexpected error", ex);
-        }
-    }
-
-    public static String getClientkey() {
-        return iClientKey == null ? "" : iClientKey;
-    }
     static {
         load();
     }
@@ -263,12 +195,6 @@ public class SSDBConfig {    private static final Logger LOG = LoggerFactory.get
             // parser.set(false)
             iParser.parse(new InputSource(new FileInputStream(CONFIG_FILE)));
 
-            String iServer = null;
-
-            if (iParser.getDocument().getDocumentElement().hasAttribute("server")) {
-                iServer = iParser.getDocument().getDocumentElement().getAttribute("server");
-            }
-
             String iCompany = null;
 
             if (iParser.getDocument().getDocumentElement().hasAttribute("company")) {
@@ -287,20 +213,6 @@ public class SSDBConfig {    private static final Logger LOG = LoggerFactory.get
             if (iYear != null && iYear.length() != 0) {
                 iYearId = Integer.parseInt(iYear);
             }
-
-            String iKey = null;
-
-            if (iParser.getDocument().getDocumentElement().hasAttribute("clientkey")) {
-                iKey = iParser.getDocument().getDocumentElement().getAttribute("clientkey");
-            } else {
-                DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH.mm z");
-
-                setClientKey(ZonedDateTime.now().format(dateFormat));
-            }
-
-            iClientKey = iKey;
-
-            iServerAddress = iServer;
 
         } catch (IOException | SAXException ex) {
             LOG.error("Unexpected error", ex);

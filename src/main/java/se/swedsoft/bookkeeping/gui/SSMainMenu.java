@@ -184,15 +184,6 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
         iMenuLoader.addActionListener("filemenu.import.sie", e -> {
 
                 SSNewCompany iCurrentCompany = SSDB.getInstance().getCurrentCompany();
-                SSPostLock.applyLock("sieimport"+iCurrentCompany.getId());
-                SSCompanyLock.removeLock(iCurrentCompany);
-                if (SSCompanyLock.isLocked(iCurrentCompany)) {
-                    SSCompanyLock.applyLock(iCurrentCompany);
-                    SSPostLock.removeLock("sieimport"+iCurrentCompany.getId());
-                    new SSErrorDialog( iMainFrame, "companyframe.siecompanyopen");
-                    return;
-                }
-                SSCompanyLock.applyLock(iCurrentCompany);
                 SSFileChooser iFileChooser = SSSIEFileChooser.getInstance();
                 int iResponce = iFileChooser.showOpenDialog(iMainFrame);
                 boolean iShowDialog = false;
@@ -203,16 +194,13 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
                         iImporter.doImport(   );
 
                     } catch (SSImportException ex) {
-                        SSPostLock.removeLock("sieimport"+iCurrentCompany.getId());
                         iShowDialog = false;
                         new SSErrorDialog(iMainFrame, "importexceptiondialog", ex.getMessage());
                     } catch (RuntimeException ex) {
                         LOG.error("Unexpected error", ex);
                         iShowDialog = false;
-                        SSPostLock.removeLock("sieimport"+iCurrentCompany.getId());
                     }
                 }
-                SSPostLock.removeLock("sieimport"+iCurrentCompany.getId());
                 if(iShowDialog)
                     new SSInformationDialog(iMainFrame, "sieimport.importdone");
 
@@ -222,11 +210,6 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
         // *****************************
         iMenuLoader.addActionListener("filemenu.import.vouchers", e -> {
 
-                final String lockString = "voucher"+SSDB.getInstance().getCurrentCompany().getId()+SSDB.getInstance().getCurrentYear().getId();
-                if (!SSPostLock.applyLock(lockString)) {
-                    new SSErrorDialog( iMainFrame, "voucheriscreated");
-                    return;
-                }
                 SSSIEFileChooser iFileChooser = SSSIEFileChooser.getInstance();
                 if (iFileChooser.showOpenDialog(iMainFrame) == JFileChooser.APPROVE_OPTION) {
                     SSSIEImporter iImporter = new SSSIEImporter(iFileChooser.getSelectedFile());
@@ -234,15 +217,11 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
                     try {
                         iImporter.doImportVouchers();
                     } catch (SSImportException ex) {
-                        SSPostLock.removeLock(lockString);
                         new SSErrorDialog(iMainFrame, "importexceptiondialog", ex.getMessage());
                     }
                     if (SSVoucherFrame.getInstance() != null) {
                         SSVoucherFrame.getInstance().getModel().fireTableDataChanged();
                     }
-                    SSPostLock.removeLock(lockString);
-                } else {
-                    SSPostLock.removeLock(lockString);
                 }
 
 
@@ -279,61 +258,7 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
 
         // Restore backup
         // *****************************
-        iMenuLoader.addActionListener("filemenu.backup.restore", e -> {
-
-                if (SSDB.getInstance().getLocking()) {
-                    new SSInformationDialog(iMainFrame, "backupframe.runningonserver");
-                    return;
-                }
-                SSBackupFrame.showFrame(iMainFrame, 600, 400);
-
-            });
-
-        // Network settings
-        // *****************************
-        iMenuLoader.addActionListener("filemenu.network.settings.db", e -> {
-
-                String iIpAddress = SSInputDialog.showDialog();
-                if(iIpAddress == null) return;
-                try {
-                    if (iIpAddress.length() == 0) {
-                        throw new IOException("Could not connect to server on address null");
-                    }
-                    SSDB.getInstance().openSocket(iIpAddress);
-                } catch (IOException ex){
-                    SSQueryDialog iDialog = new SSQueryDialog(SSMainFrame.getInstance(),"noserverfound");
-
-                    if (SSDBConfig.getClientkey() != null && SSDBConfig.getClientkey().length() != 0) {
-                        SSDB.getInstance().removeClient();
-                    }
-                    if (iDialog.getResponce() == JOptionPane.YES_OPTION) {
-                        if(SSDB.getInstance().getLocking()) {
-                            SSCompanyLock.removeLock(SSDB.getInstance().getCurrentCompany());
-                            SSYearLock.removeLock(SSDB.getInstance().getCurrentYear());
-                        }
-                        SSDB.getInstance().setLocking(true);
-                        SSDBConfig.setServerAddress(null);
-                        SSDB.getInstance().setCurrentCompany(null);
-                        SSDB.getInstance().setCurrentYear(null);
-                        SSFrameManager.getInstance().close();
-                        SSDB.getInstance().loadLocalDatabase();
-                        SSCompanyFrame.showFrame(iMainFrame, 500, 300);
-                    }
-                    return;
-                }
-                if(SSDB.getInstance().getLocking()){
-                    SSCompanyLock.removeLock(SSDB.getInstance().getCurrentCompany());
-                    SSYearLock.removeLock(SSDB.getInstance().getCurrentYear());
-                }
-
-                SSDBConfig.setServerAddress(iIpAddress);
-                SSDB.getInstance().setCurrentCompany(null);
-                SSDB.getInstance().setCurrentYear(null);
-                SSFrameManager.getInstance().close();
-                SSDB.getInstance().loadSelectedDatabase(iIpAddress);
-                SSCompanyFrame.showFrame(iMainFrame, 500, 300);
-
-            });
+        iMenuLoader.addActionListener("filemenu.backup.restore", e -> SSBackupFrame.showFrame(iMainFrame, 600, 400));
 
         // Exit
         // *****************************
@@ -596,16 +521,7 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
 
         // Ingående balans
         // *****************************
-        iMenuLoader.addActionListener("bookkeepingmenu.startingamount", e -> {
-
-                final String lockString = "startingamount"+SSDB.getInstance().getCurrentCompany().getId()+SSDB.getInstance().getCurrentYear().getId();
-                if (!SSPostLock.applyLock(lockString)) {
-                    new SSErrorDialog( iMainFrame, "startingamountopen");
-                    return;
-                }
-                SSStartingAmountFrame.showFrame(iMainFrame, 500, 400);
-
-            });
+        iMenuLoader.addActionListener("bookkeepingmenu.startingamount", e -> SSStartingAmountFrame.showFrame(iMainFrame, 500, 400));
 
         // Vouchers
         // *****************************
@@ -613,16 +529,7 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
 
         // Budget
         // *****************************
-        iMenuLoader.addActionListener("bookkeepingmenu.budget", e -> {
-
-                final String lockString = "budget"+SSDB.getInstance().getCurrentCompany().getId()+SSDB.getInstance().getCurrentYear().getId();
-                if (!SSPostLock.applyLock(lockString)) {
-                    new SSErrorDialog( iMainFrame,  "budgetopen");
-                    return;
-                }
-                SSBudgetFrame.showFrame(iMainFrame, 800, 600);
-
-            });
+        iMenuLoader.addActionListener("bookkeepingmenu.budget", e -> SSBudgetFrame.showFrame(iMainFrame, 800, 600));
 
     }
 
@@ -784,65 +691,14 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
 
             });
 
-        // Momsrapport
-        // *****************************
-        /*iMenuLoader.addActionListener("reportmenu.vatreport", e -> {
-
-                final String lockString = "voucher"+SSDB.getInstance().getCurrentCompany().getId()+SSDB.getInstance().getCurrentYear().getId();
-                if (!SSPostLock.applyLock(lockString)) {
-                    new SSErrorDialog( iMainFrame, "voucheriscreated");
-                    return;
-                }
-
-                SSNewAccountingYear yearData = SSDB.getInstance().getCurrentYear();
-
-                // Check so the yeardata isn't null
-                if (yearData == null) {
-                    SSPostLock.removeLock(lockString);
-                    SSNewAccountingYear.openWarningDialogNoYearData(iMainFrame);
-                    return;
-                }
-
-                SSReportFactory.buildVATReport(iMainFrame, bundle, yearData);
-
-            });*/
-
-        // Momsrapport 2007
-        // *****************************
-        /* iMenuLoader.addActionListener("reportmenu.vatreport2007", e -> {
-
-                final String lockString = "voucher"+SSDB.getInstance().getCurrentCompany().getId()+SSDB.getInstance().getCurrentYear().getId();
-                if (!SSPostLock.applyLock(lockString)) {
-                    new SSErrorDialog( iMainFrame, "voucheriscreated");
-                    return;
-                }
-                SSNewAccountingYear iAccountingYear = SSDB.getInstance().getCurrentYear();
-
-                // Check so the yeardata isn't null
-                if (iAccountingYear == null) {
-                    SSPostLock.removeLock(lockString);
-                    SSNewAccountingYear.openWarningDialogNoYearData(iMainFrame);
-                    return;
-                }
-
-                SSReportFactory.VATReport2007(iMainFrame, bundle, iAccountingYear);
-
-            }); */
-
         // Momsrapport 2015
         // *****************************
         iMenuLoader.addActionListener("reportmenu.vatreport2015", e -> {
 
-                final String lockString = "voucher"+SSDB.getInstance().getCurrentCompany().getId()+SSDB.getInstance().getCurrentYear().getId();
-                if (!SSPostLock.applyLock(lockString)) {
-                    new SSErrorDialog( iMainFrame, "voucheriscreated");
-                    return;
-                }
                 SSNewAccountingYear iAccountingYear = SSDB.getInstance().getCurrentYear();
 
                 // Check so the yeardata isn't null
                 if (iAccountingYear == null) {
-                    SSPostLock.removeLock(lockString);
                     SSNewAccountingYear.openWarningDialogNoYearData(iMainFrame);
                     return;
                 }
@@ -996,16 +852,6 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
 
             });
 
-        // Ta bort postlås
-        // ***********************
-        iMenuLoader.addActionListener("helpmenu.clearlocks", e -> {
-
-                SSConfirmDialog iDialog = new SSConfirmDialog("helpmenu.clearlocks.warning");
-                if(iDialog.openDialog(iMainFrame)==JOptionPane.OK_OPTION)
-                    SSPostLock.clearLocks();
-
-            });
-
         iMenuLoader.addActionListener("helpmenu.compress", e -> {
 
                 SSConfirmDialog iDialog = new SSConfirmDialog("helpmenu.compress.warning");
@@ -1027,35 +873,11 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
 
                 final Date iDate = SSDateMath.ceil(iDialog.getDate());
                 SSConfirmDialog iConfirmDialog;
-                if (!SSDB.getInstance().getLocking() /*&& !SSVersion.app_title.contains("JFS Fakturering")*/) {
-                    iConfirmDialog = new SSConfirmDialog("helpmenu.cleartransactions.warning",SSDateUtil.toLocalDate(iDate).format(DateTimeFormatter.ISO_LOCAL_DATE));
-                }
-                // // Fakturering
-                // else if(!SSDB.getInstance().getLocking()){
-                //     iConfirmDialog = new SSConfirmDialog("helpmenu.cleartransactions.wfl",new SimpleDateFormat("yyyy-MM-dd").format(iDate));
-                // }
-                // else if(SSVersion.app_title.contains("JFS Fakturering")){
-                //     iConfirmDialog = new SSConfirmDialog("helpmenu.cleartransactions.wfs",new SimpleDateFormat("yyyy-MM-dd").format(iDate));
-                // }
-                else{
-                    iConfirmDialog = new SSConfirmDialog("helpmenu.cleartransactions.was",SSDateUtil.toLocalDate(iDate).format(DateTimeFormatter.ISO_LOCAL_DATE));
-                }
+                iConfirmDialog = new SSConfirmDialog("helpmenu.cleartransactions.warning",SSDateUtil.toLocalDate(iDate).format(DateTimeFormatter.ISO_LOCAL_DATE));
                 if(iConfirmDialog.openDialog(iMainFrame)!=JOptionPane.OK_OPTION) return;
 
-                if(!SSDB.getInstance().getLocking()){
-                    if (!createBackupDialog())
-                        return;
-                }
-                else{
-                    SSNewCompany iCurrentCompany = SSDB.getInstance().getCurrentCompany();
-                    SSCompanyLock.removeLock(iCurrentCompany);
-                    if (SSCompanyLock.isLocked(iCurrentCompany)) {
-                        SSCompanyLock.applyLock(iCurrentCompany);
-                        new SSErrorDialog( iMainFrame, "companyframe.companyopen");
-                        return;
-                    }
-                    SSCompanyLock.applyLock(iCurrentCompany);
-                }
+                if (!createBackupDialog())
+                    return;
 
                 SSFrameManager.getInstance().close();
                 SSDB.getInstance().dropTriggers();
@@ -1266,18 +1088,11 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
      * @return true on successful backup
      */
     private boolean createBackupDialog() {
-        boolean result = false;
-        if (SSDB.getInstance().getLocking()) {
-            new SSInformationDialog(iMainFrame, "backupframe.runningonserver");
-        }
-        else {
-            JFileChooser fc             = SSBackupFileChooser.getInstance();
-            SSBackupDatabase db         = SSBackupDatabase.getInstance();
-            SSBackupDialog backupDialog = new SSBackupDialog(iMainFrame, fc, db);
-            SSBackupFrame.hideFrame();
-            result = backupDialog.show();
-        }
-        return result;
+        JFileChooser fc             = SSBackupFileChooser.getInstance();
+        SSBackupDatabase db         = SSBackupDatabase.getInstance();
+        SSBackupDialog backupDialog = new SSBackupDialog(iMainFrame, fc, db);
+        SSBackupFrame.hideFrame();
+        return backupDialog.show();
     }
 
     @Override

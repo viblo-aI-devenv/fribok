@@ -7,7 +7,6 @@ import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.accountingyear.SSAccountingYearFrame;
 import se.swedsoft.bookkeeping.gui.company.panel.SSCompanySettingsDialog;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
-import se.swedsoft.bookkeeping.gui.util.dialogs.SSErrorDialog;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSQueryDialog;
 import se.swedsoft.bookkeeping.gui.util.frame.SSFrameManager;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
@@ -28,12 +27,6 @@ public class SSCompanyDialog {
     private SSCompanyDialog() {}
 
     public static void editDialog(SSMainFrame iMainFrame, SSNewCompany pCompany, final SSDefaultTableModel<SSNewCompany> pModel) {
-        if (SSPostLock.isLocked(pCompany.getId())) {
-            new SSErrorDialog(iMainFrame, "postlock.company");
-            return;
-        }
-        SSPostLock.applyLock(pCompany.getId());
-
         SSCompanySettingsDialog iDialog = new SSCompanySettingsDialog(iMainFrame,
                 bundle.getString("companyframe.edit.title"));
 
@@ -49,11 +42,9 @@ public class SSCompanyDialog {
                 if (SSQueryDialog.showDialog(iMainFrame, SSBundle.getBundle(),
                         "companyframe.saveonclose")
                         != JOptionPane.OK_OPTION) {
-                    SSPostLock.removeLock(pCompany.getId());
                     return;
                 }
             } else {
-                SSPostLock.removeLock(pCompany.getId());
                 return;
             }
         }
@@ -70,7 +61,6 @@ public class SSCompanyDialog {
             }
             SSCompanyFrame.getInstance().updateFrame();
         }
-        SSPostLock.removeLock(pCompany.getId());
     }
 
     /**
@@ -80,12 +70,6 @@ public class SSCompanyDialog {
      * @param pModel
      */
     public static void editCurrentDialog(SSMainFrame iMainFrame, SSNewCompany pCompany, final SSDefaultTableModel<SSNewCompany> pModel) {
-        if (SSPostLock.isLocked(pCompany.getId())) {
-            new SSErrorDialog(iMainFrame, "postlock.company");
-            return;
-        }
-        SSPostLock.applyLock(pCompany.getId());
-
         SSCompanySettingsDialog iDialog = new SSCompanySettingsDialog(iMainFrame,
                 bundle.getString("companyframe.editcurrent.title"));
 
@@ -100,11 +84,9 @@ public class SSCompanyDialog {
                 if (SSQueryDialog.showDialog(iMainFrame, SSBundle.getBundle(),
                         "companyframe.saveonclose")
                         != JOptionPane.OK_OPTION) {
-                    SSPostLock.removeLock(pCompany.getId());
                     return;
                 }
             } else {
-                SSPostLock.removeLock(pCompany.getId());
                 return;
             }
         }
@@ -120,7 +102,6 @@ public class SSCompanyDialog {
             }
             SSCompanyFrame.getInstance().updateFrame();
         }
-        SSPostLock.removeLock(pCompany.getId());
     }
 
     /**
@@ -159,17 +140,11 @@ public class SSCompanyDialog {
                 "companyframe.replacecompany", iCompany.getName());
 
         if (iQDialog.getResponce() == JOptionPane.YES_OPTION) {
-            // Lås upp det förra företaget
-            SSCompanyLock.removeLock(SSDB.getInstance().getCurrentCompany());
-            SSYearLock.removeLock(SSDB.getInstance().getCurrentYear());
-
             // Sätt det valda företaget som nuvarande företag
             SSDB.getInstance().setCurrentCompany(iCompany);
             SSDB.getInstance().init(true);
             SSDBConfig.setCompanyId(iCompany.getId());
 
-            // Lås det nya företaget
-            SSCompanyLock.applyLock(iCompany);
             SSDB.getInstance().setCurrentYear(null);
 
             pModel.fireTableDataChanged();

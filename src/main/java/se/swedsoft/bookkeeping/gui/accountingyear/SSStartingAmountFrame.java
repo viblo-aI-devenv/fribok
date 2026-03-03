@@ -10,7 +10,6 @@ import se.swedsoft.bookkeeping.calc.math.SSAccountMath;
 import se.swedsoft.bookkeeping.data.SSAccount;
 import se.swedsoft.bookkeeping.data.SSNewAccountingYear;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.accountingyear.panel.SSStartingAmountPanel;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
@@ -87,18 +86,10 @@ public class SSStartingAmountFrame extends SSDefaultTableFrame {
                             int iResponce = iDialog.getResponce();
 
                             if (iResponce != JOptionPane.YES_OPTION) {
-                                SSPostLock.removeLock(
-                                        "startingamount"
-                                                + SSDB.getInstance().getCurrentCompany().getId()
-                                                + SSDB.getInstance().getCurrentYear().getId());
                                 return;
                             }
                             iAccountingYear.setInBalance(iStartingAmountPanel.getInBalance());
                             SSDB.getInstance().updateAccountingYear(iAccountingYear);
-                            SSPostLock.removeLock(
-                                    "startingamount"
-                                            + SSDB.getInstance().getCurrentCompany().getId()
-                                            + SSDB.getInstance().getCurrentYear().getId());
                         }
 
                     });
@@ -121,9 +112,6 @@ public class SSStartingAmountFrame extends SSDefaultTableFrame {
 
                         iAccountingYear.setInBalance(iStartingAmountPanel.getInBalance());
                         SSDB.getInstance().updateAccountingYear(iAccountingYear);
-                        SSPostLock.removeLock(
-                                "startingamount" + SSDB.getInstance().getCurrentCompany().getId()
-                                + SSDB.getInstance().getCurrentYear().getId());
                         cInstance = null;
                         setVisible(false);
 
@@ -136,9 +124,6 @@ public class SSStartingAmountFrame extends SSDefaultTableFrame {
         iButton = new SSButton("ICON_CANCELITEM", "startingammountframe.cancelbutton",
                 e -> {
 
-                        SSPostLock.removeLock(
-                                "startingamount" + SSDB.getInstance().getCurrentCompany().getId()
-                                + SSDB.getInstance().getCurrentYear().getId());
                         cInstance = null;
                         setVisible(false);
 

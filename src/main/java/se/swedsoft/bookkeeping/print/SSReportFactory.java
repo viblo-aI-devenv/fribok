@@ -11,7 +11,6 @@ import se.swedsoft.bookkeeping.calc.util.SSVATUtil;
 import se.swedsoft.bookkeeping.data.*;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.data.system.SSMail;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.dialogs.*;
@@ -385,7 +384,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         int iResponce = iDialog.showDialog();
 
         if (iResponce != JOptionPane.OK_OPTION) {
-            SSPostLock.removeLock(lockString);
             return;
         }
 
@@ -399,7 +397,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         if (SSAccountMath.getNumAccountsByVatCode(iAccounts, "R1") > 1
                 || SSAccountMath.getNumAccountsByVatCode(iAccounts, "R2") > 1
                 || SSAccountMath.getNumAccountsByVatCode(iAccounts, "A") > 1) {
-            SSPostLock.removeLock(lockString);
             new SSErrorDialog(iMainFrame, "vatbasis.dialog.morethenoneaccount");
             return;
         }
@@ -476,7 +473,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         int iResponce = iDialog.showDialog();
 
         if (iResponce != JOptionPane.OK_OPTION) {
-            SSPostLock.removeLock(lockString);
             return;
         }
 
@@ -521,7 +517,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                                         int iResponce1 = iDialog1.getResponce();
 
                                         if (iResponce1 != JOptionPane.OK_OPTION) {
-                                            SSPostLock.removeLock(lockString);
                                             return;
                                         }
                                         SSDB.getInstance().addVoucher(iVoucher, false);
@@ -529,7 +524,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                                         if (SSVoucherFrame.getInstance() != null) {
                                             SSVoucherFrame.getInstance().getModel().fireTableDataChanged();
                                         }
-                                        SSPostLock.removeLock(lockString);
 
                                     });
 
@@ -552,7 +546,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         int iResponce = iDialog.showDialog();
 
         if (iResponce != JOptionPane.OK_OPTION) {
-            SSPostLock.removeLock(lockString);
             return;
         }
 
@@ -599,7 +592,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                                         int iResponce1 = iDialog1.getResponce();
 
                                         if (iResponce1 != JOptionPane.OK_OPTION) {
-                                            SSPostLock.removeLock(lockString);
                                             return;
                                         }
                                         SSDB.getInstance().addVoucher(iVoucher, false);
@@ -607,7 +599,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                                         if (SSVoucherFrame.getInstance() != null) {
                                             SSVoucherFrame.getInstance().getModel().fireTableDataChanged();
                                         }
-                                        SSPostLock.removeLock(lockString);
 
                                     });
 
@@ -652,8 +643,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
      * @param pTo
      */
     public static void dialogVATVoucher(final SSMainFrame iMainFrame, final SSVoucher pVoucher, final SSNewAccountingYear pAccountingYear, final Date pFrom, final Date pTo) {
-        String lockString = "voucher" + SSDB.getInstance().getCurrentCompany().getId()
-                + SSDB.getInstance().getCurrentYear().getId();
         DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT);
 
         // Manually construct an input popup
@@ -663,7 +652,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         int iResponce = iDialog.getResponce();
 
         if (iResponce != JOptionPane.YES_NO_OPTION) {
-            SSPostLock.removeLock(lockString);
             return;
         }
         SSDB.getInstance().addVoucher(pVoucher, false);
@@ -671,7 +659,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         if (SSVoucherFrame.getInstance() != null) {
             SSVoucherFrame.getInstance().getModel().fireTableDataChanged();
         }
-        SSPostLock.removeLock(lockString);
     }
 
     /**
@@ -2119,14 +2106,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
      * @param iMainFrame
      */
     public static void InvoiceJournal(final SSMainFrame iMainFrame) {
-        final String lockString = "voucher"
-                + SSDB.getInstance().getCurrentCompany().getId()
-                + SSDB.getInstance().getCurrentYear().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "voucheriscreated");
-            return;
-        }
         SSAutoIncrement iAutoIncrement = SSDB.getInstance().getCurrentCompany().getAutoIncrement();
 
         SSPeriodSelectionDialog iDialog = new SSPeriodSelectionDialog(iMainFrame,
@@ -2148,7 +2127,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
 
         iDialog.setLocationRelativeTo(iMainFrame);
         if (iDialog.showDialog() != JOptionPane.OK_OPTION) {
-            SSPostLock.removeLock(lockString);
             return;
         }
         List<SSInvoice> iInvoices = SSDB.getInstance().getInvoices();
@@ -2160,7 +2138,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 .filter(iInvoice -> !iInvoice.isEntered() && SSInvoiceMath.inPeriod(iInvoice, iFrom, iTo))
                 .collect(Collectors.toList());
         if (iFiltered.isEmpty()) {
-            SSPostLock.removeLock(lockString);
             new SSInformationDialog(iMainFrame, "invoicejournal.dialog.norows");
             return;
         }
@@ -2191,7 +2168,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                         "invoicejournal.dialog.register", iNumber, iVoucher1.getNumber());
 
                 if (iDialog1.getResponce() != JOptionPane.YES_NO_OPTION) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
                 // Mark all invoices as entered
@@ -2211,7 +2187,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 if (SSVoucherFrame.getInstance() != null) {
                     SSVoucherFrame.getInstance().getModel().fireTableDataChanged();
                 }
-                SSPostLock.removeLock(lockString);
 
             };
 
@@ -2239,14 +2214,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
      * @param iMainFrame
      */
     public static void CreditInvoiceJournal(final SSMainFrame iMainFrame) {
-        final String lockString = "voucher"
-                + SSDB.getInstance().getCurrentCompany().getId()
-                + SSDB.getInstance().getCurrentYear().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "voucheriscreated");
-            return;
-        }
         SSAutoIncrement iAutoIncrement = SSDB.getInstance().getCurrentCompany().getAutoIncrement();
 
         SSPeriodSelectionDialog iDialog = new SSPeriodSelectionDialog(iMainFrame,
@@ -2270,7 +2237,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         iDialog.setLocationRelativeTo(iMainFrame);
 
         if (iDialog.showDialog() != JOptionPane.OK_OPTION) {
-            SSPostLock.removeLock(lockString);
             return;
         }
         List<SSCreditInvoice> iCreditInvoices = SSDB.getInstance().getCreditInvoices();
@@ -2283,7 +2249,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                         && SSInvoiceMath.inPeriod(iCreditInvoice, iFrom, iTo))
                 .collect(Collectors.toList());
         if (iFiltered.isEmpty()) {
-            SSPostLock.removeLock(lockString);
             new SSInformationDialog(iMainFrame, "creditinvoicejournal.dialog.norows");
             return;
         }
@@ -2315,7 +2280,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                         iVoucher1.getNumber());
 
                 if (iDialog1.getResponce() != JOptionPane.YES_NO_OPTION) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
                 // Mark all invoices as entered
@@ -2335,7 +2299,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 if (SSVoucherFrame.getInstance() != null) {
                     SSVoucherFrame.getInstance().getModel().fireTableDataChanged();
                 }
-                SSPostLock.removeLock(lockString);
 
             };
 
@@ -2364,14 +2327,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
      * @param iMainFrame
      */
     public static void InpaymentJournal(final SSMainFrame iMainFrame) {
-        final String lockString = "voucher"
-                + SSDB.getInstance().getCurrentCompany().getId()
-                + SSDB.getInstance().getCurrentYear().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "voucheriscreated");
-            return;
-        }
         SSAutoIncrement iAutoIncrement = SSDB.getInstance().getCurrentCompany().getAutoIncrement();
 
         SSPeriodSelectionDialog iDialog = new SSPeriodSelectionDialog(iMainFrame,
@@ -2398,7 +2353,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         iDialog.setLocationRelativeTo(iMainFrame);
 
         if (iDialog.showDialog() != JOptionPane.OK_OPTION) {
-            SSPostLock.removeLock(lockString);
             return;
         }
         List<SSInpayment> iInpayments = SSDB.getInstance().getInpayments();
@@ -2411,7 +2365,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                         && SSInpaymentMath.inPeriod(iInpayment, iFrom, iTo))
                 .collect(Collectors.toList());
         if (iFiltered.isEmpty()) {
-            SSPostLock.removeLock(lockString);
             new SSInformationDialog(iMainFrame, "inpaymentjournal.dialog.norows");
             return;
         }
@@ -2442,7 +2395,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                         "inpaymentjournal.dialog.register", iNumber, iVoucher1.getNumber());
 
                 if (iDialog1.getResponce() != JOptionPane.YES_NO_OPTION) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
                 // Mark all invoices as entered
@@ -2462,7 +2414,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 if (SSVoucherFrame.getInstance() != null) {
                     SSVoucherFrame.getInstance().getModel().fireTableDataChanged();
                 }
-                SSPostLock.removeLock(lockString);
 
             };
 
@@ -2491,15 +2442,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
      * @param iMainFrame
      */
     public static void SupplierInvoiceJournal(final SSMainFrame iMainFrame) {
-        final String lockString = "voucher"
-                + SSDB.getInstance().getCurrentCompany().getId()
-                + SSDB.getInstance().getCurrentYear().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "voucheriscreated");
-            return;
-        }
-
         SSAutoIncrement iAutoIncrement = SSDB.getInstance().getCurrentCompany().getAutoIncrement();
 
         SSPeriodSelectionDialog iDialog = new SSPeriodSelectionDialog(iMainFrame,
@@ -2525,7 +2467,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         int iResponce = iDialog.showDialog();
 
         if (iResponce != JOptionPane.OK_OPTION) {
-            SSPostLock.removeLock(lockString);
             return;
         }
         List<SSSupplierInvoice> iInvoices = SSDB.getInstance().getSupplierInvoices();
@@ -2538,7 +2479,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                         && SSSupplierInvoiceMath.inPeriod(iInvoice, iFrom, iTo))
                 .collect(Collectors.toList());
         if (iFiltered.isEmpty()) {
-            SSPostLock.removeLock(lockString);
             new SSInformationDialog(iMainFrame, "supplierinvoicejournal.dialog.norows");
             return;
         }
@@ -2571,7 +2511,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 int iResponce1 = iDialog1.getResponce();
 
                 if (iResponce1 != JOptionPane.YES_NO_OPTION) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
                 // Mark all invoices as entered
@@ -2591,7 +2530,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 if (SSVoucherFrame.getInstance() != null) {
                     SSVoucherFrame.getInstance().getModel().fireTableDataChanged();
                 }
-                SSPostLock.removeLock(lockString);
 
             };
 
@@ -2619,14 +2557,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
      * @param iMainFrame
      */
     public static void SupplierCreditInvoiceJournal(final SSMainFrame iMainFrame) {
-        final String lockString = "voucher"
-                + SSDB.getInstance().getCurrentCompany().getId()
-                + SSDB.getInstance().getCurrentYear().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "voucheriscreated");
-            return;
-        }
         SSAutoIncrement iAutoIncrement = SSDB.getInstance().getCurrentCompany().getAutoIncrement();
 
         SSPeriodSelectionDialog iDialog = new SSPeriodSelectionDialog(iMainFrame,
@@ -2652,7 +2582,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         int iResponce = iDialog.showDialog();
 
         if (iResponce != JOptionPane.OK_OPTION) {
-            SSPostLock.removeLock(lockString);
             return;
         }
         List<SSSupplierCreditInvoice> iInvoices = SSDB.getInstance().getSupplierCreditInvoices();
@@ -2665,7 +2594,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                         && SSSupplierCreditInvoiceMath.inPeriod(iInvoice, iFrom, iTo))
                 .collect(Collectors.toList());
         if (iFiltered.isEmpty()) {
-            SSPostLock.removeLock(lockString);
             new SSInformationDialog(iMainFrame,
                     "suppliercreditinvoicejournal.dialog.norows");
             return;
@@ -2700,7 +2628,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 int iResponce1 = iDialog1.getResponce();
 
                 if (iResponce1 != JOptionPane.YES_NO_OPTION) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
                 // Mark all invoices as entered
@@ -2720,8 +2647,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 if (SSVoucherFrame.getInstance() != null) {
                     SSVoucherFrame.getInstance().getModel().fireTableDataChanged();
                 }
-
-                SSPostLock.removeLock(lockString);
 
             };
 
@@ -2749,14 +2674,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
      * @param iMainFrame
      */
     public static void OutpaymentJournal(final SSMainFrame iMainFrame) {
-        final String lockString = "voucher"
-                + SSDB.getInstance().getCurrentCompany().getId()
-                + SSDB.getInstance().getCurrentYear().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "voucheriscreated");
-            return;
-        }
         SSAutoIncrement iAutoIncrement = SSDB.getInstance().getCurrentCompany().getAutoIncrement();
 
         SSPeriodSelectionDialog iDialog = new SSPeriodSelectionDialog(iMainFrame,
@@ -2781,7 +2698,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         int iResponce = iDialog.showDialog();
 
         if (iResponce != JOptionPane.OK_OPTION) {
-            SSPostLock.removeLock(lockString);
             return;
         }
         List<SSOutpayment> iOutpayments = SSDB.getInstance().getOutpayments();
@@ -2794,7 +2710,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                         && SSOutpaymentMath.inPeriod(iOutpayment, iFrom, iTo))
                 .collect(Collectors.toList());
         if (iFiltered.isEmpty()) {
-            SSPostLock.removeLock(lockString);
             new SSInformationDialog(iMainFrame, "outpaymentjournal.dialog.norows");
             return;
         }
@@ -2827,7 +2742,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 int iResponce1 = iDialog1.getResponce();
 
                 if (iResponce1 != JOptionPane.YES_NO_OPTION) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 
@@ -2847,7 +2761,6 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 if (SSVoucherFrame.getInstance() != null) {
                     SSVoucherFrame.getInstance().getModel().fireTableDataChanged();
                 }
-                SSPostLock.removeLock(lockString);
 
             };
 

@@ -5,7 +5,6 @@ import se.swedsoft.bookkeeping.calc.math.SSOrderMath;
 import se.swedsoft.bookkeeping.data.*;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.data.system.SSMail;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.order.panel.SSOrderSearchPanel;
 import se.swedsoft.bookkeeping.gui.order.util.SSOrderTableModel;
@@ -605,24 +604,17 @@ public class SSOrderFrame extends SSDefaultTableFrame {    private static final 
 
         if (iResponce == JOptionPane.YES_OPTION) {
             for (SSOrder iOrder : delete) {
-                if (SSPostLock.isLocked(
-                        "order" + iOrder.getNumber()
-                        + SSDB.getInstance().getCurrentCompany().getId())) {
-                    new SSErrorDialog(getMainFrame(), "orderframe.orderopen",
-                            iOrder.getNumber());
-                } else {
-                    List<SSTender> iTenders = new LinkedList<>(
-                            SSDB.getInstance().getTenders());
+                List<SSTender> iTenders = new LinkedList<>(
+                        SSDB.getInstance().getTenders());
 
-                    for (SSTender iTender : iTenders) {
-                        if (iTender.hasOrder(iOrder)) {
-                            iTender.setOrder(null);
-                            SSDB.getInstance().updateTender(iTender);
-                        }
+                for (SSTender iTender : iTenders) {
+                    if (iTender.hasOrder(iOrder)) {
+                        iTender.setOrder(null);
+                        SSDB.getInstance().updateTender(iTender);
                     }
-                    iTenders = null;
-                    SSDB.getInstance().deleteOrder(iOrder);
                 }
+                iTenders = null;
+                SSDB.getInstance().deleteOrder(iOrder);
             }
         }
     }

@@ -9,7 +9,6 @@ import se.swedsoft.bookkeeping.data.base.SSSaleRow;
 import se.swedsoft.bookkeeping.data.common.SSCurrency;
 import se.swedsoft.bookkeeping.data.common.SSTaxCode;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSErrorDialog;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
@@ -204,15 +203,6 @@ public class SSInterestInvoiceTableModel extends SSDefaultTableModel<SSInvoice> 
         List<SSInvoice> iInvoices = new LinkedList<>();
 
         for (SSInvoice iInvoice : getObjects()) {
-
-            if (SSPostLock.isLocked(
-                    "invoice" + iInvoice.getNumber()
-                    + SSDB.getInstance().getCurrentCompany().getId())) {
-                new SSErrorDialog(new JFrame(), "interestinvoice.invoiceopen",
-                        iInvoice.getNumber(), iInvoice.getNumber());
-                iInvoice.setInterestInvoiced(false);
-                continue;
-            }
 
             InterestAction iAction = iActions.get(iInvoice);
 

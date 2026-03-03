@@ -3,7 +3,6 @@ package se.swedsoft.bookkeeping.gui.resultunit;
 
 import se.swedsoft.bookkeeping.data.SSNewResultUnit;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.resultunit.panel.SSResultUnitPanel;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
@@ -93,14 +92,6 @@ public class SSResultUnitDialog {
      * @param model
      */
     public static void editDialog(final SSMainFrame iMainFrame, SSNewResultUnit pResultUnit, final AbstractTableModel model) {
-        final String lockString = "resultunit" + pResultUnit.getNumber()
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "resultunitframe.resultunitopen",
-                    pResultUnit.getNumber());
-            return;
-        }
         final SSDialog          iDialog = new SSDialog(iMainFrame,
                 SSBundle.getBundle().getString("resultunitframe.edit.title"));
         final SSResultUnitPanel iPanel = new SSResultUnitPanel(true);
@@ -115,7 +106,6 @@ public class SSResultUnitDialog {
                 SSDB.getInstance().updateResultUnit(iResultUnit);
 
                 model.fireTableDataChanged();
-                SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
 
             };
@@ -124,7 +114,6 @@ public class SSResultUnitDialog {
 
         iPanel.addCancelAction(e -> {
 
-                SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
 
             });
@@ -136,7 +125,6 @@ public class SSResultUnitDialog {
                 if (SSQueryDialog.showDialog(iMainFrame, SSBundle.getBundle(),
                         "resultunitframe.saveonclose")
                         != JOptionPane.OK_OPTION) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 

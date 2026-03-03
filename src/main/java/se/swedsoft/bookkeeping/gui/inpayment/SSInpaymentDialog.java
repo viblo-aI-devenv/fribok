@@ -3,13 +3,11 @@ package se.swedsoft.bookkeeping.gui.inpayment;
 
 import se.swedsoft.bookkeeping.data.SSInpayment;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.inpayment.panel.SSInpaymentPanel;
 import se.swedsoft.bookkeeping.gui.invoice.SSInvoiceFrame;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSDialog;
-import se.swedsoft.bookkeeping.gui.util.dialogs.SSErrorDialog;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSQueryDialog;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 
@@ -36,15 +34,6 @@ public class SSInpaymentDialog {
      * @param pModel
      */
     public static void editDialog(final SSMainFrame iMainFrame, final SSInpayment pInpayment, final SSDefaultTableModel<SSInpayment> pModel) {
-        final String lockString = "inpayment" + pInpayment.getNumber()
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "inpaymentframe.inpaymentopen",
-                    pInpayment.getNumber());
-            return;
-        }
-
         final SSDialog       iDialog = new SSDialog(iMainFrame,
                 SSBundle.getBundle().getString("inpaymentframe.edit.title"));
         final SSInpaymentPanel iPanel = new SSInpaymentPanel(iDialog);
@@ -66,7 +55,6 @@ public class SSInpaymentDialog {
                 if (SSInvoiceFrame.getInstance() != null) {
                     SSInvoiceFrame.getInstance().updateFrame();
                 }
-                SSPostLock.removeLock(lockString);
                 iPanel.dispose();
                 iDialog.closeDialog();
 
@@ -76,7 +64,6 @@ public class SSInpaymentDialog {
 
         iPanel.addCancelAction(e -> {
 
-                SSPostLock.removeLock(lockString);
                 iPanel.dispose();
                 iDialog.closeDialog();
 
@@ -88,7 +75,6 @@ public class SSInpaymentDialog {
                 if (SSQueryDialog.showDialog(iMainFrame, SSBundle.getBundle(),
                         "inpaymentframe.saveonclose")
                         != JOptionPane.OK_OPTION) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 

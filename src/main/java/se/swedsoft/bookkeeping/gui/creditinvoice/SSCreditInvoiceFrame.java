@@ -6,7 +6,6 @@ import se.swedsoft.bookkeeping.calc.math.SSInvoiceMath;
 import se.swedsoft.bookkeeping.data.SSCreditInvoice;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.data.system.SSMail;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.creditinvoice.panel.SSCreditInvoiceSearchPanel;
 import se.swedsoft.bookkeeping.gui.creditinvoice.util.SSCreditInvoiceTableModel;
@@ -320,13 +319,6 @@ public class SSCreditInvoiceFrame extends SSDefaultTableFrame {
 
         if (iResponce == JOptionPane.YES_OPTION) {
             for (SSCreditInvoice iCreditInvoice : delete) {
-                if (SSPostLock.isLocked(
-                        "creditinvoice" + iCreditInvoice.getNumber()
-                        + SSDB.getInstance().getCurrentCompany().getId())) {
-                    new SSErrorDialog(getMainFrame(),
-                            "creditinvoiceframe.creditinvoiceopen",
-                            iCreditInvoice.getNumber());
-                } else {
                     if (SSInvoiceMath.iSaldoMap.containsKey(
                             iCreditInvoice.getCreditingNr())) {
                         SSInvoiceMath.iSaldoMap.put(iCreditInvoice.getCreditingNr(),
@@ -334,7 +326,6 @@ public class SSCreditInvoiceFrame extends SSDefaultTableFrame {
                                 SSCreditInvoiceMath.getTotalSum(iCreditInvoice)));
                     }
                     SSDB.getInstance().deleteCreditInvoice(iCreditInvoice);
-                }
             }
         }
 

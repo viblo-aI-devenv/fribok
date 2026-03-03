@@ -5,7 +5,6 @@ import se.swedsoft.bookkeeping.calc.math.SSSupplierInvoiceMath;
 import se.swedsoft.bookkeeping.data.SSOutpayment;
 import se.swedsoft.bookkeeping.data.SSOutpaymentRow;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.outpayment.panel.SSOutpaymentSearchPanel;
 import se.swedsoft.bookkeeping.gui.outpayment.util.SSOutpaymentTableModel;
@@ -243,24 +242,17 @@ public class SSOutpaymentFrame extends SSDefaultTableFrame {
 
         if (iResponce == JOptionPane.YES_OPTION) {
             for (SSOutpayment iOutpayment : delete) {
-                if (SSPostLock.isLocked(
-                        "outpayment" + iOutpayment.getNumber()
-                        + SSDB.getInstance().getCurrentCompany().getId())) {
-                    new SSErrorDialog(getMainFrame(), "outpaymentframe.outpaymentopen",
-                            iOutpayment.getNumber());
-                } else {
-                    for (SSOutpaymentRow iRow : iOutpayment.getRows()) {
-                        if (iRow.getValue() != null && iRow.getInvoiceNr() != null) {
-                            if (SSSupplierInvoiceMath.iSaldoMap.containsKey(
-                                    iRow.getInvoiceNr())) {
-                                SSSupplierInvoiceMath.iSaldoMap.put(iRow.getInvoiceNr(),
-                                        SSSupplierInvoiceMath.iSaldoMap.get(iRow.getInvoiceNr()).add(
-                                        iRow.getValue()));
-                            }
+                for (SSOutpaymentRow iRow : iOutpayment.getRows()) {
+                    if (iRow.getValue() != null && iRow.getInvoiceNr() != null) {
+                        if (SSSupplierInvoiceMath.iSaldoMap.containsKey(
+                                iRow.getInvoiceNr())) {
+                            SSSupplierInvoiceMath.iSaldoMap.put(iRow.getInvoiceNr(),
+                                    SSSupplierInvoiceMath.iSaldoMap.get(iRow.getInvoiceNr()).add(
+                                    iRow.getValue()));
                         }
                     }
-                    SSDB.getInstance().deleteOutpayment(iOutpayment);
                 }
+                SSDB.getInstance().deleteOutpayment(iOutpayment);
             }
         }
     }
