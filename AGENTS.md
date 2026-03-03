@@ -132,9 +132,3 @@ Launch main application via Maven
 - Use Bash for git and build commands; avoid destructive or irreversible operations
 - Parallelize independent tool calls; chain dependent commands sequentially
 - Default to ASCII and follow existing conventions; ask questions only when blocked
-
-## Cursor Rules
-No `.cursor/rules/` or `.cursorrules` files detected
-
-## Copilot Rules
-No Copilot instructions found in `.github/copilot-instructions.md`
