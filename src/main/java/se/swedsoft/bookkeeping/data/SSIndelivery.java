@@ -18,11 +18,11 @@ public class SSIndelivery implements Serializable {
 
     private static final long serialVersionUID = -5537699296769492741L;
 
-    public Integer iNumber;
+    private Integer iNumber;
 
-    public Date iDate;
+    private Date iDate;
 
-    public String iText;
+    private String iText;
 
     private List<SSIndeliveryRow> iRows;
 

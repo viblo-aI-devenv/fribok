@@ -22,13 +22,13 @@ public class SSInventory implements Serializable {
 
     private static final long serialVersionUID = 5324014159041899233L;
 
-    public Integer iNumber;
+    private Integer iNumber;
 
     private LocalDate iDate;
 
-    public String iText;
+    private String iText;
 
-    public List<SSInventoryRow> iRows;
+    private List<SSInventoryRow> iRows;
 
     /**
      *

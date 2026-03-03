@@ -25,7 +25,7 @@ keeping the application functional throughout.
 | Old date/time API (`import java.util.Date`) | 140 files | 66 `new Date()`, 325 `Calendar.`, 0 `SimpleDateFormat` |
 | Java serialization (`implements Serializable`) | 45 classes | |
 | `return null` (no `Optional`) | ~419 | |
-| Mutable public fields | ~49 | Concentrated in BgMax data classes |
+| Mutable public fields | 0 | Encapsulated in Step 19 |
 | `synchronized` blocks | 11 | SSDB and threading code |
 | Raw types / `Vector` | 6 | `Vector` still used in a few places |
 | Stray `System.out.printf` | 4 | In 3 files: `Bookkeeping.java`, `SSBookkeeping.java`, `SSReportCache.java` |
@@ -274,10 +274,14 @@ that complicated every modification to SSDB, triggers, and GUI code.
 
 **Risk:** Low | **Effort:** Medium
 
-19. **Encapsulate public mutable fields** -- Add getters/setters for the ~51
-    public fields (concentrated in BgMax data classes: `BgMaxBetalning`,
-    `BgMaxAvsnitt`, `BgMaxFile`, `BgMaxReferens`). Consider converting simple
-    data carriers to Java records.
+19. ✓ **Encapsulate public mutable fields** -- Encapsulated all 53 public mutable
+    fields across 7 classes. BgMax data classes (`BgMaxBetalning` 18 fields,
+    `BgMaxAvsnitt` 10, `BgMaxFile` 9, `BgMaxReferens` 7) required new
+    getters/setters and caller updates (5 files). List fields made `final` with
+    `Collections.unmodifiableList()` getters and dedicated `add*()`/`getLast*()`
+    helpers. `SSInventory`, `SSOutdelivery`, `SSIndelivery` (3 fields each) only
+    needed visibility change from `public` to `private` since getters already
+    existed. All 396 unit tests + 34 integration tests pass.
 
 20. **Introduce `Optional<T>`** -- Prioritize entity lookup methods, search/find
     methods, and parser methods. Focus on public API methods first rather than
@@ -389,7 +393,7 @@ migration.
 | 2 | Logging | Low | Low | **Done** |
 | 3 | Date/Time Migration | Medium | Medium | In Progress (Steps 15-17 done) |
 | 3.5 | Remove Multi-User/Server Mode | Low | Medium | **Done** |
-| 4 | Code Quality | Low | Medium | Not started |
+| 4 | Code Quality | Low | Medium | Step 19 done |
 | 5 | Persistence Architecture | High | Very High | Not started |
 | 6 | Dependency Updates | Medium | Medium | Not started |
 | 7 | Build & Tooling | None | Low | Not started |
