@@ -7,7 +7,6 @@ import se.swedsoft.bookkeeping.data.SSInvoice;
 import se.swedsoft.bookkeeping.data.SSOrder;
 import se.swedsoft.bookkeeping.data.SSPeriodicInvoice;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.invoice.SSInvoiceFrame;
 import se.swedsoft.bookkeeping.gui.periodicinvoice.dialog.SSPendingPeriodicInvoiceDialog;
@@ -182,14 +181,6 @@ public class SSPeriodicInvoiceDialog {
      * @param pModel
      */
     public static void editDialog(final SSMainFrame iMainFrame, final SSPeriodicInvoice iEditInvoice, final AbstractTableModel pModel) {
-        final String lockString = "periodicinvoice" + iEditInvoice.getNumber()
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "periodicinvoiceframe.invoiceopen",
-                    iEditInvoice.getNumber());
-            return;
-        }
         final SSDialog               iDialog = new SSDialog(iMainFrame,
                 SSBundle.getBundle().getString("periodicinvoiceframe.edit.title"));
         final SSPeriodicInvoicePanel iPanel = new SSPeriodicInvoicePanel(iDialog);
@@ -233,7 +224,6 @@ public class SSPeriodicInvoiceDialog {
                     pModel.fireTableDataChanged();
                 }
 
-                SSPostLock.removeLock(lockString);
                 iPanel.dispose();
                 iDialog.closeDialog();
 
@@ -243,7 +233,6 @@ public class SSPeriodicInvoiceDialog {
 
         iPanel.addCancelAction(e -> {
 
-                SSPostLock.removeLock(lockString);
                 iPanel.dispose();
                 iDialog.closeDialog();
 
@@ -253,14 +242,12 @@ public class SSPeriodicInvoiceDialog {
             @Override
             public void windowClosing(WindowEvent e) {
                 if (!iPanel.isValid()) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 
                 if (SSQueryDialog.showDialog(iMainFrame, SSBundle.getBundle(),
                         "periodicinvoiceframe.saveonclose")
                         != JOptionPane.OK_OPTION) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 
@@ -279,14 +266,6 @@ public class SSPeriodicInvoiceDialog {
      * @param pModel
      */
     public static void copyDialog(final SSMainFrame iMainFrame, SSPeriodicInvoice iPeriodicInvoice, final SSPeriodicInvoiceTableModel pModel) {
-        final String lockString = "periodicinvoice" + iPeriodicInvoice.getNumber()
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (SSPostLock.isLocked(lockString)) {
-            new SSErrorDialog(iMainFrame, "peridodicinvoiceframe.invoiceopen",
-                    iPeriodicInvoice.getNumber());
-            return;
-        }
         final SSDialog       iDialog = new SSDialog(iMainFrame,
                 SSBundle.getBundle().getString("periodicinvoiceframe.copy.title"));
         final SSPeriodicInvoicePanel iPanel = new SSPeriodicInvoicePanel(iDialog);
@@ -353,14 +332,6 @@ public class SSPeriodicInvoiceDialog {
      * @return
      */
     public static boolean pendingPeriodicInvoicesDialog(SSMainFrame iMainFrame) {
-        final String lockString = "periodicinvoicepending"
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "periodicinvoiceframe.periodicinvoice");
-            return false;
-        }
-
         Map<SSPeriodicInvoice, List<SSInvoice>> iPeriodicInvoices = SSPeriodicInvoiceMath.getPeriodicInvoices();
         Map<SSPeriodicInvoice, List<SSInvoice>> iSelected = SSPendingPeriodicInvoiceDialog.showDialog(
                 iMainFrame, iPeriodicInvoices);
@@ -373,14 +344,6 @@ public class SSPeriodicInvoiceDialog {
 
         for (SSPeriodicInvoice iPeriodicInvoice : iSelected.keySet()) {
 
-            if (SSPostLock.isLocked(
-                    "periodicinvoice" + iPeriodicInvoice.getNumber()
-                    + SSDB.getInstance().getCurrentCompany().getId())) {
-                iTemp.remove(iPeriodicInvoice);
-                new SSErrorDialog(new JFrame(), "periodicinvoiceframe.invoiceopen",
-                        iPeriodicInvoice.getNumber());
-                continue;
-            }
             if (SSDB.getInstance().getPeriodicInvoice(iPeriodicInvoice) == null) {
                 iTemp.remove(iPeriodicInvoice);
                 new SSErrorDialog(new JFrame(), "periodicinvoiceframe.invoicegone",

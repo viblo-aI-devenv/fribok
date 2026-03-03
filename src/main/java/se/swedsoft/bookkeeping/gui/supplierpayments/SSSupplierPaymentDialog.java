@@ -3,7 +3,7 @@ package se.swedsoft.bookkeeping.gui.supplierpayments;
 
 import se.swedsoft.bookkeeping.data.SSSupplierInvoice;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
+
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.supplierpayments.util.SSSupplierPaymentTableModel;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
@@ -21,8 +21,6 @@ import se.swedsoft.bookkeeping.importexport.util.SSExportException;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
@@ -151,8 +149,6 @@ public class SSSupplierPaymentDialog extends SSDialog {    private static final 
                             return;
                         }
 
-                        SSPostLock.removeLock(
-                                "supplierpayment" + SSDB.getInstance().getCurrentCompany().getId());
                         closeDialog(JOptionPane.OK_OPTION);
 
                     });
@@ -160,22 +156,11 @@ public class SSSupplierPaymentDialog extends SSDialog {    private static final 
         iButtonPanel.addCancelActionListener(
                 e -> {
 
-                        SSPostLock.removeLock(
-                                "supplierpayment" + SSDB.getInstance().getCurrentCompany().getId());
                         closeDialog();
 
                     });
 
         getRootPane().setDefaultButton(iButtonPanel.getOkButton());
-
-        addWindowListener(
-                new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                SSPostLock.removeLock(
-                        "supplierpayment" + SSDB.getInstance().getCurrentCompany().getId());
-            }
-        });
 
     }
 

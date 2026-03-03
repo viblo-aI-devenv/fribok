@@ -3,7 +3,6 @@ package se.swedsoft.bookkeeping.gui.customer;
 
 import se.swedsoft.bookkeeping.data.SSCustomer;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.customer.panel.SSCustomerSearchPanel;
 import se.swedsoft.bookkeeping.gui.customer.util.SSCustomerTableModel;
@@ -362,18 +361,10 @@ public class SSCustomerFrame extends SSDefaultTableFrame {
     }
 
     public void exportBGCAdmissions() {
-        final String lockString = "bgcadmission"
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(getMainFrame(), "customerframe.bgcadmission");
-            return;
-        }
         List<SSCustomer> iSelected = iModel.getSelectedRows(iTable);
 
         iSelected = getCustomers(iSelected);
         if (iSelected.isEmpty()) {
-            SSPostLock.removeLock(lockString);
             return;
         }
 
@@ -493,14 +484,7 @@ public class SSCustomerFrame extends SSDefaultTableFrame {
 
         if (iResponce == JOptionPane.YES_OPTION) {
             for (SSCustomer iCustomer : delete) {
-                if (SSPostLock.isLocked(
-                        "customer" + iCustomer.getNumber()
-                        + SSDB.getInstance().getCurrentCompany().getId())) {
-                    new SSErrorDialog(getMainFrame(), "customerframe.customeropen",
-                            iCustomer.getNumber());
-                } else {
                     SSDB.getInstance().deleteCustomer(iCustomer);
-                }
             }
         }
     }

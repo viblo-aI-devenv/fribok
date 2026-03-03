@@ -4,7 +4,7 @@ package se.swedsoft.bookkeeping.gui.tender;
 import se.swedsoft.bookkeeping.data.SSTender;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.data.system.SSMail;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
+
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.order.SSOrderDialog;
 import se.swedsoft.bookkeeping.gui.order.SSOrderFrame;
@@ -387,14 +387,7 @@ public class SSTenderFrame extends SSDefaultTableFrame {
 
         if (iResponce == JOptionPane.YES_OPTION) {
             for (SSTender iTender : delete) {
-                if (SSPostLock.isLocked(
-                        "tender" + iTender.getNumber()
-                        + SSDB.getInstance().getCurrentCompany().getId())) {
-                    new SSErrorDialog(getMainFrame(), "tenderframe.tenderopen",
-                            iTender.getNumber());
-                } else {
-                    SSDB.getInstance().deleteTender(iTender);
-                }
+                SSDB.getInstance().deleteTender(iTender);
             }
         }
     }

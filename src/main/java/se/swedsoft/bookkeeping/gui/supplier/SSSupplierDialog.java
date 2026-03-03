@@ -4,7 +4,6 @@ package se.swedsoft.bookkeeping.gui.supplier;
 import se.swedsoft.bookkeeping.calc.math.SSSupplierMath;
 import se.swedsoft.bookkeeping.data.SSSupplier;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.supplier.panel.SSSupplierPanel;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
@@ -40,10 +39,6 @@ public class SSSupplierDialog {
      * @param pModel
      */
     public static void newDialog(final SSMainFrame iMainFrame, final AbstractTableModel pModel) {
-        if (!SSPostLock.applyLock("importsupplier")) {
-            new SSErrorDialog(iMainFrame, "supplierframe.import.locked");
-            return;
-        }
         final SSDialog        iDialog = new SSDialog(iMainFrame,
                 SSBundle.getBundle().getString("supplierframe.new.title"));
         final SSSupplierPanel iPanel = new SSSupplierPanel(iDialog, false);
@@ -69,7 +64,6 @@ public class SSSupplierDialog {
                     if (iSupplier1.equals(iTSupplier)) {
                         new SSErrorDialog(iMainFrame, "supplierframe.duplicate",
                                 iSupplier1.getNumber());
-                        SSPostLock.removeLock("importsupplier");
                         return;
                     }
 
@@ -77,7 +71,6 @@ public class SSSupplierDialog {
                             iTSupplier.getOutpaymentNumber())) {
                         new SSErrorDialog(iMainFrame, "supplierframe.dupopnr",
                                 iSupplier1.getOutpaymentNumber());
-                        SSPostLock.removeLock("importsupplier");
                         return;
                     }
                 }
@@ -87,7 +80,6 @@ public class SSSupplierDialog {
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
                 }
-                SSPostLock.removeLock("importsupplier");
                 iDialog.closeDialog();
 
             };
@@ -96,7 +88,6 @@ public class SSSupplierDialog {
 
         iPanel.addCancelAction(e -> {
 
-                SSPostLock.removeLock("importsupplier");
                 iDialog.closeDialog();
 
             });
@@ -105,14 +96,12 @@ public class SSSupplierDialog {
             @Override
             public void windowClosing(WindowEvent e) {
                 if (!iPanel.isValid()) {
-                    SSPostLock.removeLock("importsupplier");
                     return;
                 }
 
                 if (SSQueryDialog.showDialog(iMainFrame, SSBundle.getBundle(),
                         "supplierframe.saveonclose")
                         != JOptionPane.OK_OPTION) {
-                    SSPostLock.removeLock("importsupplier");
                     return;
                 }
 
@@ -131,15 +120,6 @@ public class SSSupplierDialog {
      * @param pModel
      */
     public static void editDialog(final SSMainFrame iMainFrame, SSSupplier pSupplier, final AbstractTableModel pModel) {
-        final String lockString = "supplier" + pSupplier.getNumber()
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "supplierframe.supplieropen",
-                    pSupplier.getNumber());
-            return;
-        }
-
         final SSDialog        iDialog = new SSDialog(iMainFrame,
                 SSBundle.getBundle().getString("supplierframe.edit.title"));
         final SSSupplierPanel iPanel = new SSSupplierPanel(iDialog, true);
@@ -166,7 +146,6 @@ public class SSSupplierDialog {
                                 iTSupplier.getOutpaymentNumber())) {
                             new SSErrorDialog(iMainFrame, "supplierframe.dupopnr",
                                     iSupplier.getOutpaymentNumber());
-                            SSPostLock.removeLock("importsupplier");
                             return;
                         }
                     }
@@ -176,7 +155,6 @@ public class SSSupplierDialog {
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
                 }
-                SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
 
             };
@@ -185,7 +163,6 @@ public class SSSupplierDialog {
 
         iPanel.addCancelAction(e -> {
 
-                SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
 
             });
@@ -194,14 +171,12 @@ public class SSSupplierDialog {
             @Override
             public void windowClosing(WindowEvent e) {
                 if (!iPanel.isValid()) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 
                 if (SSQueryDialog.showDialog(iMainFrame, SSBundle.getBundle(),
                         "supplierframe.saveonclose")
                         != JOptionPane.OK_OPTION) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 
@@ -220,18 +195,6 @@ public class SSSupplierDialog {
      * @param iSupplier
      */
     public static void copyDialog(final SSMainFrame iMainFrame, SSSupplier iSupplier, final AbstractTableModel pModel) {
-        final String lockString = "supplier" + iSupplier.getNumber()
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (SSPostLock.isLocked(lockString)) {
-            new SSErrorDialog(iMainFrame, "supplierframe.supplieropen",
-                    iSupplier.getNumber());
-            return;
-        }
-        if (!SSPostLock.applyLock("importsupplier")) {
-            new SSErrorDialog(iMainFrame, "supplierframe.import.locked");
-            return;
-        }
         final SSDialog        iDialog = new SSDialog(iMainFrame,
                 SSBundle.getBundle().getString("supplierframe.copy.title"));
         final SSSupplierPanel iPanel = new SSSupplierPanel(iDialog, false);
@@ -257,7 +220,6 @@ public class SSSupplierDialog {
                     if (iSupplier1.equals(iTSupplier)) {
                         new SSErrorDialog(iMainFrame, "supplierframe.duplicate",
                                 iSupplier1.getNumber());
-                        SSPostLock.removeLock("importsupplier");
                         return;
                     }
 
@@ -265,7 +227,6 @@ public class SSSupplierDialog {
                             iTSupplier.getOutpaymentNumber())) {
                         new SSErrorDialog(iMainFrame, "supplierframe.dupopnr",
                                 iSupplier1.getOutpaymentNumber());
-                        SSPostLock.removeLock("importsupplier");
                         return;
                     }
                 }
@@ -275,7 +236,6 @@ public class SSSupplierDialog {
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
                 }
-                SSPostLock.removeLock("importsupplier");
                 iDialog.closeDialog();
 
             };
@@ -284,7 +244,6 @@ public class SSSupplierDialog {
 
         iPanel.addCancelAction(e -> {
 
-                SSPostLock.removeLock("importsupplier");
                 iDialog.closeDialog();
 
             });
@@ -293,14 +252,12 @@ public class SSSupplierDialog {
             @Override
             public void windowClosing(WindowEvent e) {
                 if (!iPanel.isValid()) {
-                    SSPostLock.removeLock("importsupplier");
                     return;
                 }
 
                 if (SSQueryDialog.showDialog(iMainFrame, SSBundle.getBundle(),
                         "supplierframe.saveonclose")
                         != JOptionPane.OK_OPTION) {
-                    SSPostLock.removeLock("importsupplier");
                     return;
                 }
 

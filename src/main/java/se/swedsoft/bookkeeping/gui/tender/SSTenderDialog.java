@@ -4,7 +4,7 @@ package se.swedsoft.bookkeeping.gui.tender;
 import se.swedsoft.bookkeeping.calc.math.SSTenderMath;
 import se.swedsoft.bookkeeping.data.SSTender;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
+
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.tender.panel.SSTenderPanel;
 import se.swedsoft.bookkeeping.gui.tender.util.SSTenderTableModel;
@@ -41,13 +41,6 @@ public class SSTenderDialog {
      * @param pModel
      */
     public static void copyDialog(final SSMainFrame iMainFrame, SSTender iTender, final SSTenderTableModel pModel) {
-        final String lockString = "tender" + iTender.getNumber()
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (SSPostLock.isLocked(lockString)) {
-            new SSErrorDialog(iMainFrame, "tenderframe.tenderopen", iTender.getNumber());
-            return;
-        }
         final SSDialog      iDialog = new SSDialog(iMainFrame,
                 bundle.getString("tenderframe.copy.title"));
         final SSTenderPanel iPanel = new SSTenderPanel(iDialog);
@@ -118,13 +111,6 @@ public class SSTenderDialog {
      * @param pModel
      */
     public static void editDialog(final SSMainFrame iMainFrame, SSTender iTender, final SSTenderTableModel pModel) {
-        final String lockString = "tender" + iTender.getNumber()
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "tenderframe.tenderopen", iTender.getNumber());
-            return;
-        }
         final SSDialog      iDialog = new SSDialog(iMainFrame,
                 bundle.getString("tenderframe.edit.title"));
         final SSTenderPanel iPanel = new SSTenderPanel(iDialog);
@@ -145,7 +131,6 @@ public class SSTenderDialog {
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
                 }
-                SSPostLock.removeLock(lockString);
 
                 iPanel.dispose();
                 iDialog.closeDialog();
@@ -156,7 +141,6 @@ public class SSTenderDialog {
 
         iPanel.addCancelAction(e -> {
 
-                SSPostLock.removeLock(lockString);
                 iPanel.dispose();
                 iDialog.closeDialog();
 
@@ -166,14 +150,12 @@ public class SSTenderDialog {
             @Override
             public void windowClosing(WindowEvent e) {
                 if (!iPanel.isValid()) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 
                 if (SSQueryDialog.showDialog(iMainFrame, SSBundle.getBundle(),
                         "tenderframe.saveonclose")
                         != JOptionPane.OK_OPTION) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 

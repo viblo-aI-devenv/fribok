@@ -8,7 +8,6 @@ package se.swedsoft.bookkeeping.gui.accountingyear.dialog;
 import se.swedsoft.bookkeeping.data.SSNewAccountingYear;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.data.system.SSDBConfig;
-import se.swedsoft.bookkeeping.data.system.SSYearLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.accountingyear.panel.SSAccountingYearPanel;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
@@ -59,7 +58,6 @@ public class SSNewAccountingYearDialog {
 
                             SSDB.getInstance().setCurrentYear(iAccountingYear);
                             SSDB.getInstance().initYear(true);
-                            SSYearLock.applyLock(iAccountingYear);
                             SSDBConfig.setYearId(SSDB.getInstance().getCurrentCompany().getId(),
                                     iAccountingYear.getId());
                             // Close all year related frames

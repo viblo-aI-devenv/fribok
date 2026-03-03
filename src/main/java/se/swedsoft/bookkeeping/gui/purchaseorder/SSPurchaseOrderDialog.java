@@ -7,14 +7,12 @@ import se.swedsoft.bookkeeping.data.SSPurchaseOrder;
 import se.swedsoft.bookkeeping.data.SSSupplier;
 import se.swedsoft.bookkeeping.data.SSSupplierInvoice;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.purchaseorder.panel.SSPurchaseOrderPanel;
 import se.swedsoft.bookkeeping.gui.supplierinvoice.SSSupplierInvoiceDialog;
 import se.swedsoft.bookkeeping.gui.supplierinvoice.SSSupplierInvoiceFrame;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSDialog;
-import se.swedsoft.bookkeeping.gui.util.dialogs.SSErrorDialog;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSInformationDialog;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSQueryDialog;
 
@@ -111,14 +109,6 @@ public class SSPurchaseOrderDialog {
      */
     public static void newDialog(final SSMainFrame iMainFrame, SSPurchaseOrder iPurchaseOrder, final List<SSOrder> iSelected, final AbstractTableModel pModel) {
 
-        final String lockString = "ordertopurchaseorder"
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "purchaseorderframe.ordertopurchaseorder");
-            return;
-        }
-
         final SSDialog              iDialog = new SSDialog(iMainFrame,
                 SSPurchaseOrderDialog.bundle.getString("purchaseorderframe.new.title"));
         final SSPurchaseOrderPanel  iPanel = new SSPurchaseOrderPanel(iDialog);
@@ -141,7 +131,6 @@ public class SSPurchaseOrderDialog {
                 }
 
                 iPanel.dispose();
-                SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
 
             };
@@ -151,7 +140,6 @@ public class SSPurchaseOrderDialog {
         iPanel.addCancelAction(e -> {
 
                 iPanel.dispose();
-                SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
 
             });
@@ -160,14 +148,12 @@ public class SSPurchaseOrderDialog {
             @Override
             public void windowClosing(WindowEvent e) {
                 if (!iPanel.isValid()) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 
                 if (SSQueryDialog.showDialog(iMainFrame, SSBundle.getBundle(),
                         "purchaseorderframe.saveonclose")
                         != JOptionPane.OK_OPTION) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 
@@ -186,14 +172,6 @@ public class SSPurchaseOrderDialog {
      * @param pModel
      */
     public static void editDialog(final SSMainFrame iMainFrame, SSPurchaseOrder iPurchaseOrder, final AbstractTableModel pModel) {
-        final String lockString = "purchaseorder" + iPurchaseOrder.getNumber()
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "purchaseorderframe.purchaseorderopen",
-                    iPurchaseOrder.getNumber());
-            return;
-        }
         final SSDialog              iDialog = new SSDialog(iMainFrame,
                 SSPurchaseOrderDialog.bundle.getString("purchaseorderframe.edit.title"));
         final SSPurchaseOrderPanel  iPanel = new SSPurchaseOrderPanel(iDialog);
@@ -212,7 +190,6 @@ public class SSPurchaseOrderDialog {
                     pModel.fireTableDataChanged();
                 }
 
-                SSPostLock.removeLock(lockString);
                 iPanel.dispose();
                 iDialog.closeDialog();
 
@@ -222,7 +199,6 @@ public class SSPurchaseOrderDialog {
 
         iPanel.addCancelAction(e -> {
 
-                SSPostLock.removeLock(lockString);
                 iPanel.dispose();
                 iDialog.closeDialog();
 
@@ -233,14 +209,12 @@ public class SSPurchaseOrderDialog {
             @Override
             public void windowClosing(WindowEvent e) {
                 if (!iPanel.isValid()) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 
                 if (SSQueryDialog.showDialog(iMainFrame, SSBundle.getBundle(),
                         "purchaseorderframe.saveonclose")
                         != JOptionPane.OK_OPTION) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 
@@ -259,14 +233,6 @@ public class SSPurchaseOrderDialog {
      * @param pModel
      */
     public static void copyDialog(final SSMainFrame iMainFrame, SSPurchaseOrder iPurchaseOrder, final AbstractTableModel pModel) {
-        final String lockString = "purchaseorder" + iPurchaseOrder.getNumber()
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (SSPostLock.isLocked(lockString)) {
-            new SSErrorDialog(iMainFrame, "purchaseorderframe.purchaseorderopen",
-                    iPurchaseOrder.getNumber());
-            return;
-        }
         final SSDialog              iDialog = new SSDialog(iMainFrame,
                 SSPurchaseOrderDialog.bundle.getString("purchaseorderframe.copy.title"));
         final SSPurchaseOrderPanel  iPanel = new SSPurchaseOrderPanel(iDialog);

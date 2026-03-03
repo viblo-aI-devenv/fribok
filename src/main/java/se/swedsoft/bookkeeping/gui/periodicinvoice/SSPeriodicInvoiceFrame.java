@@ -4,7 +4,6 @@ package se.swedsoft.bookkeeping.gui.periodicinvoice;
 import se.swedsoft.bookkeeping.data.SSOrder;
 import se.swedsoft.bookkeeping.data.SSPeriodicInvoice;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.periodicinvoice.panel.SSListInvoicesPanel;
 import se.swedsoft.bookkeeping.gui.periodicinvoice.panel.SSPeriodicInvoiceSearchPanel;
@@ -186,15 +185,7 @@ public class SSPeriodicInvoiceFrame extends SSDefaultTableFrame {
         // Create PeriodicInvoice for sales
         // ***************************
         iButton = new SSButton("ICON_CREATECHANGE", "periodicinvoiceframe.invoicebutton",
-                e -> {
-
-                        if (SSPeriodicInvoiceDialog.pendingPeriodicInvoicesDialog(getMainFrame())) {
-                            SSPostLock.removeLock(
-                                    "periodicinvoicepending"
-                                            + SSDB.getInstance().getCurrentCompany().getId());
-                        }
-
-                    });
+                e -> SSPeriodicInvoiceDialog.pendingPeriodicInvoicesDialog(getMainFrame()));
         toolBar.add(iButton);
 
         return toolBar;
@@ -307,27 +298,19 @@ public class SSPeriodicInvoiceFrame extends SSDefaultTableFrame {
 
         if (iResponce == JOptionPane.YES_OPTION) {
             for (SSPeriodicInvoice iPeriodicInvoice : delete) {
-                if (SSPostLock.isLocked(
-                        "periodicinvoice" + iPeriodicInvoice.getNumber()
-                        + SSDB.getInstance().getCurrentCompany().getId())) {
-                    new SSErrorDialog(getMainFrame(),
-                            "periodicinvoiceframe.periodicinvoiceopen",
-                            iPeriodicInvoice.getNumber());
-                } else {
-                    List<SSOrder> iOrdersToUpdate = new LinkedList<>();
+                List<SSOrder> iOrdersToUpdate = new LinkedList<>();
 
-                    for (SSOrder iOrder : SSDB.getInstance().getOrders()) {
-                        if (iOrder.hasPeriodicInvoice(iPeriodicInvoice)) {
-                            iOrder.setPeriodicInvoice(null);
-                            iOrdersToUpdate.add(iOrder);
-                        }
+                for (SSOrder iOrder : SSDB.getInstance().getOrders()) {
+                    if (iOrder.hasPeriodicInvoice(iPeriodicInvoice)) {
+                        iOrder.setPeriodicInvoice(null);
+                        iOrdersToUpdate.add(iOrder);
                     }
-                    for (SSOrder iOrder : iOrdersToUpdate) {
-                        SSDB.getInstance().updateOrder(iOrder);
-                    }
-                    iOrdersToUpdate = null;
-                    SSDB.getInstance().deletePeriodicInvoice(iPeriodicInvoice);
                 }
+                for (SSOrder iOrder : iOrdersToUpdate) {
+                    SSDB.getInstance().updateOrder(iOrder);
+                }
+                iOrdersToUpdate = null;
+                SSDB.getInstance().deletePeriodicInvoice(iPeriodicInvoice);
             }
         }
     }

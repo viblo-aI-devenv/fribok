@@ -4,7 +4,6 @@ package se.swedsoft.bookkeeping.gui.product;
 import se.swedsoft.bookkeeping.data.SSProduct;
 import se.swedsoft.bookkeeping.data.SSStock;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.product.panel.SSProductSearchPanel;
 import se.swedsoft.bookkeeping.gui.product.util.SSProductTableModel;
@@ -438,14 +437,7 @@ public class SSProductFrame extends SSDefaultTableFrame {
 
         if (iResponce == JOptionPane.YES_OPTION) {
             for (SSProduct iProduct : delete) {
-                if (SSPostLock.isLocked(
-                        "product" + iProduct.getNumber()
-                        + SSDB.getInstance().getCurrentCompany().getId())) {
-                    new SSErrorDialog(getMainFrame(), "productframe.productopen",
-                            iProduct.getNumber());
-                } else {
-                    SSDB.getInstance().deleteProduct(iProduct);
-                }
+                SSDB.getInstance().deleteProduct(iProduct);
             }
         }
     }

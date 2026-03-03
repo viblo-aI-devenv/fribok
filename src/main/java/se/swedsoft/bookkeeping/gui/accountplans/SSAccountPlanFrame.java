@@ -3,7 +3,6 @@ package se.swedsoft.bookkeeping.gui.accountplans;
 
 import se.swedsoft.bookkeeping.data.SSAccountPlan;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.accountplans.util.SSAccountPlanTableModel;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
@@ -382,14 +381,6 @@ public class SSAccountPlanFrame extends SSDefaultTableFrame {
 
         updateFrame();
         if (iResponce != JOptionPane.YES_OPTION) {
-            return;
-        }
-        final String lockString = "accountplan" + iAccountPlan.getId();
-
-        if (SSPostLock.isLocked(lockString)) {
-            updateFrame();
-            new SSErrorDialog(getMainFrame(), "accountplanframe.accountplanopen",
-                    iAccountPlan.getName());
             return;
         }
         SSDB.getInstance().deleteAccountPlan(iAccountPlan);

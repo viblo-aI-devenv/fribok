@@ -7,7 +7,6 @@ import se.swedsoft.bookkeeping.data.SSPurchaseOrder;
 import se.swedsoft.bookkeeping.data.SSStock;
 import se.swedsoft.bookkeeping.data.SSSupplier;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.purchasesuggestion.util.SSPurchaseSuggestionTableModel;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
@@ -149,13 +148,6 @@ public class SSPurchaseSuggestionDialog extends SSDialog {
      * @param iMainFrame
      */
     public static void showDialog(SSMainFrame iMainFrame) {
-        String lockString = "purchasesuggestion"
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "purchasesuggestion.iscreated");
-            return;
-        }
         SSPurchaseSuggestionDialog iDialog = new SSPurchaseSuggestionDialog(iMainFrame);
 
         iDialog.setSize(800, 600);
@@ -163,7 +155,6 @@ public class SSPurchaseSuggestionDialog extends SSDialog {
         iDialog.setVisible(true);
 
         if (iDialog.getModalResult() != JOptionPane.OK_OPTION) {
-            SSPostLock.removeLock(lockString);
             return;
         }
         List<SSProduct> iProducts = iDialog.iModel.getSelected();
@@ -194,7 +185,6 @@ public class SSPurchaseSuggestionDialog extends SSDialog {
             }
         }
 
-        SSPostLock.removeLock(lockString);
         if (iAddedOrders.length() > 0) {
             SSInformationDialog.showDialog(SSMainFrame.getInstance(),
                     "purchasesuggestiondialog.success", iAddedOrders);

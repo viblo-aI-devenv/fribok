@@ -7,7 +7,6 @@ package se.swedsoft.bookkeeping.gui.project;
 
 import se.swedsoft.bookkeeping.data.SSNewProject;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.project.util.SSProjectTableModel;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
@@ -252,14 +251,7 @@ public class SSProjectFrame extends SSDefaultTableFrame {
 
         if (iResponce == JOptionPane.YES_OPTION) {
             for (SSNewProject iProject : delete) {
-                if (SSPostLock.isLocked(
-                        "project" + iProject.getNumber()
-                        + SSDB.getInstance().getCurrentCompany().getId())) {
-                    new SSErrorDialog(getMainFrame(), "projectframe.projectopen",
-                            iProject.getNumber());
-                } else {
-                    SSDB.getInstance().deleteProject(iProject);
-                }
+                SSDB.getInstance().deleteProject(iProject);
             }
         }
     }

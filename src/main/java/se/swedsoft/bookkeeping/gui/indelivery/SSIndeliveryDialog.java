@@ -3,12 +3,10 @@ package se.swedsoft.bookkeeping.gui.indelivery;
 
 import se.swedsoft.bookkeeping.data.SSIndelivery;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.indelivery.panel.SSIndeliveryPanel;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSDialog;
-import se.swedsoft.bookkeeping.gui.util.dialogs.SSErrorDialog;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSQueryDialog;
 
 import javax.swing.*;
@@ -93,15 +91,6 @@ public class SSIndeliveryDialog {
      * @param pModel
      */
     public static void editDialog(final SSMainFrame iMainFrame, SSIndelivery iIndelivery, final AbstractTableModel pModel) {
-        final String lockString = "indelivery" + iIndelivery.getNumber()
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "indeliveryframe.indeliveryopen",
-                    iIndelivery.getNumber());
-            return;
-        }
-
         final SSDialog         iDialog = new SSDialog(iMainFrame,
                 SSBundle.getBundle().getString("indeliveryframe.edit.title"));
         final SSIndeliveryPanel iPanel = new SSIndeliveryPanel(iDialog);
@@ -119,14 +108,12 @@ public class SSIndeliveryDialog {
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
                 }
-                SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
 
             });
 
         iPanel.addCancelActionListener(e -> {
 
-                SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
 
             });
@@ -139,7 +126,6 @@ public class SSIndeliveryDialog {
                 if (SSQueryDialog.showDialog(iMainFrame, SSBundle.getBundle(),
                         "indeliveryframe.saveonclose")
                         != JOptionPane.OK_OPTION) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
                 SSIndelivery iIndelivery1 = iPanel.getIndelivery();
@@ -149,7 +135,6 @@ public class SSIndeliveryDialog {
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
                 }
-                SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
             }
         });
@@ -165,14 +150,6 @@ public class SSIndeliveryDialog {
      * @param pModel
      */
     public static void copyDialog(final SSMainFrame iMainFrame, SSIndelivery iCopyFrom, final AbstractTableModel pModel) {
-        final String lockString = "indelivery" + iCopyFrom.getNumber()
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (SSPostLock.isLocked(lockString)) {
-            new SSErrorDialog(iMainFrame, "indeliveryframe.indeliveryopen",
-                    iCopyFrom.getNumber());
-            return;
-        }
         final SSDialog          iDialog = new SSDialog(iMainFrame,
                 SSBundle.getBundle().getString("indeliveryframe.copy.title"));
         final SSIndeliveryPanel iPanel = new SSIndeliveryPanel(iDialog);

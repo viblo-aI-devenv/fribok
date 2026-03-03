@@ -8,7 +8,6 @@ package se.swedsoft.bookkeeping.gui.budget;
 import se.swedsoft.bookkeeping.data.SSBudget;
 import se.swedsoft.bookkeeping.data.SSNewAccountingYear;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.budget.panel.SSBudgetMainPanel;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
@@ -76,16 +75,10 @@ public class SSBudgetFrame extends SSDefaultTableFrame {
                             int iResponce = iDialog.getResponce();
 
                             if (iResponce != JOptionPane.YES_OPTION) {
-                                SSPostLock.removeLock(
-                                        "budget" + SSDB.getInstance().getCurrentCompany().getId()
-                                        + SSDB.getInstance().getCurrentYear().getId());
                                 return;
                             }
                             iAccountingYear.setBudget(iBudgetMainPanel.getBudget());
                             SSDB.getInstance().updateAccountingYear(iAccountingYear);
-                            SSPostLock.removeLock(
-                                    "budget" + SSDB.getInstance().getCurrentCompany().getId()
-                                    + SSDB.getInstance().getCurrentYear().getId());
                         }
 
                     });
@@ -108,9 +101,6 @@ public class SSBudgetFrame extends SSDefaultTableFrame {
 
                         iAccountingYear.setBudget(iBudgetMainPanel.getBudget());
                         SSDB.getInstance().updateAccountingYear(iAccountingYear);
-                        SSPostLock.removeLock(
-                                "budget" + SSDB.getInstance().getCurrentCompany().getId()
-                                + SSDB.getInstance().getCurrentYear().getId());
 
                         cInstance = null;
                         setVisible(false);
@@ -124,9 +114,6 @@ public class SSBudgetFrame extends SSDefaultTableFrame {
         iButton = new SSButton("ICON_CANCELITEM", "budgetframe.cancelbutton",
                 e -> {
 
-                        SSPostLock.removeLock(
-                                "budget" + SSDB.getInstance().getCurrentCompany().getId()
-                                + SSDB.getInstance().getCurrentYear().getId());
                         cInstance = null;
                         setVisible(false);
 

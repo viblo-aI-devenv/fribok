@@ -4,7 +4,7 @@ package se.swedsoft.bookkeeping.gui.suppliercreditinvoice;
 import se.swedsoft.bookkeeping.calc.math.SSSupplierInvoiceMath;
 import se.swedsoft.bookkeeping.data.SSSupplierCreditInvoice;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
+
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.suppliercreditinvoice.panel.SSSupplierCreditInvoiceSearchPanel;
 import se.swedsoft.bookkeeping.gui.suppliercreditinvoice.util.SSSupplierCreditinvoiceTableModel;
@@ -281,23 +281,15 @@ public class SSSupplierCreditInvoiceFrame extends SSDefaultTableFrame {
 
         if (iResponce == JOptionPane.YES_OPTION) {
             for (SSSupplierCreditInvoice iSupplierCreditInvoice : delete) {
-                if (SSPostLock.isLocked(
-                        "suppliercreditinvoice" + iSupplierCreditInvoice.getNumber()
-                        + SSDB.getInstance().getCurrentCompany().getId())) {
-                    new SSErrorDialog(getMainFrame(),
-                            "suppliercreditinvoiceframe.suppliercreditinvoiceopen",
-                            iSupplierCreditInvoice.getNumber());
-                } else {
-                    if (SSSupplierInvoiceMath.iSaldoMap.containsKey(
-                            iSupplierCreditInvoice.getCreditingNr())) {
-                        SSSupplierInvoiceMath.iSaldoMap.put(
-                                iSupplierCreditInvoice.getCreditingNr(),
-                                SSSupplierInvoiceMath.iSaldoMap.get(iSupplierCreditInvoice.getCreditingNr()).add(
-                                        SSSupplierInvoiceMath.getTotalSum(
-                                                iSupplierCreditInvoice)));
-                    }
-                    SSDB.getInstance().deleteSupplierCreditInvoice(iSupplierCreditInvoice);
+                if (SSSupplierInvoiceMath.iSaldoMap.containsKey(
+                        iSupplierCreditInvoice.getCreditingNr())) {
+                    SSSupplierInvoiceMath.iSaldoMap.put(
+                            iSupplierCreditInvoice.getCreditingNr(),
+                            SSSupplierInvoiceMath.iSaldoMap.get(iSupplierCreditInvoice.getCreditingNr()).add(
+                                    SSSupplierInvoiceMath.getTotalSum(
+                                            iSupplierCreditInvoice)));
                 }
+                SSDB.getInstance().deleteSupplierCreditInvoice(iSupplierCreditInvoice);
             }
         }
     }

@@ -5,7 +5,6 @@ import se.swedsoft.bookkeeping.data.SSInventory;
 import se.swedsoft.bookkeeping.data.SSInventoryRow;
 import se.swedsoft.bookkeeping.data.SSProduct;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.inventory.panel.SSInventoryPanel;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
@@ -108,15 +107,6 @@ public class SSInventoryDialog {
      * @param pModel
      */
     public static void editDialog(final SSMainFrame iMainFrame, SSInventory iInventory, final AbstractTableModel pModel) {
-        final String lockString = "inventory" + iInventory.getNumber()
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "inventoryframe.inventoryopen",
-                    iInventory.getNumber());
-            return;
-        }
-
         final SSDialog         iDialog = new SSDialog(iMainFrame,
                 SSBundle.getBundle().getString("inventortyframe.edit.title"));
         final SSInventoryPanel iPanel = new SSInventoryPanel(iDialog);
@@ -134,14 +124,12 @@ public class SSInventoryDialog {
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
                 }
-                SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
 
             });
 
         iPanel.addCancelActionListener(e -> {
 
-                SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
 
             });
@@ -153,7 +141,6 @@ public class SSInventoryDialog {
                 if (SSQueryDialog.showDialog(iMainFrame, SSBundle.getBundle(),
                         "inventoryframe.saveonclose")
                         != JOptionPane.OK_OPTION) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
                 SSInventory iInventory1 = iPanel.getInventory();
@@ -163,7 +150,6 @@ public class SSInventoryDialog {
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
                 }
-                SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
             }
         });

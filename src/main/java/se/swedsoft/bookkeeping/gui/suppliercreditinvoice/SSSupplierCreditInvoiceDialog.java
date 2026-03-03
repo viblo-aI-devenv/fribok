@@ -6,7 +6,7 @@ import se.swedsoft.bookkeeping.data.SSSupplierCreditInvoice;
 import se.swedsoft.bookkeeping.data.SSSupplierInvoice;
 import se.swedsoft.bookkeeping.data.SSSupplierInvoiceRow;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
+
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.suppliercreditinvoice.dialog.SSSelectSupplierInvoiceDialog;
 import se.swedsoft.bookkeeping.gui.suppliercreditinvoice.panel.SSSupplierCreditInvoicePanel;
@@ -202,16 +202,6 @@ public class SSSupplierCreditInvoiceDialog {
      * @param pModel
      */
     public static void editDialog(final SSMainFrame iMainFrame, SSSupplierCreditInvoice iSupplierCreditInvoice, final SSTableModel<SSSupplierCreditInvoice> pModel) {
-        final String lockString = "suppliercreditinvoice"
-                + iSupplierCreditInvoice.getNumber()
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame,
-                    "suppliercreditinvoiceframe.suppliercreditinvoiceopen",
-                    iSupplierCreditInvoice.getNumber());
-            return;
-        }
         final SSDialog                     iDialog = new SSDialog(iMainFrame,
                 SSSupplierCreditInvoiceDialog.bundle.getString(
                 "suppliercreditinvoiceframe.edit.title"));
@@ -232,7 +222,6 @@ public class SSSupplierCreditInvoiceDialog {
                     pModel.fireTableDataChanged();
                 }
 
-                SSPostLock.removeLock(lockString);
                 iPanel.dispose();
                 iDialog.closeDialog();
 
@@ -242,7 +231,6 @@ public class SSSupplierCreditInvoiceDialog {
 
         iPanel.addCancelAction(e -> {
 
-                SSPostLock.removeLock(lockString);
                 iPanel.dispose();
                 iDialog.closeDialog();
 
@@ -259,7 +247,6 @@ public class SSSupplierCreditInvoiceDialog {
                 if (SSQueryDialog.showDialog(iMainFrame, SSBundle.getBundle(),
                         "suppliercreditinvoiceframe.saveonclose")
                         != JOptionPane.OK_OPTION) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 
@@ -278,16 +265,6 @@ public class SSSupplierCreditInvoiceDialog {
      * @param pModel
      */
     public static void copyDialog(final SSMainFrame iMainFrame, SSSupplierCreditInvoice iSupplierCreditInvoice, final SSTableModel<SSSupplierCreditInvoice> pModel) {
-        final String lockString = "suppliercreditinvoice"
-                + iSupplierCreditInvoice.getNumber()
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (SSPostLock.isLocked(lockString)) {
-            new SSErrorDialog(iMainFrame,
-                    "suppliercreditinvoiceframe.suppliercreditinvoiceopen",
-                    iSupplierCreditInvoice.getNumber());
-            return;
-        }
         final SSDialog                    iDialog = new SSDialog(iMainFrame,
                 SSSupplierCreditInvoiceDialog.bundle.getString(
                 "suppliercreditinvoiceframe.copy.title"));

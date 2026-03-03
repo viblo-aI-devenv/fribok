@@ -3,12 +3,10 @@ package se.swedsoft.bookkeeping.gui.ownreport;
 
 import se.swedsoft.bookkeeping.data.SSOwnReport;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.ownreport.panel.SSOwnReportPanel;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSDialog;
-import se.swedsoft.bookkeeping.gui.util.dialogs.SSErrorDialog;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSQueryDialog;
 
 import javax.swing.*;
@@ -82,14 +80,6 @@ public class SSOwnReportDialog {
     }
 
     public static void editDialog(final SSMainFrame iMainFrame, SSOwnReport pOwnReport) {
-        final String lockString = "ownreport" + pOwnReport.getId()
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "ownreportframe.ownreportopen",
-                    pOwnReport.getName());
-            return;
-        }
         final SSDialog iDialog = new SSDialog(iMainFrame,
                 bundle.getString("ownreportframe.edit.title"));
         final SSOwnReportPanel iPanel = new SSOwnReportPanel(pOwnReport);
@@ -102,7 +92,6 @@ public class SSOwnReportDialog {
 
                 SSDB.getInstance().updateOwnReport(iOwnReport);
 
-                SSPostLock.removeLock(lockString);
                 iDialog.setVisible(false);
                 iDialog.dispose();
 
@@ -112,7 +101,6 @@ public class SSOwnReportDialog {
 
         final ActionListener iCancelAction = e -> {
 
-                SSPostLock.removeLock(lockString);
                 iDialog.setVisible(false);
                 iDialog.dispose();
 
@@ -125,14 +113,12 @@ public class SSOwnReportDialog {
             @Override
             public void windowClosing(WindowEvent e) {
                 if (!iPanel.isValid()) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 
                 if (SSQueryDialog.showDialog(iMainFrame, SSBundle.getBundle(),
                         "ownreportframe.saveonclose")
                         != JOptionPane.OK_OPTION) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 

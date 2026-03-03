@@ -3,7 +3,6 @@ package se.swedsoft.bookkeeping.gui.inventory;
 
 import se.swedsoft.bookkeeping.data.SSInventory;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.inventory.util.SSInventoryTableModel;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
@@ -251,14 +250,7 @@ public class SSInventoryFrame extends SSDefaultTableFrame {
 
         if (iResponce == JOptionPane.YES_OPTION) {
             for (SSInventory iInventory : delete) {
-                if (SSPostLock.isLocked(
-                        "inventory" + iInventory.getNumber()
-                        + SSDB.getInstance().getCurrentCompany().getId())) {
-                    new SSErrorDialog(getMainFrame(), "inventoryframe.inventoryopen",
-                            iInventory.getNumber());
-                } else {
-                    SSDB.getInstance().deleteInventory(iInventory);
-                }
+                SSDB.getInstance().deleteInventory(iInventory);
             }
         }
     }

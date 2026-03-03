@@ -9,7 +9,6 @@ import se.swedsoft.bookkeeping.data.SSInvoice;
 import se.swedsoft.bookkeeping.data.SSOrder;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.data.system.SSMail;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.creditinvoice.SSCreditInvoiceDialog;
 import se.swedsoft.bookkeeping.gui.creditinvoice.SSCreditInvoiceFrame;
@@ -68,11 +67,7 @@ public class SSInvoiceFrame extends SSDefaultTableFrame {
                 && new SSConfirmDialog("periodicinvoiceframe.pendingperiodicinvoices").openDialog(
                         pMainFrame)
                                 == JOptionPane.OK_OPTION) {
-            if (SSPeriodicInvoiceDialog.pendingPeriodicInvoicesDialog(pMainFrame)) {
-                SSPostLock.removeLock(
-                        "periodicinvoicepending"
-                                + SSDB.getInstance().getCurrentCompany().getId());
-            }
+            SSPeriodicInvoiceDialog.pendingPeriodicInvoicesDialog(pMainFrame);
         }
     }
 
@@ -511,33 +506,26 @@ public class SSInvoiceFrame extends SSDefaultTableFrame {
 
         if (iResponce == JOptionPane.YES_OPTION) {
             for (SSInvoice iInvoice : delete) {
-                if (SSPostLock.isLocked(
-                        "invoice" + iInvoice.getNumber()
-                        + SSDB.getInstance().getCurrentCompany().getId())) {
-                    new SSErrorDialog(getMainFrame(), "invoiceframe.invoiceopen",
-                            iInvoice.getNumber());
-                } else {
-                    List<SSOrder> iOrdersToUpdate = new LinkedList<>();
+                List<SSOrder> iOrdersToUpdate = new LinkedList<>();
 
-                    for (SSOrder iOrder : SSDB.getInstance().getOrders()) {
-                        if (iOrder.hasInvoice(iInvoice)) {
-                            iOrder.setInvoice(null);
-                            iOrdersToUpdate.add(iOrder);
-                        }
+                for (SSOrder iOrder : SSDB.getInstance().getOrders()) {
+                    if (iOrder.hasInvoice(iInvoice)) {
+                        iOrder.setInvoice(null);
+                        iOrdersToUpdate.add(iOrder);
                     }
-                    for (SSOrder iOrder : iOrdersToUpdate) {
-                        SSDB.getInstance().updateOrder(iOrder);
-                    }
-                    iOrdersToUpdate = null;
-                    int iIndex = SSCustomerMath.iInvoicesForCustomers.get(iInvoice.getCustomerNr()).indexOf(
-                            iInvoice);
-
-                    if (iIndex != -1) {
-                        SSCustomerMath.iInvoicesForCustomers.get(iInvoice.getCustomerNr()).remove(
-                                iIndex);
-                    }
-                    SSDB.getInstance().deleteInvoice(iInvoice);
                 }
+                for (SSOrder iOrder : iOrdersToUpdate) {
+                    SSDB.getInstance().updateOrder(iOrder);
+                }
+                iOrdersToUpdate = null;
+                int iIndex = SSCustomerMath.iInvoicesForCustomers.get(iInvoice.getCustomerNr()).indexOf(
+                        iInvoice);
+
+                if (iIndex != -1) {
+                    SSCustomerMath.iInvoicesForCustomers.get(iInvoice.getCustomerNr()).remove(
+                            iIndex);
+                }
+                SSDB.getInstance().deleteInvoice(iInvoice);
             }
         }
     }

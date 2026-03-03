@@ -4,7 +4,6 @@ package se.swedsoft.bookkeeping.gui.autodist;
 import se.swedsoft.bookkeeping.data.SSAutoDist;
 import se.swedsoft.bookkeeping.data.SSAutoDistRow;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.autodist.panel.SSAutoDistPanel;
 import se.swedsoft.bookkeeping.gui.autodist.util.SSAutoDistTableModel;
@@ -40,14 +39,6 @@ public class SSAutoDistDialog {
      * @param pModel
      */
     public static void copyDialog(final SSMainFrame iMainFrame, SSAutoDist iAutoDist, final SSAutoDistTableModel pModel) {
-        final String lockString = "autodist" + iAutoDist.getNumber()
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (SSPostLock.isLocked(lockString)) {
-            new SSErrorDialog(iMainFrame, "autodistframe.autodistopen",
-                    iAutoDist.getNumber());
-            return;
-        }
         final SSDialog      iDialog = new SSDialog(iMainFrame,
                 bundle.getString("autodistframe.copy.title"));
         final SSAutoDistPanel iPanel = new SSAutoDistPanel(iDialog, false);
@@ -109,14 +100,6 @@ public class SSAutoDistDialog {
      * @param pModel
      */
     public static void editDialog(final SSMainFrame iMainFrame, SSAutoDist iAutoDist, final SSAutoDistTableModel pModel) {
-        final String lockString = "autodist" + iAutoDist.getNumber()
-                + SSDB.getInstance().getCurrentCompany().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "autodistframe.autodistopen",
-                    iAutoDist.getNumber());
-            return;
-        }
         final SSDialog      iDialog = new SSDialog(iMainFrame,
                 bundle.getString("autodistframe.edit.title"));
         final SSAutoDistPanel iPanel = new SSAutoDistPanel(iDialog, true);
@@ -149,7 +132,6 @@ public class SSAutoDistDialog {
                 if (pModel != null) {
                     pModel.fireTableDataChanged();
                 }
-                SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
 
             };
@@ -158,7 +140,6 @@ public class SSAutoDistDialog {
 
         iPanel.addCancelActionListener(e -> {
 
-                SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
 
             });
@@ -170,7 +151,6 @@ public class SSAutoDistDialog {
                 if (SSQueryDialog.showDialog(iMainFrame, SSBundle.getBundle(),
                         "autodistframe.saveonclose")
                         != JOptionPane.OK_OPTION) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 

@@ -4,7 +4,6 @@ package se.swedsoft.bookkeeping.gui.accountplans;
 import se.swedsoft.bookkeeping.data.SSAccountPlan;
 import se.swedsoft.bookkeeping.data.SSNewAccountingYear;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.accountplans.panel.SSAccountPlanPanel;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
@@ -105,13 +104,6 @@ public class SSAccountPlanDialog {
      * @param iModel
      */
     public static void editDialog(final SSMainFrame iMainFrame, SSAccountPlan iAccountPlan, final AbstractTableModel iModel) {
-        final String lockString = "accountplan" + iAccountPlan.getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "accountplanframe.accountplanopen",
-                    iAccountPlan.getName());
-            return;
-        }
         final String iName = iAccountPlan.getName();
         final SSDialog           iDialog = new SSDialog(iMainFrame,
                 bundle.getString("accountplanframe.edit.title"));
@@ -144,32 +136,24 @@ public class SSAccountPlanDialog {
                 if (iModel != null) {
                     iModel.fireTableDataChanged();
                 }
-                SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
 
             };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(e -> {
-
-                SSPostLock.removeLock(lockString);
-                iDialog.closeDialog();
-
-            });
+        iPanel.addCancelAction(e -> iDialog.closeDialog());
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 if (!iPanel.isValid()) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 
                 if (SSQueryDialog.showDialog(iMainFrame, SSBundle.getBundle(),
                         "accountplanframe.saveonclose")
                         != JOptionPane.OK_OPTION) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 
@@ -190,13 +174,6 @@ public class SSAccountPlanDialog {
      * @param iModel
      */
     public static void copyDialog(final SSMainFrame iMainFrame, SSAccountPlan iAccountPlan, final AbstractTableModel iModel) {
-        final String lockString = "accountplan" + iAccountPlan.getId();
-
-        if (SSPostLock.isLocked(lockString)) {
-            new SSErrorDialog(iMainFrame, "accountplanframe.accountplanopen",
-                    iAccountPlan.getName());
-            return;
-        }
         final SSDialog           iDialog = new SSDialog(iMainFrame,
                 bundle.getString("accountplanframe.copy.title"));
         final SSAccountPlanPanel iPanel = new SSAccountPlanPanel(iMainFrame);
@@ -263,14 +240,6 @@ public class SSAccountPlanDialog {
      * @param iModel
      */
     public static void editCurrentDialog(final SSMainFrame iMainFrame, SSAccountPlan iAccountPlan, final AbstractTableModel iModel) {
-        final String lockString = "accountplan" + iAccountPlan.getName()
-                + SSDB.getInstance().getCurrentYear().getId();
-
-        if (!SSPostLock.applyLock(lockString)) {
-            new SSErrorDialog(iMainFrame, "accountplanframe.accountplanopen",
-                    iAccountPlan.getName());
-            return;
-        }
         final SSDialog           iDialog = new SSDialog(iMainFrame,
                 bundle.getString("accountplanframe.editcurrent.title"));
         final SSAccountPlanPanel iPanel = new SSAccountPlanPanel(iMainFrame);
@@ -291,33 +260,25 @@ public class SSAccountPlanDialog {
                 if (iModel != null) {
                     iModel.fireTableDataChanged();
                 }
-                SSPostLock.removeLock(lockString);
                 iDialog.closeDialog();
 
             };
 
         iPanel.addOkAction(iSaveAction);
 
-        iPanel.addCancelAction(e -> {
-
-                SSPostLock.removeLock(lockString);
-                iDialog.closeDialog();
-
-            });
+        iPanel.addCancelAction(e -> iDialog.closeDialog());
 
         iDialog.addWindowListener(
                 new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 if (!iPanel.isValid()) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 
                 if (SSQueryDialog.showDialog(iMainFrame, SSBundle.getBundle(),
                         "accountplanframe.saveonclose")
                         != JOptionPane.OK_OPTION) {
-                    SSPostLock.removeLock(lockString);
                     return;
                 }
 

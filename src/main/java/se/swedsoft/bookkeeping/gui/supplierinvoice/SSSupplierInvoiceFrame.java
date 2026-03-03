@@ -8,7 +8,7 @@ import se.swedsoft.bookkeeping.data.SSPurchaseOrder;
 import se.swedsoft.bookkeeping.data.SSSupplierInvoice;
 import se.swedsoft.bookkeeping.data.common.SSCurrency;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
+
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.outpayment.SSOutpaymentDialog;
 import se.swedsoft.bookkeeping.gui.outpayment.SSOutpaymentFrame;
@@ -236,20 +236,10 @@ public class SSSupplierInvoiceFrame extends SSDefaultTableFrame {
                 "supplierinvoiceframe.createsupplierpayment",
                 e -> {
 
-                        final String lockString = "supplierpayment"
-                                + SSDB.getInstance().getCurrentCompany().getId();
-
-                        if (!SSPostLock.applyLock(lockString)) {
-                            new SSErrorDialog(getMainFrame(),
-                                    "supplierinvoiceframe.supplierpayment");
-                            return;
-                        }
-
                         List<SSSupplierInvoice> iSelected = iModel.getSelectedRows(iTable);
 
                         iSelected = getSupplierInvoices(iSelected);
                         if (iSelected.isEmpty()) {
-                            SSPostLock.removeLock(lockString);
                             return;
                         }
                         // Filter by currency, only SEK and EUR is supported
@@ -467,28 +457,20 @@ public class SSSupplierInvoiceFrame extends SSDefaultTableFrame {
 
         if (iResponce == JOptionPane.YES_OPTION) {
             for (SSSupplierInvoice iSupplierInvoice : delete) {
-                if (SSPostLock.isLocked(
-                        "supplierinvoice" + iSupplierInvoice.getNumber()
-                        + SSDB.getInstance().getCurrentCompany().getId())) {
-                    new SSErrorDialog(getMainFrame(),
-                            "supplierinvoiceframe.supplierinvoiceopen",
-                            iSupplierInvoice.getNumber());
-                } else {
-                    for (SSPurchaseOrder iPurchaseOrder : SSDB.getInstance().getPurchaseOrders()) {
-                        if (iPurchaseOrder.hasInvoice(iSupplierInvoice)) {
-                            iPurchaseOrder.setInvoice(null);
-                            SSDB.getInstance().updatePurchaseOrder(iPurchaseOrder);
-                        }
+                for (SSPurchaseOrder iPurchaseOrder : SSDB.getInstance().getPurchaseOrders()) {
+                    if (iPurchaseOrder.hasInvoice(iSupplierInvoice)) {
+                        iPurchaseOrder.setInvoice(null);
+                        SSDB.getInstance().updatePurchaseOrder(iPurchaseOrder);
                     }
-                    int iIndex = SSSupplierMath.iInvoicesForSuppliers.get(iSupplierInvoice.getSupplierNr()).indexOf(
-                            iSupplierInvoice);
-
-                    if (iIndex != -1) {
-                        SSSupplierMath.iInvoicesForSuppliers.get(iSupplierInvoice.getSupplierNr()).remove(
-                                iIndex);
-                    }
-                    SSDB.getInstance().deleteSupplierInvoice(iSupplierInvoice);
                 }
+                int iIndex = SSSupplierMath.iInvoicesForSuppliers.get(iSupplierInvoice.getSupplierNr()).indexOf(
+                        iSupplierInvoice);
+
+                if (iIndex != -1) {
+                    SSSupplierMath.iInvoicesForSuppliers.get(iSupplierInvoice.getSupplierNr()).remove(
+                            iIndex);
+                }
+                SSDB.getInstance().deleteSupplierInvoice(iSupplierInvoice);
             }
         }
     }

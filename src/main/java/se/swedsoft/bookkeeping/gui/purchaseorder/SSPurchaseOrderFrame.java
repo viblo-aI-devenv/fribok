@@ -6,7 +6,6 @@ import se.swedsoft.bookkeeping.data.SSPurchaseOrder;
 import se.swedsoft.bookkeeping.data.SSSupplierInvoice;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.data.system.SSMail;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.purchaseorder.panel.SSPurchaseOrderSearchPanel;
 import se.swedsoft.bookkeeping.gui.purchaseorder.util.SSPurchaseOrderTableModel;
@@ -402,21 +401,13 @@ public class SSPurchaseOrderFrame extends SSDefaultTableFrame {
 
         if (iResponce == JOptionPane.YES_OPTION) {
             for (SSPurchaseOrder iPurchaseOrder : delete) {
-                if (SSPostLock.isLocked(
-                        "purchaseorder" + iPurchaseOrder.getNumber()
-                        + SSDB.getInstance().getCurrentCompany().getId())) {
-                    new SSErrorDialog(getMainFrame(),
-                            "purchaseorderframe.purchaseorderopen",
-                            iPurchaseOrder.getNumber());
-                } else {
-                    for (SSOrder iOrder : SSDB.getInstance().getOrders()) {
-                        if (iOrder.hasPurchaseOrder(iPurchaseOrder)) {
-                            iOrder.setPurchaseOrder(null);
-                            SSDB.getInstance().updateOrder(iOrder);
-                        }
+                for (SSOrder iOrder : SSDB.getInstance().getOrders()) {
+                    if (iOrder.hasPurchaseOrder(iPurchaseOrder)) {
+                        iOrder.setPurchaseOrder(null);
+                        SSDB.getInstance().updateOrder(iOrder);
                     }
-                    SSDB.getInstance().deletePurchaseOrder(iPurchaseOrder);
                 }
+                SSDB.getInstance().deletePurchaseOrder(iPurchaseOrder);
             }
         }
     }

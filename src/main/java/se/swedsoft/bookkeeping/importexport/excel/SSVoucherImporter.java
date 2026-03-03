@@ -8,7 +8,6 @@ import jxl.read.biff.BiffException;
 import se.swedsoft.bookkeeping.data.SSVoucher;
 import se.swedsoft.bookkeeping.data.SSVoucherRow;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.data.system.SSPostLock;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.importexport.dialog.SSImportReportDialog;
@@ -48,9 +47,6 @@ public class SSVoucherImporter {
      * @throws IOException
      */
     public void Import()  throws IOException, SSImportException {
-        final String lockString = "voucher"
-                + SSDB.getInstance().getCurrentCompany().getId()
-                + SSDB.getInstance().getCurrentYear().getId();
         WorkbookSettings iSettings = new WorkbookSettings();
 
         iSettings.setLocale(new Locale("sv", "SE"));
@@ -85,7 +81,6 @@ public class SSVoucherImporter {
                 }
             }
         }
-        SSPostLock.removeLock(lockString);
 
     }
 
