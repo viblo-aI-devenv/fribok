@@ -22,10 +22,45 @@ diverging from upstream version 2.2-SNAPSHOT.
   - Native installer creation via jpackage (AppImage, MSI, DMG).
   - Smoke tests for all three platform installers.
 - AppImage build support for Linux distribution.
+- JUnit 5 test foundation with Maven Surefire integration, test infrastructure
+  utilities (`TestDBHelper`, `TestLauncher`), and initial core tests for
+  `SSNewCompany`, `SSDB`, and `SSVoucher` (PR #3).
+- Core business logic tests for `SSAccountPlan`, `SSNewAccountingYear`,
+  `SSVoucherMath`, and `SSBudget` (PR #5).
+- Database integration tests for SSDB CRUD operations covering invoices,
+  suppliers, customers, products, and vouchers (PR #6, #7).
+- `SSDateUtil` adapter class bridging `java.util.Date` and `java.time`
+  (Phase 3 Step 15) (PR #9).
+
+### Changed
+- Modernized Java syntax (Phase 1): replaced anonymous inner classes with
+  lambdas, added diamond operator, converted loops to streams, adopted
+  try-with-resources for I/O (PR #4).
+- Replaced `System.out`/`System.err`/`printStackTrace` calls with SLF4J
+  logging backed by Logback (Phase 2) (PR #8).
+- Updated `MODERNIZATION.md` to reflect current progress through Phase 3.5
+  (PR #13).
+- Migrated domain model date fields from `java.util.Date` to `LocalDate`
+  (Phase 3 Step 16) (PR #14).
+- Replaced `SimpleDateFormat` usage with `DateTimeFormatter` throughout the
+  codebase (Phase 3 Step 17) (PR #15).
 
 ### Fixed
 - CI: use `target/dist` for AppImage build output.
 - CI: use bash shell for Maven build and fix installer test paths.
 - CI: install jpackage dependencies on Linux runner.
-- CI: upgrade deprecated GitHub Actions from v3 to v4.
+- CI: upgrade deprecated GitHub Actions from v3 to v4 (PR #2).
 - Excluded build artifacts from git tracking.
+- CI: fail `build_and_publish` job when tests fail (PR #10).
+- Resolved database path issue: use per-user directories on Windows and
+  macOS instead of hard-coded paths (PR #11).
+- Caught `NullPointerException` in voucher comparator, fixed PR CI coverage
+  reporting, and fixed Linux resource loading paths (PR #12).
+- Added null guards in `SSTriggerHandler.triggerAction` and improved
+  background-thread error detection in tests (PR #16).
+
+### Removed
+- Dead multi-user/server mode code (Phase 3.5): removed `SSPostLock`,
+  `SSCompanyLock`, `SSYearLock`, and all lock acquisition/release calls
+  across 54+ GUI files. Simplified `SSTriggerHandler` to a direct
+  `Trigger.fire()` call. Reduced `SSDB` by ~1,300 lines (PR #17).

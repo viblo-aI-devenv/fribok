@@ -9,10 +9,10 @@ keeping the application functional throughout.
 | Metric | Value |
 |--------|-------|
 | Codebase age | ~17 years (first commit 2009) |
-| Lines of Java | ~153,000 |
-| Java files | 642 production, 25 test |
+| Lines of Java | ~149,400 |
+| Java files | 639 production, 25 test |
 | GUI files (Swing) | 310 Java + 111 IntelliJ `.form` files |
-| Test coverage | ~430 test methods across 24 test classes |
+| Test coverage | 430 test methods across 25 test classes |
 | Java target | 21 (code written in Java 5/6 style) |
 | Logging | SLF4J + Logback (done; 4 stray `System.out.printf` remain in 3 files) |
 | Persistence | Java serialization into HSQLDB `OBJECT` columns |
@@ -22,13 +22,14 @@ keeping the application functional throughout.
 
 | Category | Occurrences | Notes |
 |----------|:-----------:|-------|
-| Old date/time API (`import java.util.Date`) | 143 files | 89 `new Date()`, 346 `Calendar.`, 0 `SimpleDateFormat` |
-| Java serialization (`implements Serializable`) | 46 classes | 181 total serialization-related references |
-| `return null` (no `Optional`) | ~418 | Increased slightly from new code |
-| Mutable public fields | ~51 | Concentrated in BgMax data classes |
+| Old date/time API (`import java.util.Date`) | 140 files | 66 `new Date()`, 325 `Calendar.`, 0 `SimpleDateFormat` |
+| Java serialization (`implements Serializable`) | 45 classes | |
+| `return null` (no `Optional`) | ~419 | |
+| Mutable public fields | ~49 | Concentrated in BgMax data classes |
 | `synchronized` blocks | 11 | SSDB and threading code |
 | Raw types / `Vector` | 6 | `Vector` still used in a few places |
 | Stray `System.out.printf` | 4 | In 3 files: `Bookkeeping.java`, `SSBookkeeping.java`, `SSReportCache.java` |
+| Dead server/locking code | 0 | Removed in Phase 3.5 |
 | Broad `catch (Exception)` | 0 | Fixed in Phase 1 |
 | Old-style try/finally (no try-with-resources) | 0 | Fixed in Phase 1 |
 | Deprecated boxing constructors | 0 | Fixed in Phase 1 |
@@ -42,8 +43,8 @@ keeping the application functional throughout.
 | 0 | Test Foundation | **Done** |
 | 1 | Syntax Modernization | **Done** |
 | 2 | Logging | **Done** (4 stray prints remain) |
-| 3 | Date/Time Migration | In progress (Step 15 done; Steps 16-18 remain) |
-| 3.5 | Remove Multi-User/Server Mode | **In progress** |
+| 3 | Date/Time Migration | In progress (Steps 15-17 done; Step 18 remains) |
+| 3.5 | Remove Multi-User/Server Mode | **Done** |
 | 4 | Code Quality & Encapsulation | Not started |
 | 5 | Persistence Architecture | Not started |
 | 6 | Dependency Updates | Not started |
@@ -78,20 +79,11 @@ keeping the application functional throughout.
      These are tagged `@Tag("integration")` and run in a separate surefire
      execution with a forked JVM to prevent SSDB singleton state from leaking.
 
-   > **Important:** The HSQLDB account-plan seed step loads three XLS files
-   > whose names contain the Swedish character `ä`.  Maven must be run with
-   > `LANG=C.UTF-8 LC_ALL=C.UTF-8` so that the JVM's native encoding is UTF-8
-   > and the resource files are copied into `target/classes` correctly.
-   > Without this, three of the seven account plans are silently missing.
-   >
-   > ```
-   > LANG=C.UTF-8 LC_ALL=C.UTF-8 mvn clean install
-   > ```
-   >
-   > The `-Dsun.jnu.encoding=UTF-8` JVM arg does **not** work on Java 21
-   > because `sun.jnu.encoding` is derived from the OS/JVM native locale at
-   > startup and is read-only.  The locale environment variable is the only
-   > reliable fix.
+   > **Note:** The HSQLDB account-plan seed step loads three XLS files
+   > whose names originally contained the Swedish character `ä`.  These
+   > were renamed to ASCII (`Enskild-naringsidkare`) in PR #12 to avoid
+   > locale-dependent build failures.  The `LANG=C.UTF-8` workaround is
+   > no longer required.
 
 4. **Add `.editorconfig`** -- Enforce 4-space indentation, UTF-8, LF line
    endings, 120-character line width. ✓
@@ -180,14 +172,14 @@ keeping the application functional throughout.
     All 430 tests pass.)
 
 18. **Migrate GUI date components** -- Update date chooser panels and table
-    renderers. (346 `Calendar.` calls remain, mostly in GUI.)
+    renderers. (325 `Calendar.` calls remain, mostly in GUI.)
 
 **Human verification:** Verify date-related screens (invoice dates, accounting
 periods) display correctly.
 
 ---
 
-## Phase 3.5: Remove Multi-User/Server Mode
+## Phase 3.5: Remove Multi-User/Server Mode ✓ DONE
 
 **Goal:** Remove the dead client-server/multi-user networking and locking code.
 
@@ -197,42 +189,40 @@ The application originally supported a multi-user mode where multiple clients
 connected to a shared HSQLDB server via JDBC, with two custom TCP socket
 channels: port 2222 for a text-based pessimistic locking protocol, and port
 2223 for broadcasting database trigger notifications to all clients.  The
-server component (`se.swedsoft.SSServer`) is **not in this repository** and
-is presumed lost.  The multi-user mode cannot function and is dead code that
-complicates every modification to SSDB, triggers, and GUI code.
+server component (`se.swedsoft.SSServer`) was **not in this repository** and
+is presumed lost.  The multi-user mode could not function and was dead code
+that complicated every modification to SSDB, triggers, and GUI code.
 
-### What to remove
+### What was removed
 
-**Delete entirely:**
-- `SSPostLock.java` -- Record-level locking over port 2222 socket (imported
-  by ~54 GUI Frame/Dialog files)
-- `SSCompanyLock.java` -- Company-level locking over port 2222 socket
-- `SSYearLock.java` -- Accounting-year-level locking over port 2222 socket
+**Deleted entirely:**
+- `SSPostLock.java` -- Record-level locking over port 2222 socket (was imported
+  by ~54 GUI Frame/Dialog files) ✓
+- `SSCompanyLock.java` -- Company-level locking over port 2222 socket ✓
+- `SSYearLock.java` -- Accounting-year-level locking over port 2222 socket ✓
 
-**Simplify `SSTriggerHandler.java`:**
-- Remove `extends Thread`, the `run()` socket-listener method, and the
-  constructor socket code (port 2223).  Keep only the `Trigger.fire()` method
+**Simplified `SSTriggerHandler.java`:** ✓
+- Removed `extends Thread`, the `run()` socket-listener method, and the
+  constructor socket code (port 2223).  Kept only the `Trigger.fire()` method
   for local/embedded HSQLDB triggers.
 
-**Remove from `SSDB.java`:**
+**Removed from `SSDB.java`:** ✓
 - Fields: `iSocket`, `iIn`, `iOut`, `iLocking`
 - Methods: `getLocking()`, `setLocking()`, `openSocket()`,
   `startupRemote()`, `loadSelectedDatabase()`, `removeClient()`,
   `getReader()`, `getWriter()`, `getSocket()`, `LockDatabase()`,
   `UnlockDatabase()`, `createServerTriggers()`
-- Simplify methods that branch on `iLocking`: `shutdown()`,
+- Simplified methods that branched on `iLocking`: `shutdown()`,
   `shutdownCompact()`, `loadLocalDatabase()`, `addVoucher()`,
   `readOldDatabase()`, `createTriggers()`, `toString()`
-- Remove `iLocking = false` assignments in `startupLocal()`/
-  `loadLocalDatabase()` (no longer needed once the field is gone)
 
-**Remove from `SSDBConfig.java`:**
+**Removed from `SSDBConfig.java`:** ✓
 - Fields and methods: `iServerAddress`, `iClientKey`,
   `getServerAddress()`, `setServerAddress()`, `getClientkey()`,
   `setClientKey()`
-- Remove server/clientkey parsing from `load()`
+- Removed server/clientkey parsing from `load()`
 
-**Remove from GUI/import files (~54 files):**
+**Removed from GUI/import files (~54 files):** ✓
 - All `SSPostLock.applyLock()` / `SSPostLock.removeLock()` /
   `SSPostLock.isLocked()` calls and surrounding lock-check `if` blocks
 - `SSCompanyLock` / `SSYearLock` usage in `SSMainMenu.java`,
@@ -241,8 +231,8 @@ complicates every modification to SSDB, triggers, and GUI code.
 - `getLocking()` branches in `SSDBUtils.java`, `SSBackupUtils.java`,
   `SSMainMenu.java`, `SSBookkeeping.java`, `Bookkeeping.java`
 
-**Human verification:** Verify the application starts, opens a database, and
-can perform CRUD on suppliers, customers, invoices, and vouchers.
+**Result:** 69 files changed, ~2,500 lines deleted.  SSDB.java reduced from
+~8,200 lines to ~7,850 lines.  All 430 tests pass.
 
 ---
 
@@ -279,7 +269,7 @@ can perform CRUD on suppliers, customers, invoices, and vouchers.
 **Risk:** High | **Effort:** Very High
 
 This is the most complex and risky phase. Java serialization as the ORM strategy
-means that every domain class change can break existing databases. 46 domain
+means that every domain class change can break existing databases. 45 domain
 classes currently implement `Serializable`.
 
 23. **Choose migration strategy:**
@@ -365,25 +355,22 @@ migration.
 | 0 | Test Foundation | None | Medium | **Done** |
 | 1 | Syntax Modernization | Low | Medium-High | **Done** |
 | 2 | Logging | Low | Low | **Done** |
-| 3 | Date/Time Migration | Medium | Medium | In Progress (Step 15 done) |
-| 3.5 | Remove Multi-User/Server Mode | Low | Medium | **In Progress** |
+| 3 | Date/Time Migration | Medium | Medium | In Progress (Steps 15-17 done) |
+| 3.5 | Remove Multi-User/Server Mode | Low | Medium | **Done** |
 | 4 | Code Quality | Low | Medium | Not started |
 | 5 | Persistence Architecture | High | Very High | Not started |
 | 6 | Dependency Updates | Medium | Medium | Not started |
 | 7 | Build & Tooling | None | Low | Not started |
 
 **Recommended next steps:**
-1. Finish Phase 3.5: remove all dead server/locking code. This reduces SSDB
-   complexity and unblocks the SSDB God Object refactor.
-2. Finish Phase 3 (Steps 16-18: migrate date fields in domain classes and
-   import/export). Start with `SimpleDateFormat` fix in `SIEWriter` (concurrency
-   bug) and BgMax importers.
-3. Phase 4: clean up orphaned `SSBookkeeping.java`, encapsulate BgMax public
+1. Finish Phase 3 (Step 18: migrate GUI date components). 140 files still
+   import `java.util.Date`, with 325 `Calendar.` references mostly in GUI code.
+2. Phase 4: clean up orphaned `SSBookkeeping.java`, encapsulate BgMax public
    fields, add `Optional<T>` to lookup methods.
-4. Phase 7 (tooling) can be done in parallel — low risk, no coordination
+3. Phase 7 (tooling) can be done in parallel — low risk, no coordination
    required.
-5. Phase 6 (dependencies) before Phase 5, as HSQLDB upgrade is part of both.
-6. Phase 5 last — it is the most disruptive change.
+4. Phase 6 (dependencies) before Phase 5, as HSQLDB upgrade is part of both.
+5. Phase 5 last — it is the most disruptive change.
 
 ---
 
@@ -391,8 +378,8 @@ migration.
 
 These are larger architectural changes beyond "modernization":
 
-- **SSDB God Object refactor** -- `SSDB.java` is 8,195 lines and acts as DB
-  engine, GUI orchestrator, and data container. Phase 3.5 removes the lock
+- **SSDB God Object refactor** -- `SSDB.java` is ~7,850 lines and acts as DB
+  engine, GUI orchestrator, and data container. Phase 3.5 removed the lock
   manager responsibility. Breaking up the remainder requires extensive test
   coverage first.
 - **GUI framework migration** -- Swing to JavaFX or a web frontend (Vaadin,

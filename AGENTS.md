@@ -63,6 +63,7 @@ CI pipeline in `.github/workflows/ci.yml`:
 - Ensure new code follows style guidelines and includes Javadoc
 - Run static analysis and resolve warnings
 - Update documentation and version metadata as needed
+- Update `CHANGELOG.md` with the changes introduced by the PR
 
 ## Dependency Management
 - Define dependencies in `pom.xml` with explicit versions
