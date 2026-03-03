@@ -2963,6 +2963,10 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
 
                 iCustomer.setNumber(iNumber);
                 iCustomer = getCustomer(iCustomer);
+                if (iCustomer == null) {
+                    LOG.warn("NEWCUSTOMER trigger: customer not found for number {}", iNumber);
+                    return;
+                }
                 iCustomers.add(iCustomer);
                 SSCustomerMath.iInvoicesForCustomers.put(iCustomer.getNumber(),
                         new LinkedList<>());
@@ -2975,6 +2979,10 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
 
                 iCustomer.setNumber(iNumber);
                 iCustomer = getCustomer(iCustomer);
+                if (iCustomer == null) {
+                    LOG.warn("EDITCUSTOMER trigger: customer not found for number {}", iNumber);
+                    return;
+                }
                 int iIndex = iCustomers.lastIndexOf(iCustomer);
 
                 if (iIndex == -1) {
@@ -3000,6 +3008,10 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
 
                 iSupplier.setNumber(iNumber);
                 iSupplier = getSupplier(iSupplier);
+                if (iSupplier == null) {
+                    LOG.warn("NEWSUPPLIER trigger: supplier not found for number {}", iNumber);
+                    return;
+                }
                 iSuppliers.add(iSupplier);
                 SSSupplierMath.iInvoicesForSuppliers.put(iSupplier.getNumber(),
                         new LinkedList<>());
@@ -3012,6 +3024,10 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
 
                 iSupplier.setNumber(iNumber);
                 iSupplier = getSupplier(iSupplier);
+                if (iSupplier == null) {
+                    LOG.warn("EDITSUPPLIER trigger: supplier not found for number {}", iNumber);
+                    return;
+                }
                 int iIndex = iSuppliers.lastIndexOf(iSupplier);
 
                 if (iIndex == -1) {
