@@ -43,6 +43,7 @@ keeping the application functional throughout.
 | 1 | Syntax Modernization | **Done** |
 | 2 | Logging | **Done** (4 stray prints remain) |
 | 3 | Date/Time Migration | In progress (Step 15 done; Steps 16-18 remain) |
+| 3.5 | Remove Multi-User/Server Mode | **In progress** |
 | 4 | Code Quality & Encapsulation | Not started |
 | 5 | Persistence Architecture | Not started |
 | 6 | Dependency Updates | Not started |
@@ -186,6 +187,65 @@ periods) display correctly.
 
 ---
 
+## Phase 3.5: Remove Multi-User/Server Mode
+
+**Goal:** Remove the dead client-server/multi-user networking and locking code.
+
+**Risk:** Low | **Effort:** Medium
+
+The application originally supported a multi-user mode where multiple clients
+connected to a shared HSQLDB server via JDBC, with two custom TCP socket
+channels: port 2222 for a text-based pessimistic locking protocol, and port
+2223 for broadcasting database trigger notifications to all clients.  The
+server component (`se.swedsoft.SSServer`) is **not in this repository** and
+is presumed lost.  The multi-user mode cannot function and is dead code that
+complicates every modification to SSDB, triggers, and GUI code.
+
+### What to remove
+
+**Delete entirely:**
+- `SSPostLock.java` -- Record-level locking over port 2222 socket (imported
+  by ~54 GUI Frame/Dialog files)
+- `SSCompanyLock.java` -- Company-level locking over port 2222 socket
+- `SSYearLock.java` -- Accounting-year-level locking over port 2222 socket
+
+**Simplify `SSTriggerHandler.java`:**
+- Remove `extends Thread`, the `run()` socket-listener method, and the
+  constructor socket code (port 2223).  Keep only the `Trigger.fire()` method
+  for local/embedded HSQLDB triggers.
+
+**Remove from `SSDB.java`:**
+- Fields: `iSocket`, `iIn`, `iOut`, `iLocking`
+- Methods: `getLocking()`, `setLocking()`, `openSocket()`,
+  `startupRemote()`, `loadSelectedDatabase()`, `removeClient()`,
+  `getReader()`, `getWriter()`, `getSocket()`, `LockDatabase()`,
+  `UnlockDatabase()`, `createServerTriggers()`
+- Simplify methods that branch on `iLocking`: `shutdown()`,
+  `shutdownCompact()`, `loadLocalDatabase()`, `addVoucher()`,
+  `readOldDatabase()`, `createTriggers()`, `toString()`
+- Remove `iLocking = false` assignments in `startupLocal()`/
+  `loadLocalDatabase()` (no longer needed once the field is gone)
+
+**Remove from `SSDBConfig.java`:**
+- Fields and methods: `iServerAddress`, `iClientKey`,
+  `getServerAddress()`, `setServerAddress()`, `getClientkey()`,
+  `setClientKey()`
+- Remove server/clientkey parsing from `load()`
+
+**Remove from GUI/import files (~54 files):**
+- All `SSPostLock.applyLock()` / `SSPostLock.removeLock()` /
+  `SSPostLock.isLocked()` calls and surrounding lock-check `if` blocks
+- `SSCompanyLock` / `SSYearLock` usage in `SSMainMenu.java`,
+  `SSBookkeeping.java`, `Bookkeeping.java`,
+  `SSNewAccountingYearDialog.java`, `SSAccountingYearFrame.java`
+- `getLocking()` branches in `SSDBUtils.java`, `SSBackupUtils.java`,
+  `SSMainMenu.java`, `SSBookkeeping.java`, `Bookkeeping.java`
+
+**Human verification:** Verify the application starts, opens a database, and
+can perform CRUD on suppliers, customers, invoices, and vouchers.
+
+---
+
 ## Phase 4: Code Quality & Encapsulation
 
 **Goal:** Improve code structure and safety.
@@ -306,21 +366,24 @@ migration.
 | 1 | Syntax Modernization | Low | Medium-High | **Done** |
 | 2 | Logging | Low | Low | **Done** |
 | 3 | Date/Time Migration | Medium | Medium | In Progress (Step 15 done) |
+| 3.5 | Remove Multi-User/Server Mode | Low | Medium | **In Progress** |
 | 4 | Code Quality | Low | Medium | Not started |
 | 5 | Persistence Architecture | High | Very High | Not started |
 | 6 | Dependency Updates | Medium | Medium | Not started |
 | 7 | Build & Tooling | None | Low | Not started |
 
 **Recommended next steps:**
-1. Finish Phase 3 (Steps 16-18: migrate date fields in domain classes and
+1. Finish Phase 3.5: remove all dead server/locking code. This reduces SSDB
+   complexity and unblocks the SSDB God Object refactor.
+2. Finish Phase 3 (Steps 16-18: migrate date fields in domain classes and
    import/export). Start with `SimpleDateFormat` fix in `SIEWriter` (concurrency
    bug) and BgMax importers.
-2. Phase 4: clean up orphaned `SSBookkeeping.java`, encapsulate BgMax public
+3. Phase 4: clean up orphaned `SSBookkeeping.java`, encapsulate BgMax public
    fields, add `Optional<T>` to lookup methods.
-3. Phase 7 (tooling) can be done in parallel — low risk, no coordination
+4. Phase 7 (tooling) can be done in parallel — low risk, no coordination
    required.
-4. Phase 6 (dependencies) before Phase 5, as HSQLDB upgrade is part of both.
-5. Phase 5 last — it is the most disruptive change.
+5. Phase 6 (dependencies) before Phase 5, as HSQLDB upgrade is part of both.
+6. Phase 5 last — it is the most disruptive change.
 
 ---
 
@@ -329,9 +392,9 @@ migration.
 These are larger architectural changes beyond "modernization":
 
 - **SSDB God Object refactor** -- `SSDB.java` is 8,195 lines and acts as DB
-  engine, GUI orchestrator, lock manager, and data container. Breaking it up
-  is the single highest-leverage architectural improvement but requires
-  extensive test coverage first.
+  engine, GUI orchestrator, and data container. Phase 3.5 removes the lock
+  manager responsibility. Breaking up the remainder requires extensive test
+  coverage first.
 - **GUI framework migration** -- Swing to JavaFX or a web frontend (Vaadin,
   Spring Boot + HTMX). The 310 GUI files + 111 `.form` files make this a major
   undertaking.
