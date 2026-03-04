@@ -20,7 +20,6 @@ package se.swedsoft.bookkeeping.calc.util;
 
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.regex.Matcher;
@@ -106,7 +105,25 @@ class SSAutoIncrementTest {
         assertTrue(matcher.find());
     }
 
-    @Disabled("TODO: Decide what to do if passed negative numbers and test it")
     @Test
-    void whatAboutNegativeNumbers() {}
+    void negativeNumberIsStoredAndRetrieved() {
+        ainc.setNumber(key, -5);
+        assertEquals(-5, ainc.getNumber(key));
+    }
+
+    @Test
+    void negativeNumberIncrementsTowardZero() {
+        ainc.setNumber(key, -1);
+        ainc.doAutoIncrement(key);
+        assertEquals(0, ainc.getNumber(key));
+    }
+
+    @Test
+    void negativeNumberIncrementsThroughZero() {
+        ainc.setNumber(key, -2);
+        ainc.doAutoIncrement(key);
+        ainc.doAutoIncrement(key);
+        ainc.doAutoIncrement(key);
+        assertEquals(1, ainc.getNumber(key));
+    }
 }

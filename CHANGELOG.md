@@ -75,3 +75,6 @@ diverging from upstream version 2.2-SNAPSHOT.
   `SSCompanyLock`, `SSYearLock`, and all lock acquisition/release calls
   across 54+ GUI files. Simplified `SSTriggerHandler` to a direct
   `Trigger.fire()` call. Reduced `SSDB` by ~1,300 lines (PR #17).
+- Duplicate legacy entry point `SSBookkeeping.java` and 5 orphaned test data
+  files (Phase 4 Step 21). Resolved all TODOs and converted remaining
+  `System.out.printf` calls to SLF4J logging.

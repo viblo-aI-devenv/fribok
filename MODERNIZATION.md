@@ -28,7 +28,7 @@ keeping the application functional throughout.
 | Mutable public fields | 0 | Encapsulated in Step 19 |
 | `synchronized` blocks | 11 | SSDB and threading code |
 | Raw types / `Vector` | 6 | `Vector` still used in a few places |
-| Stray `System.out.printf` | 4 | In 3 files: `Bookkeeping.java`, `SSBookkeeping.java`, `SSReportCache.java` |
+| Stray `System.out.printf` | 0 | All converted to SLF4J in Step 21 |
 | Dead server/locking code | 0 | Removed in Phase 3.5 |
 | Broad `catch (Exception)` | 0 | Fixed in Phase 1 |
 | Old-style try/finally (no try-with-resources) | 0 | Fixed in Phase 1 |
@@ -300,9 +300,20 @@ that complicated every modification to SSDB, triggers, and GUI code.
     date/utility conversions -- lower priority per plan guidance. All 396 unit
     tests + 34 integration tests pass.
 
-21. **Clean up orphaned code** -- Remove the duplicate legacy entry point
-    (`SSBookkeeping.java`), orphaned test data files, and resolve the 7 TODOs.
-    Also fix the 4 remaining `System.out.printf` calls left from Phase 2.
+21. **Clean up orphaned code** ✓ -- Deleted the duplicate legacy entry point
+    `SSBookkeeping.java` (147 lines) and cleaned up 3 commented-out references
+    to it in `SSMainMenu.java` and `SSCreditInvoiceFrame.java`. Removed 5
+    orphaned test data files (LBin/LBut examples in `supplierpayments/poster/`)
+    that were never referenced by any test. Resolved all 5 TODOs: removed 2
+    dead-code TODOs in commented-out `readObject_old` methods
+    (`SSNewAccountingYear.java`, `SSAccountingYear.java`), replaced
+    `SSAccountPlanType` TODO with explanatory comment (hardcoded is acceptable
+    for 3 stable entries), replaced `SIEEntryBranschkod` TODO with comment
+    explaining SNI code is not in the data model, and wrote 3 new tests for
+    `SSAutoIncrement` negative number handling (replacing the `@Disabled` TODO).
+    Converted the remaining 3 `System.out.printf` calls to SLF4J `LOG.info` in
+    `SSReportCache.java` and `Bookkeeping.java` (the 4th was in the now-deleted
+    `SSBookkeeping.java`). All 398 unit tests + 34 integration tests pass.
 
 22. **Resolve remaining `Vector` usages** -- Verify the 6 remaining `Vector`
     references from Phase 1 are intentional or replace with `ArrayList`.

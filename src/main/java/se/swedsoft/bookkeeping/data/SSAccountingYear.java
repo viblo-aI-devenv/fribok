@@ -345,26 +345,6 @@ public class SSAccountingYear implements Serializable, SSTableSearchable {
         iBudget = (SSBudget) fields.get("iBudget", null);
     }
 
-    /**
-     *
-     * @param iObjectInputStream
-     * @throws IOException
-     * @throws ClassNotFoundException
-
-     private void readObject_old(ObjectInputStream iObjectInputStream) throws IOException, ClassNotFoundException{
-     iObjectInputStream.defaultReadObject();
-
-     SSCompany        iCompany        = SSDB.getInstance().getCurrentCompany();
-     SSAccountingYear iAccountingYear = this;
-
-     for(SSVoucher iVoucher:  iVouchers){
-     for(SSVoucherRow iVoucherRow: iVoucher.getVoucherRows())
-     // @TODO: This is a hack
-     iVoucherRow.updateReferences(iCompany, iAccountingYear);
-     }
-     notifyListeners(iCompany, iAccountingYear);
-     }
-     */
 
     /**
      *

@@ -19,7 +19,7 @@ public class SSAccountPlanType implements SSTableSearchable, Serializable {
     static final long serialVersionUID = 1L;
     private static final Map<String, SSAccountPlanType> iAccountPlanTypes = new HashMap<>();
 
-    // TODO: Load this from file
+    // Account plan types are few and stable; hardcoding is acceptable here.
     static {
         iAccountPlanTypes.put("BAS95", new SSAccountPlanType("BAS95", "BAS95.xml"));
         iAccountPlanTypes.put("BAS96", new SSAccountPlanType("BAS96", "BAS96.xml"));

@@ -110,8 +110,8 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
         InputStream stream = getClass().getResourceAsStream(MENU_RES);
         iMenuLoader.loadMenus(stream);
 
-        iMenuLoader.setEnabled("Company", /*SSBookkeeping.iCompany.getData()  != null*/false);
-        iMenuLoader.setEnabled("Year"   , /*SSBookkeeping.iCompany.getCurrentYear()     != null*/false);
+        iMenuLoader.setEnabled("Company", false);
+        iMenuLoader.setEnabled("Year", false);
 
         loadActions();
 

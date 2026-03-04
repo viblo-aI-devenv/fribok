@@ -121,7 +121,7 @@ public class Bookkeeping {    private static final Logger LOG = LoggerFactory.ge
         LOG.info("");
         LOG.info("Paths:");
         for (Path name : Path.values()) {
-            System.out.printf("   %-12s = %s\n", name, Path.get(name));
+            LOG.info(String.format("   %-12s = %s", name, Path.get(name)));
         }
 
         String warning = null;
