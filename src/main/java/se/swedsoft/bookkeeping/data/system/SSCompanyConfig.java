@@ -76,10 +76,9 @@ public class SSCompanyConfig {    private static final Logger LOG = LoggerFactor
 
         File iFile = new File(Path.get(Path.APP_BASE), "companysettings.config");
 
-        Collection<Object> iVector = new ArrayList<>();
+        Collection<Object> iEntries = new ArrayList<>();
 
-        iVector.add(iCompany);
-        // iVector.add(iCompany.getCurrentYear());
+        iEntries.add(iCompany);
 
         if (iFile.exists()) {
             try (FileInputStream fis = new FileInputStream(iFile);
@@ -90,8 +89,8 @@ public class SSCompanyConfig {    private static final Logger LOG = LoggerFactor
 
                     if (iSystemCompany != null) {
                         if (!iSystemCompany.getId().equals(iCompany.getId())) {
-                            iVector.add(iSystemCompany);
-                            iVector.add(iSystemYear);
+                            iEntries.add(iSystemCompany);
+                            iEntries.add(iSystemYear);
                         }
                     }
                 }
@@ -108,7 +107,7 @@ public class SSCompanyConfig {    private static final Logger LOG = LoggerFactor
             }
             try (FileOutputStream fos = new FileOutputStream(iFile);
                  ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-                for (Object iObject : iVector) {
+                for (Object iObject : iEntries) {
                     oos.writeObject(iObject);
                 }
             }

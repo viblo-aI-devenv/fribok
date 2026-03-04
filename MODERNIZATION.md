@@ -27,7 +27,7 @@ keeping the application functional throughout.
 | `return null` (no `Optional`) | ~212 | Down from ~419; remaining are GUI/print/framework |
 | Mutable public fields | 0 | Encapsulated in Step 19 |
 | `synchronized` blocks | 11 | SSDB and threading code |
-| Raw types / `Vector` | 6 | `Vector` still used in a few places |
+| Raw types / `Vector` | 0 | `Vector` class fully removed; last naming artifact cleaned in Step 22 |
 | Stray `System.out.printf` | 0 | All converted to SLF4J in Step 21 |
 | Dead server/locking code | 0 | Removed in Phase 3.5 |
 | Broad `catch (Exception)` | 0 | Fixed in Phase 1 |
@@ -315,8 +315,12 @@ that complicated every modification to SSDB, triggers, and GUI code.
     `SSReportCache.java` and `Bookkeeping.java` (the 4th was in the now-deleted
     `SSBookkeeping.java`). All 398 unit tests + 34 integration tests pass.
 
-22. **Resolve remaining `Vector` usages** -- Verify the 6 remaining `Vector`
-    references from Phase 1 are intentional or replace with `ArrayList`.
+22. **Resolve remaining `Vector` usages** ✓ -- Investigation found that
+    `java.util.Vector` is no longer imported or instantiated anywhere in the
+    codebase. The 6 references were all to a local variable *named* `iVector`
+    in `SSCompanyConfig.saveCompanySetting()`, already backed by `ArrayList`.
+    Renamed the variable to `iEntries` and removed a commented-out line. All
+    398 unit tests + 34 integration tests pass.
 
 **Human verification:** None.
 
