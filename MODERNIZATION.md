@@ -42,10 +42,10 @@ keeping the application functional throughout.
 |:-----:|-------------|--------|
 | 0 | Test Foundation | **Done** |
 | 1 | Syntax Modernization | **Done** |
-| 2 | Logging | **Done** (4 stray prints remain) |
-| 3 | Date/Time Migration | In progress (Steps 15-17 done; Step 18 remains) |
+| 2 | Logging | **Done** |
+| 3 | Date/Time Migration | **Done** |
 | 3.5 | Remove Multi-User/Server Mode | **Done** |
-| 4 | Code Quality & Encapsulation | Not started |
+| 4 | Code Quality & Encapsulation | **Done** |
 | 5 | Persistence Architecture | Not started |
 | 6 | Dependency Updates | Not started |
 | 7 | Build & Tooling | Not started |
@@ -419,22 +419,19 @@ migration.
 | 0 | Test Foundation | None | Medium | **Done** |
 | 1 | Syntax Modernization | Low | Medium-High | **Done** |
 | 2 | Logging | Low | Low | **Done** |
-| 3 | Date/Time Migration | Medium | Medium | In Progress (Steps 15-17 done) |
+| 3 | Date/Time Migration | Medium | Medium | **Done** |
 | 3.5 | Remove Multi-User/Server Mode | Low | Medium | **Done** |
-| 4 | Code Quality | Low | Medium | Step 19 done |
+| 4 | Code Quality | Low | Medium | **Done** |
 | 5 | Persistence Architecture | High | Very High | Not started |
 | 6 | Dependency Updates | Medium | Medium | Not started |
 | 7 | Build & Tooling | None | Low | Not started |
 
 **Recommended next steps:**
-1. Finish Phase 3 (Step 18: migrate GUI date components). 140 files still
-   import `java.util.Date`, with 325 `Calendar.` references mostly in GUI code.
-2. Phase 4: clean up orphaned `SSBookkeeping.java`, encapsulate BgMax public
-   fields, add `Optional<T>` to lookup methods.
-3. Phase 7 (tooling) can be done in parallel — low risk, no coordination
+1. Phase 7 (tooling) can be done immediately — low risk, no coordination
    required.
-4. Phase 6 (dependencies) before Phase 5, as HSQLDB upgrade is part of both.
-5. Phase 5 last — it is the most disruptive change.
+2. Phase 6 (dependencies) before Phase 5, as HSQLDB upgrade is part of both.
+3. Phase 5 last — it is the most disruptive change and requires human
+   verification with real database backups.
 
 ---
 
