@@ -3,6 +3,7 @@ package se.swedsoft.bookkeeping.data;
 
 import se.swedsoft.bookkeeping.calc.math.SSSupplierInvoiceMath;
 import se.swedsoft.bookkeeping.calc.math.SSVoucherMath;
+import se.swedsoft.bookkeeping.calc.util.SSAutoIncrement;
 import se.swedsoft.bookkeeping.data.common.SSDefaultAccount;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
@@ -64,7 +65,7 @@ public class SSSupplierCreditInvoice extends SSSupplierInvoice {
     public void doAutoIncrecement() {
         List<SSSupplierCreditInvoice> iInvoices = SSDB.getInstance().getSupplierCreditInvoices();
 
-        int iNumber = SSDB.getInstance().getAutoIncrement().getNumber(
+        int iNumber = SSDB.getInstance().getAutoIncrement().orElse(new SSAutoIncrement()).getNumber(
                 "suppliercreditinvoice");
 
         for (SSSupplierCreditInvoice iSupplierInvoice : iInvoices) {
@@ -230,16 +231,16 @@ public class SSSupplierCreditInvoice extends SSSupplierInvoice {
 
         // Add the total sum to the voucher
         iVoucher.addVoucherRow(
-                getDefaultAccount(iAccountPlan, SSDefaultAccount.SupplierDebt), iTotalSum,
+                getDefaultAccount(iAccountPlan, SSDefaultAccount.SupplierDebt).orElse(null), iTotalSum,
                 null);
 
         // Add roundingsum
-        iVoucher.addVoucherRow(getDefaultAccount(iAccountPlan, SSDefaultAccount.Rounding),
+        iVoucher.addVoucherRow(getDefaultAccount(iAccountPlan, SSDefaultAccount.Rounding).orElse(null),
                 iRoundingSum.negate());
 
         // Add the tax 1
         iVoucher.addVoucherRow(
-                getDefaultAccount(iAccountPlan, SSDefaultAccount.IncommingTax), null,
+                getDefaultAccount(iAccountPlan, SSDefaultAccount.IncommingTax).orElse(null), null,
                 iTaxSum);
 
         // Add all rows from the correction voucher
@@ -251,7 +252,7 @@ public class SSSupplierCreditInvoice extends SSSupplierInvoice {
         for (SSSupplierInvoiceRow iRow : iRows) {
             SSVoucherRow iVoucherRow = new SSVoucherRow();
 
-            iVoucherRow.setCredit(iRow.getSum());
+            iVoucherRow.setCredit(iRow.getSum().orElse(null));
             iVoucherRow.setAccount(iRow.getAccount(iAccountPlan.getAccounts()));
             iVoucherRow.setProject(iRow.getProject(SSDB.getInstance().getProjects()));
             iVoucherRow.setResultUnit(

@@ -3,6 +3,7 @@ package se.swedsoft.bookkeeping.data;
 
 import se.swedsoft.bookkeeping.calc.math.SSSupplierInvoiceMath;
 import se.swedsoft.bookkeeping.calc.math.SSVoucherMath;
+import se.swedsoft.bookkeeping.calc.util.SSAutoIncrement;
 import se.swedsoft.bookkeeping.data.common.SSCurrency;
 import se.swedsoft.bookkeeping.data.common.SSDefaultAccount;
 import se.swedsoft.bookkeeping.data.common.SSPaymentTerm;
@@ -17,6 +18,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.Optional;
 
 
 /**
@@ -180,7 +182,7 @@ public class SSSupplierInvoice implements SSTableSearchable, Serializable {
     public void doAutoIncrecement() {
         List<SSSupplierInvoice> iInvoices = SSDB.getInstance().getSupplierInvoices();
 
-        int iMax = SSDB.getInstance().getAutoIncrement().getNumber("supplierinvoice");
+        int iMax = SSDB.getInstance().getAutoIncrement().orElse(new SSAutoIncrement()).getNumber("supplierinvoice");
 
         for (SSSupplierInvoice iSupplierInvoice : iInvoices) {
             if (iSupplierInvoice.iNumber > iMax) {
@@ -523,10 +525,11 @@ public class SSSupplierInvoice implements SSTableSearchable, Serializable {
     public void append(SSPurchaseOrder iPurchaseOrder) {
         for (SSPurchaseOrderRow iRow : iPurchaseOrder.getRows()) {
 
-            SSSupplierInvoiceRow iMatchingRow = SSSupplierInvoiceMath.getMatchingRow(this,
+            Optional<SSSupplierInvoiceRow> iMatchingRowOpt = SSSupplierInvoiceMath.getMatchingRow(this,
                     iRow);
 
-            if (iMatchingRow != null) {
+            if (iMatchingRowOpt.isPresent()) {
+                SSSupplierInvoiceRow iMatchingRow = iMatchingRowOpt.get();
                 Integer iQuantity = iMatchingRow.getQuantity();
 
                 if (iQuantity != null) {
@@ -564,14 +567,14 @@ public class SSSupplierInvoice implements SSTableSearchable, Serializable {
      * @param iDefaultAccount
      * @return
      */
-    public SSAccount getDefaultAccount(SSAccountPlan iAccountPlan, SSDefaultAccount iDefaultAccount) {
+    public Optional<SSAccount> getDefaultAccount(SSAccountPlan iAccountPlan, SSDefaultAccount iDefaultAccount) {
         Integer iAccountNumber = iDefaultAccounts.get(iDefaultAccount);
 
         if (iAccountNumber == null) {
-            return null;
+            return Optional.empty();
         }
 
-        return iAccountPlan.getAccount(iAccountNumber);
+        return Optional.ofNullable(iAccountPlan.getAccount(iAccountNumber));
     }
 
     /**
@@ -783,16 +786,16 @@ public class SSSupplierInvoice implements SSTableSearchable, Serializable {
 
         // Add the total sum to the voucher
         iVoucher.addVoucherRow(
-                getDefaultAccount(iAccountPlan, SSDefaultAccount.SupplierDebt), null,
+                getDefaultAccount(iAccountPlan, SSDefaultAccount.SupplierDebt).orElse(null), null,
                 iTotalSum);
 
         // Add roundingsum
-        iVoucher.addVoucherRow(getDefaultAccount(iAccountPlan, SSDefaultAccount.Rounding),
+        iVoucher.addVoucherRow(getDefaultAccount(iAccountPlan, SSDefaultAccount.Rounding).orElse(null),
                 iRoundingSum);
 
         // Add the tax 1
         iVoucher.addVoucherRow(
-                getDefaultAccount(iAccountPlan, SSDefaultAccount.IncommingTax), iTaxSum,
+                getDefaultAccount(iAccountPlan, SSDefaultAccount.IncommingTax).orElse(null), iTaxSum,
                 null);
 
         // Add all rows from the correction voucher
@@ -804,7 +807,7 @@ public class SSSupplierInvoice implements SSTableSearchable, Serializable {
         for (SSSupplierInvoiceRow iRow : iRows) {
             SSVoucherRow iVoucherRow = new SSVoucherRow();
 
-            iVoucherRow.setDebet(iRow.getSum());
+            iVoucherRow.setDebet(iRow.getSum().orElse(null));
             iVoucherRow.setAccount(iRow.getAccount(iAccountPlan.getAccounts()));
             iVoucherRow.setProject(iRow.getProject(SSDB.getInstance().getProjects()));
             iVoucherRow.setResultUnit(

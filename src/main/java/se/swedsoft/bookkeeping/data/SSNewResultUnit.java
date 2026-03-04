@@ -161,8 +161,8 @@ public class SSNewResultUnit implements Serializable, SSTableSearchable {
                 for (SSSaleRow iRow : iInvoice.getRows()) {
                     if (iRow.getResultUnitNr() != null) {
                         if (iRow.getResultUnitNr().equals(iNumber)
-                                && iRow.getSum() != null) {
-                            iInvoiceSum += iRow.getSum().doubleValue()
+                                && iRow.getSum().isPresent()) {
+                            iInvoiceSum += iRow.getSum().get().doubleValue()
                                     * iInvoice.getCurrencyRate().doubleValue();
                         }
                     }
@@ -178,8 +178,8 @@ public class SSNewResultUnit implements Serializable, SSTableSearchable {
                 for (SSSaleRow iRow : iCreditInvoice.getRows()) {
                     if (iRow.getResultUnitNr() != null) {
                         if (iRow.getResultUnitNr().equals(iNumber)
-                                && iRow.getSum() != null) {
-                            iCreditInvoiceSum += iRow.getSum().doubleValue()
+                                && iRow.getSum().isPresent()) {
+                            iCreditInvoiceSum += iRow.getSum().get().doubleValue()
                                     * iCreditInvoice.getCurrencyRate().doubleValue();
                         }
                     }

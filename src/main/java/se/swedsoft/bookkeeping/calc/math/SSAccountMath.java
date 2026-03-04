@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 /**
@@ -82,16 +83,16 @@ public class SSAccountMath {
      * Gets a account from the current year
      *
      * @param pAccountNr
-     * @return the account or null
+     * @return the account or empty
      */
-    public static SSAccount getAccount(Integer pAccountNr) {
+    public static Optional<SSAccount> getAccount(Integer pAccountNr) {
         SSAccountPlan iAccountPlan = SSDB.getInstance().getCurrentAccountPlan();
 
         if (iAccountPlan == null) {
-            return null;
+            return Optional.empty();
         }
 
-        return iAccountPlan.getAccount(pAccountNr);
+        return Optional.ofNullable(iAccountPlan.getAccount(pAccountNr));
     }
 
     /**
@@ -294,22 +295,22 @@ public class SSAccountMath {
      * @param pVatCode The VAT Code
      * @param pDefaultAccount The account to use if no account is marked with the vatCode
      *
-     * @return The account marked with the VAT code if exactly one match, defaultAccount if no match and null if more then one matching account
+     * @return The account marked with the VAT code if exactly one match, defaultAccount if no match and empty if more then one matching account
      */
-    public static SSAccount getAccountWithVATCode(List<SSAccount> pAccounts, String pVatCode, SSAccount pDefaultAccount) {
+    public static Optional<SSAccount> getAccountWithVATCode(List<SSAccount> pAccounts, String pVatCode, SSAccount pDefaultAccount) {
         // get the accounts marked with the VAT code
         List<SSAccount> theAccounts = getAccountsByVATCode(pAccounts, pVatCode);
 
-        // If more then one account is marked return null to let the caller know that there's inconsistency in the accountplan
+        // If more then one account is marked return empty to let the caller know that there's inconsistency in the accountplan
         if (theAccounts.size() > 1) {
-            return null;
+            return Optional.empty();
         }
         // openWarningDialog(iMainFrame, "vatBasis.dialogMoreThenOneAccount");
         // Return the wanter account if it exists, or return the default account
         if (theAccounts.isEmpty()) {
-            return pDefaultAccount;
+            return Optional.ofNullable(pDefaultAccount);
         } else {
-            return theAccounts.get(0);
+            return Optional.of(theAccounts.get(0));
         }
     }
 

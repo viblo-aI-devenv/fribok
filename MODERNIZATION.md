@@ -24,7 +24,7 @@ keeping the application functional throughout.
 |----------|:-----------:|-------|
 | Old date/time API (`import java.util.Date`) | 140 files | 66 `new Date()`, 325 `Calendar.`, 0 `SimpleDateFormat` |
 | Java serialization (`implements Serializable`) | 45 classes | |
-| `return null` (no `Optional`) | ~419 | |
+| `return null` (no `Optional`) | ~212 | Down from ~419; remaining are GUI/print/framework |
 | Mutable public fields | 0 | Encapsulated in Step 19 |
 | `synchronized` blocks | 11 | SSDB and threading code |
 | Raw types / `Vector` | 6 | `Vector` still used in a few places |
@@ -283,9 +283,22 @@ that complicated every modification to SSDB, triggers, and GUI code.
     needed visibility change from `public` to `private` since getters already
     existed. All 396 unit tests + 34 integration tests pass.
 
-20. **Introduce `Optional<T>`** -- Prioritize entity lookup methods, search/find
-    methods, and parser methods. Focus on public API methods first rather than
-    all ~418 `return null` sites.
+20. **Introduce `Optional<T>`** ✓ -- Converted ~100 public API methods from
+    returning null to `Optional<T>` across four categories: (a) SSDB.java -- 33
+    single-entity lookup methods now return `Optional<T>`, 15 batch methods
+    return `Collections.emptyList()` instead of null; 38 internal trigger handler
+    callers updated with proper Optional handling and LOG.warn guards for missing
+    entities; (b) calc/math -- 26 search/find methods across 10 `*Math` classes;
+    (c) data model getters -- ~30 methods across 19 data classes (SSBudget,
+    SSCompany, SSProduct, SSInpayment, SSOutpayment, SSSupplierInvoice, SSSale,
+    SSPeriodicInvoice, SSDefaultAccount, row classes, config classes); (d)
+    parser/decoder methods -- SSVATCode.decode(), SSUnit.decode(),
+    SIEIterator.peek()/nextInteger(), SSExcelCell.getBigDecimal(),
+    SSDBUtils.loadCompany()/loadYear(). 150 files changed, ~1039 insertions,
+    ~813 deletions. Reduced `return null` count from ~419 to ~212; remaining
+    sites are GUI frames (getStatusBar, getTitle), dialog return values, and
+    date/utility conversions -- lower priority per plan guidance. All 396 unit
+    tests + 34 integration tests pass.
 
 21. **Clean up orphaned code** -- Remove the duplicate legacy entry point
     (`SSBookkeeping.java`), orphaned test data files, and resolve the 7 TODOs.

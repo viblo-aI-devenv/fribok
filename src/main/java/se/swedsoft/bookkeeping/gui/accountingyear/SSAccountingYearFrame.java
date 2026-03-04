@@ -264,7 +264,7 @@ public class SSAccountingYearFrame extends SSDefaultTableFrame {
             return;
         }
         // Kontrollera att året fortfarande finns i databasen
-        iNewYear = SSDB.getInstance().getAccountingYear(iNewYear);
+        iNewYear = SSDB.getInstance().getAccountingYear(iNewYear).orElse(null);
         if (iNewYear == null) {
             // Året fanns inte kvar i databasen. Visa felmeddelande.
             new SSErrorDialog(getMainFrame(), "accountingyearframe.yeargone");
@@ -303,7 +303,7 @@ public class SSAccountingYearFrame extends SSDefaultTableFrame {
         }
 
         // Kontrollera att året fortfarande finns i databasen
-        iAccountingYear = SSDB.getInstance().getAccountingYear(iAccountingYear);
+        iAccountingYear = SSDB.getInstance().getAccountingYear(iAccountingYear).orElse(null);
         if (iAccountingYear == null) {
             // Året fanns inte kvar i databasen. Visa felmeddelande.
             new SSErrorDialog(getMainFrame(), "accountingyearframe.yeargone");

@@ -620,7 +620,7 @@ public class SSOrderFrame extends SSDefaultTableFrame {    private static final 
     }
 
     private SSOrder getOrder(SSOrder iOrder) {
-        return SSDB.getInstance().getOrder(iOrder);
+        return SSDB.getInstance().getOrder(iOrder).orElse(null);
     }
 
     private List<SSOrder> getOrders(List<SSOrder> iOrders) {

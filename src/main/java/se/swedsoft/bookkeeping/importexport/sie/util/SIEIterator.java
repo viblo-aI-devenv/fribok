@@ -12,6 +12,7 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,13 +83,13 @@ public class SIEIterator implements Iterator<String> {    private static final L
      * Returns the next element in the iteration without incrementing
      * the current item .
      *
-     * @return the next element in the iteration.
+     * @return the next element in the iteration, or empty if at end of stream.
      */
-    public String peek() {
+    public Optional<String> peek() {
         if (iIndex >= iValues.size()) {
-            return null;
+            return Optional.empty();
         }
-        return iValues.get(iIndex + 1);
+        return Optional.of(iValues.get(iIndex + 1));
     }
 
     @Override
@@ -102,13 +103,13 @@ public class SIEIterator implements Iterator<String> {    private static final L
      * @return
      */
     private boolean hasNext(Pattern pPattern) {
-        String iNext = peek();
+        Optional<String> iNext = peek();
 
-        if (iNext == null || iNext.length() == 0) {
+        if (iNext.isEmpty() || iNext.get().length() == 0) {
             return false;
         }
 
-        Matcher m = pPattern.matcher(iNext);
+        Matcher m = pPattern.matcher(iNext.get());
 
         return m.matches();
     }
@@ -225,18 +226,16 @@ public class SIEIterator implements Iterator<String> {    private static final L
      *
      * @return
      */
-    public Integer nextInteger() {
+    public Optional<Integer> nextInteger() {
         String s = next();
 
         try {
-            Integer iNumber = null;
-
             if (s.length() > 0) {
-                iNumber = Integer.valueOf(s);
+                return Optional.of(Integer.valueOf(s));
             }
-            return iNumber;
+            return Optional.empty();
         } catch (NumberFormatException e) {
-            return null;
+            return Optional.empty();
         }
     }
 

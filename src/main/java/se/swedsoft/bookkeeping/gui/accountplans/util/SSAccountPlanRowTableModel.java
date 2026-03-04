@@ -9,6 +9,8 @@ import se.swedsoft.bookkeeping.gui.util.table.editors.SSVATCellRenderer;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSEditableTableModel;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSTableColumn;
 
+import java.util.Optional;
+
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
@@ -124,10 +126,10 @@ public class SSAccountPlanRowTableModel extends SSEditableTableModel<SSAccount> 
         @Override
         public Object getValue(SSAccount iAccount) {
 
-            SSVATCode iVATCode = SSVATCode.decode(iAccount.getVATCode());
+            Optional<SSVATCode> iVATCode = SSVATCode.decode(iAccount.getVATCode());
 
-            if (iVATCode != null) {
-                return iVATCode.getName();
+            if (iVATCode.isPresent()) {
+                return iVATCode.get().getName();
             } else {
                 return iAccount.getVATCode();
             }

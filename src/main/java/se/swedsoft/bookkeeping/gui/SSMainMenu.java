@@ -622,7 +622,7 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
                     SSNewAccountingYear.openWarningDialogNoYearData(iMainFrame);
                     return;
                 }
-                SSNewAccountingYear previousYearData = SSDB.getInstance().getPreviousYear();
+                SSNewAccountingYear previousYearData = SSDB.getInstance().getPreviousYear().orElse(null);
 
                 SSReportFactory.buildResultReport(iMainFrame, bundle, yearData, previousYearData);
 
@@ -940,7 +940,7 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
                         }
 
                         for(SSPeriodicInvoice iPeriodicInvoice : SSDB.getInstance().getPeriodicInvoices()){
-                            if(iPeriodicInvoice.getDate().before(iDate) && iPeriodicInvoice.getNextDate() == null)
+                            if(iPeriodicInvoice.getDate().before(iDate) && iPeriodicInvoice.getNextDate().isEmpty())
                                 SSDB.getInstance().deletePeriodicInvoice(iPeriodicInvoice);
                         }
 

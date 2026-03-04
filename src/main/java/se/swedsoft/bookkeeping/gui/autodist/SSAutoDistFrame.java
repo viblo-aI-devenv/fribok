@@ -255,7 +255,7 @@ public class SSAutoDistFrame extends SSDefaultTableFrame {
     }
 
     private SSAutoDist getAutoDist(SSAutoDist iAutoDist) {
-        return SSDB.getInstance().getAutoDist(iAutoDist);
+        return SSDB.getInstance().getAutoDist(iAutoDist).orElse(null);
     }
 
     private List<SSAutoDist> getAutoDists(List<SSAutoDist> iAutoDists) {

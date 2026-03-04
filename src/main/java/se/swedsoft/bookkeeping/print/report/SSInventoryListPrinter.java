@@ -166,7 +166,7 @@ public class SSInventoryListPrinter extends SSPrinter {
                         break;
 
                     case 3:
-                        value = iRow.getInventoryQuantity();
+                        value = iRow.getInventoryQuantity().orElse(null);
                         break;
 
                     case 4:

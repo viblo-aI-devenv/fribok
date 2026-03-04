@@ -268,7 +268,7 @@ public class SSOutdeliveryFrame extends SSDefaultTableFrame {
     }
 
     private SSOutdelivery getOutdelivery(SSOutdelivery iOutdelivery) {
-        return SSDB.getInstance().getOutdelivery(iOutdelivery);
+        return SSDB.getInstance().getOutdelivery(iOutdelivery).orElse(null);
     }
 
     public void updateFrame() {

@@ -242,7 +242,7 @@ public class SSPurchaseOrderRowTableModel extends SSTableModel<SSPurchaseOrderRo
             "Summa") {
         @Override
         public Object getValue(SSPurchaseOrderRow iObject) {
-            return iObject.getSum();
+            return iObject.getSum().orElse(null);
         }
 
         @Override

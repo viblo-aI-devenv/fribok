@@ -44,9 +44,12 @@ diverging from upstream version 2.2-SNAPSHOT.
   (Phase 3 Step 16) (PR #14).
 - Replaced `SimpleDateFormat` usage with `DateTimeFormatter` throughout the
   codebase (Phase 3 Step 17) (PR #15).
-- Eliminated all `java.util.Calendar` usage from the codebase, migrating GUI
-  date components, print reports, table renderers, calc utilities, and data
-  classes to `java.time.LocalDate`/`ChronoUnit` (Phase 3 Step 18).
+- Migrated all `Calendar` usage to `java.time` API (Phase 3 Step 18).
+- Encapsulated 53 public mutable fields across 7 classes with proper
+  getters/setters (Phase 4 Step 19).
+- Introduced `Optional<T>` for ~100 public API methods across SSDB lookups,
+  calc/math search methods, data model getters, and parser/decoder methods;
+  reduced `return null` sites from ~419 to ~212 (Phase 4 Step 20).
 
 ### Fixed
 - CI: use `target/dist` for AppImage build output.

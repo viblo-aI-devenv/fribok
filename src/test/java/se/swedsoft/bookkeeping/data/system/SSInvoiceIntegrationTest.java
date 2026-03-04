@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -76,10 +77,10 @@ class SSInvoiceIntegrationTest {
 
         try {
             SSDBTestFixture.resetCaches();
-            SSInvoice fetched = SSDB.getInstance().getInvoice(inv);
+            Optional<SSInvoice> fetched = SSDB.getInstance().getInvoice(inv);
 
-            assertThat(fetched).isNotNull();
-            assertThat(fetched.getCustomerNr()).isEqualTo("INV-IT-CUST-003");
+            assertThat(fetched).isPresent();
+            assertThat(fetched.get().getCustomerNr()).isEqualTo("INV-IT-CUST-003");
         } finally {
             SSDB.getInstance().deleteInvoice(inv);
         }
@@ -92,10 +93,10 @@ class SSInvoiceIntegrationTest {
 
         try {
             SSDBTestFixture.resetCaches();
-            SSInvoice fetched = SSDB.getInstance().getInvoice(inv);
+            Optional<SSInvoice> fetched = SSDB.getInstance().getInvoice(inv);
 
-            assertThat(fetched).isNotNull();
-            assertThat(fetched.getCustomerName()).isEqualTo("Name Round-Trip AB");
+            assertThat(fetched).isPresent();
+            assertThat(fetched.get().getCustomerName()).isEqualTo("Name Round-Trip AB");
         } finally {
             SSDB.getInstance().deleteInvoice(inv);
         }
@@ -110,15 +111,15 @@ class SSInvoiceIntegrationTest {
 
         try {
             SSDBTestFixture.resetCaches();
-            SSInvoice fetched = SSDB.getInstance().getInvoice(inv);
+            Optional<SSInvoice> fetched = SSDB.getInstance().getInvoice(inv);
 
             // Date fields are now LocalDate internally, so the time portion
             // is truncated to midnight on round-trip.
             LocalDate expectedLocalDate = se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(date);
             Date expectedDate = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(expectedLocalDate);
 
-            assertThat(fetched).isNotNull();
-            assertThat(fetched.getDate()).isEqualTo(expectedDate);
+            assertThat(fetched).isPresent();
+            assertThat(fetched.get().getDate()).isEqualTo(expectedDate);
         } finally {
             SSDB.getInstance().deleteInvoice(inv);
         }
@@ -132,10 +133,11 @@ class SSInvoiceIntegrationTest {
 
         try {
             SSDBTestFixture.resetCaches();
-            SSInvoice fetched = SSDB.getInstance().getInvoice(inv);
+            Optional<SSInvoice> fetched = SSDB.getInstance().getInvoice(inv);
 
-            assertThat(fetched).isNotNull();
-            assertThat(fetched.getCurrencyRate()).isEqualByComparingTo(new BigDecimal("10.50"));
+            assertThat(fetched).isPresent();
+            assertThat(fetched.get().getCurrencyRate())
+                    .isEqualByComparingTo(new BigDecimal("10.50"));
         } finally {
             SSDB.getInstance().deleteInvoice(inv);
         }
@@ -163,9 +165,9 @@ class SSInvoiceIntegrationTest {
         SSDB.getInstance().deleteInvoice(inv);
 
         SSDBTestFixture.resetCaches();
-        SSInvoice fetched = SSDB.getInstance().getInvoice(inv);
+        Optional<SSInvoice> fetched = SSDB.getInstance().getInvoice(inv);
 
-        assertThat(fetched).isNull();
+        assertThat(fetched).isEmpty();
     }
 
     // ---- updateInvoice ----
@@ -177,32 +179,32 @@ class SSInvoiceIntegrationTest {
 
         try {
             SSDBTestFixture.resetCaches();
-            SSInvoice fetched = SSDB.getInstance().getInvoice(inv);
-            assertThat(fetched).isNotNull();
+            Optional<SSInvoice> fetched = SSDB.getInstance().getInvoice(inv);
+            assertThat(fetched).isPresent();
 
-            fetched.setCustomerName("After Update");
-            SSDB.getInstance().updateInvoice(fetched);
+            fetched.get().setCustomerName("After Update");
+            SSDB.getInstance().updateInvoice(fetched.get());
 
             SSDBTestFixture.resetCaches();
-            SSInvoice updated = SSDB.getInstance().getInvoice(inv);
+            Optional<SSInvoice> updated = SSDB.getInstance().getInvoice(inv);
 
-            assertThat(updated).isNotNull();
-            assertThat(updated.getCustomerName()).isEqualTo("After Update");
+            assertThat(updated).isPresent();
+            assertThat(updated.get().getCustomerName()).isEqualTo("After Update");
         } finally {
             SSDB.getInstance().deleteInvoice(inv);
         }
     }
 
-    // ---- getInvoice returns null for unknown ----
+    // ---- getInvoice returns empty for unknown ----
 
     @Test
-    void getInvoiceReturnsNullForNonExistentNumber() {
+    void getInvoiceReturnsEmptyForNonExistentNumber() {
         SSInvoice ghost = new SSInvoice();
         ghost.setNumber(Integer.MAX_VALUE);
 
-        SSInvoice fetched = SSDB.getInstance().getInvoice(ghost);
+        Optional<SSInvoice> fetched = SSDB.getInstance().getInvoice(ghost);
 
-        assertThat(fetched).isNull();
+        assertThat(fetched).isEmpty();
     }
 
     // -------------------------------------------------------------------------

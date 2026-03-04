@@ -122,7 +122,7 @@ public class SSOwnReportPanel {
             }
         });
         iProjectComboBox.setSelected(
-                SSDB.getInstance().getProject(iOwnReport.getProjectNr()));
+                SSDB.getInstance().getProject(iOwnReport.getProjectNr()).orElse(null));
         iProjectComboBox.getComponent(0).addKeyListener(
                 new KeyAdapter() {
             @Override
@@ -146,7 +146,7 @@ public class SSOwnReportPanel {
             }
         });
         iResultUnitComboBox.setSelected(
-                SSDB.getInstance().getResultUnit(iOwnReport.getResultUnitNr()));
+                SSDB.getInstance().getResultUnit(iOwnReport.getResultUnitNr()).orElse(null));
         iResultUnitComboBox.getComponent(0).addKeyListener(
                 new KeyAdapter() {
             @Override

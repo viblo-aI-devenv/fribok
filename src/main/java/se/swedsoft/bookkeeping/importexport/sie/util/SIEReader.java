@@ -6,6 +6,7 @@ import se.swedsoft.bookkeeping.data.SSMonth;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
+import java.util.Optional;
 
 
 /**
@@ -130,11 +131,9 @@ public class SIEReader implements Iterator<String> {
      * repeatedly until the {@link #hasNext()} method returns false will
      * return each element in the underlying collection exactly once.
      *
-     * @return the next element in the iteration.
-     * @throws NoSuchElementException
-     *          iteration has no more elements.
+     * @return the next element in the iteration, or empty if at end of stream.
      */
-    public String peek() {
+    public Optional<String> peek() {
         return iValues.peek();
     }
 
@@ -276,7 +275,7 @@ public class SIEReader implements Iterator<String> {
      *
      * @return
      */
-    public Integer nextInteger() {
+    public Optional<Integer> nextInteger() {
         return iValues.nextInteger();
     }
 

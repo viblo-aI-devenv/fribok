@@ -113,7 +113,7 @@ public class SSInventoryRowTableModel extends SSEditableTableModel<SSInventoryRo
             SSBundle.getBundle().getString("inventoryrowtable.column.3")) {
         @Override
         public Object getValue(SSInventoryRow iRow) {
-            return iRow.getInventoryQuantity();
+            return iRow.getInventoryQuantity().orElse(null);
         }
 
         @Override

@@ -106,7 +106,7 @@ public class SSSelectSupplierInvoiceDialog extends SSDialog {
 
         SSSupplierInvoice selected = iDialog.iInvoices.getSelected();
 
-        return SSDB.getInstance().getSupplierInvoice(selected);
+        return SSDB.getInstance().getSupplierInvoice(selected).orElse(null);
     }
 
     @Override

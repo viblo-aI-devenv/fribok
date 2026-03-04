@@ -57,13 +57,13 @@ public class SSSupplierInvoiceRowTableModel extends SSEditableTableModel<SSSuppl
                         && iObject.getProduct().getResultUnitNr() != null) {
                     iObject.setResultUnit(
                             iObject.getProduct().getResultUnit(
-                                    iObject.getProduct().getResultUnitNr()));
+                                    iObject.getProduct().getResultUnitNr()).orElse(null));
                 }
                 if (iObject.getProduct() != null
                         && iObject.getProduct().getProjectNr() != null) {
                     iObject.setProject(
                             iObject.getProduct().getProject(
-                                    iObject.getProduct().getProjectNr()));
+                                    iObject.getProduct().getProjectNr()).orElse(null));
                 }
 
             } else {
@@ -79,13 +79,13 @@ public class SSSupplierInvoiceRowTableModel extends SSEditableTableModel<SSSuppl
                         && iObject.getProduct().getResultUnitNr() != null) {
                     iObject.setResultUnit(
                             iObject.getProduct().getResultUnit(
-                                    iObject.getProduct().getResultUnitNr()));
+                                    iObject.getProduct().getResultUnitNr()).orElse(null));
                 }
                 if (iObject.getProduct() != null
                         && iObject.getProduct().getProjectNr() != null) {
                     iObject.setProject(
                             iObject.getProduct().getProject(
-                                    iObject.getProduct().getProjectNr()));
+                                    iObject.getProduct().getProjectNr()).orElse(null));
                 }
 
             }
@@ -245,7 +245,7 @@ public class SSSupplierInvoiceRowTableModel extends SSEditableTableModel<SSSuppl
             SSBundle.getBundle().getString("supplierinvoicerowtable.column.7")) {
         @Override
         public Object getValue(SSSupplierInvoiceRow iObject) {
-            return iObject.getSum();
+            return iObject.getSum().orElse(null);
         }
 
         @Override

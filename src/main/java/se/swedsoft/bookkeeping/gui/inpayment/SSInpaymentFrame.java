@@ -256,7 +256,7 @@ public class SSInpaymentFrame extends SSDefaultTableFrame {
     }
 
     private SSInpayment getInpayment(SSInpayment iInpayment) {
-        return SSDB.getInstance().getInpayment(iInpayment);
+        return SSDB.getInstance().getInpayment(iInpayment).orElse(null);
     }
 
     public void updateFrame() {

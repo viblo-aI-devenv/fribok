@@ -44,6 +44,7 @@ import java.rmi.server.UID;
 import java.sql.*;
 import java.util.*;
 import java.util.Date;
+import java.util.Optional;
 import se.swedsoft.bookkeeping.importexport.excel.SSAccountPlanImporter;
 import se.swedsoft.bookkeeping.importexport.util.SSImportException;
 import se.swedsoft.bookkeeping.util.SSUtil;
@@ -461,7 +462,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
     }
 
     public void setCurrentCompany(SSNewCompany iCompany) {
-        iCurrentCompany = getCompany(iCompany);
+        iCurrentCompany = getCompany(iCompany).orElse(null);
         iProducts = null;
         iCustomers = null;
         iSuppliers = null;
@@ -484,7 +485,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
     }
 
     public SSNewCompany getCurrentCompany() {
-        iCurrentCompany = getCompany(iCurrentCompany);
+        iCurrentCompany = getCompany(iCurrentCompany).orElse(null);
         return iCurrentCompany;
     }
 
@@ -495,7 +496,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
     }
 
     public SSNewAccountingYear getCurrentYear() {
-        return getAccountingYear(iCurrentYear);
+        return getAccountingYear(iCurrentYear).orElse(null);
     }
 
     public List<SSNewCompany> getCompanies() {
@@ -528,10 +529,10 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         return iCompanies;
     }
 
-    public SSNewCompany getCompany(SSNewCompany pCompany) {
+    public Optional<SSNewCompany> getCompany(SSNewCompany pCompany) {
         try {
             if (pCompany == null || iConnection.isClosed()) {
-                return null;
+                return Optional.empty();
             }
 
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -545,7 +546,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
 
                 iResultSet.close();
                 iStatement.close();
-                return iCompany;
+                return Optional.of(iCompany);
             }
             iResultSet.close();
             iStatement.close();
@@ -557,7 +558,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
     public void addCompany(SSNewCompany iCompany) {
@@ -859,10 +860,10 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         return iYears;
     }
 
-    public SSNewAccountingYear getAccountingYear(SSNewAccountingYear pAccountingYear) {
+    public Optional<SSNewAccountingYear> getAccountingYear(SSNewAccountingYear pAccountingYear) {
         try {
             if (pAccountingYear == null) {
-                return null;
+                return Optional.empty();
             }
 
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -877,7 +878,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
 
                 iResultSet.close();
                 iStatement.close();
-                return iAccountingYear;
+                return Optional.of(iAccountingYear);
             }
             iResultSet.close();
             iStatement.close();
@@ -889,7 +890,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
     public void addAccountingYear(SSNewAccountingYear iAccountingYear) {
@@ -999,10 +1000,10 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         }
     }
 
-    public SSNewAccountingYear getPreviousYear() {
+    public Optional<SSNewAccountingYear> getPreviousYear() {
         iCurrentYear = getCurrentYear();
         if (iCurrentYear == null) {
-            return null;
+            return Optional.empty();
         }
         List<SSNewAccountingYear> iYears = getYears();
 
@@ -1013,16 +1014,15 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 .toLocalDate(iFirstDayOfCurrent).minusDays(1);
 
         for (SSNewAccountingYear iAccountingYear : iYears) {
-            java.time.LocalDate lastDayOfYear = se.swedsoft.bookkeeping.util.SSDateUtil
-                    .toLocalDate(iAccountingYear.getTo());
-            if (dayBeforeCurrent.equals(lastDayOfYear)) {
-                return iAccountingYear;
+            LocalDate iLastDayOfYear = SSDateUtil.toLocalDate(iAccountingYear.getTo());
+            if (dayBeforeCurrent.equals(iLastDayOfYear)) {
+                return Optional.of(iAccountingYear);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
-    public SSNewAccountingYear getLastYear() {
+    public Optional<SSNewAccountingYear> getLastYear() {
         List<SSNewAccountingYear> iYears = new LinkedList<>();
 
         if (iCurrentCompany != null) {
@@ -1055,7 +1055,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                         iAccountingYear = iYear;
                     }
                 }
-                return iAccountingYear;
+                return Optional.ofNullable(iAccountingYear);
             } catch (SQLException e) {
                 LOG.error("Unexpected error", e);
                 try {
@@ -1065,7 +1065,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                         e.getMessage());
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     /**
@@ -1112,8 +1112,8 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         }
     }
 
-    public SSAutoIncrement getAutoIncrement() {
-        return null;
+    public Optional<SSAutoIncrement> getAutoIncrement() {
+        return Optional.empty();
     }
 
     public List<SSVoucher> getVouchers() {
@@ -1204,9 +1204,9 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         return iVoucherList;
     }
 
-    public SSVoucher getVoucher(SSVoucher pVoucher) {
+    public Optional<SSVoucher> getVoucher(SSVoucher pVoucher) {
         if (pVoucher == null || iCurrentYear == null) {
-            return null;
+            return Optional.empty();
         }
 
         try {
@@ -1221,7 +1221,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSVoucher iVoucher = (SSVoucher) iResultSet.getObject(3);
 
                 iStatement.close();
-                return iVoucher;
+                return Optional.of(iVoucher);
             }
             iResultSet.close();
             iStatement.close();
@@ -1233,12 +1233,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
     public List<SSVoucher> getVouchers(List<SSVoucher> pVouchers) {
         if (pVouchers == null || iCurrentYear == null) {
-            return null;
+            return Collections.emptyList();
         }
         List<SSVoucher> iVouchers = new LinkedList<>();
 
@@ -1266,7 +1266,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     public void addVoucher(SSVoucher iVoucher, boolean iHasNumber) {
@@ -1424,7 +1424,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
 
     public List<SSVoucherTemplate> getVoucherTemplates(List<SSVoucherTemplate> pVoucherTemplates) {
         if (pVoucherTemplates == null) {
-            return null;
+            return Collections.emptyList();
         }
         List<SSVoucherTemplate> iVoucherTemplates = new LinkedList<>();
 
@@ -1455,7 +1455,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     public void addVoucherTemplate(SSVoucherTemplate iVoucherTemplate) {
@@ -1552,9 +1552,9 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         return iAccountPlans;
     }
 
-    public SSAccountPlan getAccountPlan(SSAccountPlan pAccountPlan) {
+    public Optional<SSAccountPlan> getAccountPlan(SSAccountPlan pAccountPlan) {
         if (pAccountPlan == null) {
-            return null;
+            return Optional.empty();
         }
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -1568,7 +1568,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                         "accountplan");
 
                 iStatement.close();
-                return iAccountPlan;
+                return Optional.of(iAccountPlan);
             }
             iResultSet.close();
             iStatement.close();
@@ -1580,7 +1580,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
     public void addAccountPlan(SSAccountPlan iAccountPlan) {
@@ -1799,7 +1799,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         return iCurrencies;
     }
 
-    public SSCurrency getCurrency(SSCurrency iCurrency) {
+    public Optional<SSCurrency> getCurrency(SSCurrency iCurrency) {
         SSCurrency iUpdatedCurrency = new SSCurrency();
 
         try {
@@ -1822,7 +1822,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return iUpdatedCurrency;
+        return Optional.of(iUpdatedCurrency);
     }
 
     public void addCurrency(SSCurrency iCurrency) {
@@ -2229,12 +2229,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         return iResultUnits;
     }
 
-    public SSNewResultUnit getResultUnit(SSNewResultUnit pResultUnit) {
+    public Optional<SSNewResultUnit> getResultUnit(SSNewResultUnit pResultUnit) {
         if (pResultUnit == null) {
-            return null;
+            return Optional.empty();
         }
         if (iCurrentCompany == null) {
-            return null;
+            return Optional.empty();
         }
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -2249,7 +2249,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                         "resultunit");
 
                 iStatement.close();
-                return iResultUnit;
+                return Optional.of(iResultUnit);
             }
             iResultSet.close();
             iStatement.close();
@@ -2261,15 +2261,15 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
-    public SSNewResultUnit getResultUnit(String pResultUnitNumber) {
+    public Optional<SSNewResultUnit> getResultUnit(String pResultUnitNumber) {
         if (pResultUnitNumber == null) {
-            return null;
+            return Optional.empty();
         }
         if (iCurrentCompany == null) {
-            return null;
+            return Optional.empty();
         }
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -2284,7 +2284,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                         "resultunit");
 
                 iStatement.close();
-                return iResultUnit;
+                return Optional.of(iResultUnit);
             }
             iResultSet.close();
             iStatement.close();
@@ -2296,12 +2296,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
     public List<SSNewResultUnit> getResultUnits(List<SSNewResultUnit> pResultUnits) {
         if (pResultUnits == null) {
-            return null;
+            return Collections.emptyList();
         }
         List<SSNewResultUnit> iResultUnits = new LinkedList<>();
 
@@ -2332,7 +2332,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     public void addResultUnit(SSNewResultUnit iResultUnit) {
@@ -2442,12 +2442,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         return iProjects;
     }
 
-    public SSNewProject getProject(SSNewProject pProject) {
+    public Optional<SSNewProject> getProject(SSNewProject pProject) {
         if (pProject == null) {
-            return null;
+            return Optional.empty();
         }
         if (iCurrentCompany == null) {
-            return null;
+            return Optional.empty();
         }
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -2461,7 +2461,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSNewProject iProject = (SSNewProject) iResultSet.getObject("project");
 
                 iStatement.close();
-                return iProject;
+                return Optional.of(iProject);
             }
             iResultSet.close();
             iStatement.close();
@@ -2473,15 +2473,15 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
-    public SSNewProject getProject(String pProjectNumber) {
+    public Optional<SSNewProject> getProject(String pProjectNumber) {
         if (pProjectNumber == null) {
-            return null;
+            return Optional.empty();
         }
         if (iCurrentCompany == null) {
-            return null;
+            return Optional.empty();
         }
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -2495,7 +2495,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSNewProject iProject = (SSNewProject) iResultSet.getObject("project");
 
                 iStatement.close();
-                return iProject;
+                return Optional.of(iProject);
             }
             iResultSet.close();
             iStatement.close();
@@ -2507,12 +2507,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
     public List<SSNewProject> getProjects(List<SSNewProject> pProjects) {
         if (pProjects == null) {
-            return null;
+            return Collections.emptyList();
         }
         List<SSNewProject> iProjects = new LinkedList<>();
 
@@ -2543,7 +2543,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     public void addProject(SSNewProject iProject) {
@@ -2648,7 +2648,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSProduct iProduct = new SSProduct();
 
                 iProduct.setNumber(iNumber);
-                iProduct = getProduct(iProduct);
+                Optional<SSProduct> optProduct = getProduct(iProduct);
+                if (optProduct.isEmpty()) {
+                    LOG.warn("NEWPRODUCT trigger: product not found for number {}", iNumber);
+                    return;
+                }
+                iProduct = optProduct.get();
 
                 iProducts.add(iProduct);
                 iProduct = null;
@@ -2659,7 +2664,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSProduct iProduct = new SSProduct();
 
                 iProduct.setNumber(iNumber);
-                iProduct = getProduct(iProduct);
+                Optional<SSProduct> optProduct = getProduct(iProduct);
+                if (optProduct.isEmpty()) {
+                    LOG.warn("EDITPRODUCT trigger: product not found for number {}", iNumber);
+                    return;
+                }
+                iProduct = optProduct.get();
                 int iIndex = iProducts.lastIndexOf(iProduct);
 
                 if (iIndex == -1) {
@@ -2684,11 +2694,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSCustomer iCustomer = new SSCustomer();
 
                 iCustomer.setNumber(iNumber);
-                iCustomer = getCustomer(iCustomer);
-                if (iCustomer == null) {
+                Optional<SSCustomer> optCustomer = getCustomer(iCustomer);
+                if (optCustomer.isEmpty()) {
                     LOG.warn("NEWCUSTOMER trigger: customer not found for number {}", iNumber);
                     return;
                 }
+                iCustomer = optCustomer.get();
                 iCustomers.add(iCustomer);
                 SSCustomerMath.iInvoicesForCustomers.put(iCustomer.getNumber(),
                         new LinkedList<>());
@@ -2700,11 +2711,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSCustomer iCustomer = new SSCustomer();
 
                 iCustomer.setNumber(iNumber);
-                iCustomer = getCustomer(iCustomer);
-                if (iCustomer == null) {
+                Optional<SSCustomer> optCustomer = getCustomer(iCustomer);
+                if (optCustomer.isEmpty()) {
                     LOG.warn("EDITCUSTOMER trigger: customer not found for number {}", iNumber);
                     return;
                 }
+                iCustomer = optCustomer.get();
                 int iIndex = iCustomers.lastIndexOf(iCustomer);
 
                 if (iIndex == -1) {
@@ -2729,11 +2741,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSSupplier iSupplier = new SSSupplier();
 
                 iSupplier.setNumber(iNumber);
-                iSupplier = getSupplier(iSupplier);
-                if (iSupplier == null) {
+                Optional<SSSupplier> optSupplier = getSupplier(iSupplier);
+                if (optSupplier.isEmpty()) {
                     LOG.warn("NEWSUPPLIER trigger: supplier not found for number {}", iNumber);
                     return;
                 }
+                iSupplier = optSupplier.get();
                 iSuppliers.add(iSupplier);
                 SSSupplierMath.iInvoicesForSuppliers.put(iSupplier.getNumber(),
                         new LinkedList<>());
@@ -2745,11 +2758,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSSupplier iSupplier = new SSSupplier();
 
                 iSupplier.setNumber(iNumber);
-                iSupplier = getSupplier(iSupplier);
-                if (iSupplier == null) {
+                Optional<SSSupplier> optSupplier = getSupplier(iSupplier);
+                if (optSupplier.isEmpty()) {
                     LOG.warn("EDITSUPPLIER trigger: supplier not found for number {}", iNumber);
                     return;
                 }
+                iSupplier = optSupplier.get();
                 int iIndex = iSuppliers.lastIndexOf(iSupplier);
 
                 if (iIndex == -1) {
@@ -2779,7 +2793,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSAutoDist iAutoDist = new SSAutoDist();
 
                 iAutoDist.setAccountNumber(iAccount);
-                iAutoDist = getAutoDist(iAutoDist);
+                Optional<SSAutoDist> optAutoDist = getAutoDist(iAutoDist);
+                if (optAutoDist.isEmpty()) {
+                    LOG.warn("NEWAUTODIST trigger: autodist not found for number {}", iNumber);
+                    return;
+                }
+                iAutoDist = optAutoDist.get();
                 iAutoDists.add(iAutoDist);
                 iAutoDist = null;
                 if (SSAutoDistFrame.getInstance() != null) {
@@ -2790,7 +2809,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSAutoDist iAutoDist = new SSAutoDist();
 
                 iAutoDist.setAccountNumber(iAccount);
-                iAutoDist = getAutoDist(iAutoDist);
+                Optional<SSAutoDist> optAutoDist = getAutoDist(iAutoDist);
+                if (optAutoDist.isEmpty()) {
+                    LOG.warn("EDITAUTODIST trigger: autodist not found for number {}", iNumber);
+                    return;
+                }
+                iAutoDist = optAutoDist.get();
                 int iIndex = iAutoDists.lastIndexOf(iAutoDist);
 
                 if (iIndex == -1) {
@@ -2818,7 +2842,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSInpayment iInpayment = new SSInpayment();
 
                 iInpayment.setNumber(Integer.parseInt(iNumber));
-                iInpayment = getInpayment(iInpayment);
+                Optional<SSInpayment> optInpayment = getInpayment(iInpayment);
+                if (optInpayment.isEmpty()) {
+                    LOG.warn("NEWINPAYMENT trigger: inpayment not found for number {}", iNumber);
+                    return;
+                }
+                iInpayment = optInpayment.get();
                 if (!iInpayments.contains(iInpayment)) {
                     iInpayments.add(iInpayment);
                 }
@@ -2845,7 +2874,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSInpayment iInpayment = new SSInpayment();
 
                 iInpayment.setNumber(Integer.parseInt(iNumber));
-                iInpayment = getInpayment(iInpayment);
+                Optional<SSInpayment> optInpayment = getInpayment(iInpayment);
+                if (optInpayment.isEmpty()) {
+                    LOG.warn("EDITINPAYMENT trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iInpayment = optInpayment.get();
                 int iIndex = iInpayments.lastIndexOf(iInpayment);
 
                 if (iIndex == -1) {
@@ -2905,7 +2939,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSTender iTender = new SSTender();
 
                 iTender.setNumber(Integer.parseInt(iNumber));
-                iTender = getTender(iTender);
+                Optional<SSTender> optTender = getTender(iTender);
+                if (optTender.isEmpty()) {
+                    LOG.warn("NEWTENDER trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iTender = optTender.get();
                 if (!iTenders.contains(iTender)) {
                     iTenders.add(iTender);
                 }
@@ -2917,7 +2956,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSTender iTender = new SSTender();
 
                 iTender.setNumber(Integer.parseInt(iNumber));
-                iTender = getTender(iTender);
+                Optional<SSTender> optTender = getTender(iTender);
+                if (optTender.isEmpty()) {
+                    LOG.warn("EDITTENDER trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iTender = optTender.get();
                 int iIndex = iTenders.lastIndexOf(iTender);
 
                 if (iIndex == -1) {
@@ -2943,7 +2987,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSOrder iOrder = new SSOrder();
 
                 iOrder.setNumber(Integer.parseInt(iNumber));
-                iOrder = getOrder(iOrder);
+                Optional<SSOrder> optOrder = getOrder(iOrder);
+                if (optOrder.isEmpty()) {
+                    LOG.warn("NEWORDER trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iOrder = optOrder.get();
                 if (!iOrders.contains(iOrder)) {
                     iOrders.add(iOrder);
                 }
@@ -2955,7 +3004,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSOrder iOrder = new SSOrder();
 
                 iOrder.setNumber(Integer.parseInt(iNumber));
-                iOrder = getOrder(iOrder);
+                Optional<SSOrder> optOrder = getOrder(iOrder);
+                if (optOrder.isEmpty()) {
+                    LOG.warn("EDITORDER trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iOrder = optOrder.get();
                 int iIndex = iOrders.lastIndexOf(iOrder);
 
                 if (iIndex == -1) {
@@ -2980,7 +3034,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSInvoice iInvoice = new SSInvoice();
 
                 iInvoice.setNumber(Integer.parseInt(iNumber));
-                iInvoice = getInvoice(iInvoice);
+                Optional<SSInvoice> optInvoice = getInvoice(iInvoice);
+                if (optInvoice.isEmpty()) {
+                    LOG.warn("NEWINVOICE trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iInvoice = optInvoice.get();
                 if (!iInvoices.contains(iInvoice)) {
                     iInvoices.add(iInvoice);
                 }
@@ -3011,7 +3070,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSInvoice iInvoice = new SSInvoice();
 
                 iInvoice.setNumber(Integer.parseInt(iNumber));
-                iInvoice = getInvoice(iInvoice);
+                Optional<SSInvoice> optInvoice = getInvoice(iInvoice);
+                if (optInvoice.isEmpty()) {
+                    LOG.warn("EDITINVOICE trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iInvoice = optInvoice.get();
                 int iIndex = iInvoices.lastIndexOf(iInvoice);
 
                 if (iIndex == -1) {
@@ -3056,7 +3120,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSCreditInvoice iCreditInvoice = new SSCreditInvoice();
 
                 iCreditInvoice.setNumber(Integer.parseInt(iNumber));
-                iCreditInvoice = getCreditInvoice(iCreditInvoice);
+                Optional<SSCreditInvoice> optCreditInvoice = getCreditInvoice(iCreditInvoice);
+                if (optCreditInvoice.isEmpty()) {
+                    LOG.warn("NEWCREDITINVOICE trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iCreditInvoice = optCreditInvoice.get();
                 if (!iCreditInvoices.contains(iCreditInvoice)) {
                     iCreditInvoices.add(iCreditInvoice);
                 }
@@ -3080,7 +3149,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSCreditInvoice iCreditInvoice = new SSCreditInvoice();
 
                 iCreditInvoice.setNumber(Integer.parseInt(iNumber));
-                iCreditInvoice = getCreditInvoice(iCreditInvoice);
+                Optional<SSCreditInvoice> optCreditInvoice = getCreditInvoice(iCreditInvoice);
+                if (optCreditInvoice.isEmpty()) {
+                    LOG.warn("EDITCREDITINVOICE trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iCreditInvoice = optCreditInvoice.get();
                 int iIndex = iCreditInvoices.lastIndexOf(iCreditInvoice);
 
                 if (iIndex == -1) {
@@ -3131,7 +3205,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSPeriodicInvoice iPeriodicInvoice = new SSPeriodicInvoice();
 
                 iPeriodicInvoice.setNumber(Integer.parseInt(iNumber));
-                iPeriodicInvoice = getPeriodicInvoice(iPeriodicInvoice);
+                Optional<SSPeriodicInvoice> optPeriodicInvoice = getPeriodicInvoice(iPeriodicInvoice);
+                if (optPeriodicInvoice.isEmpty()) {
+                    LOG.warn("NEWPERIODICINVOICE trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iPeriodicInvoice = optPeriodicInvoice.get();
                 if (!iPeriodicInvoices.contains(iPeriodicInvoice)) {
                     iPeriodicInvoices.add(iPeriodicInvoice);
                 }
@@ -3144,7 +3223,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSPeriodicInvoice iPeriodicInvoice = new SSPeriodicInvoice();
 
                 iPeriodicInvoice.setNumber(Integer.parseInt(iNumber));
-                iPeriodicInvoice = getPeriodicInvoice(iPeriodicInvoice);
+                Optional<SSPeriodicInvoice> optPeriodicInvoice = getPeriodicInvoice(iPeriodicInvoice);
+                if (optPeriodicInvoice.isEmpty()) {
+                    LOG.warn("EDITPERIODICINVOICE trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iPeriodicInvoice = optPeriodicInvoice.get();
                 int iIndex = iPeriodicInvoices.lastIndexOf(iPeriodicInvoice);
 
                 if (iIndex == -1) {
@@ -3172,7 +3256,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSOutpayment iOutpayment = new SSOutpayment();
 
                 iOutpayment.setNumber(Integer.parseInt(iNumber));
-                iOutpayment = getOutpayment(iOutpayment);
+                Optional<SSOutpayment> optOutpayment = getOutpayment(iOutpayment);
+                if (optOutpayment.isEmpty()) {
+                    LOG.warn("NEWOUTPAYMENT trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iOutpayment = optOutpayment.get();
                 if (!iOutpayments.contains(iOutpayment)) {
                     iOutpayments.add(iOutpayment);
                 }
@@ -3200,7 +3289,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSOutpayment iOutpayment = new SSOutpayment();
 
                 iOutpayment.setNumber(Integer.parseInt(iNumber));
-                iOutpayment = getOutpayment(iOutpayment);
+                Optional<SSOutpayment> optOutpayment = getOutpayment(iOutpayment);
+                if (optOutpayment.isEmpty()) {
+                    LOG.warn("EDITOUTPAYMENT trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iOutpayment = optOutpayment.get();
                 int iIndex = iOutpayments.lastIndexOf(iOutpayment);
 
                 if (iIndex == -1) {
@@ -3259,7 +3353,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSPurchaseOrder iPurchaseOrder = new SSPurchaseOrder();
 
                 iPurchaseOrder.setNumber(Integer.parseInt(iNumber));
-                iPurchaseOrder = getPurchaseOrder(iPurchaseOrder);
+                Optional<SSPurchaseOrder> optPurchaseOrder = getPurchaseOrder(iPurchaseOrder);
+                if (optPurchaseOrder.isEmpty()) {
+                    LOG.warn("NEWPURCHASEORDER trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iPurchaseOrder = optPurchaseOrder.get();
                 if (!iPurchaseOrders.contains(iPurchaseOrder)) {
                     iPurchaseOrders.add(iPurchaseOrder);
                 }
@@ -3274,7 +3373,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSPurchaseOrder iPurchaseOrder = new SSPurchaseOrder();
 
                 iPurchaseOrder.setNumber(Integer.parseInt(iNumber));
-                iPurchaseOrder = getPurchaseOrder(iPurchaseOrder);
+                Optional<SSPurchaseOrder> optPurchaseOrder = getPurchaseOrder(iPurchaseOrder);
+                if (optPurchaseOrder.isEmpty()) {
+                    LOG.warn("EDITPURCHASEORDER trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iPurchaseOrder = optPurchaseOrder.get();
                 int iIndex = iPurchaseOrders.lastIndexOf(iPurchaseOrder);
 
                 if (iIndex == -1) {
@@ -3304,7 +3408,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSSupplierInvoice iSupplierInvoice = new SSSupplierInvoice();
 
                 iSupplierInvoice.setNumber(Integer.parseInt(iNumber));
-                iSupplierInvoice = getSupplierInvoice(iSupplierInvoice);
+                Optional<SSSupplierInvoice> optSupplierInvoice = getSupplierInvoice(iSupplierInvoice);
+                if (optSupplierInvoice.isEmpty()) {
+                    LOG.warn("NEWSUPPLIERINVOICE trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iSupplierInvoice = optSupplierInvoice.get();
                 if (!iSupplierInvoices.contains(iSupplierInvoice)) {
                     iSupplierInvoices.add(iSupplierInvoice);
                 }
@@ -3333,7 +3442,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSSupplierInvoice iSupplierInvoice = new SSSupplierInvoice();
 
                 iSupplierInvoice.setNumber(Integer.parseInt(iNumber));
-                iSupplierInvoice = getSupplierInvoice(iSupplierInvoice);
+                Optional<SSSupplierInvoice> optSupplierInvoice = getSupplierInvoice(iSupplierInvoice);
+                if (optSupplierInvoice.isEmpty()) {
+                    LOG.warn("EDITSUPPLIERINVOICE trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iSupplierInvoice = optSupplierInvoice.get();
                 int iIndex = iSupplierInvoices.lastIndexOf(iSupplierInvoice);
 
                 if (iIndex == -1) {
@@ -3377,7 +3491,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSSupplierCreditInvoice iSupplierCreditInvoice = new SSSupplierCreditInvoice();
 
                 iSupplierCreditInvoice.setNumber(Integer.parseInt(iNumber));
-                iSupplierCreditInvoice = getSupplierCreditInvoice(iSupplierCreditInvoice);
+                Optional<SSSupplierCreditInvoice> optSupplierCreditInvoice = getSupplierCreditInvoice(iSupplierCreditInvoice);
+                if (optSupplierCreditInvoice.isEmpty()) {
+                    LOG.warn("NEWSUPPLIERCREDITINVOICE trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iSupplierCreditInvoice = optSupplierCreditInvoice.get();
                 if (!iSupplierCreditInvoices.contains(iSupplierCreditInvoice)) {
                     iSupplierCreditInvoices.add(iSupplierCreditInvoice);
                 }
@@ -3404,7 +3523,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSSupplierCreditInvoice iSupplierCreditInvoice = new SSSupplierCreditInvoice();
 
                 iSupplierCreditInvoice.setNumber(Integer.parseInt(iNumber));
-                iSupplierCreditInvoice = getSupplierCreditInvoice(iSupplierCreditInvoice);
+                Optional<SSSupplierCreditInvoice> optSupplierCreditInvoice = getSupplierCreditInvoice(iSupplierCreditInvoice);
+                if (optSupplierCreditInvoice.isEmpty()) {
+                    LOG.warn("EDITSUPPLIERCREDITINVOICE trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iSupplierCreditInvoice = optSupplierCreditInvoice.get();
                 int iIndex = iSupplierCreditInvoices.lastIndexOf(iSupplierCreditInvoice);
 
                 if (iIndex == -1) {
@@ -3463,7 +3587,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSInventory iInventory = new SSInventory();
 
                 iInventory.setNumber(Integer.parseInt(iNumber));
-                iInventory = getInventory(iInventory);
+                Optional<SSInventory> optInventory = getInventory(iInventory);
+                if (optInventory.isEmpty()) {
+                    LOG.warn("NEWINVENTORY trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iInventory = optInventory.get();
                 if (!iInventories.contains(iInventory)) {
                     iInventories.add(iInventory);
                 }
@@ -3475,7 +3604,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSInventory iInventory = new SSInventory();
 
                 iInventory.setNumber(Integer.parseInt(iNumber));
-                iInventory = getInventory(iInventory);
+                Optional<SSInventory> optInventory = getInventory(iInventory);
+                if (optInventory.isEmpty()) {
+                    LOG.warn("EDITINVENTORY trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iInventory = optInventory.get();
                 int iIndex = iInventories.lastIndexOf(iInventory);
 
                 if (iIndex == -1) {
@@ -3500,7 +3634,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSIndelivery iIndelivery = new SSIndelivery();
 
                 iIndelivery.setNumber(Integer.parseInt(iNumber));
-                iIndelivery = getIndelivery(iIndelivery);
+                Optional<SSIndelivery> optIndelivery = getIndelivery(iIndelivery);
+                if (optIndelivery.isEmpty()) {
+                    LOG.warn("NEWINDELIVERY trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iIndelivery = optIndelivery.get();
                 if (!iIndeliveries.contains(iIndelivery)) {
                     iIndeliveries.add(iIndelivery);
                 }
@@ -3512,7 +3651,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSIndelivery iIndelivery = new SSIndelivery();
 
                 iIndelivery.setNumber(Integer.parseInt(iNumber));
-                iIndelivery = getIndelivery(iIndelivery);
+                Optional<SSIndelivery> optIndelivery = getIndelivery(iIndelivery);
+                if (optIndelivery.isEmpty()) {
+                    LOG.warn("EDITINDELIVERY trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iIndelivery = optIndelivery.get();
                 int iIndex = iIndeliveries.lastIndexOf(iIndelivery);
 
                 if (iIndex == -1) {
@@ -3537,7 +3681,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSOutdelivery iOutdelivery = new SSOutdelivery();
 
                 iOutdelivery.setNumber(Integer.parseInt(iNumber));
-                iOutdelivery = getOutdelivery(iOutdelivery);
+                Optional<SSOutdelivery> optOutdelivery = getOutdelivery(iOutdelivery);
+                if (optOutdelivery.isEmpty()) {
+                    LOG.warn("NEWOUTDELIVERY trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iOutdelivery = optOutdelivery.get();
                 if (!iOutdeliveries.contains(iOutdelivery)) {
                     iOutdeliveries.add(iOutdelivery);
                 }
@@ -3549,7 +3698,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSOutdelivery iOutdelivery = new SSOutdelivery();
 
                 iOutdelivery.setNumber(Integer.parseInt(iNumber));
-                iOutdelivery = getOutdelivery(iOutdelivery);
+                Optional<SSOutdelivery> optOutdelivery = getOutdelivery(iOutdelivery);
+                if (optOutdelivery.isEmpty()) {
+                    LOG.warn("EDITOUTDELIVERY trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iOutdelivery = optOutdelivery.get();
                 int iIndex = iOutdeliveries.lastIndexOf(iOutdelivery);
 
                 if (iIndex == -1) {
@@ -3575,7 +3729,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
              */ else if (iTriggerName.equals("NEWVOUCHER") && iVouchers != null) {
                 SSVoucher iVoucher = new SSVoucher(Integer.parseInt(iNumber));
 
-                iVoucher = getVoucher(iVoucher);
+                Optional<SSVoucher> optVoucher = getVoucher(iVoucher);
+                if (optVoucher.isEmpty()) {
+                    LOG.warn("NEWVOUCHER trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iVoucher = optVoucher.get();
                 if (!iVouchers.contains(iVoucher)) {
                     iVouchers.add(iVoucher);
                 }
@@ -3586,7 +3745,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             } else if (iTriggerName.equals("EDITVOUCHER") && iVouchers != null) {
                 SSVoucher iVoucher = new SSVoucher(Integer.parseInt(iNumber));
 
-                iVoucher = getVoucher(iVoucher);
+                Optional<SSVoucher> optVoucher = getVoucher(iVoucher);
+                if (optVoucher.isEmpty()) {
+                    LOG.warn("EDITVOUCHER trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iVoucher = optVoucher.get();
                 int iIndex = iVouchers.lastIndexOf(iVoucher);
 
                 if (iIndex == -1) {
@@ -3610,7 +3774,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSOwnReport iOwnReport = new SSOwnReport();
 
                 iOwnReport.setId(Integer.parseInt(iNumber));
-                iOwnReport = getOwnReport(iOwnReport);
+                Optional<SSOwnReport> optOwnReport = getOwnReport(iOwnReport);
+                if (optOwnReport.isEmpty()) {
+                    LOG.warn("NEWOWNREPORT trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iOwnReport = optOwnReport.get();
                 if (!iOwnReports.contains(iOwnReport) && iOwnReport.getId() != -1) {
                     iOwnReports.add(iOwnReport);
                 }
@@ -3622,7 +3791,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSOwnReport iOwnReport = new SSOwnReport();
 
                 iOwnReport.setId(Integer.parseInt(iNumber));
-                iOwnReport = getOwnReport(iOwnReport);
+                Optional<SSOwnReport> optOwnReport = getOwnReport(iOwnReport);
+                if (optOwnReport.isEmpty()) {
+                    LOG.warn("EDITOWNREPORT trigger: entity not found for number {}", iNumber);
+                    return;
+                }
+                iOwnReport = optOwnReport.get();
                 int iIndex = iOwnReports.lastIndexOf(iOwnReport);
 
                 if (iIndex != -1) {
@@ -3695,12 +3869,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         return iProducts;
     }
 
-    public SSProduct getProduct(SSProduct pProduct) {
+    public Optional<SSProduct> getProduct(SSProduct pProduct) {
         if (pProduct == null) {
-            return null;
+            return Optional.empty();
         }
         if (iCurrentCompany == null) {
-            return null;
+            return Optional.empty();
         }
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -3714,7 +3888,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSProduct iProduct = (SSProduct) iResultSet.getObject(3);
 
                 iStatement.close();
-                return iProduct;
+                return Optional.of(iProduct);
             }
             iResultSet.close();
             iStatement.close();
@@ -3726,15 +3900,15 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
-    public SSProduct getProduct(String iProductNumber) {
+    public Optional<SSProduct> getProduct(String iProductNumber) {
         if (iProductNumber == null) {
-            return null;
+            return Optional.empty();
         }
         if (iCurrentCompany == null) {
-            return null;
+            return Optional.empty();
         }
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -3748,7 +3922,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSProduct iProduct = (SSProduct) iResultSet.getObject(3);
 
                 iStatement.close();
-                return iProduct;
+                return Optional.of(iProduct);
             }
             iResultSet.close();
             iStatement.close();
@@ -3760,12 +3934,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
     public List<SSProduct> getProducts(List<SSProduct> pProducts) {
         if (pProducts == null) {
-            return null;
+            return Collections.emptyList();
         }
         List<SSProduct> iProducts = new LinkedList<>();
 
@@ -3804,7 +3978,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     public void addProduct(SSProduct iProduct) {
@@ -3934,12 +4108,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         return iCustomers;
     }
 
-    public SSCustomer getCustomer(SSCustomer pCustomer) {
+    public Optional<SSCustomer> getCustomer(SSCustomer pCustomer) {
         if (pCustomer == null) {
-            return null;
+            return Optional.empty();
         }
         if (iCurrentCompany == null) {
-            return null;
+            return Optional.empty();
         }
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -3953,7 +4127,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSCustomer iCustomer = (SSCustomer) iResultSet.getObject(3);
 
                 iStatement.close();
-                return iCustomer;
+                return Optional.of(iCustomer);
             }
             iResultSet.close();
             iStatement.close();
@@ -3965,15 +4139,15 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
-    public SSCustomer getCustomer(String iCustomerNumber) {
+    public Optional<SSCustomer> getCustomer(String iCustomerNumber) {
         if (iCustomerNumber == null) {
-            return null;
+            return Optional.empty();
         }
         if (iCurrentCompany == null) {
-            return null;
+            return Optional.empty();
         }
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -3987,7 +4161,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSCustomer iCustomer = (SSCustomer) iResultSet.getObject(3);
 
                 iStatement.close();
-                return iCustomer;
+                return Optional.of(iCustomer);
             }
             iResultSet.close();
             iStatement.close();
@@ -3999,12 +4173,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
     public List<SSCustomer> getCustomers(List<SSCustomer> pCustomers) {
         if (pCustomers == null) {
-            return null;
+            return Collections.emptyList();
         }
         List<SSCustomer> iCustomers = new LinkedList<>();
 
@@ -4043,7 +4217,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     public void addCustomer(SSCustomer iCustomer) {
@@ -4173,9 +4347,9 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         return iSuppliers;
     }
 
-    public SSSupplier getSupplier(SSSupplier pSupplier) {
+    public Optional<SSSupplier> getSupplier(SSSupplier pSupplier) {
         if (pSupplier == null || iCurrentCompany == null) {
-            return null;
+            return Optional.empty();
         }
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -4189,7 +4363,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSSupplier iSupplier = (SSSupplier) iResultSet.getObject(3);
 
                 iStatement.close();
-                return iSupplier;
+                return Optional.of(iSupplier);
             }
             iResultSet.close();
             iStatement.close();
@@ -4201,12 +4375,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
     public List<SSSupplier> getSuppliers(List<SSSupplier> pSuppliers) {
         if (pSuppliers == null) {
-            return null;
+            return Collections.emptyList();
         }
         List<SSSupplier> iSuppliers = new LinkedList<>();
 
@@ -4245,7 +4419,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     public void addSupplier(SSSupplier iSupplier) {
@@ -4374,9 +4548,9 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         return iAutoDists;
     }
 
-    public SSAutoDist getAutoDist(SSAutoDist pAutoDist) {
+    public Optional<SSAutoDist> getAutoDist(SSAutoDist pAutoDist) {
         if (pAutoDist == null || iCurrentCompany == null) {
-            return null;
+            return Optional.empty();
         }
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -4390,7 +4564,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSAutoDist iAutoDist = (SSAutoDist) iResultSet.getObject(3);
 
                 iStatement.close();
-                return iAutoDist;
+                return Optional.of(iAutoDist);
             }
             iResultSet.close();
             iStatement.close();
@@ -4402,12 +4576,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
     public List<SSAutoDist> getAutoDists(List<SSAutoDist> pAutoDists) {
         if (pAutoDists == null) {
-            return null;
+            return Collections.emptyList();
         }
         List<SSAutoDist> iAutoDists = new LinkedList<>();
 
@@ -4446,7 +4620,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     public void addAutoDist(SSAutoDist iAutoDist) {
@@ -4578,9 +4752,9 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         return iTenders;
     }
 
-    public SSTender getTender(SSTender pTender) {
+    public Optional<SSTender> getTender(SSTender pTender) {
         if (pTender == null || iCurrentCompany == null) {
-            return null;
+            return Optional.empty();
         }
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -4594,7 +4768,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSTender iTender = (SSTender) iResultSet.getObject(3);
 
                 iStatement.close();
-                return iTender;
+                return Optional.of(iTender);
             }
             iResultSet.close();
             iStatement.close();
@@ -4606,12 +4780,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
     public List<SSTender> getTenders(List<SSTender> pTenders) {
         if (pTenders == null) {
-            return null;
+            return Collections.emptyList();
         }
         List<SSTender> iTenders = new LinkedList<>();
 
@@ -4651,7 +4825,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     public void addTender(SSTender iTender) {
@@ -4799,9 +4973,9 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         return iOrders;
     }
 
-    public SSOrder getOrder(SSOrder pOrder) {
+    public Optional<SSOrder> getOrder(SSOrder pOrder) {
         if (pOrder == null || iCurrentCompany == null) {
-            return null;
+            return Optional.empty();
         }
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -4815,7 +4989,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSOrder iOrder = (SSOrder) iResultSet.getObject(3);
 
                 iStatement.close();
-                return iOrder;
+                return Optional.of(iOrder);
             }
             iResultSet.close();
             iStatement.close();
@@ -4827,12 +5001,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
     public List<SSOrder> getOrders(List<SSOrder> pOrders) {
         if (pOrders == null) {
-            return null;
+            return Collections.emptyList();
         }
         List<SSOrder> iOrders = new LinkedList<>();
 
@@ -4871,7 +5045,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     public void addOrder(SSOrder iOrder) {
@@ -5024,9 +5198,9 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         return iInvoices;
     }
 
-    public SSInvoice getInvoice(SSInvoice pInvoice) {
+    public Optional<SSInvoice> getInvoice(SSInvoice pInvoice) {
         if (pInvoice == null || iCurrentCompany == null) {
-            return null;
+            return Optional.empty();
         }
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -5040,7 +5214,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSInvoice iInvoice = (SSInvoice) iResultSet.getObject(3);
 
                 iStatement.close();
-                return iInvoice;
+                return Optional.of(iInvoice);
             }
             iResultSet.close();
             iStatement.close();
@@ -5052,12 +5226,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
     public List<SSInvoice> getInvoices(List<SSInvoice> pInvoices) {
         if (pInvoices == null) {
-            return null;
+            return Collections.emptyList();
         }
         List<SSInvoice> iInvoices = new LinkedList<>();
 
@@ -5096,7 +5270,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     public void addInvoice(SSInvoice iInvoice) {
@@ -5249,9 +5423,9 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         return iInpayments;
     }
 
-    public SSInpayment getInpayment(SSInpayment pInpayment) {
+    public Optional<SSInpayment> getInpayment(SSInpayment pInpayment) {
         if (pInpayment == null || iCurrentCompany == null) {
-            return null;
+            return Optional.empty();
         }
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -5265,7 +5439,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSInpayment iInpayment = (SSInpayment) iResultSet.getObject(3);
 
                 iStatement.close();
-                return iInpayment;
+                return Optional.of(iInpayment);
             }
             iResultSet.close();
             iStatement.close();
@@ -5277,7 +5451,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
     public void addInpayment(SSInpayment iInpayment) {
@@ -5428,9 +5602,9 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         return iOutpayments;
     }
 
-    public SSOutpayment getOutpayment(SSOutpayment pOutpayment) {
+    public Optional<SSOutpayment> getOutpayment(SSOutpayment pOutpayment) {
         if (pOutpayment == null || iCurrentCompany == null) {
-            return null;
+            return Optional.empty();
         }
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -5444,7 +5618,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSOutpayment iOutpayment = (SSOutpayment) iResultSet.getObject(3);
 
                 iStatement.close();
-                return iOutpayment;
+                return Optional.of(iOutpayment);
             }
             iResultSet.close();
             iStatement.close();
@@ -5456,7 +5630,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
     public void addOutpayment(SSOutpayment iOutpayment) {
@@ -5609,9 +5783,9 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         return iCreditInvoices;
     }
 
-    public SSCreditInvoice getCreditInvoice(SSCreditInvoice pCreditInvoice) {
+    public Optional<SSCreditInvoice> getCreditInvoice(SSCreditInvoice pCreditInvoice) {
         if (pCreditInvoice == null || iCurrentCompany == null) {
-            return null;
+            return Optional.empty();
         }
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -5625,7 +5799,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSCreditInvoice iCreditInvoice = (SSCreditInvoice) iResultSet.getObject(3);
 
                 iStatement.close();
-                return iCreditInvoice;
+                return Optional.of(iCreditInvoice);
             }
             iResultSet.close();
             iStatement.close();
@@ -5637,12 +5811,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
     public List<SSCreditInvoice> getCreditInvoices(List<SSCreditInvoice> pCreditInvoices) {
         if (pCreditInvoices == null) {
-            return null;
+            return Collections.emptyList();
         }
         List<SSCreditInvoice> iCreditInvoices = new LinkedList<>();
 
@@ -5681,7 +5855,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     public void addCreditInvoice(SSCreditInvoice iCreditInvoice) {
@@ -5834,9 +6008,9 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         return iPeriodicInvoices;
     }
 
-    public SSPeriodicInvoice getPeriodicInvoice(SSPeriodicInvoice pPeriodicInvoice) {
+    public Optional<SSPeriodicInvoice> getPeriodicInvoice(SSPeriodicInvoice pPeriodicInvoice) {
         if (pPeriodicInvoice == null || iCurrentCompany == null) {
-            return null;
+            return Optional.empty();
         }
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -5851,7 +6025,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                         3);
 
                 iStatement.close();
-                return iPeriodicInvoice;
+                return Optional.of(iPeriodicInvoice);
             }
             iResultSet.close();
             iStatement.close();
@@ -5863,7 +6037,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
     public void addPeriodicInvoice(SSPeriodicInvoice iPeriodicInvoice) {
@@ -6016,9 +6190,9 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         return iPurchaseOrders;
     }
 
-    public SSPurchaseOrder getPurchaseOrder(SSPurchaseOrder pPurchaseOrder) {
+    public Optional<SSPurchaseOrder> getPurchaseOrder(SSPurchaseOrder pPurchaseOrder) {
         if (pPurchaseOrder == null || iCurrentCompany == null) {
-            return null;
+            return Optional.empty();
         }
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -6032,7 +6206,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSPurchaseOrder iPurchaseOrder = (SSPurchaseOrder) iResultSet.getObject(3);
 
                 iStatement.close();
-                return iPurchaseOrder;
+                return Optional.of(iPurchaseOrder);
             }
             iResultSet.close();
             iStatement.close();
@@ -6044,12 +6218,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
     public List<SSPurchaseOrder> getPurchaseOrders(List<SSPurchaseOrder> pPurchaseOrders) {
         if (pPurchaseOrders == null) {
-            return null;
+            return Collections.emptyList();
         }
         List<SSPurchaseOrder> iPurchaseOrders = new LinkedList<>();
 
@@ -6088,7 +6262,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     public void addPurchaseOrder(SSPurchaseOrder iPurchaseOrder) {
@@ -6241,9 +6415,9 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         return iSupplierInvoices;
     }
 
-    public SSSupplierInvoice getSupplierInvoice(SSSupplierInvoice pSupplierInvoice) {
+    public Optional<SSSupplierInvoice> getSupplierInvoice(SSSupplierInvoice pSupplierInvoice) {
         if (pSupplierInvoice == null || iCurrentCompany == null) {
-            return null;
+            return Optional.empty();
         }
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -6258,7 +6432,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                         3);
 
                 iStatement.close();
-                return iSupplierInvoice;
+                return Optional.of(iSupplierInvoice);
             }
             iResultSet.close();
             iStatement.close();
@@ -6270,12 +6444,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
     public List<SSSupplierInvoice> getSupplierInvoices(List<SSSupplierInvoice> pSupplierInvoices) {
         if (pSupplierInvoices == null) {
-            return null;
+            return Collections.emptyList();
         }
         List<SSSupplierInvoice> iSupplierInvoices = new LinkedList<>();
 
@@ -6314,7 +6488,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     public void addSupplierInvoice(SSSupplierInvoice iSupplierInvoice) {
@@ -6468,9 +6642,9 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         return iSupplierCreditInvoices;
     }
 
-    public SSSupplierCreditInvoice getSupplierCreditInvoice(SSSupplierCreditInvoice pSupplierCreditInvoice) {
+    public Optional<SSSupplierCreditInvoice> getSupplierCreditInvoice(SSSupplierCreditInvoice pSupplierCreditInvoice) {
         if (pSupplierCreditInvoice == null || iCurrentCompany == null) {
-            return null;
+            return Optional.empty();
         }
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -6485,7 +6659,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                         3);
 
                 iStatement.close();
-                return iSupplierCreditInvoice;
+                return Optional.of(iSupplierCreditInvoice);
             }
             iResultSet.close();
             iStatement.close();
@@ -6497,7 +6671,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
     public void addSupplierCreditInvoice(SSSupplierCreditInvoice iSupplierCreditInvoice) {
@@ -6649,9 +6823,9 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         return iInventories;
     }
 
-    public SSInventory getInventory(SSInventory pInventory) {
+    public Optional<SSInventory> getInventory(SSInventory pInventory) {
         if (pInventory == null || iCurrentCompany == null) {
-            return null;
+            return Optional.empty();
         }
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -6665,7 +6839,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSInventory iInventory = (SSInventory) iResultSet.getObject(3);
 
                 iStatement.close();
-                return iInventory;
+                return Optional.of(iInventory);
             }
             iResultSet.close();
             iStatement.close();
@@ -6677,7 +6851,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
     public void addInventory(SSInventory iInventory) {
@@ -6829,9 +7003,9 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         return iIndeliveries;
     }
 
-    public SSIndelivery getIndelivery(SSIndelivery pIndelivery) {
+    public Optional<SSIndelivery> getIndelivery(SSIndelivery pIndelivery) {
         if (pIndelivery == null || iCurrentCompany == null) {
-            return null;
+            return Optional.empty();
         }
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -6845,7 +7019,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSIndelivery iIndelivery = (SSIndelivery) iResultSet.getObject(3);
 
                 iStatement.close();
-                return iIndelivery;
+                return Optional.of(iIndelivery);
             }
             iResultSet.close();
             iStatement.close();
@@ -6857,7 +7031,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
     public void addIndelivery(SSIndelivery iIndelivery) {
@@ -7009,9 +7183,9 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         return iOutdeliveries;
     }
 
-    public SSOutdelivery getOutdelivery(SSOutdelivery pOutdelivery) {
+    public Optional<SSOutdelivery> getOutdelivery(SSOutdelivery pOutdelivery) {
         if (pOutdelivery == null || iCurrentCompany == null) {
-            return null;
+            return Optional.empty();
         }
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -7025,7 +7199,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSOutdelivery iOutdelivery = (SSOutdelivery) iResultSet.getObject(3);
 
                 iStatement.close();
-                return iOutdelivery;
+                return Optional.of(iOutdelivery);
             }
             iResultSet.close();
             iStatement.close();
@@ -7037,7 +7211,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
     public void addOutdelivery(SSOutdelivery iOutdelivery) {
@@ -7184,12 +7358,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         return iOwnReports;
     }
 
-    public SSOwnReport getOwnReport(SSOwnReport pOwnReport) {
+    public Optional<SSOwnReport> getOwnReport(SSOwnReport pOwnReport) {
         if (pOwnReport == null) {
-            return null;
+            return Optional.empty();
         }
         if (iCurrentCompany == null) {
-            return null;
+            return Optional.empty();
         }
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -7203,7 +7377,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSOwnReport iOwnReport = (SSOwnReport) iResultSet.getObject(2);
 
                 iStatement.close();
-                return iOwnReport;
+                return Optional.of(iOwnReport);
             }
             iResultSet.close();
             iStatement.close();
@@ -7215,15 +7389,15 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
-    public SSOwnReport getOwnReport(Integer iOwnReportNumber) {
+    public Optional<SSOwnReport> getOwnReport(Integer iOwnReportNumber) {
         if (iOwnReportNumber == null) {
-            return null;
+            return Optional.empty();
         }
         if (iCurrentCompany == null) {
-            return null;
+            return Optional.empty();
         }
         try {
             PreparedStatement iStatement = iConnection.prepareStatement(
@@ -7237,7 +7411,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 SSOwnReport iOwnReport = (SSOwnReport) iResultSet.getObject(2);
 
                 iStatement.close();
-                return iOwnReport;
+                return Optional.of(iOwnReport);
             }
             iResultSet.close();
             iStatement.close();
@@ -7249,12 +7423,12 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 
     public List<SSOwnReport> getOwnReports(List<SSOwnReport> pOwnReports) {
         if (pOwnReports == null) {
-            return null;
+            return Collections.emptyList();
         }
         List<SSOwnReport> iOwnReports = new LinkedList<>();
 
@@ -7293,7 +7467,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSErrorDialog.showDialog(SSMainFrame.getInstance(), "SQL Error",
                     e.getMessage());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     public void addOwnReport(SSOwnReport iOwnReport) {
@@ -7629,7 +7803,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             SSNewCompany iNewCompany = new SSNewCompany(iCompany);
 
             addCompany(iNewCompany);
-            setCurrentCompany(getCompany(iNewCompany));
+            setCurrentCompany(getCompany(iNewCompany).orElse(null));
 
             for (SSCurrency iCurrency : iCompany.getCurrencies()) {
                 if (!getCurrencies().contains(iCurrency)) {
@@ -7761,7 +7935,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                     iAccountingYear);
 
             addAccountingYear(iNewAccountingYear);
-            setCurrentYear(getAccountingYear(iNewAccountingYear));
+            setCurrentYear(getAccountingYear(iNewAccountingYear).orElse(null));
 
             for (SSVoucher iVoucher : iAccountingYear.getVouchers()) {
                 for (SSVoucherRow iRow : iVoucher.getRows()) {

@@ -3,6 +3,7 @@ package se.swedsoft.bookkeeping.data;
 
 import se.swedsoft.bookkeeping.calc.math.SSInpaymentMath;
 import se.swedsoft.bookkeeping.calc.math.SSVoucherMath;
+import se.swedsoft.bookkeeping.calc.util.SSAutoIncrement;
 import se.swedsoft.bookkeeping.data.common.SSDefaultAccount;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
@@ -116,7 +117,7 @@ public class SSInpayment implements SSTableSearchable, Serializable {
     public void doAutoIncrecement() {
         List<SSInpayment> iInpayments = SSDB.getInstance().getInpayments();
 
-        int iNumber = SSDB.getInstance().getAutoIncrement().getNumber("inpayment");
+        int iNumber = SSDB.getInstance().getAutoIncrement().orElse(new SSAutoIncrement()).getNumber("inpayment");
 
         for (SSInpayment iInpayment: iInpayments) {
             if (iInpayment.iNumber > iNumber) {
@@ -221,14 +222,14 @@ public class SSInpayment implements SSTableSearchable, Serializable {
      * @param iDefaultAccount
      * @return
      */
-    public SSAccount getDefaultAccount(SSAccountPlan iAccountPlan, SSDefaultAccount iDefaultAccount) {
+    public Optional<SSAccount> getDefaultAccount(SSAccountPlan iAccountPlan, SSDefaultAccount iDefaultAccount) {
         Integer iAccountNumber = iDefaultAccounts.get(iDefaultAccount);
 
         if (iAccountNumber == null) {
-            return null;
+            return Optional.empty();
         }
 
-        return iAccountPlan.getAccount(iAccountNumber);
+        return Optional.ofNullable(iAccountPlan.getAccount(iAccountNumber));
     }
 
     /**
@@ -427,17 +428,17 @@ public class SSInpayment implements SSTableSearchable, Serializable {
 
         // Add the sum
         iVoucher.addVoucherRow(
-                getDefaultAccount(iAccountPlan, SSDefaultAccount.CustomerClaim),
+                getDefaultAccount(iAccountPlan, SSDefaultAccount.CustomerClaim).orElse(null),
                 iSum.negate());
 
         // Add the currency change if not zero
         if (iCurrencyRateDifference.signum() > 0) {
             iVoucher.addVoucherRow(
-                    getDefaultAccount(iAccountPlan, SSDefaultAccount.CurrencyProfit),
+                    getDefaultAccount(iAccountPlan, SSDefaultAccount.CurrencyProfit).orElse(null),
                     iCurrencyRateDifference.negate());
         } else {
             iVoucher.addVoucherRow(
-                    getDefaultAccount(iAccountPlan, SSDefaultAccount.CurrencyLoss),
+                    getDefaultAccount(iAccountPlan, SSDefaultAccount.CurrencyLoss).orElse(null),
                     iCurrencyRateDifference.negate());
         }
 
@@ -454,7 +455,7 @@ public class SSInpayment implements SSTableSearchable, Serializable {
 
             iVoucherRow.setValue(iValue);
             iVoucherRow.setAccount(
-                    getDefaultAccount(iAccountPlan, SSDefaultAccount.InPayment));
+                    getDefaultAccount(iAccountPlan, SSDefaultAccount.InPayment).orElse(null));
 
             iVoucher.addVoucherRow(iVoucherRow);
         }

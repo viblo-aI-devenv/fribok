@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -342,7 +343,7 @@ public class SSOrderExporter {    private static final Logger LOG = LoggerFactor
 
                 iSubElement2 = iXmlDoc.createElementNS(null, "SumOfLine");
                 iNode = iXmlDoc.createTextNode(
-                        iRow.getSum() == null ? "" : iRow.getSum().toString());
+                        iRow.getSum().map(BigDecimal::toString).orElse(""));
                 iSubElement2.appendChild(iNode);
                 iSubElement.appendChild(iSubElement2);
 

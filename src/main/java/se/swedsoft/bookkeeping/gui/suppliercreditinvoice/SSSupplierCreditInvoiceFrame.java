@@ -295,7 +295,7 @@ public class SSSupplierCreditInvoiceFrame extends SSDefaultTableFrame {
     }
 
     private SSSupplierCreditInvoice getSupplierCreditInvoice(SSSupplierCreditInvoice iSupplierCreditInvoice) {
-        return SSDB.getInstance().getSupplierCreditInvoice(iSupplierCreditInvoice);
+        return SSDB.getInstance().getSupplierCreditInvoice(iSupplierCreditInvoice).orElse(null);
     }
 
     public void updateFrame() {

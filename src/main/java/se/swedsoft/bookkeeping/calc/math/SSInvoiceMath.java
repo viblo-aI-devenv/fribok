@@ -13,6 +13,7 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +64,7 @@ public class SSInvoiceMath extends SSSaleMath {    private static final Logger L
         SSInvoice iInvoice = new SSInvoice();
 
         iInvoice.setNumber(iInvoiceNr);
-        iInvoice = SSDB.getInstance().getInvoice(iInvoice);
+        iInvoice = SSDB.getInstance().getInvoice(iInvoice).orElse(null);
 
         BigDecimal iCurrencyRate = iInvoice.getCurrencyRate();
 
@@ -486,7 +487,7 @@ public class SSInvoiceMath extends SSSaleMath {    private static final Logger L
      * @param iReferensNumber
      * @return
      */
-    public static SSInvoice getInvoiceByReference(String iReferensNumber) {
+    public static Optional<SSInvoice> getInvoiceByReference(String iReferensNumber) {
         return getInvoiceByReference(SSDB.getInstance().getInvoices(), iReferensNumber);
     }
 
@@ -496,16 +497,16 @@ public class SSInvoiceMath extends SSSaleMath {    private static final Logger L
      * @param iReferensNumber
      * @return
      */
-    public static SSInvoice getInvoiceByReference(List<SSInvoice> iInvoices, String iReferensNumber) {
+    public static Optional<SSInvoice> getInvoiceByReference(List<SSInvoice> iInvoices, String iReferensNumber) {
         for (SSInvoice iInvoice : iInvoices) {
             String iNumber = iInvoice.getNumber().toString();
             String iOCRNumber = iInvoice.getOCRNumber();
 
             if (iReferensNumber.equals(iOCRNumber) || iReferensNumber.equals(iNumber)) {
-                return iInvoice;
+                return Optional.of(iInvoice);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     public static Map<String, Integer> getStockInfluencing(List<? extends SSInvoice> iInvoices) {

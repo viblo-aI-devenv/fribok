@@ -898,7 +898,7 @@ public class SSOrderImporter {    private static final Logger LOG = LoggerFactor
                     String[] iFields = iLine.split("\t");
 
                     if (iOrder.getCustomer() == null && iFields[0] != null) {
-                        SSCustomer iCustomer = SSDB.getInstance().getCustomer(iFields[0]);
+                        SSCustomer iCustomer = SSDB.getInstance().getCustomer(iFields[0]).orElse(null);
 
                         if (iCustomer == null) {
                             iBadOrders.add(
@@ -926,7 +926,7 @@ public class SSOrderImporter {    private static final Logger LOG = LoggerFactor
                     SSSaleRow iRow = new SSSaleRow();
 
                     if (iFields[2] != null) {
-                        SSProduct iProduct = SSDB.getInstance().getProduct(iFields[2]);
+                        SSProduct iProduct = SSDB.getInstance().getProduct(iFields[2]).orElse(null);
 
                         if (iProduct != null) {
                             iRow.setProduct(iProduct);
@@ -997,7 +997,7 @@ public class SSOrderImporter {    private static final Logger LOG = LoggerFactor
                     try {
                         iFeeString = iFeeString.replace(",", ".");
                         SSSaleRow iRow = new SSSaleRow(
-                                SSDB.getInstance().getProduct("Avgift"));
+                                SSDB.getInstance().getProduct("Avgift").orElse(null));
                         BigDecimal iFee = new BigDecimal(iFeeString);
 
                         iFee = iFee.multiply(new BigDecimal("0.8"));
@@ -1016,7 +1016,7 @@ public class SSOrderImporter {    private static final Logger LOG = LoggerFactor
                     try {
                         iFreightString = iFreightString.replace(",", ".");
                         SSSaleRow iRow = new SSSaleRow(
-                                SSDB.getInstance().getProduct("Frakt"));
+                                SSDB.getInstance().getProduct("Frakt").orElse(null));
                         BigDecimal iFreight = new BigDecimal(iFreightString);
 
                         iFreight = iFreight.multiply(new BigDecimal("0.8"));

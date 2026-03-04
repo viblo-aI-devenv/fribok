@@ -139,11 +139,11 @@ public class SSSupplierCreditInvoiceDialog {
                 iRow.setProject(
                         iProduct == null
                                 ? null
-                                : iProduct.getProject(iProduct.getProjectNr()));
+                                : iProduct.getProject(iProduct.getProjectNr()).orElse(null));
                 iRow.setResultUnit(
                         iProduct == null
                                 ? null
-                                : iProduct.getResultUnit(iProduct.getResultUnitNr()));
+                                : iProduct.getResultUnit(iProduct.getResultUnitNr()).orElse(null));
             }
         }
         iPanel.setCreditSupplierInvoice(iSupplierCreditInvoice);

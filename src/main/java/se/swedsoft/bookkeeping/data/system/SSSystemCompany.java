@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.rmi.server.UID;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -149,14 +150,14 @@ public class SSSystemCompany implements Serializable {
      *
      * @return list of years
      */
-    public SSSystemYear getCurrentYear() {
+    public Optional<SSSystemYear> getCurrentYear() {
 
         for (SSSystemYear iYear : iYears) {
             if (iYear.isCurrent()) {
-                return iYear;
+                return Optional.of(iYear);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     public void setCurrentyear(SSSystemYear iNew) {

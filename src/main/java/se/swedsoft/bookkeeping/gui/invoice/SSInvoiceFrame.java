@@ -531,7 +531,7 @@ public class SSInvoiceFrame extends SSDefaultTableFrame {
     }
 
     private SSInvoice getInvoice(SSInvoice iInvoice) {
-        return SSDB.getInstance().getInvoice(iInvoice);
+        return SSDB.getInstance().getInvoice(iInvoice).orElse(null);
     }
 
     private List<SSInvoice> getInvoices(List<SSInvoice> iInvoices) {

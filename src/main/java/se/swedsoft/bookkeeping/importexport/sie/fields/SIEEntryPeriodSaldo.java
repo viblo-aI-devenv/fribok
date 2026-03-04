@@ -49,7 +49,7 @@ public class SIEEntryPeriodSaldo implements SIEEntry {
      */
     @Override
     public boolean exportEntry(SSSIEExporter iExporter, SIEWriter iWriter, SSNewAccountingYear iCurrentYearData) throws SSExportException {
-        SSNewAccountingYear iPreviousYearData = SSDB.getInstance().getPreviousYear();
+        SSNewAccountingYear iPreviousYearData = SSDB.getInstance().getPreviousYear().orElse(null);
 
         List<SSNewResultUnit> iResultUnits = SSDB.getInstance().getResultUnits();
         List<SSNewProject   > iProjects = SSDB.getInstance().getProjects();

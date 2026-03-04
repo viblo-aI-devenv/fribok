@@ -325,7 +325,7 @@ public class SSPeriodicInvoiceFrame extends SSDefaultTableFrame {
     }
 
     private SSPeriodicInvoice getPeriodicInvoice(SSPeriodicInvoice iPeriodicInvoice) {
-        return SSDB.getInstance().getPeriodicInvoice(iPeriodicInvoice);
+        return SSDB.getInstance().getPeriodicInvoice(iPeriodicInvoice).orElse(null);
     }
 
     public void updateFrame() {

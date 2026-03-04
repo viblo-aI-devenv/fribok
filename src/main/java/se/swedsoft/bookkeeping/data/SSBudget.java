@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.util.*;
+import java.util.Optional;
 
 
 /**
@@ -127,13 +128,13 @@ public class SSBudget implements Serializable {
      * @param pMonth
      * @return The months
      */
-    public SSMonth getMonth(SSMonth pMonth) {
+    public Optional<SSMonth> getMonth(SSMonth pMonth) {
         for (SSMonth iMonth: iBudget.keySet()) {
             if (iMonth.equals(pMonth)) {
-                return iMonth;
+                return Optional.of(iMonth);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     /**
@@ -339,14 +340,14 @@ public class SSBudget implements Serializable {
      *
      * @return The value
      */
-    public BigDecimal getValueForAccountAndMonth(SSAccount pAccount, SSMonth pMonth) {
+    public Optional<BigDecimal> getValueForAccountAndMonth(SSAccount pAccount, SSMonth pMonth) {
 
         Map<SSAccount, BigDecimal> iMonthlyBudget = iBudget.get(pMonth);
 
         if (iMonthlyBudget != null) {
-            return iMonthlyBudget.get(pAccount);
+            return Optional.ofNullable(iMonthlyBudget.get(pAccount));
         }
-        return null;
+        return Optional.empty();
     }
 
     /**

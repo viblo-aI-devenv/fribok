@@ -253,7 +253,7 @@ public class SSOwnReportFrame extends SSDefaultTableFrame {
     }
 
     private SSOwnReport getOwnReport(SSOwnReport iOwnReport) {
-        return SSDB.getInstance().getOwnReport(iOwnReport);
+        return SSDB.getInstance().getOwnReport(iOwnReport).orElse(null);
     }
 
     public void updateFrame() {

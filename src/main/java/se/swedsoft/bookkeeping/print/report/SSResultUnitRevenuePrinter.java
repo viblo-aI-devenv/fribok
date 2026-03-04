@@ -132,9 +132,9 @@ public class SSResultUnitRevenuePrinter extends SSPrinter {
                 SSMonth iMonth = new SSMonth(monthStart, monthEnd);
 
                 for (SSSaleRow iRow : iInvoice.getRows()) {
-                    if (iRow.getResultUnitNr() != null && iRow.getSum() != null) {
+                    if (iRow.getResultUnitNr() != null && iRow.getSum().isPresent()) {
                         BigDecimal iSum = SSInvoiceMath.convertToLocal(iInvoice,
-                                iRow.getSum());
+                                iRow.getSum().get());
                         Map<SSMonth, BigDecimal> iRevenueInMonth;
 
                         if (iResultUnitRevenue.containsKey(iRow.getResultUnitNr())) {
@@ -167,9 +167,9 @@ public class SSResultUnitRevenuePrinter extends SSPrinter {
                 SSMonth iMonth = new SSMonth(monthStart, monthEnd);
 
                 for (SSSaleRow iRow : iCreditInvoice.getRows()) {
-                    if (iRow.getResultUnitNr() != null && iRow.getSum() != null) {
+                    if (iRow.getResultUnitNr() != null && iRow.getSum().isPresent()) {
                         BigDecimal iSum = SSCreditInvoiceMath.convertToLocal(
-                                iCreditInvoice, iRow.getSum());
+                                iCreditInvoice, iRow.getSum().get());
                         Map<SSMonth, BigDecimal> iRevenueInMonth;
 
                         if (iResultUnitRevenue.containsKey(iRow.getResultUnitNr())) {

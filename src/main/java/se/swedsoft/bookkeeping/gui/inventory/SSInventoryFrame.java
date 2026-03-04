@@ -256,7 +256,7 @@ public class SSInventoryFrame extends SSDefaultTableFrame {
     }
 
     private SSInventory getInventory(SSInventory iInventory) {
-        return SSDB.getInstance().getInventory(iInventory);
+        return SSDB.getInstance().getInventory(iInventory).orElse(null);
     }
 
     public void updateFrame() {

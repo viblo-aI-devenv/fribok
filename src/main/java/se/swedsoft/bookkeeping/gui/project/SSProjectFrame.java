@@ -256,7 +256,7 @@ public class SSProjectFrame extends SSDefaultTableFrame {
     }
 
     private SSNewProject getProject(SSNewProject iProject) {
-        return SSDB.getInstance().getProject(iProject);
+        return SSDB.getInstance().getProject(iProject).orElse(null);
     }
 
     private List<SSNewProject> getProjects(List<SSNewProject> iProjects) {

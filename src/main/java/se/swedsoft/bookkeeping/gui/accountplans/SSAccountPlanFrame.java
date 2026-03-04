@@ -389,7 +389,7 @@ public class SSAccountPlanFrame extends SSDefaultTableFrame {
     }
 
     public SSAccountPlan getAccountPlan(SSAccountPlan iAccountPlan) {
-        return SSDB.getInstance().getAccountPlan(iAccountPlan);
+        return SSDB.getInstance().getAccountPlan(iAccountPlan).orElse(null);
     }
 
     public void updateFrame() {

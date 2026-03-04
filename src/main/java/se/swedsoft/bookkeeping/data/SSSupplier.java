@@ -354,7 +354,7 @@ public class SSSupplier implements Serializable, SSTableSearchable {
      * @return
      */
     public SSCurrency getCurrency() {
-        return SSDB.getInstance().getCurrency(iCurrency);
+        return SSDB.getInstance().getCurrency(iCurrency).orElse(null);
     }
 
     /**

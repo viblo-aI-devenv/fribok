@@ -608,14 +608,14 @@ public abstract class SSSale implements SSTableSearchable, Serializable {
      * @param iDefaultAccount
      * @return
      */
-    public SSAccount getDefaultAccount(SSAccountPlan iAccountPlan, SSDefaultAccount iDefaultAccount) {
+    public Optional<SSAccount> getDefaultAccount(SSAccountPlan iAccountPlan, SSDefaultAccount iDefaultAccount) {
         Integer iAccountNumber = iDefaultAccounts.get(iDefaultAccount);
 
         if (iAccountNumber == null) {
-            return null;
+            return Optional.empty();
         }
 
-        return iAccountPlan.getAccount(iAccountNumber);
+        return Optional.ofNullable(iAccountPlan.getAccount(iAccountNumber));
     }
 
     /**

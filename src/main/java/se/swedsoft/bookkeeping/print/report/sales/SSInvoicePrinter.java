@@ -310,7 +310,7 @@ public class SSInvoicePrinter extends SSPrinter {
                         break;
 
                     case 6:
-                        value = iRow.getSum();
+                        value = iRow.getSum().orElse(null);
                         break;
                     }
 

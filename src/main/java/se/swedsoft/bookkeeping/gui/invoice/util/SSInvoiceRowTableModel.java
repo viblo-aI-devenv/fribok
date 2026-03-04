@@ -72,13 +72,13 @@ public class SSInvoiceRowTableModel extends SSEditableTableModel<SSSaleRow> {
                         && iObject.getProduct().getResultUnitNr() != null) {
                     iObject.setResultUnit(
                             iObject.getProduct().getResultUnit(
-                                    iObject.getProduct().getResultUnitNr()));
+                                    iObject.getProduct().getResultUnitNr()).orElse(null));
                 }
                 if (iObject.getProduct() != null
                         && iObject.getProduct().getProjectNr() != null) {
                     iObject.setProject(
                             iObject.getProduct().getProject(
-                                    iObject.getProduct().getProjectNr()));
+                                    iObject.getProduct().getProjectNr()).orElse(null));
                 }
             } else {
                 iObject.setProductNr((String) iValue);
@@ -268,7 +268,7 @@ public class SSInvoiceRowTableModel extends SSEditableTableModel<SSSaleRow> {
             SSBundle.getBundle().getString("salerowtable.column.7")) {
         @Override
         public Object getValue(SSSaleRow iObject) {
-            return iObject.getSum();
+            return iObject.getSum().orElse(null);
         }
 
         @Override

@@ -332,7 +332,7 @@ public class SSCreditInvoiceFrame extends SSDefaultTableFrame {
     }
 
     private SSCreditInvoice getCreditInvoice(SSCreditInvoice iCreditInvoice) {
-        return SSDB.getInstance().getCreditInvoice(iCreditInvoice);
+        return SSDB.getInstance().getCreditInvoice(iCreditInvoice).orElse(null);
     }
 
     private List<SSCreditInvoice> getCreditInvoices(List<SSCreditInvoice> iCreditInvoices) {

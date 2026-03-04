@@ -90,15 +90,15 @@ public class SSVATReportDialog extends SSDialog {    private static final Logger
 
         iAccountR1.setSelected(
                 SSAccountMath.getAccountWithVATCode(SSDB.getInstance().getAccounts(), "R1",
-                new SSAccount(1650)),
+                new SSAccount(1650)).orElse(null),
                 true);
         iAccountR2.setSelected(
                 SSAccountMath.getAccountWithVATCode(SSDB.getInstance().getAccounts(), "R2",
-                new SSAccount(2650)),
+                new SSAccount(2650)).orElse(null),
                 true);
         iAccountA.setSelected(
                 SSAccountMath.getAccountWithVATCode(SSDB.getInstance().getAccounts(), "A",
-                new SSAccount(3740)),
+                new SSAccount(3740)).orElse(null),
                 true);
 
         iButtonPanel.addCancelActionListener(e -> setModalResult(JOptionPane.CANCEL_OPTION, true));

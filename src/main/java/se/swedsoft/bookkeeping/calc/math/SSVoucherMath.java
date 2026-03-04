@@ -9,6 +9,7 @@ import se.swedsoft.bookkeeping.util.SSDateUtil;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -339,10 +340,10 @@ public class SSVoucherMath {
      * @param iVouchers
      * @return
      */
-    public static SSVoucher getFirst(List<SSVoucher> iVouchers) {
+    public static Optional<SSVoucher> getFirst(List<SSVoucher> iVouchers) {
 
         if (iVouchers.isEmpty()) {
-            return null;
+            return Optional.empty();
         }
 
         SSVoucher iCurrent = iVouchers.get(0);
@@ -353,7 +354,7 @@ public class SSVoucherMath {
             }
         }
 
-        return iCurrent;
+        return Optional.of(iCurrent);
     }
 
     /**
@@ -361,10 +362,10 @@ public class SSVoucherMath {
      * @param iVouchers
      * @return
      */
-    public static SSVoucher getLast(List<SSVoucher> iVouchers) {
+    public static Optional<SSVoucher> getLast(List<SSVoucher> iVouchers) {
 
         if (iVouchers.isEmpty()) {
-            return null;
+            return Optional.empty();
         }
 
         SSVoucher iCurrent = iVouchers.get(0);
@@ -375,7 +376,7 @@ public class SSVoucherMath {
             }
         }
 
-        return iCurrent;
+        return Optional.of(iCurrent);
     }
 
     /**
@@ -529,7 +530,7 @@ public class SSVoucherMath {
      * @param iResultunit
      * @return
      */
-    public static SSVoucherRow findRow(SSVoucher iVoucher, SSAccount iAccount, SSNewProject iProject, SSNewResultUnit iResultunit) {
+    public static Optional<SSVoucherRow> findRow(SSVoucher iVoucher, SSAccount iAccount, SSNewProject iProject, SSNewResultUnit iResultunit) {
 
         for (SSVoucherRow iRow : iVoucher.getRows()) {
             SSAccount    iRowAccount = iRow.getAccount();
@@ -543,10 +544,10 @@ public class SSVoucherMath {
                                     && (iResultunit == iRowResultUnit
                                             || (iResultunit != null
                                                     && iResultunit.equals(iRowResultUnit)))) {
-                return iRow;
+                return Optional.of(iRow);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     /**
@@ -564,12 +565,13 @@ public class SSVoucherMath {
         iNew.setCorrectedBy(iVoucher.getCorrectedBy());
 
         for (SSVoucherRow iRow : iVoucher.getRows()) {
-            SSVoucherRow iCurrent = findRow(iNew, iRow.getAccount(), iRow.getProject(),
+            Optional<SSVoucherRow> iCurrentOpt = findRow(iNew, iRow.getAccount(), iRow.getProject(),
                     iRow.getResultUnit());
 
-            if (iCurrent == null) {
+            if (iCurrentOpt.isEmpty()) {
                 iNew.addVoucherRow(new SSVoucherRow(iRow));
             } else {
+                SSVoucherRow iCurrent = iCurrentOpt.get();
                 BigDecimal iCredit = iRow.getCredit();
                 BigDecimal iDebet = iRow.getDebet();
 

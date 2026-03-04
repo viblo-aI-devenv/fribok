@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -175,13 +176,13 @@ public class SSOutpaymentRow implements SSTableSearchable, Serializable {
      *
      * @return
      */
-    public BigDecimal getLocalValue() {
+    public Optional<BigDecimal> getLocalValue() {
 
         if (iCurrencyRate == null || iValue == null) {
-            return null;
+            return Optional.empty();
         }
 
-        return iCurrencyRate.multiply(iValue);
+        return Optional.of(iCurrencyRate.multiply(iValue));
     }
 
     /**

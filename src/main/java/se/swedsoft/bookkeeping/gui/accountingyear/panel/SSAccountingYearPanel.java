@@ -91,7 +91,7 @@ public class SSAccountingYearPanel {
      * @return
      */
     public SSAccountPlan getAccountPlan() {
-        SSNewAccountingYear iLast = SSDB.getInstance().getLastYear();
+        SSNewAccountingYear iLast = SSDB.getInstance().getLastYear().orElse(null);
 
         if (iRadioUseLast.isSelected() && iLast != null && iLast.getAccountPlan() != null) {
             return iLast.getAccountPlan();
@@ -106,7 +106,7 @@ public class SSAccountingYearPanel {
      * or defaults to the current calendar year if no previous year exists.
      */
     public void setYearFromAndTo() {
-        SSNewAccountingYear iLast = SSDB.getInstance().getLastYear();
+        SSNewAccountingYear iLast = SSDB.getInstance().getLastYear().orElse(null);
 
         iRadioUseLast.setEnabled(iLast != null);
         iRadioAccountPlan.setEnabled(iAccountPlan.getFirst() != null);

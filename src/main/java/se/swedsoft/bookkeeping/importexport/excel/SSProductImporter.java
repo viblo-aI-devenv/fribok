@@ -232,7 +232,7 @@ public class SSProductImporter {    private static final Logger LOG = LoggerFact
                     }
                     if (iColumns.containsKey(SSProductExporter.ENHET)
                             && iColumns.get(SSProductExporter.ENHET) == col) {
-                        iProduct.setUnit(SSUnit.decode(iValue));
+                        iProduct.setUnit(SSUnit.decode(iValue).orElse(null));
                     }
                     if (iColumns.containsKey(SSProductExporter.VIKT)
                             && iColumns.get(SSProductExporter.VIKT) == col) {
@@ -473,7 +473,7 @@ public class SSProductImporter {    private static final Logger LOG = LoggerFact
                         iValue = iTextProductAttList.item(0) == null
                                 ? null
                                 : iTextProductAttList.item(0).getNodeValue().trim();
-                        iProduct.setUnit(iValue == null ? null : SSUnit.decode(iValue));
+                        iProduct.setUnit(iValue == null ? null : SSUnit.decode(iValue).orElse(null));
                     }
 
                     iProductAttList = iProductElement.getElementsByTagName("Weight");

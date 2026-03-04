@@ -79,7 +79,7 @@ class SIEReaderTest {
     void nextIntegerReturnsCorrectValue() {
         SIEReader reader = new SIEReader("42");
 
-        assertThat(reader.nextInteger()).isEqualTo(42);
+        assertThat(reader.nextInteger()).isPresent().hasValue(42);
     }
 
     @Test
@@ -87,7 +87,7 @@ class SIEReaderTest {
         // Quoted empty string tokenises as empty string
         SIEReader reader = new SIEReader("\"\"");
 
-        assertThat(reader.nextInteger()).isNull();
+        assertThat(reader.nextInteger()).isEmpty();
     }
 
     // ---- Float / Double parsing ----
@@ -239,7 +239,7 @@ class SIEReaderTest {
     void peekReturnsNextTokenWithoutConsuming() {
         SIEReader reader = new SIEReader("A B");
 
-        String peeked = reader.peek();
+        String peeked = reader.peek().orElse(null);
         String consumed = reader.nextString();
 
         assertThat(peeked).isEqualTo("A");

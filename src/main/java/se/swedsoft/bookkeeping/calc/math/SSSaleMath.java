@@ -14,6 +14,7 @@ import se.swedsoft.bookkeeping.gui.product.SSProductFrame;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import java.util.Optional;
 
 
 /**
@@ -75,7 +76,7 @@ public class SSSaleMath {
         BigDecimal iNetSum = new BigDecimal(0);
 
         for (SSSaleRow iRow: iSale.getRows()) {
-            BigDecimal iRowSum = iRow.getSum();
+            BigDecimal iRowSum = iRow.getSum().orElse(null);
 
             if (iRowSum != null) {
                 iNetSum = iNetSum.add(iRowSum);
@@ -109,7 +110,7 @@ public class SSSaleMath {
         }
 
         for (SSSaleRow iRow: iSale.getRows()) {
-            BigDecimal iRowSum = iRow.getSum();
+            BigDecimal iRowSum = iRow.getSum().orElse(null);
             SSTaxCode  iRowTax = iRow.getTaxCode();
 
             if (iRowSum != null) {
@@ -217,7 +218,7 @@ public class SSSaleMath {
      * @param iSale
      * @return the new customer
      */
-    public static SSCustomer getNewCustomer(SSSale iSale) {
+    public static Optional<SSCustomer> getNewCustomer(SSSale iSale) {
         if (iSale.getCustomer(SSDB.getInstance().getCustomers()) == null) {
             SSCustomer iCustomer = new SSCustomer();
 
@@ -235,9 +236,9 @@ public class SSSaleMath {
             iCustomer.setInvoiceAddress(new SSAddress(iSale.getInvoiceAddress()));
             iCustomer.setDeliveryAddress(new SSAddress(iSale.getDeliveryAddress()));
 
-            return iCustomer;
+            return Optional.of(iCustomer);
         }
-        return null;
+        return Optional.empty();
     }
 
     /**
@@ -259,7 +260,7 @@ public class SSSaleMath {
 
             // This is a new product
             if (iProduct == null && iProductNr.length() > 0
-                    && SSProductMath.getProduct(iProducts, iProductNr) == null) {
+                    && SSProductMath.getProduct(iProducts, iProductNr).isEmpty()) {
                 iProduct = new SSProduct();
 
                 iProduct.setNumber(iProductNr);
@@ -313,10 +314,10 @@ public class SSSaleMath {
      * @param iSale
      */
     public static void addCustomerAndProducts(SSSale iSale) {
-        SSCustomer iCustomer = getNewCustomer(iSale);
+        Optional<SSCustomer> iCustomer = getNewCustomer(iSale);
 
-        if (iCustomer != null) {
-            SSDB.getInstance().addCustomer(iCustomer);
+        if (iCustomer.isPresent()) {
+            SSDB.getInstance().addCustomer(iCustomer.get());
         }
 
         List<SSProduct> iProducts = getNewProducts(iSale);
@@ -377,21 +378,21 @@ public class SSSaleMath {
      * @param iRow
      * @return
      */
-    public static SSSaleRow getMatchingRow(SSSale iSale, SSSaleRow iRow) {
+    public static Optional<SSSaleRow> getMatchingRow(SSSale iSale, SSSaleRow iRow) {
 
         String iProductNr = iRow.getProductNr();
 
         if (iProductNr == null) {
-            return null;
+            return Optional.empty();
         }
 
         for (SSSaleRow iCurrent : iSale.getRows()) {
 
             if (iProductNr.equals(iCurrent.getProductNr())) {
-                return iCurrent;
+                return Optional.of(iCurrent);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     /**

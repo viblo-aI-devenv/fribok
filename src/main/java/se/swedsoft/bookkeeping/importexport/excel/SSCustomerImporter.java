@@ -934,7 +934,7 @@ public class SSCustomerImporter {
             for (String iLine : al) {
                 boolean iNewCustomer = false;
                 String[] iFields = iLine.split("\t", -1);
-                SSCustomer iCustomer = SSDB.getInstance().getCustomer(iFields[0]);
+                SSCustomer iCustomer = SSDB.getInstance().getCustomer(iFields[0]).orElse(null);
 
                 if (iCustomer == null) {
                     iCustomer = new SSCustomer();

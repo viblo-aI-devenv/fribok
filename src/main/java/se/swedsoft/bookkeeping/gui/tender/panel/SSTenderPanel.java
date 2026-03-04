@@ -880,7 +880,7 @@ public class SSTenderPanel {
                 return null;
             }
 
-            BigDecimal iInprice = SSProductMath.getInprice(iProduct, iDate.getDate());
+            BigDecimal iInprice = SSProductMath.getInprice(iProduct, iDate.getDate()).orElse(null);
             BigDecimal iUnitprice = iRow.getUnitprice();
             BigDecimal iExchangeRate = getExchangeRate();
 

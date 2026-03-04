@@ -99,11 +99,11 @@ public class SSBgMaxImporter {    private static final Logger LOG = LoggerFactor
             for (BgMaxBetalning iBetalning : iAvsnitt.getBetalningar()) {
 
                 SSInvoice iInvoice = SSInvoiceMath.getInvoiceByReference(
-                        iBetalning.getReferens());
+                        iBetalning.getReferens()).orElse(null);
 
                 if (iInvoice == null && !iBetalning.hasNoReferenser()) {
                     for (BgMaxReferens iReferens : iBetalning.getReferenser()) {
-                        iInvoice = SSInvoiceMath.getInvoiceByReference(iReferens.getReferens());
+                        iInvoice = SSInvoiceMath.getInvoiceByReference(iReferens.getReferens()).orElse(null);
                     }
                 }
                 if (iInvoice == null) {

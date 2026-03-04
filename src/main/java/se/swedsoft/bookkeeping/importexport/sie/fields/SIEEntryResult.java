@@ -15,6 +15,7 @@ import se.swedsoft.bookkeeping.importexport.util.SSImportException;
 
 import java.math.BigDecimal;
 import java.util.Map;
+import java.util.Optional;
 
 
 /**
@@ -48,11 +49,12 @@ public class SIEEntryResult implements SIEEntry {
      */
     @Override
     public boolean exportEntry(SSSIEExporter iExporter, SIEWriter iWriter, SSNewAccountingYear iYear) throws SSExportException {
-        SSNewAccountingYear iPreviousYearData = SSDB.getInstance().getPreviousYear();
+        Optional<SSNewAccountingYear> optPreviousYearData = SSDB.getInstance().getPreviousYear();
 
         boolean iHasData = false;
 
-        if (iPreviousYearData != null) {
+        if (optPreviousYearData.isPresent()) {
+            SSNewAccountingYear iPreviousYearData = optPreviousYearData.get();
             Map<SSAccount, BigDecimal> iResult = SSResultCalculator.getResult(
                     iPreviousYearData);
 

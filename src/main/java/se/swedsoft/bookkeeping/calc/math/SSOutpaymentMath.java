@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -85,16 +86,16 @@ public class SSOutpaymentMath {
      * @param iOutpaymentRow
      * @return the currency rate difference
      */
-    public static BigDecimal getCurrencyRateDifference(SSOutpaymentRow iOutpaymentRow) {
+    public static Optional<BigDecimal> getCurrencyRateDifference(SSOutpaymentRow iOutpaymentRow) {
         BigDecimal iPaymentRate = iOutpaymentRow.getCurrencyRate();
         BigDecimal iCurrencyRate = iOutpaymentRow.getInvoiceCurrencyRate();
         BigDecimal iValue = iOutpaymentRow.getValue();
 
         if (iPaymentRate == null || iCurrencyRate == null || iValue == null) {
-            return null;
+            return Optional.empty();
         }
 
-        return iValue.multiply(iCurrencyRate.subtract(iPaymentRate));
+        return Optional.of(iValue.multiply(iCurrencyRate.subtract(iPaymentRate)));
     }
 
     /**
@@ -107,10 +108,10 @@ public class SSOutpaymentMath {
         BigDecimal iSum = new BigDecimal(0);
 
         for (SSOutpaymentRow iRow: iOutpayment.getRows()) {
-            BigDecimal iRowSum = getCurrencyRateDifference(iRow);
+            Optional<BigDecimal> iRowSum = getCurrencyRateDifference(iRow);
 
-            if (iRowSum != null) {
-                iSum = iSum.add(iRowSum);
+            if (iRowSum.isPresent()) {
+                iSum = iSum.add(iRowSum.get());
             }
         }
 

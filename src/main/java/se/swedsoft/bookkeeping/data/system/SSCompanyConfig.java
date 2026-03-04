@@ -7,6 +7,7 @@ import se.swedsoft.bookkeeping.data.SSNewCompany;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,19 +30,19 @@ public class SSCompanyConfig {    private static final Logger LOG = LoggerFactor
         try (FileOutputStream fos = new FileOutputStream(iFile);
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(iLastCompany);
-            if (iLastCompany.getCurrentYear() != null) {
-                oos.writeObject(iLastCompany.getCurrentYear());
+            if (iLastCompany.getCurrentYear().isPresent()) {
+                oos.writeObject(iLastCompany.getCurrentYear().get());
             }
         } catch (IOException e) {
             LOG.error("Unexpected error", e);
         }
     }
 
-    public static SSSystemCompany openLastOpenCompany() {
+    public static Optional<SSSystemCompany> openLastOpenCompany() {
         File iFile = new File(Path.get(Path.APP_BASE), "lastcompanyopen.config");
 
         if (!iFile.exists()) {
-            return null;
+            return Optional.empty();
         }
 
         SSSystemCompany iSystemCompany = null;
@@ -61,11 +62,11 @@ public class SSCompanyConfig {    private static final Logger LOG = LoggerFactor
 
         } catch (IOException e) {
             iFile.delete();
-            return iSystemCompany;
+            return Optional.ofNullable(iSystemCompany);
         } catch (ClassNotFoundException e) {
             LOG.error("Unexpected error", e);
         }
-        return iSystemCompany;
+        return Optional.ofNullable(iSystemCompany);
     }
 
     public static void saveCompanySetting(SSNewCompany iCompany) {
@@ -116,11 +117,11 @@ public class SSCompanyConfig {    private static final Logger LOG = LoggerFactor
         }
     }
 
-    public static SSSystemCompany openCompanySetting(SSSystemCompany iCompany) {
+    public static Optional<SSSystemCompany> openCompanySetting(SSSystemCompany iCompany) {
         File iFile = new File(Path.get(Path.APP_BASE), "companysettings.config");
 
         if (!iFile.exists()) {
-            return null;
+            return Optional.empty();
         }
 
         SSSystemCompany iSystemCompany = null;
@@ -141,17 +142,17 @@ public class SSCompanyConfig {    private static final Logger LOG = LoggerFactor
                                 }
                             }
                         }
-                        return iSystemCompany;
+                        return Optional.of(iSystemCompany);
                     }
                 }
             }
 
         } catch (IOException e) {
-            return null;
+            return Optional.empty();
         } catch (ClassNotFoundException e) {
             LOG.error("Unexpected error", e);
         }
-        return iSystemCompany;
+        return Optional.ofNullable(iSystemCompany);
     }
 
     private static ObjectOutputStream appendableObjectOutputStream(File f) throws IOException {

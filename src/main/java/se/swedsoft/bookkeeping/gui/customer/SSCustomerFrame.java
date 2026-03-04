@@ -577,7 +577,7 @@ public class SSCustomerFrame extends SSDefaultTableFrame {
     }
 
     private SSCustomer getCustomer(SSCustomer iCustomer) {
-        return SSDB.getInstance().getCustomer(iCustomer);
+        return SSDB.getInstance().getCustomer(iCustomer).orElse(null);
     }
 
     private List<SSCustomer> getCustomers(List<SSCustomer> iCustomers) {

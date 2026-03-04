@@ -54,7 +54,7 @@ public class SSOrder extends SSSale {
 
         if (iCompany != null) {
             setDelayInterest(iCompany.getDelayInterest());
-            setText(iCompany.getStandardText(SSStandardText.Saleorder));
+            setText(iCompany.getStandardText(SSStandardText.Saleorder).orElse(null));
             setTaxRate1(iCompany.getTaxRate1());
             setTaxRate2(iCompany.getTaxRate2());
             setTaxRate3(iCompany.getTaxRate3());
@@ -105,7 +105,7 @@ public class SSOrder extends SSSale {
         }
         if (iCompany != null) {
             iEstimatedDelivery = iCompany.getEstimatedDelivery();
-            iText = iCompany.getStandardText(SSStandardText.Saleorder);
+            iText = iCompany.getStandardText(SSStandardText.Saleorder).orElse(null);
         }
         iNumber = null;
     }

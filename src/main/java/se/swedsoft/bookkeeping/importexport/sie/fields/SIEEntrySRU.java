@@ -41,7 +41,7 @@ public class SIEEntrySRU implements SIEEntry {
                     SSBundleString.getString("sieimport.fielderror", line));
         }
 
-        int iAccountNumber = iReader.nextInteger();
+        int iAccountNumber = iReader.nextInteger().orElse(0);
 
         SSAccount iAccount = iAccountPlan.getAccount(iAccountNumber);
 

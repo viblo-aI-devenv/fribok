@@ -393,7 +393,7 @@ public class SSTenderFrame extends SSDefaultTableFrame {
     }
 
     private SSTender getTender(SSTender iTender) {
-        return SSDB.getInstance().getTender(iTender);
+        return SSDB.getInstance().getTender(iTender).orElse(null);
     }
 
     private List<SSTender> getTenders(List<SSTender> iTenders) {

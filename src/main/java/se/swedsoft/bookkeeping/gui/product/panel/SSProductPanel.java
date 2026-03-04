@@ -303,9 +303,9 @@ public class SSProductPanel {
      *
      */
     private void updateContribution() {
-        BigDecimal iInprice = SSProductMath.getInprice(iProduct);
-        BigDecimal iContribution = SSProductMath.getContribution(iProduct);
-        BigDecimal iContributionRate = SSProductMath.getContributionRate(iProduct);
+        BigDecimal iInprice = SSProductMath.getInprice(iProduct).orElse(null);
+        BigDecimal iContribution = SSProductMath.getContribution(iProduct).orElse(null);
+        BigDecimal iContributionRate = SSProductMath.getContributionRate(iProduct).orElse(null);
 
         if (iInprice != null) {
             this.iInprice.setValue(iInprice);

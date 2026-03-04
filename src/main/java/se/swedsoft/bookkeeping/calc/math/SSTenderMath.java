@@ -28,7 +28,7 @@ public class SSTenderMath extends SSSaleMath {
 
         if (iCompany != null) {
             iTender.setDelayInterest(iCompany.getDelayInterest());
-            iTender.setText(iCompany.getStandardText(SSStandardText.Tender));
+            iTender.setText(iCompany.getStandardText(SSStandardText.Tender).orElse(null));
             iTender.setTaxRate1(iCompany.getTaxRate1());
             iTender.setTaxRate2(iCompany.getTaxRate2());
             iTender.setTaxRate3(iCompany.getTaxRate3());

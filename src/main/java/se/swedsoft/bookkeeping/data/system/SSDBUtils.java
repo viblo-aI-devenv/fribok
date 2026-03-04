@@ -5,6 +5,7 @@ import se.swedsoft.bookkeeping.data.SSNewAccountingYear;
 import se.swedsoft.bookkeeping.data.SSNewCompany;
 
 import java.io.*;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -256,7 +257,7 @@ public class SSDBUtils {    private static final Logger LOG = LoggerFactory.getL
      * @return The company
      *
      */
-    public static SSNewCompany loadCompany(String pFilename) {
+    public static Optional<SSNewCompany> loadCompany(String pFilename) {
         try {
             BufferedInputStream iBufferedInputStream = new BufferedInputStream(
                     new FileInputStream(pFilename));
@@ -264,13 +265,13 @@ public class SSDBUtils {    private static final Logger LOG = LoggerFactory.getL
             ObjectInputStream iObjectInputStream = new SSObjectInputStream(
                     iBufferedInputStream);
 
-            return (SSNewCompany) iObjectInputStream.readObject();
+            return Optional.of((SSNewCompany) iObjectInputStream.readObject());
         } catch (IOException ex) {
             LOG.error("Unexpected error", ex);
         } catch (ClassNotFoundException ex) {
             LOG.error("Unexpected error", ex);
         }
-        return null;
+        return Optional.empty();
     }
 
     /**
@@ -301,7 +302,7 @@ public class SSDBUtils {    private static final Logger LOG = LoggerFactory.getL
      * @return The year
      *
      */
-    public static SSNewAccountingYear loadYear(String pFilename) {
+    public static Optional<SSNewAccountingYear> loadYear(String pFilename) {
         try {
             BufferedInputStream iBufferedInputStream = new BufferedInputStream(
                     new FileInputStream(pFilename));
@@ -312,9 +313,9 @@ public class SSDBUtils {    private static final Logger LOG = LoggerFactory.getL
             SSNewAccountingYear iYear = (SSNewAccountingYear) iObjectInputStream.readObject();
 
             if (iYear == null) {
-                return new SSNewAccountingYear();
+                return Optional.of(new SSNewAccountingYear());
             } else {
-                return iYear;
+                return Optional.of(iYear);
             }
 
         } catch (IOException ex) {
@@ -322,7 +323,7 @@ public class SSDBUtils {    private static final Logger LOG = LoggerFactory.getL
         } catch (ClassNotFoundException ex) {
             LOG.error("Unexpected error", ex);
         }
-        return null;
+        return Optional.empty();
     }
 
     /**

@@ -1,6 +1,7 @@
 package se.swedsoft.bookkeeping.data;
 
 
+import se.swedsoft.bookkeeping.calc.util.SSAutoIncrement;
 import se.swedsoft.bookkeeping.data.common.*;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.table.SSTableSearchable;
@@ -13,6 +14,7 @@ import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.Optional;
 
 
 /**
@@ -92,7 +94,7 @@ public class SSPurchaseOrder implements SSTableSearchable, Serializable {
         if (iCompany != null) {
             setDefaultAccounts(iCompany.getDefaultAccounts());
             iDeliveryAddress = new SSAddress(iCompany.getDeliveryAddress());
-            iText = iCompany.getStandardText(SSStandardText.Purchaseorder);
+            iText = iCompany.getStandardText(SSStandardText.Purchaseorder).orElse(null);
         }
         if (iSupplier != null) {
             iCurrency = iSupplier.getCurrency();
@@ -148,7 +150,7 @@ public class SSPurchaseOrder implements SSTableSearchable, Serializable {
         if (iCompany != null) {
             setDefaultAccounts(iCompany.getDefaultAccounts());
             iDeliveryAddress = new SSAddress(iCompany.getDeliveryAddress());
-            iText = iCompany.getStandardText(SSStandardText.Purchaseorder);
+            iText = iCompany.getStandardText(SSStandardText.Purchaseorder).orElse(null);
         }
         if (this.iSupplier != null) {
             iCurrency = this.iSupplier.getCurrency();
@@ -156,7 +158,7 @@ public class SSPurchaseOrder implements SSTableSearchable, Serializable {
         }
 
         for (SSProduct iProduct : iProducts) {
-            SSProduct iOriginal = SSDB.getInstance().getProduct(iProduct);
+            SSProduct iOriginal = SSDB.getInstance().getProduct(iProduct).orElse(null);
 
             if (iOriginal != null) {
                 SSPurchaseOrderRow iRow = new SSPurchaseOrderRow();
@@ -176,7 +178,7 @@ public class SSPurchaseOrder implements SSTableSearchable, Serializable {
     public void doAutoIncrecement() {
         List<SSPurchaseOrder> iPurchaseOrders = SSDB.getInstance().getPurchaseOrders();
 
-        int iNumber = SSDB.getInstance().getAutoIncrement().getNumber("purchaseorder");
+        int iNumber = SSDB.getInstance().getAutoIncrement().orElse(new SSAutoIncrement()).getNumber("purchaseorder");
 
         for (SSPurchaseOrder iPurchaseOrder : iPurchaseOrders) {
             if (iPurchaseOrder.iNumber > iNumber) {
@@ -660,10 +662,10 @@ public class SSPurchaseOrder implements SSTableSearchable, Serializable {
         BigDecimal iSum = new BigDecimal(0);
 
         for (SSPurchaseOrderRow iRow : iRows) {
-            BigDecimal iRowSum = iRow.getSum();
+            Optional<BigDecimal> iRowSum = iRow.getSum();
 
-            if (iRowSum != null) {
-                iSum = iSum.add(iRowSum);
+            if (iRowSum.isPresent()) {
+                iSum = iSum.add(iRowSum.get());
             }
         }
         return iSum;

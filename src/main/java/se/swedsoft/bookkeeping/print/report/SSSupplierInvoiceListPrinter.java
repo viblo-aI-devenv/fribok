@@ -217,7 +217,7 @@ public class SSSupplierInvoiceListPrinter extends SSPrinter {
                         break;
 
                     case 5:
-                        value = iRow.getSum();
+                        value = iRow.getSum().orElse(null);
                         break;
                     }
 

@@ -53,10 +53,10 @@ public class SSOwnReportPrinter extends SSPrinter {
 
         iProject = iOwnReport.getProjectNr() == null
                 ? null
-                : SSDB.getInstance().getProject(iOwnReport.getProjectNr());
+                : SSDB.getInstance().getProject(iOwnReport.getProjectNr()).orElse(null);
         iResultUnit = iOwnReport.getResultUnitNr() == null
                 ? null
-                : SSDB.getInstance().getResultUnit(iOwnReport.getResultUnitNr());
+                : SSDB.getInstance().getResultUnit(iOwnReport.getResultUnitNr()).orElse(null);
 
         // iYearData = SSDB.getInstance().getCurrentYear();
 
