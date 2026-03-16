@@ -45,6 +45,7 @@ class SSSupplierIntegrationTest {
         SSDB.getInstance().addSupplier(s);
 
         try {
+            SSDBTestFixture.resetCaches();
             List<SSSupplier> all = SSDB.getInstance().getSuppliers();
 
             assertThat(all).extracting(SSSupplier::getNumber).contains("S-IT-001");
