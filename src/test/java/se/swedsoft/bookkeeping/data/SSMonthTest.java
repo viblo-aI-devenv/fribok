@@ -2,6 +2,7 @@ package se.swedsoft.bookkeeping.data;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -215,6 +216,84 @@ class SSMonthTest {
         // A fiscal year from September to August
         Date from = makeDate(2023, 9, 1);
         Date to = makeDate(2024, 8, 31);
+
+        List<SSMonth> months = SSMonth.splitYearIntoMonths(from, to);
+
+        assertThat(months).hasSize(12);
+    }
+
+    // ---- LocalDate constructor tests ----
+
+    @Test
+    void localDateSingleConstructorSetsFromAndToNull() {
+        LocalDate date = LocalDate.of(2024, 6, 1);
+        SSMonth month = new SSMonth(date);
+
+        assertThat(month.getLocalFrom()).isEqualTo(date);
+        assertThat(month.getLocalTo()).isNull();
+    }
+
+    @Test
+    void localDateTwoArgConstructorSetsBoth() {
+        LocalDate from = LocalDate.of(2024, 6, 1);
+        LocalDate to = LocalDate.of(2024, 6, 30);
+        SSMonth month = new SSMonth(from, to);
+
+        assertThat(month.getLocalFrom()).isEqualTo(from);
+        assertThat(month.getLocalTo()).isEqualTo(to);
+    }
+
+    @Test
+    void localDateConstructorEqualsDateConstructor() {
+        SSMonth fromDate = new SSMonth(makeDate(2024, 6, 1), makeDate(2024, 6, 30));
+        SSMonth fromLocalDate = new SSMonth(LocalDate.of(2024, 6, 1), LocalDate.of(2024, 6, 30));
+
+        assertThat(fromDate).isEqualTo(fromLocalDate);
+        assertThat(fromDate.hashCode()).isEqualTo(fromLocalDate.hashCode());
+    }
+
+    // ---- LocalDate splitYearIntoMonths tests ----
+
+    @Test
+    void splitYearIntoMonthsLocalDateReturnsCorrectNumberOfMonths() {
+        LocalDate from = LocalDate.of(2024, 1, 1);
+        LocalDate to = LocalDate.of(2024, 12, 31);
+
+        List<SSMonth> months = SSMonth.splitYearIntoMonths(from, to);
+
+        assertThat(months).hasSize(12);
+    }
+
+    @Test
+    void splitYearIntoMonthsLocalDateSetsFromAndTo() {
+        LocalDate from = LocalDate.of(2024, 1, 1);
+        LocalDate to = LocalDate.of(2024, 3, 31);
+
+        List<SSMonth> months = SSMonth.splitYearIntoMonths(from, to);
+
+        assertThat(months).hasSize(3);
+        for (SSMonth m : months) {
+            assertThat(m.getLocalFrom()).isNotNull();
+            assertThat(m.getLocalTo()).isNotNull();
+        }
+    }
+
+    @Test
+    void splitYearIntoMonthsLocalDateFirstMonthStartsOnFirstDay() {
+        LocalDate from = LocalDate.of(2024, 1, 1);
+        LocalDate to = LocalDate.of(2024, 12, 31);
+
+        List<SSMonth> months = SSMonth.splitYearIntoMonths(from, to);
+
+        assertThat(months.get(0).getLocalFrom().getMonthValue()).isEqualTo(1);
+        assertThat(months.get(0).getLocalFrom().getDayOfMonth()).isEqualTo(1);
+    }
+
+    @Test
+    void splitYearIntoMonthsLocalDateHandlesBrokenFiscalYear() {
+        // A fiscal year from September to August
+        LocalDate from = LocalDate.of(2023, 9, 1);
+        LocalDate to = LocalDate.of(2024, 8, 31);
 
         List<SSMonth> months = SSMonth.splitYearIntoMonths(from, to);
 

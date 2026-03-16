@@ -44,6 +44,9 @@ diverging from upstream version 2.2-SNAPSHOT.
   (Phase 3 Step 16) (PR #14).
 - Replaced `SimpleDateFormat` usage with `DateTimeFormatter` throughout the
   codebase (Phase 3 Step 17) (PR #15).
+- Eliminated all `java.util.Calendar` usage from the codebase, migrating GUI
+  date components, print reports, table renderers, calc utilities, and data
+  classes to `java.time.LocalDate`/`ChronoUnit` (Phase 3 Step 18).
 
 ### Fixed
 - CI: use `target/dist` for AppImage build output.
@@ -58,6 +61,11 @@ diverging from upstream version 2.2-SNAPSHOT.
   reporting, and fixed Linux resource loading paths (PR #12).
 - Added null guards in `SSTriggerHandler.triggerAction` and improved
   background-thread error detection in tests (PR #16).
+- Fixed buggy delayed-days calculation in `SSReminderPrinter.getNumDelayedDays()`
+  and `SSInvoiceMath.getNumDelayedDays()`: replaced epoch-based Calendar
+  arithmetic with `ChronoUnit.DAYS.between()`.
+- Fixed thread-safety issues: removed shared mutable `static Calendar` fields
+  in `SSVoucherMath` and `SSBudget`.
 
 ### Removed
 - Dead multi-user/server mode code (Phase 3.5): removed `SSPostLock`,

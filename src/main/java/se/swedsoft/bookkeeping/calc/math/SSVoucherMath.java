@@ -4,7 +4,10 @@ package se.swedsoft.bookkeeping.calc.math;
 import se.swedsoft.bookkeeping.data.*;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 
+import se.swedsoft.bookkeeping.util.SSDateUtil;
+
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -14,8 +17,6 @@ import java.util.stream.Collectors;
  * Time: 17:19:30
  */
 public class SSVoucherMath {
-
-    private static Calendar cCalendar = Calendar.getInstance();
 
     private SSVoucherMath() {}
 
@@ -72,24 +73,38 @@ public class SSVoucherMath {
     }
 
     /**
+     * Checks if a voucher falls within the same period one year earlier.
      *
-     * @param iVoucher
-     * @param pFrom
-     * @param pTo
-     * @return
+     * @param iVoucher the voucher to check
+     * @param pFrom the start of the period
+     * @param pTo the end of the period
+     * @return true if the voucher date is in the previous year's equivalent period
+     * @deprecated Use {@link #inPeriodPrevYear(SSVoucher, LocalDate, LocalDate)} instead
      */
+    @Deprecated
     public static boolean inPeriodPrevYear(SSVoucher iVoucher, Date pFrom, Date pTo) {
-        cCalendar.setTime(pFrom);
-        cCalendar.add(Calendar.YEAR, -1);
+        LocalDate from = SSDateUtil.toLocalDate(pFrom);
+        LocalDate to = SSDateUtil.toLocalDate(pTo);
 
-        Date iPrevYearFrom = cCalendar.getTime();
+        return inPeriodPrevYear(iVoucher, from, to);
+    }
 
-        cCalendar.setTime(pTo);
-        cCalendar.add(Calendar.YEAR, -1);
+    /**
+     * Checks if a voucher falls within the same period one year earlier.
+     *
+     * @param iVoucher the voucher to check
+     * @param pFrom the start of the period
+     * @param pTo the end of the period
+     * @return true if the voucher date is in the previous year's equivalent period
+     */
+    public static boolean inPeriodPrevYear(SSVoucher iVoucher, LocalDate pFrom, LocalDate pTo) {
+        LocalDate iPrevYearFrom = pFrom.minusYears(1);
+        LocalDate iPrevYearTo = pTo.minusYears(1);
 
-        Date iPrevYearTo = cCalendar.getTime();
+        Date prevFrom = SSDateUtil.toDate(iPrevYearFrom);
+        Date prevTo = SSDateUtil.toDate(iPrevYearTo);
 
-        return inPeriod(iVoucher, iPrevYearFrom, iPrevYearTo);
+        return inPeriod(iVoucher, prevFrom, prevTo);
     }
 
     /**

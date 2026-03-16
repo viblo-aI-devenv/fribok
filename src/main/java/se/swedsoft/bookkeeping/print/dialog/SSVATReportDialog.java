@@ -17,7 +17,8 @@ import se.swedsoft.bookkeeping.gui.util.model.SSAccountTableModel;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,22 +108,18 @@ public class SSVATReportDialog extends SSDialog {    private static final Logger
 
         SSNewCompany iCurrentCompany = SSDB.getInstance().getCurrentCompany();
 
-        Calendar iCalendar = Calendar.getInstance();
+        LocalDate now = LocalDate.now();
+        int vatMonths = (iCurrentCompany.getVatPeriod() != null
+                && iCurrentCompany.getVatPeriod() != 0)
+                ? iCurrentCompany.getVatPeriod()
+                : 1;
+        LocalDate fromDate = now.minusMonths(vatMonths)
+                .with(TemporalAdjusters.firstDayOfMonth());
+        iFrom.setDate(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(fromDate));
 
-        if (iCurrentCompany.getVatPeriod() != null && iCurrentCompany.getVatPeriod() != 0) {
-            iCalendar.add(Calendar.MONTH, iCurrentCompany.getVatPeriod() * -1);
-        } else {
-            iCalendar.add(Calendar.MONTH, -1);
-        }
-        iCalendar.set(Calendar.DAY_OF_MONTH,
-                iCalendar.getActualMinimum(Calendar.DAY_OF_MONTH));
-        iFrom.setDate(iCalendar.getTime());
-
-        iCalendar = Calendar.getInstance();
-        iCalendar.add(Calendar.MONTH, -1);
-        iCalendar.set(Calendar.DAY_OF_MONTH,
-                iCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-        iTo.setDate(iCalendar.getTime());
+        LocalDate toDate = now.minusMonths(1)
+                .with(TemporalAdjusters.lastDayOfMonth());
+        iTo.setDate(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(toDate));
 
     }
 

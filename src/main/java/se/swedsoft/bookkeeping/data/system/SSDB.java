@@ -1008,19 +1008,14 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
 
         Date iFirstDayOfCurrent = iCurrentYear.getFrom();
 
-        // Hämta sista dagen i föregående år
-        Calendar iCalendar = Calendar.getInstance();
+        // Get the last day of the previous year (day before the current year starts)
+        java.time.LocalDate dayBeforeCurrent = se.swedsoft.bookkeeping.util.SSDateUtil
+                .toLocalDate(iFirstDayOfCurrent).minusDays(1);
 
-        iCalendar.setTime(iFirstDayOfCurrent);
-        iCalendar.add(Calendar.DATE, -1);
         for (SSNewAccountingYear iAccountingYear : iYears) {
-            Date iLastDayOfYear = iAccountingYear.getTo();
-            Calendar iNewCalendar = Calendar.getInstance();
-
-            iNewCalendar.setTime(iLastDayOfYear);
-            if (iCalendar.get(Calendar.YEAR) == iNewCalendar.get(Calendar.YEAR)
-                    && iCalendar.get(Calendar.MONTH) == iNewCalendar.get(Calendar.MONTH)
-                    && iCalendar.get(Calendar.DATE) == iNewCalendar.get(Calendar.DATE)) {
+            java.time.LocalDate lastDayOfYear = se.swedsoft.bookkeeping.util.SSDateUtil
+                    .toLocalDate(iAccountingYear.getTo());
+            if (dayBeforeCurrent.equals(lastDayOfYear)) {
                 return iAccountingYear;
             }
         }

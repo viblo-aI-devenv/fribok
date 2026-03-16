@@ -14,6 +14,7 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.EventObject;
 
@@ -76,7 +77,9 @@ public class SSDateCellEditor extends AbstractCellEditor implements TableCellEdi
 
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-        if (value instanceof Date) {
+        if (value instanceof LocalDate) {
+            setDate(se.swedsoft.bookkeeping.util.SSDateUtil.toDate((LocalDate) value));
+        } else if (value instanceof Date) {
             setDate((Date) value);
         } else {
             setDate(new Date());

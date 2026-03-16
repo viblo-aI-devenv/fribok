@@ -1,25 +1,28 @@
 package se.swedsoft.bookkeeping.gui.util.datechooser.panel;
 
 
+import se.swedsoft.bookkeeping.util.SSDateUtil;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DateFormat;
 import java.text.DateFormatSymbols;
-import java.util.Calendar;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.temporal.WeekFields;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
- * User: Andreas Lago
- * Date: 2006-apr-04
- * Time: 09:58:55
+ * Day picker panel that displays a 6x7 grid of day buttons for a given month.
  *
- * $Id$
- *
+ * <p>Internally uses {@link LocalDate} for all date arithmetic.  The legacy
+ * {@link Date} API is retained on the public surface for compatibility with
+ * {@link SSCalendar} and {@link se.swedsoft.bookkeeping.gui.util.datechooser.SSDateChooser}.
  */
 public class SSDayChooser implements ActionListener {
 
@@ -48,8 +51,8 @@ public class SSDayChooser implements ActionListener {
     // The labels for the weeks
     private List<JLabel> iWeekNames;
 
-    // The selected date
-    private Date iDate;
+    // The selected date (stored as LocalDate internally)
+    private LocalDate iLocalDate;
     // the change listeners
     private List<ActionListener> iChangeListeners;
 
@@ -112,24 +115,43 @@ public class SSDayChooser implements ActionListener {
             iWeekNamePanel.add(iLabel);
         }
 
-        setDate(new Date());
+        setLocalDate(LocalDate.now());
     }
 
     /**
-     *
-     * @return
+     * @return the selected date as a legacy Date
+     * @deprecated Use {@link #getLocalDate()} instead.
      */
+    @Deprecated
     public Date getDate() {
-        return iDate;
+        return SSDateUtil.toDate(iLocalDate);
     }
 
     /**
-     * Set the selected date
-     *
-     * @param iDate
+     * @return the selected date
      */
+    public LocalDate getLocalDate() {
+        return iLocalDate;
+    }
+
+    /**
+     * Set the selected date.
+     *
+     * @param iDate the date
+     * @deprecated Use {@link #setLocalDate(LocalDate)} instead.
+     */
+    @Deprecated
     public void setDate(Date iDate) {
-        this.iDate = iDate;
+        setLocalDate(SSDateUtil.toLocalDate(iDate));
+    }
+
+    /**
+     * Set the selected date.
+     *
+     * @param date the date
+     */
+    public void setLocalDate(LocalDate date) {
+        this.iLocalDate = date;
 
         updateDayColumns();
         updateDays();
@@ -146,106 +168,90 @@ public class SSDayChooser implements ActionListener {
     }
 
     /**
-     *
+     * Updates the day-of-week column headers using locale-aware names.
      */
     private void updateDayColumns() {
-        Calendar iCalendar = Calendar.getInstance();
+        WeekFields weekFields = WeekFields.of(Locale.getDefault());
+        DayOfWeek firstDayOfWeek = weekFields.getFirstDayOfWeek();
 
-        String[] iDayNames = new DateFormatSymbols().getShortWeekdays();
+        String[] dayNames = new DateFormatSymbols().getShortWeekdays();
 
-        int day = iCalendar.getFirstDayOfWeek();
+        DayOfWeek current = firstDayOfWeek;
+        for (JLabel iLabel : this.iDayNames) {
+            // Map DayOfWeek to Calendar day index (SUNDAY=1..SATURDAY=7)
+            int calendarDay = current.getValue() % 7 + 1; // ISO Mon=1..Sun=7 -> Sun=1..Sat=7
+            iLabel.setText(dayNames[calendarDay]);
 
-        for (JLabel iLabel: this.iDayNames) {
-            iLabel.setText(iDayNames[day]);
-
-            if (day == Calendar.SUNDAY) {
+            if (current == DayOfWeek.SUNDAY) {
                 iLabel.setForeground(sundayForeground);
             } else {
                 iLabel.setForeground(weekdayForeground);
             }
 
-            if (day < 7) {
-                day++;
-            } else {
-                day -= 6;
-            }
+            current = current.plus(1);
         }
     }
 
     /**
-     *
+     * Updates the week number labels.
      */
     private void updateWeeks() {
-        Calendar iCalendar = Calendar.getInstance();
+        WeekFields weekFields = WeekFields.of(Locale.getDefault());
+        LocalDate firstOfMonth = iLocalDate.withDayOfMonth(1);
 
-        iCalendar.setTime(iDate);
+        for (JLabel iLabel : iWeekNames) {
+            int weekNumber = firstOfMonth.get(weekFields.weekOfWeekBasedYear());
 
-        iCalendar.set(Calendar.DAY_OF_MONTH, 1);
-
-        for (JLabel iLabel: iWeekNames) {
-            int iWeekNumber = iCalendar.get(Calendar.WEEK_OF_YEAR);
-
-            if (iWeekNumber < 10) {
-                iLabel.setText('0' + Integer.toString(iWeekNumber));
+            if (weekNumber < 10) {
+                iLabel.setText("0" + weekNumber);
             } else {
-                iLabel.setText(Integer.toString(iWeekNumber));
+                iLabel.setText(Integer.toString(weekNumber));
             }
 
-            iCalendar.add(Calendar.WEEK_OF_YEAR, 1);
+            firstOfMonth = firstOfMonth.plusWeeks(1);
         }
-
     }
 
     /**
-     *
+     * Updates the day buttons for the current month.
      */
     private void updateDays() {
-        Calendar iCalendar = Calendar.getInstance();
+        WeekFields weekFields = WeekFields.of(Locale.getDefault());
+        DayOfWeek firstDayOfWeek = weekFields.getFirstDayOfWeek();
 
-        iCalendar.setTime(iDate);
+        LocalDate firstOfMonth = iLocalDate.withDayOfMonth(1);
+        int lengthOfMonth = iLocalDate.lengthOfMonth();
 
-        // Get the current month
-        int iMonth = iCalendar.get(Calendar.MONTH);
+        // Calculate offset: how many cells before the first day of the month
+        int dayOfWeekValue = firstOfMonth.getDayOfWeek().getValue(); // Mon=1..Sun=7
+        int firstDowValue = firstDayOfWeek.getValue();
+        int iStart = (dayOfWeekValue - firstDowValue + 7) % 7;
+        int iStop = iStart + lengthOfMonth;
 
-        // Move to the fist day of the month
-        iCalendar.set(Calendar.DAY_OF_MONTH, 1);
+        java.time.format.DateTimeFormatter longFormat =
+                java.time.format.DateTimeFormatter.ofLocalizedDate(java.time.format.FormatStyle.LONG);
 
-        // int iStartDay =  ;
-        // Reset to the first day in the fist week of the month
-        // iCalendar.add(Calendar.DAY_OF_YEAR, iCalendar.getFirstDayOfWeek() - iCalendar.get(Calendar.DAY_OF_WEEK) );
-        int iStart = iCalendar.get(Calendar.DAY_OF_WEEK) - iCalendar.getFirstDayOfWeek();
-
-        if (iStart < 0) {
-            iStart = iStart + 7;
-        }
-
-        int iStop = iStart + iCalendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-
-        DateFormat iFormat = DateFormat.getDateInstance(DateFormat.LONG);
         int iIndex = 0;
+        LocalDate currentDate = firstOfMonth;
 
-        for (DayButton iButton: iDayButtons) {
-            int iDay = iCalendar.get(Calendar.DAY_OF_MONTH);
-
+        for (DayButton iButton : iDayButtons) {
             // Only show the button if the day is in the current month
             if (iIndex >= iStart && iIndex < iStop) {
-                Date iCurrentDate = iCalendar.getTime();
-
                 iButton.setVisible(true);
-                iButton.setText(Integer.toString(iDay));
-                iButton.setToolTipText(iFormat.format(iCurrentDate));
-                iButton.setDate(iCurrentDate);
+                iButton.setText(Integer.toString(currentDate.getDayOfMonth()));
+                iButton.setToolTipText(currentDate.format(longFormat));
+                iButton.setLocalDate(currentDate);
 
-                if (iCurrentDate.equals(iDate)) {
+                if (currentDate.equals(iLocalDate)) {
                     iButton.setBackground(SELECTED_COLOR);
                 } else {
                     iButton.setBackground(new JButton().getBackground());
                 }
 
-                iCalendar.add(Calendar.DAY_OF_MONTH, 1);
+                currentDate = currentDate.plusDays(1);
             } else {
                 iButton.setVisible(false);
-                iButton.setDate(null);
+                iButton.setLocalDate(null);
             }
 
             iIndex++;
@@ -259,7 +265,7 @@ public class SSDayChooser implements ActionListener {
         if (e.getSource() instanceof DayButton) {
             DayButton iButton = (DayButton) e.getSource();
 
-            iDate = iButton.getDate();
+            iLocalDate = iButton.getLocalDate();
 
             notifyChangeListeners();
         }
@@ -269,7 +275,7 @@ public class SSDayChooser implements ActionListener {
     /**
      * Invoked when the date changes
      *
-     * @param iActionListener
+     * @param iActionListener the listener
      */
 
     public void addChangeListener(ActionListener iActionListener) {
@@ -319,7 +325,7 @@ public class SSDayChooser implements ActionListener {
         iWeekNames.removeAll(iWeekNames);
         iWeekNames = null;
 
-        iDate = null;
+        iLocalDate = null;
 
         iChangeListeners.removeAll(iChangeListeners);
         iChangeListeners = null;
@@ -331,7 +337,7 @@ public class SSDayChooser implements ActionListener {
     private class DayButton extends JButton {
 
         // The date to select if the user presses this button
-        private Date iDate;
+        private LocalDate iDate;
 
         /**
          * Creates a button with no set text or icon.
@@ -348,19 +354,35 @@ public class SSDayChooser implements ActionListener {
         }
 
         /**
-         *
-         * @return
+         * @return the date as a legacy Date
+         * @deprecated Use {@link #getLocalDate()} instead.
          */
+        @Deprecated
         public Date getDate() {
+            return SSDateUtil.toDate(iDate);
+        }
+
+        /**
+         * @return the date
+         */
+        public LocalDate getLocalDate() {
             return iDate;
         }
 
         /**
-         *
-         * @param iDate
+         * @param iDate the date
+         * @deprecated Use {@link #setLocalDate(LocalDate)} instead.
          */
+        @Deprecated
         public void setDate(Date iDate) {
-            this.iDate = iDate;
+            this.iDate = SSDateUtil.toLocalDate(iDate);
+        }
+
+        /**
+         * @param date the date
+         */
+        public void setLocalDate(LocalDate date) {
+            this.iDate = date;
         }
 
         @Override
@@ -381,7 +403,7 @@ public class SSDayChooser implements ActionListener {
 
         sb.append("se.swedsoft.bookkeeping.gui.util.datechooser.panel.SSDayChooser");
         sb.append("{iChangeListeners=").append(iChangeListeners);
-        sb.append(", iDate=").append(iDate);
+        sb.append(", iLocalDate=").append(iLocalDate);
         sb.append(", iDayButtons=").append(iDayButtons);
         sb.append(", iDayNamePanel=").append(iDayNamePanel);
         sb.append(", iDayNames=").append(iDayNames);
@@ -393,4 +415,3 @@ public class SSDayChooser implements ActionListener {
         return sb.toString();
     }
 }
-

@@ -172,7 +172,39 @@ keeping the application functional throughout.
     All 430 tests pass.)
 
 18. **Migrate GUI date components** -- Update date chooser panels and table
-    renderers. (325 `Calendar.` calls remain, mostly in GUI.)
+    renderers. ~~(346 `Calendar.` calls remain, mostly in GUI.)~~
+    **DONE.** All `java.util.Calendar` usage eliminated from the entire
+    codebase (main + test). Zero `Calendar` imports remain.
+    Migrated files (across multiple sessions):
+    - **Date chooser GUI:** SSDateChooser, SSCalendar, SSDayChooser,
+      SSMonthChooser, SSYearChooser, SSQuarterChooser — internal logic
+      rewritten with `LocalDate`; `SSDateChooser` exposes
+      `getLocalDate()`/`setLocalDate()` API.
+    - **Core utilities:** SSDateMath fully rewritten with `LocalDate`
+      overloads; deprecated `Date` wrappers delegate to `LocalDate`
+      counterparts.
+    - **Data classes:** SSPaymentTerm, SSBudget, SSMonth, SSPeriodicInvoice,
+      SSDB — Calendar usage removed, `LocalDate` overloads added.
+    - **Calc/math:** SSVoucherMath, SSInvoiceMath — static Calendar fields
+      removed, rewritten with `ChronoUnit`/`LocalDate`.
+    - **GUI panels/frames:** SSAccountingYearPanel, SSClearTransactionsDialog,
+      SSCustomerFrame, SSSupplierFrame, SSProductFrame, SSProjectFrame,
+      SSResultUnitFrame — Calendar fallbacks replaced with `LocalDate`.
+    - **Print/report:** SSReportFactory, SSVATReportDialog,
+      SSQuarterReportPrinter, SSCustomerRevenuePrinter,
+      SSSupplierRevenuePrinter, SSResultUnitRevenuePrinter,
+      SSProjectRevenuePrinter, SSProductRevenuePrinter, SSReminderPrinter
+      — all Calendar usage replaced with `LocalDate`/`ChronoUnit`.
+    - **Table renderers:** SSDateCellRenderer, SSDateCellEditor,
+      SSDateTimeCellRenderer — updated to handle `LocalDate`/`LocalDateTime`
+      values alongside legacy `Date`.
+    - **Tests:** SSDateMathTest, SSMonthTest, SSDBTestFixture,
+      SSInvoiceIntegrationTest, SSVoucherIntegrationTest — Calendar usage
+      removed; new `LocalDate` tests added.
+    - **Bug fixes:** SSReminderPrinter.getNumDelayedDays() and
+      SSInvoiceMath.getNumDelayedDays() had buggy epoch-based Calendar
+      arithmetic; both replaced with `ChronoUnit.DAYS.between()`.
+    All tests pass.
 
 **Human verification:** Verify date-related screens (invoice dates, accounting
 periods) display correctly.
