@@ -88,20 +88,20 @@ public class BgMaxSelectInvoiceDialog extends SSDialog {
     public int showDialog(BgMaxBetalning iBetalning) {
         iInvoices.setSelected(null);
 
-        iCurrency.setText(iBetalning.iAvsnitt.iValuta);
+        iCurrency.setText(iBetalning.getAvsnitt().getValuta());
 
-        iInformationsText.setText(iBetalning.iInformationsText);
+        iInformationsText.setText(iBetalning.getInformationsText());
 
         iReference.setText(getReferenceText(iBetalning));
 
         iBelopp.setValue(iBetalning.getBelopp());
 
-        iBetalarensNamn.setText(iBetalning.iBetalarensNamn);
-        iBetalarensOrt.setText(iBetalning.iBetalarensOrt);
-        iBetalarensPostnummer.setText(iBetalning.iBetalarensPostnummer);
-        iBetalarensAdress.setText(iBetalning.iBetalarensAdress);
-        iBetalarensLand.setText(iBetalning.iBetalarensLand);
-        iBetalarensOrganisationsnr.setText(iBetalning.iBetalarensOrganisationsnr);
+        iBetalarensNamn.setText(iBetalning.getBetalarensNamn());
+        iBetalarensOrt.setText(iBetalning.getBetalarensOrt());
+        iBetalarensPostnummer.setText(iBetalning.getBetalarensPostnummer());
+        iBetalarensAdress.setText(iBetalning.getBetalarensAdress());
+        iBetalarensLand.setText(iBetalning.getBetalarensLand());
+        iBetalarensOrganisationsnr.setText(iBetalning.getBetalarensOrganisationsnr());
 
         pack();
 
@@ -116,14 +116,14 @@ public class BgMaxSelectInvoiceDialog extends SSDialog {
     private String getReferenceText(BgMaxBetalning iBetalning) {
         StringBuilder sb = new StringBuilder();
 
-        String iText = iBetalning.iReferens;
+        String iText = iBetalning.getReferens();
 
         if (iText != null && iText.trim().length() > 0) {
             sb.append(iText).append('\n');
         }
 
-        for (BgMaxReferens iReferens : iBetalning.iReferenser) {
-            iText = iReferens.iReferens;
+        for (BgMaxReferens iReferens : iBetalning.getReferenser()) {
+            iText = iReferens.getReferens();
 
             if (iText != null && iText.trim().length() > 0) {
                 sb.append(iText).append('\n');

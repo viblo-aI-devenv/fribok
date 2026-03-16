@@ -258,7 +258,7 @@ public class SSOutpaymentFrame extends SSDefaultTableFrame {
     }
 
     private SSOutpayment getOutpayment(SSOutpayment iOutpayment) {
-        return SSDB.getInstance().getOutpayment(iOutpayment);
+        return SSDB.getInstance().getOutpayment(iOutpayment).orElse(null);
     }
 
     public void updateFrame() {

@@ -15,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.io.InputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -163,15 +164,15 @@ public class SSVATCode implements SSTableSearchable {    private static final Lo
      * @param iVATCode
      * @return the vatcode
      */
-    public static SSVATCode decode(String iVATCode) {
+    public static Optional<SSVATCode> decode(String iVATCode) {
 
         for (SSVATCode iVatCode: getValues()) {
 
             if (iVatCode.equals(iVATCode)) {
-                return iVatCode;
+                return Optional.of(iVatCode);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
 }

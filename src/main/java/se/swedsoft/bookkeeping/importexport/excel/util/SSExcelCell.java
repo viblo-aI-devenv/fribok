@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
+import java.util.Optional;
 
 import se.swedsoft.bookkeeping.util.SSDateUtil;
 
@@ -99,16 +100,16 @@ public class SSExcelCell {
      *
      * @return
      */
-    public BigDecimal getBigDecimal() {
+    public Optional<BigDecimal> getBigDecimal() {
         if (iCell instanceof NumberCell) {
             NumberCell iNumber = (NumberCell) iCell;
 
-            return new BigDecimal(iNumber.getValue());
+            return Optional.of(new BigDecimal(iNumber.getValue()));
         }
         try {
-            return new BigDecimal(iCell.getContents());
+            return Optional.of(new BigDecimal(iCell.getContents()));
         } catch (NumberFormatException e) {
-            return null;
+            return Optional.empty();
         }
     }
 

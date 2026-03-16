@@ -6,6 +6,7 @@ import se.swedsoft.bookkeeping.data.SSAccountPlan;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -91,13 +92,13 @@ public enum SSDefaultAccount implements Serializable {
      * @param iAccounts
      * @return
      */
-    public SSAccount getAccount(List<SSAccount> iAccounts) {
+    public Optional<SSAccount> getAccount(List<SSAccount> iAccounts) {
         for (SSAccount iAccount : iAccounts) {
             if (iAccount.getNumber() == iDefaultAccountNumber) {
-                return iAccount;
+                return Optional.of(iAccount);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
 }

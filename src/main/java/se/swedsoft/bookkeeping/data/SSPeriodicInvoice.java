@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.Optional;
 
 
 /**
@@ -480,7 +481,7 @@ public class SSPeriodicInvoice implements Serializable {
      *
      * @return the date
      */
-    public Date getNextDate() {
+    public Optional<Date> getNextDate() {
 
         for (SSInvoice iInvoice : getInvoices()) {
             // Skip the invoice if its already added
@@ -488,9 +489,9 @@ public class SSPeriodicInvoice implements Serializable {
                 continue;
             }
 
-            return iInvoice.getDate();
+            return Optional.ofNullable(iInvoice.getDate());
         }
-        return null;
+        return Optional.empty();
     }
 
     /**

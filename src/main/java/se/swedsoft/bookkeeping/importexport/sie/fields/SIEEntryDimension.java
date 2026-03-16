@@ -47,7 +47,7 @@ public class SIEEntryDimension implements SIEEntry {    private static final Log
 
         SIEDimension iDimension = new SIEDimension();
 
-        iDimension.setNumber(iReader.nextInteger());
+        iDimension.setNumber(iReader.nextInteger().orElse(0));
         iDimension.setName(iReader.nextString());
 
         if (iDimensions.contains(iDimension)) {

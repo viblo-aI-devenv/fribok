@@ -198,7 +198,7 @@ public class SSProduct implements SSTableSearchable, Serializable {
      * @param iLocale
      * @return
      */
-    public String getDescription(Locale iLocale) {
+    public Optional<String> getDescription(Locale iLocale) {
         if (iDescriptions == null) {
             iDescriptions = new HashMap<>();
         }
@@ -206,9 +206,9 @@ public class SSProduct implements SSTableSearchable, Serializable {
         String iDescription = iDescriptions.get(iLocale);
 
         if (iDescription == null || iDescription.trim().length() == 0) {
-            return null;
+            return Optional.empty();
         } else {
-            return iDescription;
+            return Optional.of(iDescription);
         }
     }
 
@@ -247,13 +247,13 @@ public class SSProduct implements SSTableSearchable, Serializable {
         return iProject;
     }
 
-    public SSNewProject getProject(String iNumber) {
+    public Optional<SSNewProject> getProject(String iNumber) {
         for (SSNewProject pProject : SSDB.getInstance().getProjects()) {
             if (pProject.getNumber().equals(iNumber)) {
-                return pProject;
+                return Optional.of(pProject);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     public void setProject(SSNewProject iProject) {
@@ -265,13 +265,13 @@ public class SSProduct implements SSTableSearchable, Serializable {
         return iResultUnit;
     }
 
-    public SSNewResultUnit getResultUnit(String iNumber) {
+    public Optional<SSNewResultUnit> getResultUnit(String iNumber) {
         for (SSNewResultUnit pResultUnit : SSDB.getInstance().getResultUnits()) {
             if (pResultUnit.getNumber().equals(iNumber)) {
-                return pResultUnit;
+                return Optional.of(pResultUnit);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     public void setResultUnit(SSNewResultUnit iResultUnit) {
@@ -341,13 +341,13 @@ public class SSProduct implements SSTableSearchable, Serializable {
      *
      * @return
      */
-    public BigDecimal getTaxRate() {
+    public Optional<BigDecimal> getTaxRate() {
         SSNewCompany iCompany = SSDB.getInstance().getCurrentCompany();
 
         if (iTaxCode != null && iCompany != null) {
             return iCompany.getTaxRate(iTaxCode);
         }
-        return null;
+        return Optional.empty();
     }
 
     /**
@@ -754,8 +754,8 @@ public class SSProduct implements SSTableSearchable, Serializable {
             if (iMonth.isDateInMonth(iInvoice.getDate())) {
                 for (SSSaleRow iRow : iInvoice.getRows()) {
                     if (iRow.getProductNr() != null) {
-                        if (iRow.getProductNr().equals(iNumber) && iRow.getSum() != null) {
-                            iInvoiceSum += iRow.getSum().doubleValue()
+                        if (iRow.getProductNr().equals(iNumber) && iRow.getSum().isPresent()) {
+                            iInvoiceSum += iRow.getSum().get().doubleValue()
                                     * iInvoice.getCurrencyRate().doubleValue();
                         }
                     }
@@ -770,8 +770,8 @@ public class SSProduct implements SSTableSearchable, Serializable {
             if (iMonth.isDateInMonth(iCreditInvoice.getDate())) {
                 for (SSSaleRow iRow : iCreditInvoice.getRows()) {
                     if (iRow.getProductNr() != null) {
-                        if (iRow.getProductNr().equals(iNumber) && iRow.getSum() != null) {
-                            iCreditInvoiceSum += iRow.getSum().doubleValue()
+                        if (iRow.getProductNr().equals(iNumber) && iRow.getSum().isPresent()) {
+                            iCreditInvoiceSum += iRow.getSum().get().doubleValue()
                                     * iCreditInvoice.getCurrencyRate().doubleValue();
                         }
                     }

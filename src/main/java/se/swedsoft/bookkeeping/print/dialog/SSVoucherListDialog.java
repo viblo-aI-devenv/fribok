@@ -91,8 +91,8 @@ public class SSVoucherListDialog extends SSDialog {
         iFromVoucher.setModel(SSVoucherTableModel.getDropDownModel());
         iToVoucher.setModel(SSVoucherTableModel.getDropDownModel());
 
-        iFromVoucher.setSelected(SSVoucherMath.getFirst(iVouchers));
-        iToVoucher.setSelected(SSVoucherMath.getLast(iVouchers));
+        iFromVoucher.setSelected(SSVoucherMath.getFirst(iVouchers).orElse(null));
+        iToVoucher.setSelected(SSVoucherMath.getLast(iVouchers).orElse(null));
 
         iFromVoucher.setSearchColumns(0);
         iToVoucher.setSearchColumns(0);

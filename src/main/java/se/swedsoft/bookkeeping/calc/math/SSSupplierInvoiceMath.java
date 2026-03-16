@@ -7,6 +7,7 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -67,7 +68,7 @@ public class SSSupplierInvoiceMath {
         SSSupplierInvoice iSupplierInvoice = new SSSupplierInvoice();
 
         iSupplierInvoice.setNumber(iSupplierInvoiceNr);
-        iSupplierInvoice = SSDB.getInstance().getSupplierInvoice(iSupplierInvoice);
+        iSupplierInvoice = SSDB.getInstance().getSupplierInvoice(iSupplierInvoice).orElse(null);
 
         BigDecimal iCurrencyRate = iSupplierInvoice.getCurrencyRate();
 
@@ -104,7 +105,7 @@ public class SSSupplierInvoiceMath {
         BigDecimal iTotalSum = new BigDecimal(0);
 
         for (SSSupplierInvoiceRow iRow : iSupplierInvoice.getRows()) {
-            BigDecimal iRowSum = iRow.getSum();
+            BigDecimal iRowSum = iRow.getSum().orElse(null);
 
             if (iRowSum != null) {
                 iTotalSum = iTotalSum.add(iRowSum);
@@ -410,15 +411,15 @@ public class SSSupplierInvoiceMath {
      * @param iNumber
      * @return
      */
-    public static SSSupplierInvoice getSupplierInvoice(List<SSSupplierInvoice> iSupplierInvoices, int iNumber) {
+    public static Optional<SSSupplierInvoice> getSupplierInvoice(List<SSSupplierInvoice> iSupplierInvoices, int iNumber) {
 
         for (SSSupplierInvoice iSupplierInvoice : iSupplierInvoices) {
 
             if (iSupplierInvoice.getNumber() == iNumber) {
-                return iSupplierInvoice;
+                return Optional.of(iSupplierInvoice);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     /**
@@ -427,15 +428,15 @@ public class SSSupplierInvoiceMath {
      * @param iNumber
      * @return
      */
-    public static SSSupplierInvoice getSupplierInvoiceByNumber(List<SSSupplierInvoice> iSupplierInvoices, Integer iNumber) {
+    public static Optional<SSSupplierInvoice> getSupplierInvoiceByNumber(List<SSSupplierInvoice> iSupplierInvoices, Integer iNumber) {
 
         for (SSSupplierInvoice iSupplierInvoice : iSupplierInvoices) {
 
             if (iSupplierInvoice.getNumber().equals(iNumber)) {
-                return iSupplierInvoice;
+                return Optional.of(iSupplierInvoice);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     /**
@@ -444,17 +445,17 @@ public class SSSupplierInvoiceMath {
      * @param iNumber
      * @return
      */
-    public static SSSupplierInvoice getSupplierInvoiceByReference(List<SSSupplierInvoice> iSupplierInvoices, String iNumber) {
+    public static Optional<SSSupplierInvoice> getSupplierInvoiceByReference(List<SSSupplierInvoice> iSupplierInvoices, String iNumber) {
 
         for (SSSupplierInvoice iSupplierInvoice : iSupplierInvoices) {
 
             String iReferencenumber = iSupplierInvoice.getReferencenumber();
 
             if (iReferencenumber.length() > 0 && iReferencenumber.equals(iNumber)) {
-                return iSupplierInvoice;
+                return Optional.of(iSupplierInvoice);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     /**
@@ -463,21 +464,21 @@ public class SSSupplierInvoiceMath {
      * @param iRow
      * @return
      */
-    public static SSSupplierInvoiceRow getMatchingRow(SSSupplierInvoice iSupplierInvoice, SSPurchaseOrderRow iRow) {
+    public static Optional<SSSupplierInvoiceRow> getMatchingRow(SSSupplierInvoice iSupplierInvoice, SSPurchaseOrderRow iRow) {
 
         String iProductNr = iRow.getProductNr();
 
         if (iProductNr == null) {
-            return null;
+            return Optional.empty();
         }
 
         for (SSSupplierInvoiceRow iCurrent : iSupplierInvoice.getRows()) {
 
             if (iProductNr.equals(iCurrent.getProductNr())) {
-                return iCurrent;
+                return Optional.of(iCurrent);
             }
         }
-        return null;
+        return Optional.empty();
 
     }
 

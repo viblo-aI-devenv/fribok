@@ -207,7 +207,7 @@ public class SSBudgetPrinter extends SSPrinter {
                         break;
 
                     case 2:
-                        value = iBudget.getValueForAccountAndMonth(iAccount, iMonth);
+                        value = iBudget.getValueForAccountAndMonth(iAccount, iMonth).orElse(null);
                         break;
 
                     case 3:

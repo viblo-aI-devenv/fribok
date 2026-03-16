@@ -85,25 +85,25 @@ public class SSBgMaxImporter {    private static final Logger LOG = LoggerFactor
 
         List<SSInpayment> iInpayments = new LinkedList<>();
 
-        for (BgMaxAvsnitt iAvsnitt : iBgMaxFile.iAvsnitts) {
+        for (BgMaxAvsnitt iAvsnitt : iBgMaxFile.getAvsnitts()) {
             SSInpayment iInpayment = new SSInpayment();
 
-            iInpayment.setText("Bankgiro inbetalning " + iAvsnitt.iLopnummer);
+            iInpayment.setText("Bankgiro inbetalning " + iAvsnitt.getLopnummer());
             try {
-                LocalDate parsed = LocalDate.parse(iAvsnitt.iBetalningsdag, iDateFormat);
+                LocalDate parsed = LocalDate.parse(iAvsnitt.getBetalningsdag(), iDateFormat);
                 iInpayment.setDate(SSDateUtil.toDate(parsed));
             } catch (DateTimeParseException e) {
                 LOG.error("Unexpected error", e);
             }
 
-            for (BgMaxBetalning iBetalning : iAvsnitt.iBetalningar) {
+            for (BgMaxBetalning iBetalning : iAvsnitt.getBetalningar()) {
 
                 SSInvoice iInvoice = SSInvoiceMath.getInvoiceByReference(
-                        iBetalning.iReferens);
+                        iBetalning.getReferens()).orElse(null);
 
-                if (iInvoice == null && !iBetalning.iReferenser.isEmpty()) {
-                    for (BgMaxReferens iReferens : iBetalning.iReferenser) {
-                        iInvoice = SSInvoiceMath.getInvoiceByReference(iReferens.iReferens);
+                if (iInvoice == null && !iBetalning.hasNoReferenser()) {
+                    for (BgMaxReferens iReferens : iBetalning.getReferenser()) {
+                        iInvoice = SSInvoiceMath.getInvoiceByReference(iReferens.getReferens()).orElse(null);
                     }
                 }
                 if (iInvoice == null) {

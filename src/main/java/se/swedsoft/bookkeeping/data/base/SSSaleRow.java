@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 
 /**
@@ -144,7 +145,7 @@ public class SSSaleRow implements SSTableSearchable, Serializable {
      */
     public String getDescription(Locale iLocale) {
         if (getProduct() != null) {
-            String iProductDescription = iProduct.getDescription(iLocale);
+            String iProductDescription = iProduct.getDescription(iLocale).orElse(null);
 
             if (iProductDescription != null) {
                 return iProductDescription;
@@ -527,10 +528,10 @@ public class SSSaleRow implements SSTableSearchable, Serializable {
      *
      * @return the sum of the row
      */
-    public BigDecimal getSum() {
+    public Optional<BigDecimal> getSum() {
         // If either of the unitprice or count is null we cant have a sum
         if (iUnitprice == null || iCount == null) {
-            return null;
+            return Optional.empty();
         }
 
         // Calculate the sum of the products
@@ -538,11 +539,11 @@ public class SSSaleRow implements SSTableSearchable, Serializable {
 
         // No discount
         if (iDiscount == null) {
-            return iSum;
+            return Optional.of(iSum);
         }
 
         // Subtract the discount from the sum
-        return iSum.subtract(iSum.multiply(getNormalizedDiscount()));
+        return Optional.of(iSum.subtract(iSum.multiply(getNormalizedDiscount())));
     }
 
 }

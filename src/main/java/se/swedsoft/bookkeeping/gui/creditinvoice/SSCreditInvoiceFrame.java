@@ -295,18 +295,6 @@ public class SSCreditInvoiceFrame extends SSDefaultTableFrame {
      * @param delete
      */
     
-    /* private void deleteSelectedInvoice() {
-     int[] selected = iTable.getSelectedRows();
-
-     if (selected.length == 0) return;
-
-     SSQueryDialog iDialog = new SSQueryDialog(getMainFrame(), "creditinvoiceframe.delete");
-
-     if(iDialog.getResponce()== JOptionPane.YES_OPTION) {
-     iModel.delete(selected);
-     SSDB.getInstance().notifyUpdated(SSBookkeeping.iCompany);
-     }
-     }*/
 
     private void deleteSelectedInvoice(List<SSCreditInvoice> delete) {
         if (delete.isEmpty()) {
@@ -332,7 +320,7 @@ public class SSCreditInvoiceFrame extends SSDefaultTableFrame {
     }
 
     private SSCreditInvoice getCreditInvoice(SSCreditInvoice iCreditInvoice) {
-        return SSDB.getInstance().getCreditInvoice(iCreditInvoice);
+        return SSDB.getInstance().getCreditInvoice(iCreditInvoice).orElse(null);
     }
 
     private List<SSCreditInvoice> getCreditInvoices(List<SSCreditInvoice> iCreditInvoices) {

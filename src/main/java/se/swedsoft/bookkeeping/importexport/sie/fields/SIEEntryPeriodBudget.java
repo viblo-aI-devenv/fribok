@@ -45,9 +45,9 @@ public class SIEEntryPeriodBudget implements SIEEntry {
                     SSBundleString.getString("sieimport.fielderror", iReader.peekLine()));
         }
 
-        int        iYear = iReader.nextInteger();
+        int        iYear = iReader.nextInteger().orElse(0);
         SSMonth    iMonth = iReader.nextMonth();
-        int        iAccountNumber = iReader.nextInteger();
+        int        iAccountNumber = iReader.nextInteger().orElse(0);
 
         iReader.nextArray(); // We don't support result budget for objects
         BigDecimal iSaldo = iReader.nextBigDecimal();
@@ -58,7 +58,7 @@ public class SIEEntryPeriodBudget implements SIEEntry {
             SSAccount iAccount = iCurrentYearData.getAccountPlan().getAccount(
                     iAccountNumber);
 
-            iMonth = iBudget.getMonth(iMonth);
+            iMonth = iBudget.getMonth(iMonth).orElse(null);
 
             if (iSaldo == null) {
                 iSaldo = new BigDecimal(0);
@@ -80,7 +80,7 @@ public class SIEEntryPeriodBudget implements SIEEntry {
      */
     @Override
     public boolean exportEntry(SSSIEExporter iExporter, SIEWriter iWriter, SSNewAccountingYear iCurrentYearData) throws SSExportException {
-        SSNewAccountingYear iPreviousYearData = SSDB.getInstance().getPreviousYear();
+        SSNewAccountingYear iPreviousYearData = SSDB.getInstance().getPreviousYear().orElse(null);
 
         boolean iHasData = false;
 

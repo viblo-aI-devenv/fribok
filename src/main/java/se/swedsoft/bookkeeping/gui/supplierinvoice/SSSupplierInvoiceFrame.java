@@ -476,7 +476,7 @@ public class SSSupplierInvoiceFrame extends SSDefaultTableFrame {
     }
 
     private SSSupplierInvoice getSupplierInvoice(SSSupplierInvoice iSupplierInvoice) {
-        return SSDB.getInstance().getSupplierInvoice(iSupplierInvoice);
+        return SSDB.getInstance().getSupplierInvoice(iSupplierInvoice).orElse(null);
     }
 
     private List<SSSupplierInvoice> getSupplierInvoices(List<SSSupplierInvoice> iSupplierInvoices) {

@@ -181,7 +181,7 @@ public class SSInpaymentListPrinter extends SSPrinter {
                         break;
 
                     case 5:
-                        value = iRow.getLocalValue();
+                        value = iRow.getLocalValue().orElse(null);
                         break;
                     }
 

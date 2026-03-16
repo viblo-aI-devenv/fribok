@@ -336,7 +336,7 @@ public class SSResultUnitFrame extends SSDefaultTableFrame {
     }
 
     private SSNewResultUnit getResultUnit(SSNewResultUnit iResultUnit) {
-        return SSDB.getInstance().getResultUnit(iResultUnit);
+        return SSDB.getInstance().getResultUnit(iResultUnit).orElse(null);
     }
 
     private List<SSNewResultUnit> getResultUnits(List<SSNewResultUnit> iResultUnits) {

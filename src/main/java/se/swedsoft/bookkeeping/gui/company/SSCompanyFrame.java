@@ -24,6 +24,7 @@ import javax.swing.event.InternalFrameEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Optional;
 
 
 /**
@@ -235,7 +236,7 @@ public class SSCompanyFrame extends SSDefaultTableFrame {
             return;
         }
         // Kontrollera att företaget fortfarande finns i databasen
-        iNewCompany = SSDB.getInstance().getCompany(iNewCompany);
+        iNewCompany = SSDB.getInstance().getCompany(iNewCompany).orElse(null);
         if (iNewCompany == null) {
             // Företaget fanns inte kvar i databasen. Visa felmeddelande.
             new SSErrorDialog(getMainFrame(), "companyframe.companygone");
@@ -260,16 +261,16 @@ public class SSCompanyFrame extends SSDefaultTableFrame {
         SSFrameManager.getInstance().close();
 
         // Läs in det förra öppna året för företaget
-        SSNewAccountingYear iYear = SSDBConfig.loadCompanySetting(iNewCompany.getId());
+        Optional<SSNewAccountingYear> iYear = SSDBConfig.loadCompanySetting(iNewCompany.getId());
 
-        if (iYear == null) {
+        if (iYear.isEmpty()) {
             // Inget år för företaget sparat. Öppna årsfönstret
             SSDBConfig.setYearId(iNewCompany.getId(), null);
             SSAccountingYearFrame.showFrame(getMainFrame(), 500, 300, false);
         } else {
             // Hittade ett sparat år. Sätt det som nuvarande
-            SSDB.getInstance().setCurrentYear(iYear);
-            SSDBConfig.setYearId(iNewCompany.getId(), iYear.getId());
+            SSDB.getInstance().setCurrentYear(iYear.get());
+            SSDBConfig.setYearId(iNewCompany.getId(), iYear.get().getId());
         }
         SSDB.getInstance().init(true);
     }
@@ -285,7 +286,7 @@ public class SSCompanyFrame extends SSDefaultTableFrame {
         }
 
         // Kontrollera att företaget fortfarande finns i databasen
-        pCompany = SSDB.getInstance().getCompany(pCompany);
+        pCompany = SSDB.getInstance().getCompany(pCompany).orElse(null);
         if (pCompany == null) {
             // Företaget fanns inte kvar i databasen. Visa felmeddelande.
             new SSErrorDialog(getMainFrame(), "companyframe.companygone");
@@ -321,16 +322,16 @@ public class SSCompanyFrame extends SSDefaultTableFrame {
             SSFrameManager.getInstance().close();
 
             // Läs in det förra öppna året för företaget
-            SSNewAccountingYear iYear = SSDBConfig.loadCompanySetting(pCompany.getId());
+            Optional<SSNewAccountingYear> iYear = SSDBConfig.loadCompanySetting(pCompany.getId());
 
-            if (iYear == null) {
+            if (iYear.isEmpty()) {
                 // Inget år för företaget sparat. Öppna årsfönstret
                 SSDBConfig.setYearId(pCompany.getId(), null);
                 SSAccountingYearFrame.showFrame(getMainFrame(), 500, 300, false);
             } else {
                 // Hittade ett sparat år. Sätt det som nuvarande
-                SSDB.getInstance().setCurrentYear(iYear);
-                SSDBConfig.setYearId(pCompany.getId(), iYear.getId());
+                SSDB.getInstance().setCurrentYear(iYear.get());
+                SSDBConfig.setYearId(pCompany.getId(), iYear.get().getId());
             }
             SSDB.getInstance().init(true);
         }

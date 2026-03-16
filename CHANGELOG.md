@@ -16,6 +16,12 @@ diverging from upstream version 2.2-SNAPSHOT.
   bring the codebase from Java 5/6-era style to modern Java.
 - `AGENTS.md` with build, test, lint commands and code style guidelines for
   AI-assisted development.
+- Checkstyle configuration (`checkstyle.xml`) enforcing project code style
+  guidelines (Phase 7 Step 34).
+- SpotBugs static analysis replacing abandoned FindBugs (Phase 7 Step 35).
+- JaCoCo code coverage reporting with 5.3% baseline (Phase 7 Step 36).
+- CI quality gates: Checkstyle and coverage report upload on PRs (Phase 7
+  Step 37).
 - GitHub Actions CI/CD workflow (`ci.yml`):
   - Pull request builds with `mvn clean install` on Ubuntu/JDK 21.
   - Release builds on push to master for Linux, Windows, and macOS.
@@ -44,9 +50,12 @@ diverging from upstream version 2.2-SNAPSHOT.
   (Phase 3 Step 16) (PR #14).
 - Replaced `SimpleDateFormat` usage with `DateTimeFormatter` throughout the
   codebase (Phase 3 Step 17) (PR #15).
-- Eliminated all `java.util.Calendar` usage from the codebase, migrating GUI
-  date components, print reports, table renderers, calc utilities, and data
-  classes to `java.time.LocalDate`/`ChronoUnit` (Phase 3 Step 18).
+- Migrated all `Calendar` usage to `java.time` API (Phase 3 Step 18).
+- Encapsulated 53 public mutable fields across 7 classes with proper
+  getters/setters (Phase 4 Step 19).
+- Introduced `Optional<T>` for ~100 public API methods across SSDB lookups,
+  calc/math search methods, data model getters, and parser/decoder methods;
+  reduced `return null` sites from ~419 to ~212 (Phase 4 Step 20).
 
 ### Fixed
 - CI: use `target/dist` for AppImage build output.
@@ -72,3 +81,6 @@ diverging from upstream version 2.2-SNAPSHOT.
   `SSCompanyLock`, `SSYearLock`, and all lock acquisition/release calls
   across 54+ GUI files. Simplified `SSTriggerHandler` to a direct
   `Trigger.fire()` call. Reduced `SSDB` by ~1,300 lines (PR #17).
+- Duplicate legacy entry point `SSBookkeeping.java` and 5 orphaned test data
+  files (Phase 4 Step 21). Resolved all TODOs and converted remaining
+  `System.out.printf` calls to SLF4J logging.

@@ -46,9 +46,9 @@ public class SIEEntryUnderDimension implements SIEEntry {    private static fina
 
         SIEDimension iDimension = new SIEDimension();
 
-        iDimension.setNumber(iReader.nextInteger());
+        iDimension.setNumber(iReader.nextInteger().orElse(0));
         iDimension.setName(iReader.nextString());
-        iDimension.setSuperDimension(iReader.nextInteger());
+        iDimension.setSuperDimension(iReader.nextInteger().orElse(0));
 
         if (iDimensions.contains(iDimension)) {
             LOG.info("Duplicate dimension:" + iDimension);

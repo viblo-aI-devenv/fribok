@@ -252,9 +252,9 @@ public class SSPickingslipPrinter extends SSPrinter {
                     (iSaleRow1, iSaleRow2) -> {
 
                             SSProduct iProduct1 = SSDB.getInstance().getProduct(
-                                    iSaleRow1.getProductNr());
+                                    iSaleRow1.getProductNr()).orElse(null);
                             SSProduct iProduct2 = SSDB.getInstance().getProduct(
-                                    iSaleRow2.getProductNr());
+                                    iSaleRow2.getProductNr()).orElse(null);
 
                             if (iProduct1 != null && iProduct2 != null) {
                                 if (iProduct1.getWarehouseLocation() == null

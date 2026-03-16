@@ -28,7 +28,7 @@ public class SSSalePrinterUtils {    private static final Logger LOG = LoggerFac
      */
     public static void addParametersForCompany(SSNewCompany iCompany, SSPrinter iPrinter) {
         // Company parameters
-        iPrinter.addParameter("company.logo", iCompany.getLogoImage());
+        iPrinter.addParameter("company.logo", iCompany.getLogoImage().orElse(null));
 
         iPrinter.addParameter("company.name", iCompany.getName());
         iPrinter.addParameter("company.address1", iCompany.getAddress().getAddress1());

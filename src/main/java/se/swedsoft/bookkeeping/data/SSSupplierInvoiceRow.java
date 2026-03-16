@@ -9,6 +9,7 @@ import se.swedsoft.bookkeeping.gui.util.table.SSTableSearchable;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -471,14 +472,14 @@ public class SSSupplierInvoiceRow  implements SSTableSearchable, Serializable {
      *
      * @return the sum of the row
      */
-    public BigDecimal getSum() {
+    public Optional<BigDecimal> getSum() {
         // If either of the unitprice or count is null we cant have a sum
         if (iUnitprice == null || iQuantity == null) {
-            return null;
+            return Optional.empty();
         }
 
         // Calculate the sum of the products
-        return iUnitprice.multiply(new BigDecimal(iQuantity));
+        return Optional.of(iUnitprice.multiply(new BigDecimal(iQuantity)));
     }
 
 }

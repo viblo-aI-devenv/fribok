@@ -5,6 +5,7 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -109,12 +110,12 @@ public class SSInventoryRow implements Serializable {
      *
      * @return
      */
-    public Integer getInventoryQuantity() {
+    public Optional<Integer> getInventoryQuantity() {
         if (iQuantity == null || iChange == null) {
-            return null;
+            return Optional.empty();
         }
 
-        return iQuantity + iChange;
+        return Optional.of(iQuantity + iChange);
     }
 
     /**

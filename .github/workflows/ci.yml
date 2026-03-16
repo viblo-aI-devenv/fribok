@@ -28,6 +28,18 @@ jobs:
     - name: Build and test
       run: mvn clean install
 
+    - name: Upload coverage report
+      if: runner.os == 'Linux'
+      uses: actions/upload-artifact@v4
+      with:
+        name: jacoco-report
+        path: target/site/jacoco/
+
+    - name: Run Checkstyle
+      if: runner.os == 'Linux'
+      run: mvn checkstyle:check -q
+      continue-on-error: true
+
   build_and_publish:
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     strategy:

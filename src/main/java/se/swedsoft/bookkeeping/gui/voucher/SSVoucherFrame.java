@@ -403,7 +403,7 @@ public class SSVoucherFrame extends SSDefaultTableFrame {
     }
 
     private SSVoucher getVoucher(SSVoucher iVoucher) {
-        return SSDB.getInstance().getVoucher(iVoucher);
+        return SSDB.getInstance().getVoucher(iVoucher).orElse(null);
     }
 
     private List<SSVoucher> getVouchers(List<SSVoucher> iVouchers) {

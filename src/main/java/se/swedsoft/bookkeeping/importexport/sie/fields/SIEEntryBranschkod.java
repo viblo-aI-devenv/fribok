@@ -42,9 +42,8 @@ public class SIEEntryBranschkod implements SIEEntry {
      */
     @Override
     public boolean exportEntry(SSSIEExporter iExporter, SIEWriter iWriter, SSNewAccountingYear iCurrentYearData) throws SSExportException {
-        // SSNewCompany iCompany = SSDB.getInstance().getCurrentCompany();
-
-        // TODO SNI-kod ???
+        // SNI code (branschkod) is not stored in the company data model;
+        // export 0 as a placeholder per SIE specification.
         iWriter.append(SIELabel.SIE_BKOD);
         iWriter.append(0);
         iWriter.newLine();

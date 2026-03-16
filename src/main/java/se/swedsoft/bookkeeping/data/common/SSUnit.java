@@ -8,6 +8,7 @@ import se.swedsoft.bookkeeping.gui.util.table.SSTableSearchable;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -122,15 +123,15 @@ public class SSUnit implements Serializable, SSTableSearchable {
      * @param iValue
      * @return
      */
-    public static SSUnit decode(String iValue) {
+    public static Optional<SSUnit> decode(String iValue) {
         List<SSUnit> iUnits = SSDB.getInstance().getUnits();
 
         for (SSUnit iUnit : iUnits) {
             if (iValue.equals(iUnit.iName) || iValue.equals(iUnit.iDescription)) {
-                return iUnit;
+                return Optional.of(iUnit);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
 }

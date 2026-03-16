@@ -3,6 +3,7 @@ package se.swedsoft.bookkeeping.data;
 
 import se.swedsoft.bookkeeping.calc.math.SSInvoiceMath;
 import se.swedsoft.bookkeeping.calc.math.SSVoucherMath;
+import se.swedsoft.bookkeeping.calc.util.SSAutoIncrement;
 import se.swedsoft.bookkeeping.data.base.SSSaleRow;
 import se.swedsoft.bookkeeping.data.common.SSDefaultAccount;
 import se.swedsoft.bookkeeping.data.common.SSInvoiceType;
@@ -58,7 +59,7 @@ public class SSCreditInvoice extends SSInvoice {
         SSNewCompany iCompany = SSDB.getInstance().getCurrentCompany();
 
         if (iCompany != null) {
-            setText(iCompany.getStandardText(SSStandardText.Creditinvoice));
+            setText(iCompany.getStandardText(SSStandardText.Creditinvoice).orElse(null));
         }
 
         generateVoucher();
@@ -110,7 +111,7 @@ public class SSCreditInvoice extends SSInvoice {
     public void doAutoIncrecement() {
         List<SSCreditInvoice> iCreditInvoices = SSDB.getInstance().getCreditInvoices();
 
-        int iNumber = SSDB.getInstance().getAutoIncrement().getNumber("creditinvoice");
+        int iNumber = SSDB.getInstance().getAutoIncrement().orElse(new SSAutoIncrement()).getNumber("creditinvoice");
 
         for (SSCreditInvoice iCreditInvoice: iCreditInvoices) {
 
@@ -269,31 +270,31 @@ public class SSCreditInvoice extends SSInvoice {
         // Add the total sum to the voucher
         if (iType == SSInvoiceType.NORMAL) {
             iVoucher.addVoucherRow(
-                    getDefaultAccount(iAccountPlan, SSDefaultAccount.CustomerClaim), null,
+                    getDefaultAccount(iAccountPlan, SSDefaultAccount.CustomerClaim).orElse(null), null,
                     iTotalSum);
         }
         if (iType == SSInvoiceType.CASH) {
-            iVoucher.addVoucherRow(getDefaultAccount(iAccountPlan, SSDefaultAccount.Cash),
+            iVoucher.addVoucherRow(getDefaultAccount(iAccountPlan, SSDefaultAccount.Cash).orElse(null),
                     null, iTotalSum);
         }
 
         // Add the rounding
         if (!SSDB.getInstance().getCurrentCompany().isRoundingOff()) {
             iVoucher.addVoucherRow(
-                    getDefaultAccount(iAccountPlan, SSDefaultAccount.Rounding),
+                    getDefaultAccount(iAccountPlan, SSDefaultAccount.Rounding).orElse(null),
                     iRoundingSum);
         }
 
         // Add the tax if not tax free
         if (!iTaxFree) {
             // Add the tax 1
-            iVoucher.addVoucherRow(getDefaultAccount(iAccountPlan, SSDefaultAccount.Tax1),
+            iVoucher.addVoucherRow(getDefaultAccount(iAccountPlan, SSDefaultAccount.Tax1).orElse(null),
                     iTaxSum.get(SSTaxCode.TAXRATE_1), null);
             // Add the tax 2
-            iVoucher.addVoucherRow(getDefaultAccount(iAccountPlan, SSDefaultAccount.Tax2),
+            iVoucher.addVoucherRow(getDefaultAccount(iAccountPlan, SSDefaultAccount.Tax2).orElse(null),
                     iTaxSum.get(SSTaxCode.TAXRATE_2), null);
             // Add the tax 3
-            iVoucher.addVoucherRow(getDefaultAccount(iAccountPlan, SSDefaultAccount.Tax3),
+            iVoucher.addVoucherRow(getDefaultAccount(iAccountPlan, SSDefaultAccount.Tax3).orElse(null),
                     iTaxSum.get(SSTaxCode.TAXRATE_3), null);
         }
 
@@ -301,7 +302,7 @@ public class SSCreditInvoice extends SSInvoice {
         for (SSSaleRow iRow : iRows) {
             SSVoucherRow iVoucherRow = new SSVoucherRow();
 
-            iVoucherRow.setDebet(iRow.getSum());
+            iVoucherRow.setDebet(iRow.getSum().orElse(null));
             iVoucherRow.setAccount(iRow.getAccount(iAccountPlan.getAccounts()));
             iVoucherRow.setProject(iRow.getProject(SSDB.getInstance().getProjects()));
             iVoucherRow.setResultUnit(

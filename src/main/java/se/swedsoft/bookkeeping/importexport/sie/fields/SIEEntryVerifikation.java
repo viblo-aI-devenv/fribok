@@ -46,7 +46,7 @@ public class SIEEntryVerifikation implements SIEEntry {
         SSVoucher iVoucher = new SSVoucher();
 
         String     iSerie = iReader.nextString();
-        Integer    iNumber = iReader.nextInteger();
+        Integer    iNumber = iReader.nextInteger().orElse(null);
         Date       iDate = iReader.hasNextDate() ? iReader.nextDate() : new Date();
         String     iDescription = iReader.hasNextString() ? iReader.nextString() : null;
 

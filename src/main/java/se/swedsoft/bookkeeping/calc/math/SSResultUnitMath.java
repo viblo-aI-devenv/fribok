@@ -5,6 +5,7 @@ import se.swedsoft.bookkeeping.data.SSNewResultUnit;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -19,17 +20,17 @@ public class SSResultUnitMath {
      * Returns one resultunit for the current company.
      *
      * @param pNumber
-     * @return The resultunit or null
+     * @return The resultunit or empty
      */
-    public static SSNewResultUnit getResultUnit(String pNumber) {
+    public static Optional<SSNewResultUnit> getResultUnit(String pNumber) {
 
         List<SSNewResultUnit> iResultUnits = SSDB.getInstance().getResultUnits();
 
         for (SSNewResultUnit iResultUnit: iResultUnits) {
             if (iResultUnit.getNumber().equals(pNumber)) {
-                return iResultUnit;
+                return Optional.of(iResultUnit);
             }
         }
-        return null;
+        return Optional.empty();
     }
 }

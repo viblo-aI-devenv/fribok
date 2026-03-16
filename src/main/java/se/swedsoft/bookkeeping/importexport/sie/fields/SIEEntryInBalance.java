@@ -44,8 +44,8 @@ public class SIEEntryInBalance implements SIEEntry {
                     SSBundleString.getString("sieimport.fielderror", iReader.peekLine()));
         }
 
-        int iYear = iReader.nextInteger();
-        int iAccountNumber = iReader.nextInteger();
+        int iYear = iReader.nextInteger().orElse(0);
+        int iAccountNumber = iReader.nextInteger().orElse(0);
 
         if ((iYear == 0) && (iCurrentYearData != null)) {
             Map<SSAccount, BigDecimal> iInbalance = iCurrentYearData.getInBalance();
@@ -70,7 +70,7 @@ public class SIEEntryInBalance implements SIEEntry {
      */
     @Override
     public boolean exportEntry(SSSIEExporter iExporter, SIEWriter iWriter, SSNewAccountingYear iCurrentYearData) throws SSExportException {
-        SSNewAccountingYear iPreviousYearData = SSDB.getInstance().getPreviousYear();
+        SSNewAccountingYear iPreviousYearData = SSDB.getInstance().getPreviousYear().orElse(null);
 
         boolean iHasData = false;
 

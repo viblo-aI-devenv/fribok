@@ -103,8 +103,7 @@ public class SSReportCache {    private static final Logger LOG = LoggerFactory.
 		    // if the report file hasn't been changes since the last compile,
 		    // load the compiled file, else fall through to the compile code
 		    if (iReportDate.compareTo(iCompiledDate) <= 0) {
-			System.out.printf("Loading precompiled report %s from disk...\n",
-					  iCompiledFile);
+			LOG.info("Loading precompiled report {} from disk...", iCompiledFile);
 			return loadCompiledReport(iCompiledFile);
 		    }
 		} catch (DateTimeParseException ex)  {
@@ -116,7 +115,7 @@ public class SSReportCache {    private static final Logger LOG = LoggerFactory.
             }
 
             // .. we need to recompile the report
-	    System.out.printf("Compiling and saving report %s to disk...\n", iReportResource);
+	    LOG.info("Compiling and saving report {} to disk...", iReportResource);
 
 	    InputStream is = getClass().getResourceAsStream(iReportResource);
 

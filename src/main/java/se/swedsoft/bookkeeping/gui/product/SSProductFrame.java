@@ -528,7 +528,7 @@ public class SSProductFrame extends SSDefaultTableFrame {
     }
 
     private SSProduct getProduct(SSProduct iProduct) {
-        return SSDB.getInstance().getProduct(iProduct);
+        return SSDB.getInstance().getProduct(iProduct).orElse(null);
     }
 
     private List<SSProduct> getProducts(List<SSProduct> iProducts) {

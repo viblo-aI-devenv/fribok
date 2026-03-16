@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -213,19 +214,19 @@ public class SSInpaymentMath {
     }
 
     /**
-     * Get the saldo for the sales of the current row in the sales currency, returns null if no sales
+     * Get the saldo for the sales of the current row in the sales currency, returns empty if no sales
      *
      * @param iInpaymentRow
      * @return the saldo
      */
-    public static BigDecimal getSaldo(SSInpaymentRow iInpaymentRow) {
+    public static Optional<BigDecimal> getSaldo(SSInpaymentRow iInpaymentRow) {
         SSInvoice iInvoice = iInpaymentRow.getInvoice(SSDB.getInstance().getInvoices());
 
         if (iInvoice == null) {
-            return null;
+            return Optional.empty();
         }
 
-        return SSInvoiceMath.getSaldo(iInvoice.getNumber());
+        return Optional.of(SSInvoiceMath.getSaldo(iInvoice.getNumber()));
     }
 
     /**
@@ -236,16 +237,16 @@ public class SSInpaymentMath {
      * @param iInpaymentRow
      * @return the currency rate difference
      */
-    public static BigDecimal getCurrencyRateDifference(SSInpaymentRow iInpaymentRow) {
+    public static Optional<BigDecimal> getCurrencyRateDifference(SSInpaymentRow iInpaymentRow) {
         BigDecimal iPaymentRate = iInpaymentRow.getCurrencyRate();
         BigDecimal iCurrencyRate = iInpaymentRow.getInvoiceCurrencyRate();
         BigDecimal iValue = iInpaymentRow.getValue();
 
         if (iPaymentRate == null || iCurrencyRate == null || iValue == null) {
-            return null;
+            return Optional.empty();
         }
 
-        return iValue.multiply(iPaymentRate.subtract(iCurrencyRate));
+        return Optional.of(iValue.multiply(iPaymentRate.subtract(iCurrencyRate)));
     }
 
     /**
@@ -258,10 +259,10 @@ public class SSInpaymentMath {
         BigDecimal iSum = new BigDecimal(0);
 
         for (SSInpaymentRow iRow: iInpayment.getRows()) {
-            BigDecimal iRowSum = getCurrencyRateDifference(iRow);
+            Optional<BigDecimal> iRowSum = getCurrencyRateDifference(iRow);
 
-            if (iRowSum != null) {
-                iSum = iSum.add(iRowSum);
+            if (iRowSum.isPresent()) {
+                iSum = iSum.add(iRowSum.get());
             }
         }
 

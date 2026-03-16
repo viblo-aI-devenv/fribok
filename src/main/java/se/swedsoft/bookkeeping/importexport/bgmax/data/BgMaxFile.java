@@ -4,6 +4,7 @@ package se.swedsoft.bookkeeping.importexport.bgmax.data;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.importexport.util.SSImportException;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import org.slf4j.Logger;
@@ -24,23 +25,88 @@ import org.slf4j.LoggerFactory;
 public class BgMaxFile {    private static final Logger LOG = LoggerFactory.getLogger(BgMaxFile.class);
 
 
-    public String iLayoutnamn;
-    public String iVersion;
-    public String iTidsstampel;
-    public String iTestmarkering;
+    private String iLayoutnamn;
+    private String iVersion;
+    private String iTidsstampel;
+    private String iTestmarkering;
 
-    public String iAntalBetalningsPoster;
-    public String iAntalExtraReferensPoster;
-    public String iAntalAvdragsPoster;
-    public String iAntalInsattningsPoster;
+    private String iAntalBetalningsPoster;
+    private String iAntalExtraReferensPoster;
+    private String iAntalAvdragsPoster;
+    private String iAntalInsattningsPoster;
 
-    public List<BgMaxAvsnitt> iAvsnitts;
+    private List<BgMaxAvsnitt> iAvsnitts;
 
     /**
      *
      */
     public BgMaxFile() {
         iAvsnitts = new LinkedList<>();
+    }
+
+    // ---- Getters ----
+
+    /**
+     * @return the layout name
+     */
+    public String getLayoutnamn() {
+        return iLayoutnamn;
+    }
+
+    /**
+     * @return the version
+     */
+    public String getVersion() {
+        return iVersion;
+    }
+
+    /**
+     * @return the timestamp
+     */
+    public String getTidsstampel() {
+        return iTidsstampel;
+    }
+
+    /**
+     * @return the test marking
+     */
+    public String getTestmarkering() {
+        return iTestmarkering;
+    }
+
+    /**
+     * @return the number of payment records
+     */
+    public String getAntalBetalningsPoster() {
+        return iAntalBetalningsPoster;
+    }
+
+    /**
+     * @return the number of extra reference records
+     */
+    public String getAntalExtraReferensPoster() {
+        return iAntalExtraReferensPoster;
+    }
+
+    /**
+     * @return the number of deduction records
+     */
+    public String getAntalAvdragsPoster() {
+        return iAntalAvdragsPoster;
+    }
+
+    /**
+     * @return the number of deposit records
+     */
+    public String getAntalInsattningsPoster() {
+        return iAntalInsattningsPoster;
+    }
+
+    /**
+     * @return an unmodifiable view of the sections
+     */
+    public List<BgMaxAvsnitt> getAvsnitts() {
+        return Collections.unmodifiableList(iAvsnitts);
     }
 
     /**
@@ -118,14 +184,13 @@ public class BgMaxFile {    private static final Logger LOG = LoggerFactory.getL
 
             if (iTransaktionsKod.equals("20") || iTransaktionsKod.equals("21")) {
                 iBetalning = new BgMaxBetalning();
-                iBetalning.iAvsnitt = iAvsnitt;
+                iBetalning.setAvsnitt(iAvsnitt);
 
-                iAvsnitt.iBetalningar.add(iBetalning);
+                iAvsnitt.addBetalning(iBetalning);
             } else {
 
-                if (!iAvsnitt.iBetalningar.isEmpty()) {
-                    iBetalning = iAvsnitt.iBetalningar.get(
-                            iAvsnitt.iBetalningar.size() - 1);
+                if (!iAvsnitt.hasNoBetalningar()) {
+                    iBetalning = iAvsnitt.getLastBetalning();
                 } else {
                     iBetalning = null;
                 }
@@ -227,9 +292,9 @@ public class BgMaxFile {    private static final Logger LOG = LoggerFactory.getL
      * @param iAvsnitt
      */
     public static void readOppningsPost(BgMaxLine iLine, BgMaxAvsnitt  iAvsnitt) {
-        iAvsnitt.iPlusgiroNummer = iLine.getField(13, 22);
-        iAvsnitt.iBankgiroNummer = iLine.getField(3, 12);
-        iAvsnitt.iValuta = iLine.getField(23, 25);
+        iAvsnitt.setPlusgiroNummer(iLine.getField(13, 22));
+        iAvsnitt.setBankgiroNummer(iLine.getField(3, 12));
+        iAvsnitt.setValuta(iLine.getField(23, 25));
     }
 
     /**
@@ -239,13 +304,13 @@ public class BgMaxFile {    private static final Logger LOG = LoggerFactory.getL
      * @param iAvsnitt
      */
     private static void readInsattningsPost(BgMaxLine iLine, BgMaxAvsnitt iAvsnitt) {
-        iAvsnitt.iBankKontoNummer = iLine.getField(3, 37);
-        iAvsnitt.iBetalningsdag = iLine.getField(38, 45);
-        iAvsnitt.iLopnummer = iLine.getField(46, 50);
-        iAvsnitt.iBelopp = iLine.getField(51, 65);
-        iAvsnitt.iValuta = iLine.getField(69, 71);
-        iAvsnitt.iAntal = iLine.getField(72, 79);
-        iAvsnitt.iTyp = iLine.getField(80);
+        iAvsnitt.setBankKontoNummer(iLine.getField(3, 37));
+        iAvsnitt.setBetalningsdag(iLine.getField(38, 45));
+        iAvsnitt.setLopnummer(iLine.getField(46, 50));
+        iAvsnitt.setBelopp(iLine.getField(51, 65));
+        iAvsnitt.setValuta(iLine.getField(69, 71));
+        iAvsnitt.setAntal(iLine.getField(72, 79));
+        iAvsnitt.setTyp(iLine.getField(80));
     }
 
     /**
@@ -255,13 +320,13 @@ public class BgMaxFile {    private static final Logger LOG = LoggerFactory.getL
      * @param iBetalning
      */
     public static void readBetalningsPost(BgMaxLine iLine, BgMaxBetalning iBetalning) {
-        iBetalning.iBankgiroNummer = iLine.getField(3, 12);
-        iBetalning.iReferens = iLine.getField(13, 37);
-        iBetalning.iBelopp = iLine.getField(38, 55);
-        iBetalning.iReferensKod = iLine.getField(56);
-        iBetalning.iBetalningsKanalKod = iLine.getField(57);
-        iBetalning.iBGCLopnummer = iLine.getField(58, 69);
-        iBetalning.iAvibildmarkering = iLine.getField(70);
+        iBetalning.setBankgiroNummer(iLine.getField(3, 12));
+        iBetalning.setReferens(iLine.getField(13, 37));
+        iBetalning.setBeloppRaw(iLine.getField(38, 55));
+        iBetalning.setReferensKod(iLine.getField(56));
+        iBetalning.setBetalningsKanalKod(iLine.getField(57));
+        iBetalning.setBGCLopnummer(iLine.getField(58, 69));
+        iBetalning.setAvibildmarkering(iLine.getField(70));
     }
 
     /**
@@ -271,13 +336,13 @@ public class BgMaxFile {    private static final Logger LOG = LoggerFactory.getL
      * @param iBetalning
      */
     public static void readAvdragsPost(BgMaxLine iLine, BgMaxBetalning iBetalning) {
-        iBetalning.iBankgiroNummer = iLine.getField(3, 12);
-        iBetalning.iReferens = iLine.getField(13, 37);
-        iBetalning.iBelopp = '-' + iLine.getField(38, 55);
-        iBetalning.iReferensKod = iLine.getField(56);
-        iBetalning.iBetalningsKanalKod = iLine.getField(57);
-        iBetalning.iBGCLopnummer = iLine.getField(58, 69);
-        iBetalning.iAvibildmarkering = iLine.getField(70);
+        iBetalning.setBankgiroNummer(iLine.getField(3, 12));
+        iBetalning.setReferens(iLine.getField(13, 37));
+        iBetalning.setBeloppRaw('-' + iLine.getField(38, 55));
+        iBetalning.setReferensKod(iLine.getField(56));
+        iBetalning.setBetalningsKanalKod(iLine.getField(57));
+        iBetalning.setBGCLopnummer(iLine.getField(58, 69));
+        iBetalning.setAvibildmarkering(iLine.getField(70));
     }
 
     /**
@@ -298,15 +363,15 @@ public class BgMaxFile {    private static final Logger LOG = LoggerFactory.getL
 
         BgMaxReferens iBgMaxReferens = new BgMaxReferens();
 
-        iBgMaxReferens.iBankgiroNummer = iBankgiroNummer;
-        iBgMaxReferens.iReferens = iReferens;
-        iBgMaxReferens.iBelopp = iBelopp;
-        iBgMaxReferens.iReferensKod = iReferensKod;
-        iBgMaxReferens.iBetalningsKanalKod = iBetalningsKanalKod;
-        iBgMaxReferens.iBGCLopnummer = iBGCLopnummer;
-        iBgMaxReferens.iAvibildmarkering = iAvibildmarkering;
+        iBgMaxReferens.setBankgiroNummer(iBankgiroNummer);
+        iBgMaxReferens.setReferens(iReferens);
+        iBgMaxReferens.setBelopp(iBelopp);
+        iBgMaxReferens.setReferensKod(iReferensKod);
+        iBgMaxReferens.setBetalningsKanalKod(iBetalningsKanalKod);
+        iBgMaxReferens.setBGCLopnummer(iBGCLopnummer);
+        iBgMaxReferens.setAvibildmarkering(iAvibildmarkering);
 
-        iBetalning.iReferenser.add(iBgMaxReferens);
+        iBetalning.addReferens(iBgMaxReferens);
 
     }
 
@@ -319,9 +384,9 @@ public class BgMaxFile {    private static final Logger LOG = LoggerFactory.getL
     private static void readInformationsPost(BgMaxLine iLine, BgMaxBetalning iBetalning) {
         String iInformationsText = iLine.getField(3, 52);
 
-        iBetalning.iInformationsText = iBetalning.iInformationsText == null
+        iBetalning.setInformationsText(iBetalning.getInformationsText() == null
                 ? iInformationsText
-                : iBetalning.iInformationsText + iInformationsText;
+                : iBetalning.getInformationsText() + iInformationsText);
     }
 
     /**
@@ -331,8 +396,8 @@ public class BgMaxFile {    private static final Logger LOG = LoggerFactory.getL
      * @param iBetalning
      */
     private static void readNamnPost(BgMaxLine iLine, BgMaxBetalning iBetalning) {
-        iBetalning.iBetalarensNamn = iLine.getField(3, 27);
-        iBetalning.iExtraNamnfalt = iLine.getField(38, 72);
+        iBetalning.setBetalarensNamn(iLine.getField(3, 27));
+        iBetalning.setExtraNamnfalt(iLine.getField(38, 72));
     }
 
     /**
@@ -342,8 +407,8 @@ public class BgMaxFile {    private static final Logger LOG = LoggerFactory.getL
      * @param iBetalning
      */
     private static void readAddressPost1(BgMaxLine iLine, BgMaxBetalning iBetalning) {
-        iBetalning.iBetalarensAdress = iLine.getField(3, 37);
-        iBetalning.iBetalarensPostnummer = iLine.getField(38, 46);
+        iBetalning.setBetalarensAdress(iLine.getField(3, 37));
+        iBetalning.setBetalarensPostnummer(iLine.getField(38, 46));
     }
 
     /**
@@ -353,9 +418,9 @@ public class BgMaxFile {    private static final Logger LOG = LoggerFactory.getL
      * @param iBetalning
      */
     private static void readAddressPost2(BgMaxLine iLine, BgMaxBetalning iBetalning) {
-        iBetalning.iBetalarensOrt = iLine.getField(3, 37);
-        iBetalning.iBetalarensLand = iLine.getField(38, 72);
-        iBetalning.iLandKod = iLine.getField(73, 74);
+        iBetalning.setBetalarensOrt(iLine.getField(3, 37));
+        iBetalning.setBetalarensLand(iLine.getField(38, 72));
+        iBetalning.setLandKod(iLine.getField(73, 74));
     }
 
     /**
@@ -365,6 +430,6 @@ public class BgMaxFile {    private static final Logger LOG = LoggerFactory.getL
      * @param iBetalning
      */
     private static void readOrgnummerPost(BgMaxLine iLine, BgMaxBetalning iBetalning) {
-        iBetalning.iBetalarensOrganisationsnr = iLine.getField(3, 14);
+        iBetalning.setBetalarensOrganisationsnr(iLine.getField(3, 14));
     }
 }

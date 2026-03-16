@@ -421,7 +421,7 @@ public class SSPurchaseOrderFrame extends SSDefaultTableFrame {
     }
 
     private SSPurchaseOrder getPurchaseOrder(SSPurchaseOrder iPurchaseOrder) {
-        return SSDB.getInstance().getPurchaseOrder(iPurchaseOrder);
+        return SSDB.getInstance().getPurchaseOrder(iPurchaseOrder).orElse(null);
     }
 
     private List<SSPurchaseOrder> getPurchaseOrders(List<SSPurchaseOrder> iPurchaseOrders) {

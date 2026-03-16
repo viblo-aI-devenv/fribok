@@ -8,6 +8,7 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import java.util.Optional;
 
 
 /**
@@ -25,15 +26,15 @@ public class SSProductMath {
      * @param iProductNr
      * @return
      */
-    public static SSProduct getProduct(List<SSProduct> iProducts, String iProductNr) {
+    public static Optional<SSProduct> getProduct(List<SSProduct> iProducts, String iProductNr) {
         for (SSProduct iCurrent: iProducts) {
             String iNumber = iCurrent.getNumber();
 
             if (iNumber != null && iNumber.equals(iProductNr)) {
-                return iCurrent;
+                return Optional.of(iCurrent);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     /**
@@ -131,7 +132,7 @@ public class SSProductMath {
         Map<SSProduct, BigDecimal> IInprices = new HashMap<>();
 
         for (SSProduct iProduct : iProducts) {
-            IInprices.put(iProduct, getInprice(iProduct));
+            IInprices.put(iProduct, getInprice(iProduct).orElse(null));
         }
         return IInprices;
     }
@@ -146,7 +147,7 @@ public class SSProductMath {
         Map<SSProduct, BigDecimal> IInprices = new HashMap<>();
 
         for (SSProduct iProduct : iProducts) {
-            IInprices.put(iProduct, getInprice(iProduct, iDate));
+            IInprices.put(iProduct, getInprice(iProduct, iDate).orElse(null));
         }
         return IInprices;
     }
@@ -156,7 +157,7 @@ public class SSProductMath {
      * @param iProduct
      * @return
      */
-    public static BigDecimal getInprice(SSProduct iProduct) {
+    public static Optional<BigDecimal> getInprice(SSProduct iProduct) {
         return getInprice(iProduct, null);
     }
 
@@ -166,7 +167,7 @@ public class SSProductMath {
      * @param iDate
      * @return
      */
-    public static BigDecimal getInprice(SSProduct iProduct, Date iDate) {
+    public static Optional<BigDecimal> getInprice(SSProduct iProduct, Date iDate) {
         // Paket produkt
         if (iProduct.isParcel()) {
 
@@ -187,17 +188,17 @@ public class SSProductMath {
                     continue;
                 }
 
-                BigDecimal iInprice = getInprice(iRowProduct, iDate);
+                Optional<BigDecimal> iInprice = getInprice(iRowProduct, iDate);
 
                 // Om endast en rad saknar inpris så kan vi inte räkna ut något inpris
-                if (iInprice == null) {
-                    return null;
+                if (iInprice.isEmpty()) {
+                    return Optional.empty();
                 }
 
-                iInpriceSum = iInpriceSum.add(iInprice.multiply(new BigDecimal(iQuantity)));
+                iInpriceSum = iInpriceSum.add(iInprice.get().multiply(new BigDecimal(iQuantity)));
 
             }
-            return iInpriceSum;
+            return Optional.of(iInpriceSum);
         }
         List<SSSupplierInvoice> iSupplierInvoices = SSDB.getInstance().getSupplierInvoices();
 
@@ -233,14 +234,14 @@ public class SSProductMath {
                         BigDecimal iLocalValue = SSSupplierInvoiceMath.convertToLocal(
                                 iSupplierInvoice, iValue);
 
-                        return iLocalValue == null
+                        return Optional.ofNullable(iLocalValue == null
                                 ? iProduct.getStockPrice()
-                                : iLocalValue;
+                                : iLocalValue);
                     }
                 }
             }
         }
-        return iProduct.getStockPrice();
+        return Optional.ofNullable(iProduct.getStockPrice());
     }
 
     /**
@@ -248,15 +249,15 @@ public class SSProductMath {
      * @param iProduct
      * @return
      */
-    public static BigDecimal getContribution(SSProduct iProduct) {
-        BigDecimal iInprice = getInprice(iProduct);
+    public static Optional<BigDecimal> getContribution(SSProduct iProduct) {
+        Optional<BigDecimal> iInprice = getInprice(iProduct);
 
-        if (iInprice == null || iProduct.getSellingPrice() == null) {
-            return null;
+        if (iInprice.isEmpty() || iProduct.getSellingPrice() == null) {
+            return Optional.empty();
         }
 
         // Enhetspros - Senaste inpris
-        return iProduct.getSellingPrice().subtract(iInprice);
+        return Optional.of(iProduct.getSellingPrice().subtract(iInprice.get()));
     }
 
     /**
@@ -265,15 +266,15 @@ public class SSProductMath {
      * @param iDate
      * @return
      */
-    public static BigDecimal getContribution(SSProduct iProduct, Date iDate) {
-        BigDecimal iInprice = getInprice(iProduct, iDate);
+    public static Optional<BigDecimal> getContribution(SSProduct iProduct, Date iDate) {
+        Optional<BigDecimal> iInprice = getInprice(iProduct, iDate);
 
-        if (iInprice == null || iProduct.getSellingPrice() == null) {
-            return null;
+        if (iInprice.isEmpty() || iProduct.getSellingPrice() == null) {
+            return Optional.empty();
         }
 
         // Enhetspros - Senaste inpris
-        return iProduct.getSellingPrice().subtract(iInprice);
+        return Optional.of(iProduct.getSellingPrice().subtract(iInprice.get()));
     }
 
     /**
@@ -281,21 +282,21 @@ public class SSProductMath {
      * @param iProduct
      * @return
      */
-    public static BigDecimal getContributionRate(SSProduct iProduct) {
-        BigDecimal iContribution = getContribution(iProduct);
+    public static Optional<BigDecimal> getContributionRate(SSProduct iProduct) {
+        Optional<BigDecimal> iContribution = getContribution(iProduct);
         BigDecimal iSellingPrice = iProduct.getSellingPrice();
 
-        if (iContribution == null || iSellingPrice == null) {
-            return null;
+        if (iContribution.isEmpty() || iSellingPrice == null) {
+            return Optional.empty();
         }
 
         if (iSellingPrice.signum() == 0) {
-            return null;
+            return Optional.empty();
         }
 
         // TB / Enhetspris
-        return iContribution.divide(iSellingPrice, 20, RoundingMode.HALF_UP).scaleByPowerOfTen(
-                2);
+        return Optional.of(iContribution.get().divide(iSellingPrice, 20, RoundingMode.HALF_UP).scaleByPowerOfTen(
+                2));
     }
 
     /**
@@ -304,38 +305,38 @@ public class SSProductMath {
      * @param iDate
      * @return
      */
-    public static BigDecimal getContributionRate(SSProduct iProduct, Date iDate) {
-        BigDecimal iContribution = getContribution(iProduct, iDate);
+    public static Optional<BigDecimal> getContributionRate(SSProduct iProduct, Date iDate) {
+        Optional<BigDecimal> iContribution = getContribution(iProduct, iDate);
         BigDecimal iSellingPrice = iProduct.getSellingPrice();
 
-        if (iContribution == null || iSellingPrice == null) {
-            return null;
+        if (iContribution.isEmpty() || iSellingPrice == null) {
+            return Optional.empty();
         }
 
         if (iSellingPrice.signum() == 0) {
-            return null;
+            return Optional.empty();
         }
 
         // TB / Enhetspris
-        return iContribution.divide(iSellingPrice, 20, RoundingMode.HALF_UP).scaleByPowerOfTen(
-                2);
+        return Optional.of(iContribution.get().divide(iSellingPrice, 20, RoundingMode.HALF_UP).scaleByPowerOfTen(
+                2));
     }
 
-    public static BigDecimal getContributionRate(SSProduct iProduct, Date iDate, BigDecimal iContribution) {
+    public static Optional<BigDecimal> getContributionRate(SSProduct iProduct, Date iDate, BigDecimal iContribution) {
         // BigDecimal iContribution = getContribution(iProduct, iDate);
         BigDecimal iSellingPrice = iProduct.getSellingPrice();
 
         if (iContribution == null || iSellingPrice == null) {
-            return null;
+            return Optional.empty();
         }
 
         if (iSellingPrice.signum() == 0) {
-            return null;
+            return Optional.empty();
         }
 
         // TB / Enhetspris
-        return iContribution.divide(iSellingPrice, 20, RoundingMode.HALF_UP).scaleByPowerOfTen(
-                2);
+        return Optional.of(iContribution.divide(iSellingPrice, 20, RoundingMode.HALF_UP).scaleByPowerOfTen(
+                2));
     }
 
     /**

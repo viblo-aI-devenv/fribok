@@ -186,11 +186,11 @@ public class SSVoucherTemplateImporter {
 
                 if (iColumns.containsKey(SSVoucherTemplateExporter.DEBET)
                         && iColumns.get(SSVoucherTemplateExporter.DEBET) == col) {
-                    iVoucherTemplateRow.setDebet(iCell.getBigDecimal());
+                    iVoucherTemplateRow.setDebet(iCell.getBigDecimal().orElse(null));
                 }
                 if (iColumns.containsKey(SSVoucherTemplateExporter.KREDIT)
                         && iColumns.get(SSVoucherTemplateExporter.KREDIT) == col) {
-                    iVoucherTemplateRow.setCredit(iCell.getBigDecimal());
+                    iVoucherTemplateRow.setCredit(iCell.getBigDecimal().orElse(null));
                 }
             }
 

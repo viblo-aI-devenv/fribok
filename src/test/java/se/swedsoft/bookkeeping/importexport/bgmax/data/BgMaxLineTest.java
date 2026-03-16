@@ -110,7 +110,7 @@ class BgMaxLineTest {
     void getBeloppScalesEighteenDigitStringByMinusTwoPowerOfTen() {
         BgMaxBetalning bet = new BgMaxBetalning();
         // "000000000000018000" represents 180.00 SEK (amounts in öre/cents)
-        bet.iBelopp = "000000000000018000";
+        bet.setBeloppRaw("000000000000018000");
 
         BigDecimal expected = new BigDecimal("180.00");
         assertThat(bet.getBelopp()).isEqualByComparingTo(expected);
@@ -119,7 +119,7 @@ class BgMaxLineTest {
     @Test
     void getBeloppForZeroAmount() {
         BgMaxBetalning bet = new BgMaxBetalning();
-        bet.iBelopp = "000000000000000000";
+        bet.setBeloppRaw("000000000000000000");
 
         assertThat(bet.getBelopp()).isEqualByComparingTo(BigDecimal.ZERO);
     }
@@ -127,7 +127,7 @@ class BgMaxLineTest {
     @Test
     void getBeloppForSmallAmountOneOre() {
         BgMaxBetalning bet = new BgMaxBetalning();
-        bet.iBelopp = "000000000000000001";
+        bet.setBeloppRaw("000000000000000001");
 
         assertThat(bet.getBelopp()).isEqualByComparingTo(new BigDecimal("0.01"));
     }
@@ -136,7 +136,7 @@ class BgMaxLineTest {
     void getBeloppForLargeAmount() {
         BgMaxBetalning bet = new BgMaxBetalning();
         // 1 000 000.00 SEK = 100 000 000 öre
-        bet.iBelopp = "000000000010000000";
+        bet.setBeloppRaw("000000000010000000");
 
         assertThat(bet.getBelopp()).isEqualByComparingTo(new BigDecimal("100000.00"));
     }
@@ -147,7 +147,7 @@ class BgMaxLineTest {
     void defaultConstructorInitialisesReferenser() {
         BgMaxBetalning bet = new BgMaxBetalning();
 
-        assertThat(bet.iReferenser).isNotNull().isEmpty();
+        assertThat(bet.getReferenser()).isNotNull().isEmpty();
     }
 
     // ---- BgMaxFile parse invalid input ----

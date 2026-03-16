@@ -158,7 +158,7 @@ public class SSProductExporter {    private static final Logger LOG = LoggerFact
             iRow.setNumber(2, iProduct.getSellingPrice());
             iRow.setNumber(3, iProduct.getPurchasePrice());
             iRow.setNumber(4, iProduct.getUnitFreight());
-            iRow.setNumber(5, iProduct.getTaxRate());
+            iRow.setNumber(5, iProduct.getTaxRate().orElse(null));
             iRow.setString(6,
                     iProduct.getUnit() == null ? "" : iProduct.getUnit().getName());
             iRow.setNumber(7, iProduct.getWeight());
@@ -211,7 +211,7 @@ public class SSProductExporter {    private static final Logger LOG = LoggerFact
             iSubElement = iXmlDoc.createElementNS(null, "TaxRate");
             iElement.appendChild(iSubElement);
             iNode = iXmlDoc.createTextNode(
-                    iProduct.getTaxRate() == null ? "" : iProduct.getTaxRate().toString());
+                    iProduct.getTaxRate().map(Object::toString).orElse(""));
             iSubElement.appendChild(iNode);
 
             iSubElement = iXmlDoc.createElementNS(null, "PurchasePrice");
@@ -307,7 +307,7 @@ public class SSProductExporter {    private static final Logger LOG = LoggerFact
 
             iSubElement = iXmlDoc.createElementNS(null, "EnProductDescription");
             iElement.appendChild(iSubElement);
-            iNode = iXmlDoc.createTextNode(iProduct.getDescription(new Locale("en")));
+            iNode = iXmlDoc.createTextNode(iProduct.getDescription(new Locale("en")).orElse(null));
             iSubElement.appendChild(iNode);
 
             Element iRoot2 = iXmlDoc.createElement("Detail");

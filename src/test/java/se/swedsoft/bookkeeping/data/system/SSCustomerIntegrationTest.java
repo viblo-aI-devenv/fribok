@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import se.swedsoft.bookkeeping.data.SSCustomer;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -60,10 +61,10 @@ class SSCustomerIntegrationTest {
 
         try {
             SSDBTestFixture.resetCaches();
-            SSCustomer fetched = SSDB.getInstance().getCustomer("C-IT-002");
+            Optional<SSCustomer> fetched = SSDB.getInstance().getCustomer("C-IT-002");
 
-            assertThat(fetched).isNotNull();
-            assertThat(fetched.getName()).isEqualTo("Round-Trip AB");
+            assertThat(fetched).isPresent();
+            assertThat(fetched.get().getName()).isEqualTo("Round-Trip AB");
         } finally {
             SSDB.getInstance().deleteCustomer(c);
         }
@@ -77,10 +78,10 @@ class SSCustomerIntegrationTest {
 
         try {
             SSDBTestFixture.resetCaches();
-            SSCustomer fetched = SSDB.getInstance().getCustomer("C-IT-003");
+            Optional<SSCustomer> fetched = SSDB.getInstance().getCustomer("C-IT-003");
 
-            assertThat(fetched).isNotNull();
-            assertThat(fetched.getEMail()).isEqualTo("test@roundtrip.se");
+            assertThat(fetched).isPresent();
+            assertThat(fetched.get().getEMail()).isEqualTo("test@roundtrip.se");
         } finally {
             SSDB.getInstance().deleteCustomer(c);
         }
@@ -94,10 +95,10 @@ class SSCustomerIntegrationTest {
 
         try {
             SSDBTestFixture.resetCaches();
-            SSCustomer fetched = SSDB.getInstance().getCustomer("C-IT-004");
+            Optional<SSCustomer> fetched = SSDB.getInstance().getCustomer("C-IT-004");
 
-            assertThat(fetched).isNotNull();
-            assertThat(fetched.getPhone1()).isEqualTo("08-123456");
+            assertThat(fetched).isPresent();
+            assertThat(fetched.get().getPhone1()).isEqualTo("08-123456");
         } finally {
             SSDB.getInstance().deleteCustomer(c);
         }
@@ -124,9 +125,9 @@ class SSCustomerIntegrationTest {
         SSDB.getInstance().addCustomer(c);
         SSDB.getInstance().deleteCustomer(c);
 
-        SSCustomer fetched = SSDB.getInstance().getCustomer("C-IT-DEL-002");
+        Optional<SSCustomer> fetched = SSDB.getInstance().getCustomer("C-IT-DEL-002");
 
-        assertThat(fetched).isNull();
+        assertThat(fetched).isEmpty();
     }
 
     // ---- updateCustomer ----
@@ -138,17 +139,17 @@ class SSCustomerIntegrationTest {
 
         try {
             SSDBTestFixture.resetCaches();
-            SSCustomer fetched = SSDB.getInstance().getCustomer("C-IT-UPD-001");
-            assertThat(fetched).isNotNull();
+            Optional<SSCustomer> fetched = SSDB.getInstance().getCustomer("C-IT-UPD-001");
+            assertThat(fetched).isPresent();
 
-            fetched.setName("After Update");
-            SSDB.getInstance().updateCustomer(fetched);
+            fetched.get().setName("After Update");
+            SSDB.getInstance().updateCustomer(fetched.get());
 
             SSDBTestFixture.resetCaches();
-            SSCustomer updated = SSDB.getInstance().getCustomer("C-IT-UPD-001");
+            Optional<SSCustomer> updated = SSDB.getInstance().getCustomer("C-IT-UPD-001");
 
-            assertThat(updated).isNotNull();
-            assertThat(updated.getName()).isEqualTo("After Update");
+            assertThat(updated).isPresent();
+            assertThat(updated.get().getName()).isEqualTo("After Update");
         } finally {
             SSDB.getInstance().deleteCustomer(c);
         }
@@ -157,10 +158,10 @@ class SSCustomerIntegrationTest {
     // ---- getCustomer by number ----
 
     @Test
-    void getCustomerByNumberReturnsNullForUnknownNumber() {
-        SSCustomer fetched = SSDB.getInstance().getCustomer("C-IT-DOES-NOT-EXIST");
+    void getCustomerByNumberReturnsEmptyForUnknownNumber() {
+        Optional<SSCustomer> fetched = SSDB.getInstance().getCustomer("C-IT-DOES-NOT-EXIST");
 
-        assertThat(fetched).isNull();
+        assertThat(fetched).isEmpty();
     }
 
     // -------------------------------------------------------------------------

@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 
 /**
@@ -108,7 +109,7 @@ public class SSPurchaseOrderRow implements Serializable {
      */
     public String getDescription(Locale iLocale) {
         if (getProduct() != null) {
-            String iProductDescription = iProduct.getDescription(iLocale);
+            String iProductDescription = iProduct.getDescription(iLocale).orElse(null);
 
             if (iProductDescription != null) {
                 return iProductDescription;
@@ -269,13 +270,13 @@ public class SSPurchaseOrderRow implements Serializable {
      *
      * @return the sum
      */
-    public BigDecimal getSum() {
+    public Optional<BigDecimal> getSum() {
         // If either of the unitprice or count is null we cant have a sum
         if (iUnitprice == null || iQuantity == null) {
-            return null;
+            return Optional.empty();
         }
 
-        return iUnitprice.multiply(new BigDecimal(iQuantity));
+        return Optional.of(iUnitprice.multiply(new BigDecimal(iQuantity)));
     }
 
     @Override

@@ -70,7 +70,7 @@ public class SSMail {
         SSNewCompany company = SSDB.getInstance().getCurrentCompany();
 
         SSMailMessage message = new SSMailMessage(company.getEMail(), pTo, company.getMailServer().getBccAddresses(), pSubject,
-                company.getStandardText(SSStandardText.Email), new File(PDF_FILE_DIR, pFileName).getPath());
+                company.getStandardText(SSStandardText.Email).orElse(null), new File(PDF_FILE_DIR, pFileName).getPath());
 
         // Send message
         MimeMessage mimeMessage = makeMessage(company.getMailServer(), message);

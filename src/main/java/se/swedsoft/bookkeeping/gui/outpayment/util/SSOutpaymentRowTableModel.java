@@ -236,7 +236,7 @@ public class SSOutpaymentRowTableModel extends SSTableModel<SSOutpaymentRow> {
             SSBundle.getBundle().getString("outpaymentrowtable.column.6")) {
         @Override
         public Object getValue(SSOutpaymentRow iObject) {
-            return iObject.getLocalValue();
+            return iObject.getLocalValue().orElse(null);
         }
 
         @Override
@@ -263,7 +263,7 @@ public class SSOutpaymentRowTableModel extends SSTableModel<SSOutpaymentRow> {
             SSBundle.getBundle().getString("outpaymentrowtable.column.7")) {
         @Override
         public Object getValue(SSOutpaymentRow iObject) {
-            return SSOutpaymentMath.getCurrencyRateDifference(iObject);
+            return SSOutpaymentMath.getCurrencyRateDifference(iObject).orElse(null);
         }
 
         @Override

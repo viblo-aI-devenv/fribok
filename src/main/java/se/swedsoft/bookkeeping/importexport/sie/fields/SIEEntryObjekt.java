@@ -54,7 +54,7 @@ public class SIEEntryObjekt implements SIEEntry {    private static final Logger
                     SSBundleString.getString("sieimport.fielderror", iReader.peekLine()));
         }
 
-        int iNumber = iReader.nextInteger();
+        int iNumber = iReader.nextInteger().orElse(0);
 
         SIEDimension iDimension = iImporter.getDimension(iNumber);
 

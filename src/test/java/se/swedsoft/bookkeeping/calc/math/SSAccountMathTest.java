@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -241,9 +242,10 @@ class SSAccountMathTest {
 
         List<SSAccount> accounts = Collections.singletonList(a1);
 
-        SSAccount result = SSAccountMath.getAccountWithVATCode(accounts, "25", defaultAccount);
+        Optional<SSAccount> result = SSAccountMath.getAccountWithVATCode(accounts, "25", defaultAccount);
 
-        assertThat(result.getNumber()).isEqualTo(1000);
+        assertThat(result).isPresent();
+        assertThat(result.get().getNumber()).isEqualTo(1000);
     }
 
     @Test
@@ -254,13 +256,14 @@ class SSAccountMathTest {
 
         List<SSAccount> accounts = Collections.singletonList(a1);
 
-        SSAccount result = SSAccountMath.getAccountWithVATCode(accounts, "25", defaultAccount);
+        Optional<SSAccount> result = SSAccountMath.getAccountWithVATCode(accounts, "25", defaultAccount);
 
-        assertThat(result.getNumber()).isEqualTo(9999);
+        assertThat(result).isPresent();
+        assertThat(result.get().getNumber()).isEqualTo(9999);
     }
 
     @Test
-    void getAccountWithVATCodeReturnsNullWhenMultipleMatches() {
+    void getAccountWithVATCodeReturnsEmptyWhenMultipleMatches() {
         SSAccount a1 = new SSAccount(1000);
         a1.setVATCode("25");
         SSAccount a2 = new SSAccount(2000);
@@ -269,9 +272,9 @@ class SSAccountMathTest {
 
         List<SSAccount> accounts = Arrays.asList(a1, a2);
 
-        SSAccount result = SSAccountMath.getAccountWithVATCode(accounts, "25", defaultAccount);
+        Optional<SSAccount> result = SSAccountMath.getAccountWithVATCode(accounts, "25", defaultAccount);
 
-        assertThat(result).isNull();
+        assertThat(result).isEmpty();
     }
 
     // ---- getSumByVATCodeForAccounts ----

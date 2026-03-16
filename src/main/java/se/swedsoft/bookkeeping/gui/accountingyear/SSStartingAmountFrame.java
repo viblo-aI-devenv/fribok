@@ -238,7 +238,7 @@ public class SSStartingAmountFrame extends SSDefaultTableFrame {
      *
      */
     private void importFromLastYearBalanceReport() {
-        SSNewAccountingYear iPreviousYear = SSDB.getInstance().getPreviousYear();
+        SSNewAccountingYear iPreviousYear = SSDB.getInstance().getPreviousYear().orElse(null);
 
         // If nothing selected, return
         if (iPreviousYear == null) {

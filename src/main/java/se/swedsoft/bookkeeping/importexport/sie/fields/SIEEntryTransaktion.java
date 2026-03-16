@@ -99,7 +99,7 @@ public class SIEEntryTransaktion implements SIEEntry {
                     SSBundleString.getString("sieimport.fielderror", iReader.peekLine()));
         }
 
-        int          iAccountNumber = iReader.nextInteger();
+        int          iAccountNumber = iReader.nextInteger().orElse(0);
         List<String> iObjects = iReader.nextArray();
         BigDecimal   iAmmount = iReader.nextBigDecimal();
 
@@ -123,7 +123,7 @@ public class SIEEntryTransaktion implements SIEEntry {
         SSNewProject iProject = null;
 
         while (iObjectIterator.hasNext()) {
-            int iDimension = iObjectIterator.nextInteger();
+            int iDimension = iObjectIterator.nextInteger().orElse(0);
             String iNum = iObjectIterator.next();
 
             if (iNum == null) {
@@ -132,14 +132,14 @@ public class SIEEntryTransaktion implements SIEEntry {
 
             // Resultatenhet, #DIM 1
             if (iDimension == 1) {
-                iResultUnit = SSResultUnitMath.getResultUnit(iNum);
+                iResultUnit = SSResultUnitMath.getResultUnit(iNum).orElse(null);
 
                 // if(iResultUnit == null)
                 // throw new RuntimeException("Resultunit not defined: " + iNum);
             }
             // Projekt, #DIM 6
             if (iDimension == 6) {
-                iProject = SSProjectMath.getProject(SSDB.getInstance().getProjects(), iNum);
+                iProject = SSProjectMath.getProject(SSDB.getInstance().getProjects(), iNum).orElse(null);
 
                 // if(iProject == null)
                 // throw new RuntimeException("Project not defined: " + iNum);

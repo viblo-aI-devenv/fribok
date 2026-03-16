@@ -12,6 +12,7 @@ import se.swedsoft.bookkeeping.gui.util.table.model.SSTableModel;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.Optional;
 
 
 /**
@@ -126,12 +127,12 @@ public class SSPeriodicInvoiceTableModel extends SSTableModel<SSPeriodicInvoice>
             SSBundle.getBundle().getString("periodicinvoicetable.column.4")) {
         @Override
         public Object getValue(SSPeriodicInvoice iObject) {
-            Date iNext = iObject.getNextDate();
+            Optional<Date> iNext = iObject.getNextDate();
 
             DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
-            return iNext != null
-                    ? iFormat.format(iNext)
+            return iNext.isPresent()
+                    ? iFormat.format(iNext.get())
                     : SSBundle.getBundle().getString("periodicinvoiceframe.concluded");
         }
 

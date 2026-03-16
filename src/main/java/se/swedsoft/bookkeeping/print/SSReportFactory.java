@@ -398,11 +398,11 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
 
         // Get the R1, R2 and A accounts
         final SSAccount accountR1 = SSAccountMath.getAccountWithVATCode(iAccounts, "R1",
-                iAccountingYear.getAccountPlan().getAccount(1650));
+                iAccountingYear.getAccountPlan().getAccount(1650)).orElse(null);
         final SSAccount accountR2 = SSAccountMath.getAccountWithVATCode(iAccounts, "R2",
-                iAccountingYear.getAccountPlan().getAccount(2650));
+                iAccountingYear.getAccountPlan().getAccount(2650)).orElse(null);
         final SSAccount accountA = SSAccountMath.getAccountWithVATCode(iAccounts, "A",
-                iAccountingYear.getAccountPlan().getAccount(3740));
+                iAccountingYear.getAccountPlan().getAccount(3740)).orElse(null);
 
         String voucherName = String.format(bundle.getString("vatbasis.vouchername"),
                 format.format(localFrom), format.format(localTo));

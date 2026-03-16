@@ -44,7 +44,7 @@ public class SIEEntryKonto implements SIEEntry {
         }
         SSAccount iAccount = new SSAccount();
 
-        iAccount.setNumber(iReader.nextInteger());
+        iAccount.setNumber(iReader.nextInteger().orElse(0));
         iAccount.setDescription(iReader.next());
 
         if (!iAccountPlan.getAccounts().contains(iAccount)) {

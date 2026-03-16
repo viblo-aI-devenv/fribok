@@ -211,8 +211,8 @@ public class SSNewProject implements Serializable, SSTableSearchable {
             if (iMonth.isDateInMonth(iInvoice.getDate())) {
                 for (SSSaleRow iRow : iInvoice.getRows()) {
                     if (iRow.getProjectNr() != null) {
-                        if (iRow.getProjectNr().equals(iNumber) && iRow.getSum() != null) {
-                            iInvoiceSum += iRow.getSum().doubleValue()
+                        if (iRow.getProjectNr().equals(iNumber) && iRow.getSum().isPresent()) {
+                            iInvoiceSum += iRow.getSum().get().doubleValue()
                                     * iInvoice.getCurrencyRate().doubleValue();
                         }
                     }
@@ -227,8 +227,8 @@ public class SSNewProject implements Serializable, SSTableSearchable {
             if (iMonth.isDateInMonth(iCreditInvoice.getDate())) {
                 for (SSSaleRow iRow : iCreditInvoice.getRows()) {
                     if (iRow.getProjectNr() != null) {
-                        if (iRow.getProjectNr().equals(iNumber) && iRow.getSum() != null) {
-                            iCreditInvoiceSum += iRow.getSum().doubleValue()
+                        if (iRow.getProjectNr().equals(iNumber) && iRow.getSum().isPresent()) {
+                            iCreditInvoiceSum += iRow.getSum().get().doubleValue()
                                     * iCreditInvoice.getCurrencyRate().doubleValue();
                         }
                     }

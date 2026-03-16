@@ -251,11 +251,11 @@ public class SSCompany implements Serializable {    private static final Logger 
      * @param iStandardtext
      * @return
      */
-    public String getStandardText(SSStandardText iStandardtext) {
+    public Optional<String> getStandardText(SSStandardText iStandardtext) {
         if (iStandardTexts != null) {
-            return iStandardTexts.get(iStandardtext);
+            return Optional.ofNullable(iStandardTexts.get(iStandardtext));
         } else {
-            return null;
+            return Optional.empty();
         }
 
     }
@@ -300,14 +300,14 @@ public class SSCompany implements Serializable {    private static final Logger 
      * @param iDefaultAccount
      * @return
      */
-    public SSAccount getDefaultAccount(SSAccountPlan iAccountPlan, SSDefaultAccount iDefaultAccount) {
+    public Optional<SSAccount> getDefaultAccount(SSAccountPlan iAccountPlan, SSDefaultAccount iDefaultAccount) {
         Integer iAccountNumber = iDefaultAccounts.get(iDefaultAccount);
 
         if (iAccountNumber == null) {
-            return null;
+            return Optional.empty();
         }
 
-        return iAccountPlan.getAccount(iAccountNumber);
+        return Optional.ofNullable(iAccountPlan.getAccount(iAccountNumber));
     }
 
     /**
@@ -854,17 +854,17 @@ public class SSCompany implements Serializable {    private static final Logger 
      * @param iTaxCode
      * @return
      */
-    public BigDecimal getTaxRate(SSTaxCode iTaxCode) {
+    public Optional<BigDecimal> getTaxRate(SSTaxCode iTaxCode) {
         if (iTaxCode == SSTaxCode.TAXRATE_1) {
-            return  iTaxrate1;
+            return  Optional.ofNullable(iTaxrate1);
         }
         if (iTaxCode == SSTaxCode.TAXRATE_2) {
-            return  iTaxrate2;
+            return  Optional.ofNullable(iTaxrate2);
         }
         if (iTaxCode == SSTaxCode.TAXRATE_3) {
-            return  iTaxrate3;
+            return  Optional.ofNullable(iTaxrate3);
         }
-        return null;
+        return Optional.empty();
     }
 
     // ///////////////////////////////////////////////////
@@ -1255,8 +1255,8 @@ public class SSCompany implements Serializable {    private static final Logger 
 
             if (iMonth.isDateInMonth(iTenderDate)) {
                 for (SSSaleRow iRow : iTender.getRows()) {
-                    if (iRow.getSum() != null) {
-                        sum += iRow.getSum().doubleValue()
+                    if (iRow.getSum().isPresent()) {
+                        sum += iRow.getSum().get().doubleValue()
                                 * iTender.getCurrencyRate().doubleValue();
                     }
                 }
@@ -1310,8 +1310,8 @@ public class SSCompany implements Serializable {    private static final Logger 
 
             if (iMonth.isDateInMonth(iOrderDate)) {
                 for (SSSaleRow iRow : iOrder.getRows()) {
-                    if (iRow.getSum() != null) {
-                        sum += iRow.getSum().doubleValue()
+                    if (iRow.getSum().isPresent()) {
+                        sum += iRow.getSum().get().doubleValue()
                                 * iOrder.getCurrencyRate().doubleValue();
                     }
                 }
@@ -1360,8 +1360,8 @@ public class SSCompany implements Serializable {    private static final Logger 
 
             if (iMonth.isDateInMonth(iInvoiceDate)) {
                 for (SSSaleRow iRow : iInvoice.getRows()) {
-                    if (iRow.getSum() != null) {
-                        suminvoices += iRow.getSum().doubleValue()
+                    if (iRow.getSum().isPresent()) {
+                        suminvoices += iRow.getSum().get().doubleValue()
                                 * iInvoice.getCurrencyRate().doubleValue();
                     }
                 }
@@ -1375,8 +1375,8 @@ public class SSCompany implements Serializable {    private static final Logger 
 
             if (iMonth.isDateInMonth(iCreditInvoiceDate)) {
                 for (SSSaleRow iRow : iCreditInvoice.getRows()) {
-                    if (iRow.getSum() != null) {
-                        sumcreditinvoices += iRow.getSum().doubleValue()
+                    if (iRow.getSum().isPresent()) {
+                        sumcreditinvoices += iRow.getSum().get().doubleValue()
                                 * iCreditInvoice.getCurrencyRate().doubleValue();
                     }
                 }
@@ -1774,10 +1774,10 @@ public class SSCompany implements Serializable {    private static final Logger 
      *
      * @return
      */
-    public Image getLogoImage() {
+    public Optional<Image> getLogoImage() {
         // The logotype is null
         if (iLogotype == null) {
-            return null;
+            return Optional.empty();
         }
 
         // Create the file
@@ -1785,7 +1785,7 @@ public class SSCompany implements Serializable {    private static final Logger 
 
         // The file doesn't exists, return null
         if (!iFile.exists()) {
-            return null;
+            return Optional.empty();
         }
 
         Image iImage = null;
@@ -1795,7 +1795,7 @@ public class SSCompany implements Serializable {    private static final Logger 
         } catch (IOException e) {
             LOG.error("Unexpected error", e);
         }
-        return iImage;
+        return Optional.ofNullable(iImage);
 
     }
 

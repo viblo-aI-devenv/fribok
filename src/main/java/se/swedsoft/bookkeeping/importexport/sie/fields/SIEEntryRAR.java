@@ -42,7 +42,7 @@ public class SIEEntryRAR implements SIEEntry {
                     SSBundleString.getString("sieimport.fielderror", iReader.peekLine()));
         }
 
-        int        iYear = iReader.nextInteger();
+        int        iYear = iReader.nextInteger().orElse(0);
         Date       iFrom = iReader.nextDate();
         Date       iTo = iReader.nextDate();
 
@@ -66,7 +66,7 @@ public class SIEEntryRAR implements SIEEntry {
      */
     @Override
     public boolean exportEntry(SSSIEExporter iExporter, SIEWriter iWriter, SSNewAccountingYear iCurrentYearData) throws SSExportException {
-        SSNewAccountingYear iPreviousYearData = SSDB.getInstance().getPreviousYear();
+        SSNewAccountingYear iPreviousYearData = SSDB.getInstance().getPreviousYear().orElse(null);
 
         if (iPreviousYearData != null) {
             iWriter.append(SIELabel.SIE_RAR);

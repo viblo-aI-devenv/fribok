@@ -49,7 +49,7 @@ public class SSInterestInvoicePanel {
 
         SSAccount iSelected = SSDB.getInstance().getCurrentCompany().getDefaultAccount(
                 SSDB.getInstance().getCurrentAccountPlan(),
-                SSDefaultAccount.InterestProfit);
+                SSDefaultAccount.InterestProfit).orElse(null);
 
         iAccount.setModel(SSAccountTableModel.getDropDownModel());
         iAccount.setSearchColumns(0);

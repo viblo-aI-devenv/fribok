@@ -445,7 +445,7 @@ public class SSSupplierFrame extends SSDefaultTableFrame {
     }
 
     private SSSupplier getSupplier(SSSupplier iSupplier) {
-        return SSDB.getInstance().getSupplier(iSupplier);
+        return SSDB.getInstance().getSupplier(iSupplier).orElse(null);
     }
 
     private List<SSSupplier> getSuppliers(List<SSSupplier> iSuppliers) {

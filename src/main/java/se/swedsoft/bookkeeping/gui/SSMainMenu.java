@@ -110,8 +110,8 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
         InputStream stream = getClass().getResourceAsStream(MENU_RES);
         iMenuLoader.loadMenus(stream);
 
-        iMenuLoader.setEnabled("Company", /*SSBookkeeping.iCompany.getData()  != null*/false);
-        iMenuLoader.setEnabled("Year"   , /*SSBookkeeping.iCompany.getCurrentYear()     != null*/false);
+        iMenuLoader.setEnabled("Company", false);
+        iMenuLoader.setEnabled("Year", false);
 
         loadActions();
 
@@ -622,7 +622,7 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
                     SSNewAccountingYear.openWarningDialogNoYearData(iMainFrame);
                     return;
                 }
-                SSNewAccountingYear previousYearData = SSDB.getInstance().getPreviousYear();
+                SSNewAccountingYear previousYearData = SSDB.getInstance().getPreviousYear().orElse(null);
 
                 SSReportFactory.buildResultReport(iMainFrame, bundle, yearData, previousYearData);
 
@@ -940,7 +940,7 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
                         }
 
                         for(SSPeriodicInvoice iPeriodicInvoice : SSDB.getInstance().getPeriodicInvoices()){
-                            if(iPeriodicInvoice.getDate().before(iDate) && iPeriodicInvoice.getNextDate() == null)
+                            if(iPeriodicInvoice.getDate().before(iDate) && iPeriodicInvoice.getNextDate().isEmpty())
                                 SSDB.getInstance().deletePeriodicInvoice(iPeriodicInvoice);
                         }
 

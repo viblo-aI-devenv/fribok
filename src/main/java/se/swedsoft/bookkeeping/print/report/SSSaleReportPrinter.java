@@ -307,7 +307,7 @@ public class SSSaleReportPrinter extends SSPrinter {
                         SSProduct iProduct = new SSProduct();
 
                         iProduct.setNumber(iRow.getProductNr());
-                        iProduct = SSDB.getInstance().getProduct(iProduct);
+                        iProduct = SSDB.getInstance().getProduct(iProduct).orElse(null);
 
                         if (iProduct == null || iProduct.isParcel()) {
                             continue;
@@ -337,21 +337,21 @@ public class SSSaleReportPrinter extends SSPrinter {
                 for (SSSaleRow iRow : iInvoice.getRows()) {
                     if (iRow.getProductNr() != null) {
                         SSProduct iProduct = SSDB.getInstance().getProduct(
-                                iRow.getProductNr());
+                                iRow.getProductNr()).orElse(null);
 
                         if (iProduct == null || iRow.getQuantity() == null) {
                             continue;
                         }
-                        if (iRow.getSum() != null) {
+                        if (iRow.getSum().isPresent()) {
                             if (iAverageSellingPrice.containsKey(iProduct.getNumber())) {
                                 iAverageSellingPrice.put(iProduct.getNumber(),
                                         iAverageSellingPrice.get(iProduct.getNumber()).add(
                                         SSInvoiceMath.convertToLocal(iInvoice,
-                                        iRow.getSum())));
+                                        iRow.getSum().get())));
                             } else {
                                 iAverageSellingPrice.put(iProduct.getNumber(),
                                         SSInvoiceMath.convertToLocal(iInvoice,
-                                        iRow.getSum()));
+                                        iRow.getSum().get()));
                             }
                         }
 
@@ -373,20 +373,20 @@ public class SSSaleReportPrinter extends SSPrinter {
                 for (SSSaleRow iRow : iCreditInvoice.getRows()) {
                     if (iRow.getProductNr() != null) {
                         SSProduct iProduct = SSDB.getInstance().getProduct(
-                                iRow.getProductNr());
+                                iRow.getProductNr()).orElse(null);
 
                         if (iProduct == null || iRow.getQuantity() == null) {
                             continue;
                         }
 
-                        if (iRow.getSum() != null) {
+                        if (iRow.getSum().isPresent()) {
                             if (iAverageSellingPrice.containsKey(iProduct.getNumber())) {
                                 iAverageSellingPrice.put(iProduct.getNumber(),
                                         iAverageSellingPrice.get(iProduct.getNumber()).subtract(
-                                        iRow.getSum()));
+                                        iRow.getSum().get()));
                             } else {
                                 iAverageSellingPrice.put(iProduct.getNumber(),
-                                        iRow.getSum().negate());
+                                        iRow.getSum().get().negate());
                             }
                         }
 
@@ -409,7 +409,7 @@ public class SSSaleReportPrinter extends SSPrinter {
 
                 for (SSProductRow iRow : iProduct.getParcelRows()) {
                     SSProduct iRowProduct = SSDB.getInstance().getProduct(
-                            iRow.getProductNr());
+                            iRow.getProductNr()).orElse(null);
 
                     // Undvik inf loop
                     if (iRowProduct == null || iProduct.equals(iRowProduct)) {
@@ -473,7 +473,7 @@ public class SSSaleReportPrinter extends SSPrinter {
 
             iContributionRate.put(iProduct.getNumber(),
                     SSProductMath.getContributionRate(iProduct, iTo,
-                    iContribution.get(iProduct.getNumber())));
+                    iContribution.get(iProduct.getNumber())).orElse(null));
         }
     }
 

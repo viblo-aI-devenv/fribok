@@ -31,7 +31,7 @@ public class SIEEntryFlagga implements SIEEntry {    private static final Logger
             throw new SSImportException(SIELabel.SIE_FLAGGA + " Missing parameter");
         }
 
-        if (iReader.nextInteger() == 1) {
+        if (iReader.nextInteger().orElse(0) == 1) {
             LOG.info("(SIEEntryFlagga) The file has already been imported, ignored.");
         }
         return true;

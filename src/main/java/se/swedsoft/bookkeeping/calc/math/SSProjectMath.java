@@ -4,6 +4,7 @@ package se.swedsoft.bookkeeping.calc.math;
 import se.swedsoft.bookkeeping.data.SSNewProject;
 
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -19,15 +20,15 @@ public class SSProjectMath {
      *
      * @param iProjects
      * @param iNumber
-     * @return The project or null
+     * @return The project or empty
      */
-    public static SSNewProject getProject(List<SSNewProject> iProjects, String iNumber) {
+    public static Optional<SSNewProject> getProject(List<SSNewProject> iProjects, String iNumber) {
         for (SSNewProject iProject: iProjects) {
             if (iProject.getNumber().equals(iNumber)) {
-                return iProject;
+                return Optional.of(iProject);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
 }

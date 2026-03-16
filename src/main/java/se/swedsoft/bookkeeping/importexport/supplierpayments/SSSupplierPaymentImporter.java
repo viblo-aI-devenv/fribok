@@ -104,11 +104,11 @@ public class SSSupplierPaymentImporter {    private static final Logger LOG = Lo
                 Integer iInvoiceNr = iPostTK14.getInvoiceNr();
 
                 iSupplierInvoice = SSSupplierInvoiceMath.getSupplierInvoiceByNumber(
-                        SSDB.getInstance().getSupplierInvoices(), iInvoiceNr);
+                        SSDB.getInstance().getSupplierInvoices(), iInvoiceNr).orElse(null);
 
                 if (iSupplierInvoice == null) {
                     iSupplierInvoice = SSSupplierInvoiceMath.getSupplierInvoiceByReference(
-                            SSDB.getInstance().getSupplierInvoices(), iReference);
+                            SSDB.getInstance().getSupplierInvoices(), iReference).orElse(null);
                 }
 
                 if (iSupplierInvoice != null) {
@@ -134,11 +134,11 @@ public class SSSupplierPaymentImporter {    private static final Logger LOG = Lo
                 Integer iInvoiceNr = iPostTK54.getInvoiceNr();
 
                 iSupplierInvoice = SSSupplierInvoiceMath.getSupplierInvoiceByNumber(
-                        SSDB.getInstance().getSupplierInvoices(), iInvoiceNr);
+                        SSDB.getInstance().getSupplierInvoices(), iInvoiceNr).orElse(null);
 
                 if (iSupplierInvoice == null) {
                     iSupplierInvoice = SSSupplierInvoiceMath.getSupplierInvoiceByReference(
-                            SSDB.getInstance().getSupplierInvoices(), iReference);
+                            SSDB.getInstance().getSupplierInvoices(), iReference).orElse(null);
                 }
 
                 if (iSupplierInvoice != null) {

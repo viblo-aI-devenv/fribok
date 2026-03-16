@@ -267,7 +267,7 @@ public class SSIndeliveryFrame extends SSDefaultTableFrame {
     }
 
     private SSIndelivery getIndelivery(SSIndelivery iIndelivery) {
-        return SSDB.getInstance().getIndelivery(iIndelivery);
+        return SSDB.getInstance().getIndelivery(iIndelivery).orElse(null);
     }
 
     public void updateFrame() {

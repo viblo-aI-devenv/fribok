@@ -449,7 +449,7 @@ public class SSCustomer implements Serializable, SSTableSearchable {
      * @return
      */
     public SSCurrency getInvoiceCurrency() {
-        return SSDB.getInstance().getCurrency(iInvoiceCurrency);
+        return SSDB.getInstance().getCurrency(iInvoiceCurrency).orElse(null);
     }
 
     /**

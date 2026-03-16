@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import se.swedsoft.bookkeeping.data.SSSupplier;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -44,6 +45,7 @@ class SSSupplierIntegrationTest {
         SSDB.getInstance().addSupplier(s);
 
         try {
+            SSDBTestFixture.resetCaches();
             List<SSSupplier> all = SSDB.getInstance().getSuppliers();
 
             assertThat(all).extracting(SSSupplier::getNumber).contains("S-IT-001");
@@ -59,10 +61,10 @@ class SSSupplierIntegrationTest {
 
         try {
             SSDBTestFixture.resetCaches();
-            SSSupplier fetched = SSDB.getInstance().getSupplier(s);
+            Optional<SSSupplier> fetched = SSDB.getInstance().getSupplier(s);
 
-            assertThat(fetched).isNotNull();
-            assertThat(fetched.getName()).isEqualTo("Round-Trip Leverantör");
+            assertThat(fetched).isPresent();
+            assertThat(fetched.get().getName()).isEqualTo("Round-Trip Leverantör");
         } finally {
             SSDB.getInstance().deleteSupplier(s);
         }
@@ -76,10 +78,10 @@ class SSSupplierIntegrationTest {
 
         try {
             SSDBTestFixture.resetCaches();
-            SSSupplier fetched = SSDB.getInstance().getSupplier(s);
+            Optional<SSSupplier> fetched = SSDB.getInstance().getSupplier(s);
 
-            assertThat(fetched).isNotNull();
-            assertThat(fetched.getEMail()).isEqualTo("lev@example.se");
+            assertThat(fetched).isPresent();
+            assertThat(fetched.get().getEMail()).isEqualTo("lev@example.se");
         } finally {
             SSDB.getInstance().deleteSupplier(s);
         }
@@ -93,10 +95,10 @@ class SSSupplierIntegrationTest {
 
         try {
             SSDBTestFixture.resetCaches();
-            SSSupplier fetched = SSDB.getInstance().getSupplier(s);
+            Optional<SSSupplier> fetched = SSDB.getInstance().getSupplier(s);
 
-            assertThat(fetched).isNotNull();
-            assertThat(fetched.getPhone1()).isEqualTo("08-999888");
+            assertThat(fetched).isPresent();
+            assertThat(fetched.get().getPhone1()).isEqualTo("08-999888");
         } finally {
             SSDB.getInstance().deleteSupplier(s);
         }
@@ -124,9 +126,9 @@ class SSSupplierIntegrationTest {
         SSDB.getInstance().deleteSupplier(s);
 
         SSDBTestFixture.resetCaches();
-        SSSupplier fetched = SSDB.getInstance().getSupplier(s);
+        Optional<SSSupplier> fetched = SSDB.getInstance().getSupplier(s);
 
-        assertThat(fetched).isNull();
+        assertThat(fetched).isEmpty();
     }
 
     // ---- updateSupplier ----
@@ -138,30 +140,30 @@ class SSSupplierIntegrationTest {
 
         try {
             SSDBTestFixture.resetCaches();
-            SSSupplier fetched = SSDB.getInstance().getSupplier(s);
-            assertThat(fetched).isNotNull();
+            Optional<SSSupplier> fetched = SSDB.getInstance().getSupplier(s);
+            assertThat(fetched).isPresent();
 
-            fetched.setName("After Update Lev");
-            SSDB.getInstance().updateSupplier(fetched);
+            fetched.get().setName("After Update Lev");
+            SSDB.getInstance().updateSupplier(fetched.get());
 
             SSDBTestFixture.resetCaches();
-            SSSupplier updated = SSDB.getInstance().getSupplier(s);
+            Optional<SSSupplier> updated = SSDB.getInstance().getSupplier(s);
 
-            assertThat(updated).isNotNull();
-            assertThat(updated.getName()).isEqualTo("After Update Lev");
+            assertThat(updated).isPresent();
+            assertThat(updated.get().getName()).isEqualTo("After Update Lev");
         } finally {
             SSDB.getInstance().deleteSupplier(s);
         }
     }
 
-    // ---- getSupplier returns null for unknown ----
+    // ---- getSupplier returns empty for unknown ----
 
     @Test
-    void getSupplierReturnsNullForUnknownNumber() {
+    void getSupplierReturnsEmptyForUnknownNumber() {
         SSSupplier unknown = supplier("S-IT-UNKNOWN-999", "Ghost");
-        SSSupplier fetched = SSDB.getInstance().getSupplier(unknown);
+        Optional<SSSupplier> fetched = SSDB.getInstance().getSupplier(unknown);
 
-        assertThat(fetched).isNull();
+        assertThat(fetched).isEmpty();
     }
 
     // -------------------------------------------------------------------------

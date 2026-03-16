@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Optional;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributeListImpl;
 import org.slf4j.Logger;
@@ -114,9 +115,9 @@ public class SSDBConfig {    private static final Logger LOG = LoggerFactory.get
         }
     }
 
-    public static SSNewAccountingYear loadCompanySetting(Integer pCompanyId) {
+    public static Optional<SSNewAccountingYear> loadCompanySetting(Integer pCompanyId) {
         if (pCompanyId == null) {
-            return null;
+            return Optional.empty();
         }
         DOMParser iParser = new DOMParser();
 
@@ -137,7 +138,7 @@ public class SSDBConfig {    private static final Logger LOG = LoggerFactory.get
                         String iResult = iCompanyElement.getAttribute("yearid");
 
                         if (iResult == null || iResult.length() == 0) {
-                            return null;
+                            return Optional.empty();
                         }
                         SSNewAccountingYear iYear = new SSNewAccountingYear();
 
@@ -150,7 +151,7 @@ public class SSDBConfig {    private static final Logger LOG = LoggerFactory.get
         } catch (IOException | SAXException ex) {
             LOG.error("Unexpected error", ex);
         }
-        return null;
+        return Optional.empty();
     }
 
     static {

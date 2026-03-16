@@ -3,6 +3,7 @@ package se.swedsoft.bookkeeping.data;
 
 import se.swedsoft.bookkeeping.calc.math.SSInvoiceMath;
 import se.swedsoft.bookkeeping.calc.math.SSVoucherMath;
+import se.swedsoft.bookkeeping.calc.util.SSAutoIncrement;
 import se.swedsoft.bookkeeping.data.base.SSSale;
 import se.swedsoft.bookkeeping.data.base.SSSaleRow;
 import se.swedsoft.bookkeeping.data.common.SSDefaultAccount;
@@ -96,7 +97,7 @@ public class SSInvoice extends SSSale {
         if (iCompany != null) {
             setDelayInterest(iCompany.getDelayInterest());
 
-            setText(iCompany.getStandardText(SSStandardText.Customerinvoice));
+            setText(iCompany.getStandardText(SSStandardText.Customerinvoice).orElse(null));
 
             setTaxRate1(iCompany.getTaxRate1());
             setTaxRate2(iCompany.getTaxRate2());
@@ -125,7 +126,7 @@ public class SSInvoice extends SSSale {
         SSNewCompany iCompany = SSDB.getInstance().getCurrentCompany();
 
         if (iCompany != null) {
-            iText = iCompany.getStandardText(SSStandardText.Customerinvoice);
+            iText = iCompany.getStandardText(SSStandardText.Customerinvoice).orElse(null);
         }
     }
 
@@ -158,7 +159,7 @@ public class SSInvoice extends SSSale {
      */
     @Override
     public void doAutoIncrecement() {
-        int iNumber = SSDB.getInstance().getAutoIncrement().getNumber("invoice");
+        int iNumber = SSDB.getInstance().getAutoIncrement().orElse(new SSAutoIncrement()).getNumber("invoice");
 
         for (SSInvoice iInvoice: SSDB.getInstance().getInvoices()) {
 
@@ -426,9 +427,10 @@ public class SSInvoice extends SSSale {
     public void append(SSOrder iOrder) {
         for (SSSaleRow iRow : iOrder.getRows()) {
 
-            SSSaleRow iMatchingRow = SSInvoiceMath.getMatchingRow(this, iRow);
+            Optional<SSSaleRow> iMatchingRowOpt = SSInvoiceMath.getMatchingRow(this, iRow);
 
-            if (iMatchingRow != null) {
+            if (iMatchingRowOpt.isPresent()) {
+                SSSaleRow iMatchingRow = iMatchingRowOpt.get();
                 Integer iQuantity = iMatchingRow.getQuantity();
 
                 if (iQuantity != null) {
@@ -486,31 +488,31 @@ public class SSInvoice extends SSSale {
         // Add the total sum to the voucher
         if (iType == SSInvoiceType.NORMAL) {
             iVoucher.addVoucherRow(
-                    getDefaultAccount(iAccountPlan, SSDefaultAccount.CustomerClaim),
+                    getDefaultAccount(iAccountPlan, SSDefaultAccount.CustomerClaim).orElse(null),
                     iTotalSum, null);
         }
         if (iType == SSInvoiceType.CASH) {
-            iVoucher.addVoucherRow(getDefaultAccount(iAccountPlan, SSDefaultAccount.Cash),
+            iVoucher.addVoucherRow(getDefaultAccount(iAccountPlan, SSDefaultAccount.Cash).orElse(null),
                     iTotalSum, null);
         }
 
         // Add the rounding
         if (!SSDB.getInstance().getCurrentCompany().isRoundingOff()) {
             iVoucher.addVoucherRow(
-                    getDefaultAccount(iAccountPlan, SSDefaultAccount.Rounding),
+                    getDefaultAccount(iAccountPlan, SSDefaultAccount.Rounding).orElse(null),
                     iRoundingSum.negate());
         }
 
         // Add the tax if not tax free
         if (!iTaxFree) {
             // Add the tax 1
-            iVoucher.addVoucherRow(getDefaultAccount(iAccountPlan, SSDefaultAccount.Tax1),
+            iVoucher.addVoucherRow(getDefaultAccount(iAccountPlan, SSDefaultAccount.Tax1).orElse(null),
                     null, iTaxSum.get(SSTaxCode.TAXRATE_1));
             // Add the tax 2
-            iVoucher.addVoucherRow(getDefaultAccount(iAccountPlan, SSDefaultAccount.Tax2),
+            iVoucher.addVoucherRow(getDefaultAccount(iAccountPlan, SSDefaultAccount.Tax2).orElse(null),
                     null, iTaxSum.get(SSTaxCode.TAXRATE_2));
             // Add the tax 3
-            iVoucher.addVoucherRow(getDefaultAccount(iAccountPlan, SSDefaultAccount.Tax3),
+            iVoucher.addVoucherRow(getDefaultAccount(iAccountPlan, SSDefaultAccount.Tax3).orElse(null),
                     null, iTaxSum.get(SSTaxCode.TAXRATE_3));
         }
 
@@ -518,7 +520,7 @@ public class SSInvoice extends SSSale {
         for (SSSaleRow iRow : iRows) {
             SSVoucherRow iVoucherRow = new SSVoucherRow();
 
-            iVoucherRow.setCredit(iRow.getSum());
+            iVoucherRow.setCredit(iRow.getSum().orElse(null));
             iVoucherRow.setAccount(iRow.getAccount(iAccountPlan.getAccounts()));
             iVoucherRow.setProject(iRow.getProject(SSDB.getInstance().getProjects()));
             iVoucherRow.setResultUnit(

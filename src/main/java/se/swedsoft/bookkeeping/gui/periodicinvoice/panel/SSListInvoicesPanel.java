@@ -62,7 +62,7 @@ public class SSListInvoicesPanel {
         // Första faktueringsdatum
         iDate.setDate(iPeriodicInvoice.getDate());
         // Nästa fakturadatum
-        iNext.setDate(iPeriodicInvoice.getNextDate());
+        iNext.setDate(iPeriodicInvoice.getNextDate().orElse(null));
         // Antal fakturor
         iCount.setValue(iPeriodicInvoice.getCount());
         // Periodtid i månader
