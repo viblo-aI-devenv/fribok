@@ -1,465 +1,145 @@
-# Fribok Modernization Plan
-
-This document outlines a phased plan to modernize the Fribok codebase from its
-current Java 5/6-era coding style to modern Java idioms and practices, while
-keeping the application functional throughout.
-
-## Current State
-
-| Metric | Value |
-|--------|-------|
-| Codebase age | ~17 years (first commit 2009) |
-| Lines of Java | ~149,400 |
-| Java files | 639 production, 25 test |
-| GUI files (Swing) | 310 Java + 111 IntelliJ `.form` files |
-| Test coverage | 430 test methods across 25 test classes |
-| Java target | 21 (code written in Java 5/6 style) |
-| Logging | SLF4J + Logback (done; 4 stray `System.out.printf` remain in 3 files) |
-| Persistence | Java serialization into HSQLDB `OBJECT` columns |
-| Date/time | `java.util.Date` / `Calendar` (migration started; `SimpleDateFormat` fully eliminated) |
-
-### Key Issues by Count
-
-| Category | Occurrences | Notes |
-|----------|:-----------:|-------|
-| Old date/time API (`import java.util.Date`) | 140 files | 66 `new Date()`, 325 `Calendar.`, 0 `SimpleDateFormat` |
-| Java serialization (`implements Serializable`) | 45 classes | |
-| `return null` (no `Optional`) | ~212 | Down from ~419; remaining are GUI/print/framework |
-| Mutable public fields | 0 | Encapsulated in Step 19 |
-| `synchronized` blocks | 11 | SSDB and threading code |
-| Raw types / `Vector` | 0 | `Vector` class fully removed; last naming artifact cleaned in Step 22 |
-| Stray `System.out.printf` | 0 | All converted to SLF4J in Step 21 |
-| Dead server/locking code | 0 | Removed in Phase 3.5 |
-| Broad `catch (Exception)` | 0 | Fixed in Phase 1 |
-| Old-style try/finally (no try-with-resources) | 0 | Fixed in Phase 1 |
-| Deprecated boxing constructors | 0 | Fixed in Phase 1 |
+# Fribok Modernization Backlog
+
+This file tracks only modernization work that is still incomplete.
+
+Completed work belongs in `CHANGELOG.md` and git history, not here.
+
+## Current Snapshot
+
+| Area | Current state |
+|------|---------------|
+| Java target | 21 |
+| Tests | JUnit 5 + integration tests in place |
+| Logging | SLF4J + Logback in place |
+| Build tooling | Checkstyle, SpotBugs, JaCoCo, and CI are configured |
+| Date/time migration | Partially complete: `SimpleDateFormat` is gone, but legacy `Date` usage remains |
+| Persistence | Still based on Java serialization stored in HSQLDB `OBJECT` columns |
+
+## Remaining Work
+
+### 1. Finish Date/Time Modernization
+
+Status: partially complete
+
+Current repo state:
+- `140` production files still import `java.util.Date`
+- `63` `new Date()` calls remain in production code
+- `4` `Calendar` usages remain in production code
+- `0` `SimpleDateFormat` usages remain
+
+Remaining tasks:
+- Replace remaining `Date`-based APIs with `java.time` types where practical
+- Remove or isolate deprecated bridge methods that still exist only for legacy callers
+- Eliminate the remaining `Calendar` usage in:
+  - `src/main/java/se/swedsoft/bookkeeping/gui/invoice/util/SSInterestInvoiceTableModel.java`
+  - `src/main/java/se/swedsoft/bookkeeping/gui/util/datechooser/SSDateChooser.java`
+- Re-evaluate whether GUI date widgets can move fully to `java.time` without `Date` adapters
+
+Done when:
+- production code no longer depends on `Calendar`
+- legacy `Date` usage is either removed or clearly constrained to unavoidable framework boundaries
 
----
-
-## Progress Overview
+### 2. Replace Serialization-Based Persistence
+
+Status: not started
+
+Current repo state:
+- `46` production classes still implement `Serializable`
+- storage is still built around serialized objects in HSQLDB
+- HSQLDB is still `1.8.0.10`
+
+Remaining tasks:
+- Decide the target persistence strategy
+  - normalized SQL schema
+  - JSON/text document storage
+  - another transitional approach on newer HSQLDB
+- Design a migration path from existing user databases
+- Build a migration tool that can read old serialized-object data and write the new format
+- Incrementally remove `Serializable` from domain and backup models once the storage layer no longer depends on it
+- Keep backup/restore working across the migration
+
+Done when:
+- new persistence format is implemented
+- existing user data can be migrated safely
+- domain model evolution no longer depends on Java serialization compatibility
+
+### 3. Replace or Remove Obsolete Dependencies
+
+Status: not started
+
+Current repo state:
+- `javax.mail` still present in `pom.xml` and referenced from mail/report code
+- `jxl` still powers Excel import/export code
+- `com.lowagie:itext` 4.2.2 is still used
+- IntelliJ GUI Designer runtime/plugin is still required
+- `javax.help:javahelp` is still present and actively referenced
+- Spring dependencies remain in `pom.xml`, but there are `0` `org.springframework` references in `src/main/java`
+- there are `111` IntelliJ `.form` files under `src/main`
+
+Remaining tasks:
+- Replace `javax.mail` with `jakarta.mail`
+- Replace `jxl` with Apache POI or another maintained Excel library
+- Replace `itext` 4.x with a maintained alternative such as OpenPDF if licensing/functionality fit
+- Decide whether to keep or eliminate IntelliJ GUI Designer as a build dependency
+- Replace or remove JavaHelp
+- Remove unused Spring dependencies after confirming nothing depends on them indirectly
+
+Done when:
+- obsolete libraries are removed from `pom.xml`
+- code paths using them have been migrated and verified
+
+### 4. Tighten Build and Quality Gates
+
+Status: partially complete
+
+Current repo state:
+- Checkstyle is configured, but `failOnViolation` is disabled
+- SpotBugs is configured, but `failOnError` is disabled
+- JaCoCo reports are generated
+- PR CI runs `mvn clean install` on Linux, Windows, and macOS
+- Linux CI runs Checkstyle as `continue-on-error`
+- CI does not currently enforce SpotBugs or a coverage threshold
 
-| Phase | Description | Status |
-|:-----:|-------------|--------|
-| 0 | Test Foundation | **Done** |
-| 1 | Syntax Modernization | **Done** |
-| 2 | Logging | **Done** |
-| 3 | Date/Time Migration | **Done** |
-| 3.5 | Remove Multi-User/Server Mode | **Done** |
-| 4 | Code Quality & Encapsulation | **Done** |
-| 5 | Persistence Architecture | Not started |
-| 6 | Dependency Updates | Not started |
-| 7 | Build & Tooling | **Done** |
+Remaining tasks:
+- Reduce the existing Checkstyle baseline until violations can fail the build
+- Reduce the SpotBugs baseline until issues can fail the build
+- Decide whether to enforce a minimum coverage threshold
+- Add any missing CI checks needed to make tooling enforcement consistent
 
----
+Done when:
+- style and static analysis checks can block regressions in CI
+- coverage policy is explicit and enforced if desired
 
-## Phase 0: Test Foundation ✓ DONE
+### 5. Optional API Cleanup After Core Modernization
 
-**Goal:** Establish the safety net that makes all subsequent changes safe.
+Status: partially complete
 
-**Risk:** None | **Effort:** Medium
+Current repo state:
+- `245` `return null` sites remain in production code
+- many of the remaining sites are GUI, table-model, print, importer, or framework-boundary methods
 
-1. **Upgrade to JUnit 5** -- Replace `junit:junit:4.13.2` with JUnit Jupiter 5.x
-   in `pom.xml`. Migrate the 4 existing tests. Add `maven-surefire-plugin`
-   configuration. ✓
+Remaining tasks:
+- Review remaining `return null` sites and separate intentional framework contracts from avoidable legacy API design
+- Introduce `Optional<T>` only where it improves correctness and API clarity
+- Avoid forcing `Optional` into Swing/table-model patterns where `null` is part of the expected contract
 
-2. **Add test infrastructure** -- Add Mockito and AssertJ as test dependencies.
-   Fix existing test issues (resource leak in `BgMaxFileTest`, reversed assertion
-   args in `SSAutoIncrementTest`, mixed JUnit 3/4 imports). ✓
+Done when:
+- remaining `null` returns are either removed or intentionally documented by category
 
-3. **Write tests for core business logic** -- Before changing any production
-   code, cover:
-   - Calculator classes (`SSBalanceCalculator`, `SSResultCalculator`,
-     `SSSalesTaxCalculator`, `SSOCRNumber`) ✓
-   - Data model classes (`SSInvoice`, `SSVoucher`, `SSAccount`, `SSCustomer`,
-     `SSSupplier`) ✓
-   - Import/export (`SIEReader`, `SIEWriter`, `BgMaxFile`, Excel importers) ✓
-   - Utility classes (`SSUtil`, `SSAutoIncrement`, `SSConfig`) ✓
-   - **DB integration tests** (`SSCustomer`, `SSInvoice`, `SSSupplier`,
-     `SSVoucher` CRUD operations against an in-memory HSQLDB instance). ✓
-     These are tagged `@Tag("integration")` and run in a separate surefire
-     execution with a forked JVM to prevent SSDB singleton state from leaking.
-
-   > **Note:** The HSQLDB account-plan seed step loads three XLS files
-   > whose names originally contained the Swedish character `ä`.  These
-   > were renamed to ASCII (`Enskild-naringsidkare`) in PR #12 to avoid
-   > locale-dependent build failures.  The `LANG=C.UTF-8` workaround is
-   > no longer required.
-
-4. **Add `.editorconfig`** -- Enforce 4-space indentation, UTF-8, LF line
-   endings, 120-character line width. ✓
-
----
-
-## Phase 1: Low-Risk Syntax Modernization ✓ DONE
-
-**Goal:** Bring code to modern Java idioms without changing behavior.
-
-**Risk:** Low | **Effort:** Medium-High
-
-5. **Replace deprecated boxing constructors** -- `new Integer(x)` to
-   `Integer.valueOf(x)` (2 occurrences). ✓
-
-6. **Fix raw types** -- Add generics to raw-type usages. Replace `Vector`
-   with `ArrayList`. ✓ (Note: 6 `Vector` references remain — verify if intentional.)
-
-7. **Add try-with-resources** -- Convert all old-style try/finally blocks.
-   Fix resources that leak on exceptions. ✓
-
-8. **Use diamond operator** -- Replace explicit type arguments with `<>` across
-   the codebase. ✓
-
-9. **Replace anonymous inner classes with lambdas** -- `Runnable`,
-   `ActionListener`, `Comparator`, etc. Large but mechanical transformation
-   across GUI code. ✓
-
-10. **Introduce streams** -- Replace simple filter/map/collect `for` loops with
-    `Stream` pipelines where it improves readability. ✓
-
-11. **Fix broad exception catching** -- Replace `catch (Exception e)` with
-    specific exception types (33 occurrences). Remove silently swallowed
-    exceptions. ✓
-
----
-
-## Phase 2: Logging ✓ DONE
-
-**Goal:** Replace ad-hoc console output with structured logging.
-
-**Risk:** Low | **Effort:** Low
-
-12. **Add SLF4J + Logback** -- Add `slf4j-api` and `logback-classic` to
-    `pom.xml`. Create `logback.xml` with sensible defaults (console + file
-    appender, log rotation). ✓
-
-13. **Replace `System.out.println` / `System.err.println`** -- Convert all 109
-    occurrences to SLF4J log calls at appropriate levels. ✓ (4 stray
-    `System.out.printf` remain in `Bookkeeping.java:155`,
-    `SSBookkeeping.java:114`, and `SSReportCache.java:104,117`.)
-
-14. **Replace `e.printStackTrace()`** -- Convert to `log.error("message", e)`
-    with contextual messages. ✓
-
----
-
-## Phase 3: Date/Time API Migration
-
-**Goal:** Migrate from `java.util.Date`/`Calendar`/`SimpleDateFormat` to
-`java.time.*`.
-
-**Risk:** Medium | **Effort:** Medium
-
-15. **Create adapter utilities** -- Bridge methods between `java.util.Date` and
-    `java.time.LocalDate`/`LocalDateTime` for gradual migration (Swing date
-    pickers and JasperReports may still need `Date`). ✓ (`SSDateUtil.java`
-    created with full adapter API.)
-
-16. **Migrate data model classes** -- Change date fields in domain objects from
-    `Date` to `LocalDate`/`LocalDateTime`. Use `SSDateUtil` for boundary
-    conversion. (143 files still import `java.util.Date`; 89 `new Date()`
-    calls remain.) ✓ (16 domain model classes migrated: internal fields changed
-    to `LocalDate`, deprecated `Date`-typed bridge getters/setters added for
-    backward compatibility with ~50 GUI/print callers, new `LocalDate`-typed
-    API added, `new Date()` replaced with `SSDateUtil.today()`, tests updated.)
-
-17. **Migrate import/export** -- Replace `SimpleDateFormat` with
-    `DateTimeFormatter` (thread-safe) in SIE, BgMax, and Excel code. (33
-    `SimpleDateFormat` usages remain; note `SIEWriter` has a static
-    `SimpleDateFormat` field — a potential concurrency bug.) ✓ (All 13 files
-    migrated: SIEWriter, SIEIterator, SSBgMaxImporter, LBinLine,
-    SSWritableExcelRow, SSExcelCell, SSOrderImporter, SSOrderExporter,
-    SSDBConfig, SSReportCache, SSInvoicePrinter, SSCreditinvoicePrinter,
-    SSMainMenu. Zero `SimpleDateFormat` imports remain in codebase.
-    All 430 tests pass.)
-
-18. **Migrate GUI date components** -- Update date chooser panels and table
-    renderers. ~~(346 `Calendar.` calls remain, mostly in GUI.)~~
-    **DONE.** All `java.util.Calendar` usage eliminated from the entire
-    codebase (main + test). Zero `Calendar` imports remain.
-    Migrated files (across multiple sessions):
-    - **Date chooser GUI:** SSDateChooser, SSCalendar, SSDayChooser,
-      SSMonthChooser, SSYearChooser, SSQuarterChooser — internal logic
-      rewritten with `LocalDate`; `SSDateChooser` exposes
-      `getLocalDate()`/`setLocalDate()` API.
-    - **Core utilities:** SSDateMath fully rewritten with `LocalDate`
-      overloads; deprecated `Date` wrappers delegate to `LocalDate`
-      counterparts.
-    - **Data classes:** SSPaymentTerm, SSBudget, SSMonth, SSPeriodicInvoice,
-      SSDB — Calendar usage removed, `LocalDate` overloads added.
-    - **Calc/math:** SSVoucherMath, SSInvoiceMath — static Calendar fields
-      removed, rewritten with `ChronoUnit`/`LocalDate`.
-    - **GUI panels/frames:** SSAccountingYearPanel, SSClearTransactionsDialog,
-      SSCustomerFrame, SSSupplierFrame, SSProductFrame, SSProjectFrame,
-      SSResultUnitFrame — Calendar fallbacks replaced with `LocalDate`.
-    - **Print/report:** SSReportFactory, SSVATReportDialog,
-      SSQuarterReportPrinter, SSCustomerRevenuePrinter,
-      SSSupplierRevenuePrinter, SSResultUnitRevenuePrinter,
-      SSProjectRevenuePrinter, SSProductRevenuePrinter, SSReminderPrinter
-      — all Calendar usage replaced with `LocalDate`/`ChronoUnit`.
-    - **Table renderers:** SSDateCellRenderer, SSDateCellEditor,
-      SSDateTimeCellRenderer — updated to handle `LocalDate`/`LocalDateTime`
-      values alongside legacy `Date`.
-    - **Tests:** SSDateMathTest, SSMonthTest, SSDBTestFixture,
-      SSInvoiceIntegrationTest, SSVoucherIntegrationTest — Calendar usage
-      removed; new `LocalDate` tests added.
-    - **Bug fixes:** SSReminderPrinter.getNumDelayedDays() and
-      SSInvoiceMath.getNumDelayedDays() had buggy epoch-based Calendar
-      arithmetic; both replaced with `ChronoUnit.DAYS.between()`.
-    All tests pass.
-
-**Human verification:** Verify date-related screens (invoice dates, accounting
-periods) display correctly.
-
----
-
-## Phase 3.5: Remove Multi-User/Server Mode ✓ DONE
-
-**Goal:** Remove the dead client-server/multi-user networking and locking code.
-
-**Risk:** Low | **Effort:** Medium
-
-The application originally supported a multi-user mode where multiple clients
-connected to a shared HSQLDB server via JDBC, with two custom TCP socket
-channels: port 2222 for a text-based pessimistic locking protocol, and port
-2223 for broadcasting database trigger notifications to all clients.  The
-server component (`se.swedsoft.SSServer`) was **not in this repository** and
-is presumed lost.  The multi-user mode could not function and was dead code
-that complicated every modification to SSDB, triggers, and GUI code.
-
-### What was removed
-
-**Deleted entirely:**
-- `SSPostLock.java` -- Record-level locking over port 2222 socket (was imported
-  by ~54 GUI Frame/Dialog files) ✓
-- `SSCompanyLock.java` -- Company-level locking over port 2222 socket ✓
-- `SSYearLock.java` -- Accounting-year-level locking over port 2222 socket ✓
-
-**Simplified `SSTriggerHandler.java`:** ✓
-- Removed `extends Thread`, the `run()` socket-listener method, and the
-  constructor socket code (port 2223).  Kept only the `Trigger.fire()` method
-  for local/embedded HSQLDB triggers.
-
-**Removed from `SSDB.java`:** ✓
-- Fields: `iSocket`, `iIn`, `iOut`, `iLocking`
-- Methods: `getLocking()`, `setLocking()`, `openSocket()`,
-  `startupRemote()`, `loadSelectedDatabase()`, `removeClient()`,
-  `getReader()`, `getWriter()`, `getSocket()`, `LockDatabase()`,
-  `UnlockDatabase()`, `createServerTriggers()`
-- Simplified methods that branched on `iLocking`: `shutdown()`,
-  `shutdownCompact()`, `loadLocalDatabase()`, `addVoucher()`,
-  `readOldDatabase()`, `createTriggers()`, `toString()`
-
-**Removed from `SSDBConfig.java`:** ✓
-- Fields and methods: `iServerAddress`, `iClientKey`,
-  `getServerAddress()`, `setServerAddress()`, `getClientkey()`,
-  `setClientKey()`
-- Removed server/clientkey parsing from `load()`
-
-**Removed from GUI/import files (~54 files):** ✓
-- All `SSPostLock.applyLock()` / `SSPostLock.removeLock()` /
-  `SSPostLock.isLocked()` calls and surrounding lock-check `if` blocks
-- `SSCompanyLock` / `SSYearLock` usage in `SSMainMenu.java`,
-  `SSBookkeeping.java`, `Bookkeeping.java`,
-  `SSNewAccountingYearDialog.java`, `SSAccountingYearFrame.java`
-- `getLocking()` branches in `SSDBUtils.java`, `SSBackupUtils.java`,
-  `SSMainMenu.java`, `SSBookkeeping.java`, `Bookkeeping.java`
-
-**Result:** 69 files changed, ~2,500 lines deleted.  SSDB.java reduced from
-~8,200 lines to ~7,850 lines.  All 430 tests pass.
-
----
-
-## Phase 4: Code Quality & Encapsulation
-
-**Goal:** Improve code structure and safety.
-
-**Risk:** Low | **Effort:** Medium
-
-19. ✓ **Encapsulate public mutable fields** -- Encapsulated all 53 public mutable
-    fields across 7 classes. BgMax data classes (`BgMaxBetalning` 18 fields,
-    `BgMaxAvsnitt` 10, `BgMaxFile` 9, `BgMaxReferens` 7) required new
-    getters/setters and caller updates (5 files). List fields made `final` with
-    `Collections.unmodifiableList()` getters and dedicated `add*()`/`getLast*()`
-    helpers. `SSInventory`, `SSOutdelivery`, `SSIndelivery` (3 fields each) only
-    needed visibility change from `public` to `private` since getters already
-    existed. All 396 unit tests + 34 integration tests pass.
-
-20. **Introduce `Optional<T>`** ✓ -- Converted ~100 public API methods from
-    returning null to `Optional<T>` across four categories: (a) SSDB.java -- 33
-    single-entity lookup methods now return `Optional<T>`, 15 batch methods
-    return `Collections.emptyList()` instead of null; 38 internal trigger handler
-    callers updated with proper Optional handling and LOG.warn guards for missing
-    entities; (b) calc/math -- 26 search/find methods across 10 `*Math` classes;
-    (c) data model getters -- ~30 methods across 19 data classes (SSBudget,
-    SSCompany, SSProduct, SSInpayment, SSOutpayment, SSSupplierInvoice, SSSale,
-    SSPeriodicInvoice, SSDefaultAccount, row classes, config classes); (d)
-    parser/decoder methods -- SSVATCode.decode(), SSUnit.decode(),
-    SIEIterator.peek()/nextInteger(), SSExcelCell.getBigDecimal(),
-    SSDBUtils.loadCompany()/loadYear(). 150 files changed, ~1039 insertions,
-    ~813 deletions. Reduced `return null` count from ~419 to ~212; remaining
-    sites are GUI frames (getStatusBar, getTitle), dialog return values, and
-    date/utility conversions -- lower priority per plan guidance. All 396 unit
-    tests + 34 integration tests pass.
-
-21. **Clean up orphaned code** ✓ -- Deleted the duplicate legacy entry point
-    `SSBookkeeping.java` (147 lines) and cleaned up 3 commented-out references
-    to it in `SSMainMenu.java` and `SSCreditInvoiceFrame.java`. Removed 5
-    orphaned test data files (LBin/LBut examples in `supplierpayments/poster/`)
-    that were never referenced by any test. Resolved all 5 TODOs: removed 2
-    dead-code TODOs in commented-out `readObject_old` methods
-    (`SSNewAccountingYear.java`, `SSAccountingYear.java`), replaced
-    `SSAccountPlanType` TODO with explanatory comment (hardcoded is acceptable
-    for 3 stable entries), replaced `SIEEntryBranschkod` TODO with comment
-    explaining SNI code is not in the data model, and wrote 3 new tests for
-    `SSAutoIncrement` negative number handling (replacing the `@Disabled` TODO).
-    Converted the remaining 3 `System.out.printf` calls to SLF4J `LOG.info` in
-    `SSReportCache.java` and `Bookkeeping.java` (the 4th was in the now-deleted
-    `SSBookkeeping.java`). All 398 unit tests + 34 integration tests pass.
-
-22. **Resolve remaining `Vector` usages** ✓ -- Investigation found that
-    `java.util.Vector` is no longer imported or instantiated anywhere in the
-    codebase. The 6 references were all to a local variable *named* `iVector`
-    in `SSCompanyConfig.saveCompanySetting()`, already backed by `ArrayList`.
-    Renamed the variable to `iEntries` and removed a commented-out line. All
-    398 unit tests + 34 integration tests pass.
-
-**Human verification:** None.
-
----
-
-## Phase 5: Persistence Architecture
-
-**Goal:** Replace Java serialization with a proper persistence strategy.
-
-**Risk:** High | **Effort:** Very High
-
-This is the most complex and risky phase. Java serialization as the ORM strategy
-means that every domain class change can break existing databases. 45 domain
-classes currently implement `Serializable`.
-
-23. **Choose migration strategy:**
-    - **Option A:** Normalized SQL schema with JDBC or jOOQ
-    - **Option B:** JSON serialization (Jackson) into HSQLDB text columns (less
-      disruptive)
-    - **Option C:** Upgrade HSQLDB to 2.x with proper SQL and a lightweight ORM
-
-24. **Upgrade HSQLDB** -- From 1.8.0.10 (2008-era) to 2.7.x for SQL standard
-    compliance, better performance, and modern JDBC support.
-
-25. **Write a database migration tool** -- Must read the old serialized-object
-    format and write data in the new format. Critical for users with existing
-    data.
-
-26. **Implement new persistence layer** -- Replace `OBJECT` columns with
-    normalized SQL or JSON. Remove `Serializable` from domain classes
-    incrementally.
-
-27. **Keep backup/restore working** -- Ensure the backup system works with the
-    new format.
-
-**Human verification:** Test with a real database backup to verify data
-migration.
-
----
-
-## Phase 6: Dependency Updates
-
-**Goal:** Bring all dependencies to current versions and replace obsolete ones.
-
-**Risk:** Medium | **Effort:** Medium
-
-28. **Replace `javax.mail`** with `jakarta.mail` (Jakarta EE migration).
-
-29. **Replace `jxl`** (abandoned 2009) with Apache POI for Excel support.
-
-30. **Evaluate `itext` 4.2.2** -- Consider upgrading to OpenPDF (LGPL fork) or
-    iText 7+ (AGPL).
-
-31. **Evaluate `forms_rt` and `ideauidesigner-maven-plugin`** -- The IntelliJ
-    GUI Designer dependency ties the build to a specific IDE. Consider migrating
-    111 `.form` files to plain Java (substantial work).
-
-32. **Evaluate `javax.help:javahelp`** -- Abandoned. Consider replacing with a
-    simple HTML-based help browser or removing if unused.
-
-33. **Evaluate Spring usage** -- Only `spring-core` and `spring-beans` are used.
-    Determine if Spring is needed at all, or if it can be replaced with a
-    lighter solution.
-
-**Human verification:** None.
-
----
-
-## Phase 7: Build & Tooling
-
-**Goal:** Modern build practices and quality enforcement.
-
-**Risk:** None | **Effort:** Low
-
-34. **Add Checkstyle configuration** ✓ -- Created `checkstyle.xml` with rules
-    matching AGENTS.md style guidelines: 4-space indent (no tabs), 120-char line
-    limit, no star imports, no unused imports, left-brace on same line,
-    UpperCamelCase types, lowerCamelCase methods, UPPER_SNAKE_CASE constants,
-    plus coding checks (EqualsHashCode, MissingSwitchDefault, FallThrough, etc.).
-    Added as build plugin with `failOnViolation=false`. Baseline: 1916
-    violations (mostly star imports, unused imports, tabs, and long lines from
-    legacy code).
-
-35. **Replace FindBugs with SpotBugs** ✓ -- Replaced abandoned
-    `findbugs-maven-plugin` 3.0.5 (incompatible with Java 21) with
-    `spotbugs-maven-plugin` 4.8.6.6 in both build and reporting sections.
-    Configured with `effort=Default`, `threshold=High`, `failOnError=false`.
-    Baseline: 378 high-priority issues.
-
-36. **Add code coverage** ✓ -- Added JaCoCo 0.8.12 with `prepare-agent` and
-    `report` goals. Fixed Surefire `argLine` to include `@{argLine}` for JaCoCo
-    agent injection. Coverage reports generated in `target/site/jacoco/`.
-    Baseline: 5.3% line coverage (2989/56105 lines -- expected for mostly-GUI
-    legacy codebase).
-
-37. **Add CI quality gates** ✓ -- Added Checkstyle and JaCoCo coverage report
-    upload steps to the PR build in `ci.yml` (Linux runner only). Both use
-    `continue-on-error: true` to avoid blocking PRs while the baseline is high.
-    Quality gates can be tightened as violations are reduced.
-
-**Human verification:** None.
-
----
-
-## Phase Summary
-
-| Phase | Description | Risk | Effort | Status |
-|:-----:|-------------|------|--------|--------|
-| 0 | Test Foundation | None | Medium | **Done** |
-| 1 | Syntax Modernization | Low | Medium-High | **Done** |
-| 2 | Logging | Low | Low | **Done** |
-| 3 | Date/Time Migration | Medium | Medium | **Done** |
-| 3.5 | Remove Multi-User/Server Mode | Low | Medium | **Done** |
-| 4 | Code Quality | Low | Medium | **Done** |
-| 5 | Persistence Architecture | High | Very High | Not started |
-| 6 | Dependency Updates | Medium | Medium | Not started |
-| 7 | Build & Tooling | None | Low | **Done** |
-
-**Recommended next steps:**
-1. Phase 7 (tooling) can be done immediately — low risk, no coordination
-   required.
-2. Phase 6 (dependencies) before Phase 5, as HSQLDB upgrade is part of both.
-3. Phase 5 last — it is the most disruptive change and requires human
-   verification with real database backups.
-
----
-
-## Out of Scope (Future Considerations)
-
-These are larger architectural changes beyond "modernization":
-
-- **SSDB God Object refactor** -- `SSDB.java` is ~7,850 lines and acts as DB
-  engine, GUI orchestrator, and data container. Phase 3.5 removed the lock
-  manager responsibility. Breaking up the remainder requires extensive test
-  coverage first.
-- **GUI framework migration** -- Swing to JavaFX or a web frontend (Vaadin,
-  Spring Boot + HTMX). The 310 GUI files + 111 `.form` files make this a major
-  undertaking.
-- **Dependency injection** -- Replace singleton/static-access patterns with
-  proper DI.
-- **Maven to Gradle** -- Optional, better incremental builds.
-- **Java module system (JPMS)** -- Enforce architectural boundaries.
+## Suggested Order
+
+1. Finish the remaining date/time cleanup
+2. Remove clearly unused dependencies such as Spring, if confirmed safe
+3. Tackle library migrations with the smallest blast radius first (`javax.mail`, `jxl`, `javahelp`)
+4. Decide the persistence migration strategy before changing storage-related models
+5. Tighten CI quality gates after the dependency and persistence work stops moving the baseline
+
+## Out of Scope for This File
+
+These may be worthwhile, but they are broader architecture work rather than backlog items for the current modernization pass:
+
+- breaking up `SSDB.java`
+- replacing Swing with another UI framework
+- introducing dependency injection across the app
+- switching build tools
+- adopting JPMS
