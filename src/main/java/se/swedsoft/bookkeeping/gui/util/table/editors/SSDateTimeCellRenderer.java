@@ -7,6 +7,10 @@ package se.swedsoft.bookkeeping.gui.util.table.editors;
 
 import javax.swing.table.DefaultTableCellRenderer;
 import java.text.DateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
 
 /**
@@ -28,7 +32,8 @@ public class SSDateTimeCellRenderer extends DefaultTableCellRenderer {
     }
 
     /**
-     * Sets the value for the cell.
+     * Sets the value for the cell. Accepts {@link java.util.Date},
+     * {@link java.time.LocalDate}, and {@link java.time.LocalDateTime} values.
      *
      * @param value The value to format.
      */
@@ -36,6 +41,12 @@ public class SSDateTimeCellRenderer extends DefaultTableCellRenderer {
     public void setValue(Object value) {
         if (value == null) {
             setText("");
+        } else if (value instanceof LocalDateTime) {
+            DateTimeFormatter dtf = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
+            setText(dtf.format((LocalDateTime) value));
+        } else if (value instanceof LocalDate) {
+            DateTimeFormatter df = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
+            setText(df.format((LocalDate) value));
         } else {
             setText(iDateFormat.format(value) + ' ' + iTimeFormat.format(value));
         }

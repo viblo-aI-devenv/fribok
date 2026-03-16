@@ -1,22 +1,24 @@
 package se.swedsoft.bookkeeping.gui.util.datechooser.panel;
 
 
+import se.swedsoft.bookkeeping.util.SSDateUtil;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.DateFormatSymbols;
-import java.util.Calendar;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 
 /**
- * User: Andreas Lago
- * Date: 2006-apr-04
- * Time: 12:01:53
+ * Month picker panel using a {@link JComboBox} with {@link JSpinner}.
+ *
+ * <p>Internally uses {@link LocalDate} for all date arithmetic.
  */
 public class SSMonthChooser implements ItemListener {
 
@@ -26,8 +28,8 @@ public class SSMonthChooser implements ItemListener {
     // the spinner
     private JSpinner iSpinner;
 
-    // The selected date
-    private Date iDate;
+    // The selected date (stored as LocalDate internally)
+    private LocalDate iLocalDate;
     // the change listeners
     private List<ActionListener> iChangeListeners;
 
@@ -49,71 +51,79 @@ public class SSMonthChooser implements ItemListener {
 
         updateMonthNames();
 
-        setDate(new Date());
+        setLocalDate(LocalDate.now());
     }
 
     /**
      *
-     * @return
+     * @return the panel
      */
     public JPanel getPanel() {
         return iPanel;
     }
 
     /**
-     *
-     * @return
+     * @return the selected date as a legacy Date
+     * @deprecated Use {@link #getLocalDate()} instead.
      */
+    @Deprecated
     public Date getDate() {
-        return iDate;
+        return SSDateUtil.toDate(iLocalDate);
     }
 
     /**
-     *
-     * @param iDate
+     * @return the selected date
      */
+    public LocalDate getLocalDate() {
+        return iLocalDate;
+    }
+
+    /**
+     * @param iDate the date
+     * @deprecated Use {@link #setLocalDate(LocalDate)} instead.
+     */
+    @Deprecated
     public void setDate(Date iDate) {
-        this.iDate = iDate;
+        setLocalDate(SSDateUtil.toLocalDate(iDate));
+    }
 
-        Calendar iCalendar = Calendar.getInstance();
-
-        iCalendar.setTime(iDate);
+    /**
+     * Set the selected date, updating the combo box to show the correct month.
+     *
+     * @param date the date
+     */
+    public void setLocalDate(LocalDate date) {
+        this.iLocalDate = date;
 
         ComboBoxModel iComboBoxModel = iComboBox.getModel();
 
-        int iIndex = iCalendar.get(Calendar.MONTH);
+        // LocalDate months are 1-based; combo box is 0-based
+        int iIndex = date.getMonthValue() - 1;
 
         iComboBoxModel.setSelectedItem(iComboBoxModel.getElementAt(iIndex));
     }
 
     /**
      *
-     * @param e
+     * @param e the event
      */
     public void itemStateChanged(ItemEvent e) {
 
         int iMonth = iComboBox.getSelectedIndex();
 
-        if (iDate != null && iMonth >= 0) {
-            Calendar iCalendar = Calendar.getInstance();
-
-            iCalendar.setTime(iDate);
-
-            // Get the selected day
-            int iDay = iCalendar.get(Calendar.DAY_OF_MONTH);
-
-            iCalendar.set(Calendar.DAY_OF_MONTH, 1);
-            iCalendar.set(Calendar.MONTH, iMonth);
-
-            if (iDay > iCalendar.getActualMaximum(Calendar.DAY_OF_MONTH)) {
-                iCalendar.set(Calendar.DAY_OF_MONTH,
-                        iCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        if (iLocalDate != null && iMonth >= 0) {
+            // Clamp the day to the new month's max day
+            int currentDay = iLocalDate.getDayOfMonth();
+            // withMonth is 1-based
+            LocalDate newDate = iLocalDate.withMonth(iMonth + 1);
+            int maxDay = newDate.lengthOfMonth();
+            if (currentDay > maxDay) {
+                newDate = newDate.withDayOfMonth(maxDay);
             } else {
-                iCalendar.set(Calendar.DAY_OF_MONTH, iDay);
-
+                newDate = newDate.withDayOfMonth(currentDay);
             }
 
-            iDate = iCalendar.getTime();
+            iLocalDate = newDate;
 
             notifyChangeListeners();
         }
@@ -122,7 +132,7 @@ public class SSMonthChooser implements ItemListener {
     /**
      * Invoked when the date changes
      *
-     * @param iActionListener
+     * @param iActionListener the listener
      */
     public void addChangeListener(ActionListener iActionListener) {
         iChangeListeners.add(iActionListener);
@@ -169,7 +179,7 @@ public class SSMonthChooser implements ItemListener {
         iComboBox = null;
         iSpinner.removeAll();
         iSpinner = null;
-        iDate = null;
+        iLocalDate = null;
 
         iChangeListeners.removeAll(iChangeListeners);
         iChangeListeners = null;
@@ -222,7 +232,7 @@ public class SSMonthChooser implements ItemListener {
         sb.append("se.swedsoft.bookkeeping.gui.util.datechooser.panel.SSMonthChooser");
         sb.append("{iChangeListeners=").append(iChangeListeners);
         sb.append(", iComboBox=").append(iComboBox);
-        sb.append(", iDate=").append(iDate);
+        sb.append(", iLocalDate=").append(iLocalDate);
         sb.append(", iPanel=").append(iPanel);
         sb.append(", iSpinner=").append(iSpinner);
         sb.append('}');

@@ -363,17 +363,11 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 + SSDB.getInstance().getCurrentCompany().getId()
                 + SSDB.getInstance().getCurrentYear().getId();
 
-        Calendar iCalendar = Calendar.getInstance();
-
-        iCalendar.add(Calendar.MONTH, -1);
-
-        iCalendar.set(Calendar.DAY_OF_MONTH,
-                iCalendar.getActualMinimum(Calendar.DAY_OF_MONTH));
-        Date iFrom = iCalendar.getTime();
-
-        iCalendar.set(Calendar.DAY_OF_MONTH,
-                iCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-        Date iTo = iCalendar.getTime();
+        java.time.LocalDate prevMonth = java.time.LocalDate.now().minusMonths(1);
+        Date iFrom = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
+                prevMonth.withDayOfMonth(1));
+        Date iTo = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
+                prevMonth.withDayOfMonth(prevMonth.lengthOfMonth()));
 
         SSPeriodSelectionDialog iDialog = new SSPeriodSelectionDialog(iMainFrame,
                 bundle.getString("vatreport.perioddialog.title"));
@@ -1276,11 +1270,9 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
             iDialog.setFrom(iAccountingYear.getFrom());
             iDialog.setTo(iAccountingYear.getTo());
         } else {
-            Calendar iCal = Calendar.getInstance();
-
-            iDialog.setFrom(iCal.getTime());
-            iCal.add(Calendar.MONTH, 1);
-            iDialog.setTo(iCal.getTime());
+            java.time.LocalDate now = java.time.LocalDate.now();
+            iDialog.setFrom(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(now));
+            iDialog.setTo(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(now.plusMonths(1)));
         }
         iDialog.setLocationRelativeTo(iMainFrame);
         if (iDialog.showDialog() != JOptionPane.OK_OPTION) {
@@ -1313,11 +1305,9 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
             iDialog.setFrom(iAccountingYear.getFrom());
             iDialog.setTo(iAccountingYear.getTo());
         } else {
-            Calendar iCal = Calendar.getInstance();
-
-            iDialog.setFrom(iCal.getTime());
-            iCal.add(Calendar.MONTH, 1);
-            iDialog.setTo(iCal.getTime());
+            java.time.LocalDate now = java.time.LocalDate.now();
+            iDialog.setFrom(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(now));
+            iDialog.setTo(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(now.plusMonths(1)));
         }
         iDialog.setLocationRelativeTo(iMainFrame);
         if (iDialog.showDialog() != JOptionPane.OK_OPTION) {
@@ -2110,17 +2100,11 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
 
         SSPeriodSelectionDialog iDialog = new SSPeriodSelectionDialog(iMainFrame,
                 SSBundle.getBundle().getString("invoicejournal.dialog.title"));
-        Calendar iCalendar = Calendar.getInstance();
-
-        iCalendar.add(Calendar.MONTH, -1);
-
-        iCalendar.set(Calendar.DAY_OF_MONTH,
-                iCalendar.getActualMinimum(Calendar.DAY_OF_MONTH));
-        Date iFirstDayOfMonth = iCalendar.getTime();
-
-        iCalendar.set(Calendar.DAY_OF_MONTH,
-                iCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-        Date iLastDayOfMonth = iCalendar.getTime();
+        java.time.LocalDate prevMonth = java.time.LocalDate.now().minusMonths(1);
+        Date iFirstDayOfMonth = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
+                prevMonth.withDayOfMonth(1));
+        Date iLastDayOfMonth = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
+                prevMonth.withDayOfMonth(prevMonth.lengthOfMonth()));
 
         iDialog.setFrom(iFirstDayOfMonth);
         iDialog.setTo(iLastDayOfMonth);
@@ -2219,17 +2203,11 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         SSPeriodSelectionDialog iDialog = new SSPeriodSelectionDialog(iMainFrame,
                 SSBundle.getBundle().getString("creditinvoicejournal.dialog.title"));
 
-        Calendar iCalendar = Calendar.getInstance();
-
-        iCalendar.add(Calendar.MONTH, -1);
-
-        iCalendar.set(Calendar.DAY_OF_MONTH,
-                iCalendar.getActualMinimum(Calendar.DAY_OF_MONTH));
-        Date iFirstDayOfMonth = iCalendar.getTime();
-
-        iCalendar.set(Calendar.DAY_OF_MONTH,
-                iCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-        Date iLastDayOfMonth = iCalendar.getTime();
+        java.time.LocalDate prevMonth = java.time.LocalDate.now().minusMonths(1);
+        Date iFirstDayOfMonth = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
+                prevMonth.withDayOfMonth(1));
+        Date iLastDayOfMonth = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
+                prevMonth.withDayOfMonth(prevMonth.lengthOfMonth()));
 
         iDialog.setFrom(iFirstDayOfMonth);
         iDialog.setTo(iLastDayOfMonth);
@@ -2332,17 +2310,11 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         SSPeriodSelectionDialog iDialog = new SSPeriodSelectionDialog(iMainFrame,
                 SSBundle.getBundle().getString("inpaymentjournal.dialog.title"));
 
-        Calendar iCalendar = Calendar.getInstance();
-
-        iCalendar.add(Calendar.MONTH, -1);
-
-        iCalendar.set(Calendar.DAY_OF_MONTH,
-                iCalendar.getActualMinimum(Calendar.DAY_OF_MONTH));
-        Date iFirstDayOfMonth = iCalendar.getTime();
-
-        iCalendar.set(Calendar.DAY_OF_MONTH,
-                iCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-        Date iLastDayOfMonth = iCalendar.getTime();
+        java.time.LocalDate prevMonth = java.time.LocalDate.now().minusMonths(1);
+        Date iFirstDayOfMonth = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
+                prevMonth.withDayOfMonth(1));
+        Date iLastDayOfMonth = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
+                prevMonth.withDayOfMonth(prevMonth.lengthOfMonth()));
 
         iDialog.setFrom(iFirstDayOfMonth);
         iDialog.setTo(iLastDayOfMonth);
@@ -2447,17 +2419,11 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         SSPeriodSelectionDialog iDialog = new SSPeriodSelectionDialog(iMainFrame,
                 SSBundle.getBundle().getString("supplierinvoicejournal.dialog.title"));
 
-        Calendar iCalendar = Calendar.getInstance();
-
-        iCalendar.add(Calendar.MONTH, -1);
-
-        iCalendar.set(Calendar.DAY_OF_MONTH,
-                iCalendar.getActualMinimum(Calendar.DAY_OF_MONTH));
-        Date iFirstDayOfMonth = iCalendar.getTime();
-
-        iCalendar.set(Calendar.DAY_OF_MONTH,
-                iCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-        Date iLastDayOfMonth = iCalendar.getTime();
+        java.time.LocalDate prevMonth = java.time.LocalDate.now().minusMonths(1);
+        Date iFirstDayOfMonth = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
+                prevMonth.withDayOfMonth(1));
+        Date iLastDayOfMonth = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
+                prevMonth.withDayOfMonth(prevMonth.lengthOfMonth()));
 
         iDialog.setFrom(iFirstDayOfMonth);
         iDialog.setTo(iLastDayOfMonth);
@@ -2562,17 +2528,11 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         SSPeriodSelectionDialog iDialog = new SSPeriodSelectionDialog(iMainFrame,
                 SSBundle.getBundle().getString("suppliercreditinvoicejournal.dialog.title"));
 
-        Calendar iCalendar = Calendar.getInstance();
-
-        iCalendar.add(Calendar.MONTH, -1);
-
-        iCalendar.set(Calendar.DAY_OF_MONTH,
-                iCalendar.getActualMinimum(Calendar.DAY_OF_MONTH));
-        Date iFirstDayOfMonth = iCalendar.getTime();
-
-        iCalendar.set(Calendar.DAY_OF_MONTH,
-                iCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-        Date iLastDayOfMonth = iCalendar.getTime();
+        java.time.LocalDate prevMonth = java.time.LocalDate.now().minusMonths(1);
+        Date iFirstDayOfMonth = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
+                prevMonth.withDayOfMonth(1));
+        Date iLastDayOfMonth = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
+                prevMonth.withDayOfMonth(prevMonth.lengthOfMonth()));
 
         iDialog.setFrom(iFirstDayOfMonth);
         iDialog.setTo(iLastDayOfMonth);
@@ -2679,17 +2639,11 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         SSPeriodSelectionDialog iDialog = new SSPeriodSelectionDialog(iMainFrame,
                 SSBundle.getBundle().getString("outpaymentjournal.dialog.title"));
 
-        Calendar iCalendar = Calendar.getInstance();
-
-        iCalendar.add(Calendar.MONTH, -1);
-
-        iCalendar.set(Calendar.DAY_OF_MONTH,
-                iCalendar.getActualMinimum(Calendar.DAY_OF_MONTH));
-        Date iFirstDayOfMonth = iCalendar.getTime();
-
-        iCalendar.set(Calendar.DAY_OF_MONTH,
-                iCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-        Date iLastDayOfMonth = iCalendar.getTime();
+        java.time.LocalDate prevMonth = java.time.LocalDate.now().minusMonths(1);
+        Date iFirstDayOfMonth = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
+                prevMonth.withDayOfMonth(1));
+        Date iLastDayOfMonth = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
+                prevMonth.withDayOfMonth(prevMonth.lengthOfMonth()));
 
         iDialog.setFrom(iFirstDayOfMonth);
         iDialog.setTo(iLastDayOfMonth);

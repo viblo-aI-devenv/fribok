@@ -1,6 +1,8 @@
 package se.swedsoft.bookkeeping.gui.util.datechooser.panel;
 
 
+import se.swedsoft.bookkeeping.util.SSDateUtil;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,16 +10,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.DateFormatSymbols;
-import java.util.Calendar;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 
 /**
- * User: Andreas Lago
- * Date: 2006-maj-31
- * Time: 15:18:50
+ * Quarter picker panel.
+ *
+ * <p>Internally uses {@link LocalDate} for all date arithmetic.
  */
 public class SSQuarterChooser extends JPanel implements ItemListener {
 
@@ -25,8 +27,8 @@ public class SSQuarterChooser extends JPanel implements ItemListener {
 
     private JPanel iPanel;
 
-    // The selected date
-    private Date iDate;
+    // The selected date (stored as LocalDate internally)
+    private LocalDate iLocalDate;
     // the change listeners
     private List<ActionListener> iChangeListeners;
 
@@ -40,16 +42,10 @@ public class SSQuarterChooser extends JPanel implements ItemListener {
 
         add(iPanel, BorderLayout.CENTER);
 
-        /*
-         iComboBox.addItem("1");
-         iComboBox.addItem("2");
-         iComboBox.addItem("3");
-         iComboBox.addItem("4"); */
-
         updateQuarterNames();
 
         iComboBox.addItemListener(this);
-        setDate(new Date());
+        setLocalDate(LocalDate.now());
     }
 
     /**
@@ -59,10 +55,6 @@ public class SSQuarterChooser extends JPanel implements ItemListener {
         String[] iMonths = new DateFormatSymbols().getMonths();
 
         iComboBox.removeAllItems();
-        // iComboBox.addItem("1  (" + iMonths[0] + " - " + iMonths[2]);
-        // iComboBox.addItem("2  (" + iMonths[3] + " - " + iMonths[5]);
-        // iComboBox.addItem("3  (" + iMonths[6] + " - " + iMonths[8]);
-        // iComboBox.addItem("4  (" + iMonths[9] + " - " + iMonths[11]);
         iComboBox.addItem("1");
         iComboBox.addItem("2");
         iComboBox.addItem("3");
@@ -72,7 +64,7 @@ public class SSQuarterChooser extends JPanel implements ItemListener {
     /**
      * Invoked when the date changes
      *
-     * @param iActionListener
+     * @param iActionListener the listener
      */
 
     public void addChangeListener(ActionListener iActionListener) {
@@ -92,69 +84,76 @@ public class SSQuarterChooser extends JPanel implements ItemListener {
 
     /**
      * Invoked when an item has been selected or deselected by the user.
-     * The code written for this method performs the operations
-     * that need to occur when an item is selected (or deselected).
      */
     public void itemStateChanged(ItemEvent e) {
         notifyChangeListeners();
     }
 
     /**
+     * Returns the start date of the selected quarter as a legacy Date.
      *
-     * @return
+     * @return the start date of the selected quarter
+     * @deprecated Use {@link #getLocalDate()} instead.
      */
+    @Deprecated
     public Date getDate() {
-        int iIndex = iComboBox.getSelectedIndex();
-
-        Calendar iCalendar = Calendar.getInstance();
-
-        iCalendar.setTime(iDate);
-
-        iCalendar.set(Calendar.MONTH, iIndex * 3);
-        iCalendar.set(Calendar.DAY_OF_MONTH, 1);
-        iCalendar.set(Calendar.HOUR_OF_DAY, 0);
-        iCalendar.set(Calendar.MINUTE, 0);
-        iCalendar.set(Calendar.SECOND, 0);
-
-        iDate = iCalendar.getTime();
-
-        return iDate;
+        return SSDateUtil.toDate(getLocalDate());
     }
 
     /**
+     * Returns the start date of the selected quarter.
      *
-     * @return
+     * @return the first day of the selected quarter
      */
+    public LocalDate getLocalDate() {
+        int iIndex = iComboBox.getSelectedIndex();
+        int quarterStartMonth = iIndex * 3 + 1; // 1-based month
+
+        return LocalDate.of(iLocalDate.getYear(), quarterStartMonth, 1);
+    }
+
+    /**
+     * Returns the end date of the selected quarter as a legacy Date.
+     *
+     * @return the end date of the selected quarter
+     * @deprecated Use {@link #getLocalEndDate()} instead.
+     */
+    @Deprecated
     public Date getEndDate() {
-
-        int iIndex = iComboBox.getSelectedIndex();
-
-        Calendar iCalendar = Calendar.getInstance();
-
-        iCalendar.setTime(iDate);
-
-        iCalendar.set(Calendar.MONTH, (iIndex + 1) * 3);
-        iCalendar.set(Calendar.DAY_OF_MONTH, 1);
-        iCalendar.set(Calendar.HOUR_OF_DAY, 23);
-        iCalendar.set(Calendar.MINUTE, 59);
-        iCalendar.set(Calendar.SECOND, 59);
-        iCalendar.add(Calendar.DAY_OF_MONTH, -1);
-
-        return iCalendar.getTime();
+        return SSDateUtil.toDate(getLocalEndDate().atTime(23, 59, 59));
     }
 
     /**
+     * Returns the last day of the selected quarter.
      *
-     * @param iDate
+     * @return the last day of the selected quarter
      */
+    public LocalDate getLocalEndDate() {
+        int iIndex = iComboBox.getSelectedIndex();
+        int quarterEndMonth = (iIndex + 1) * 3; // 1-based month
+
+        LocalDate lastDay = LocalDate.of(iLocalDate.getYear(), quarterEndMonth, 1);
+        return lastDay.withDayOfMonth(lastDay.lengthOfMonth());
+    }
+
+    /**
+     * @param iDate the date
+     * @deprecated Use {@link #setLocalDate(LocalDate)} instead.
+     */
+    @Deprecated
     public void setDate(Date iDate) {
-        this.iDate = iDate;
+        setLocalDate(SSDateUtil.toLocalDate(iDate));
+    }
 
-        Calendar iCalendar = Calendar.getInstance();
+    /**
+     * Set the selected date, updating the combo box to show the correct quarter.
+     *
+     * @param date the date
+     */
+    public void setLocalDate(LocalDate date) {
+        this.iLocalDate = date;
 
-        iCalendar.setTime(iDate);
-
-        int iIndex = iCalendar.get(Calendar.MONTH) % 3;
+        int iIndex = (date.getMonthValue() - 1) / 3;
 
         iComboBox.setSelectedIndex(iIndex);
     }
@@ -166,7 +165,7 @@ public class SSQuarterChooser extends JPanel implements ItemListener {
         sb.append("se.swedsoft.bookkeeping.gui.util.datechooser.panel.SSQuarterChooser");
         sb.append("{iChangeListeners=").append(iChangeListeners);
         sb.append(", iComboBox=").append(iComboBox);
-        sb.append(", iDate=").append(iDate);
+        sb.append(", iLocalDate=").append(iLocalDate);
         sb.append(", iPanel=").append(iPanel);
         sb.append('}');
         return sb.toString();

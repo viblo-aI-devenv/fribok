@@ -7,6 +7,9 @@ package se.swedsoft.bookkeeping.gui.util.table.editors;
 
 import javax.swing.table.DefaultTableCellRenderer;
 import java.text.DateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
 
 // Trade Extensions specific imports
@@ -21,8 +24,11 @@ import java.text.DateFormat;
  */
 public class SSDateCellRenderer extends DefaultTableCellRenderer {
 
-    // The formatter to use.
+    // The formatter to use for java.util.Date values.
     private DateFormat iFormat;
+
+    // The formatter to use for java.time.LocalDate values.
+    private DateTimeFormatter iLocalDateFormat;
 
     /**
      * Default constructor.
@@ -32,16 +38,26 @@ public class SSDateCellRenderer extends DefaultTableCellRenderer {
     }
 
     /**
-     * Sets the value for the cell.
+     * Sets the value for the cell. Accepts both {@link java.util.Date} and
+     * {@link java.time.LocalDate} values.
      *
      * @param value The value to format.
      */
     @Override
     public void setValue(Object value) {
-        if (iFormat == null) {
-            iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+        if (value == null) {
+            setText("");
+        } else if (value instanceof LocalDate) {
+            if (iLocalDateFormat == null) {
+                iLocalDateFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
+            }
+            setText(iLocalDateFormat.format((LocalDate) value));
+        } else {
+            if (iFormat == null) {
+                iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+            }
+            setText(iFormat.format(value));
         }
-        setText((value == null) ? "" : iFormat.format(value));
     }
 
     @Override

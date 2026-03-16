@@ -5,11 +5,12 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.util.SSButtonPanel;
 import se.swedsoft.bookkeeping.gui.util.datechooser.SSDateChooser;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Calendar;
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -33,12 +34,9 @@ public class SSClearTransactionsDialog extends SSDialog {
 
         setPanel(iPanel);
 
-        Calendar iCal = Calendar.getInstance();
-
-        iCal.setTime(SSDB.getInstance().getCurrentYear().getFrom());
-        iCal.add(Calendar.DATE, -1);
-
-        iDate.setDate(iCal.getTime());
+        LocalDate firstDay = SSDateUtil.toLocalDate(
+                SSDB.getInstance().getCurrentYear().getFrom());
+        iDate.setDate(SSDateUtil.toDate(firstDay.minusDays(1)));
         iButtonPanel.addCancelActionListener(e -> setModalResult(JOptionPane.CANCEL_OPTION, true));
         iButtonPanel.addOkActionListener(e -> setModalResult(JOptionPane.OK_OPTION, true));
 

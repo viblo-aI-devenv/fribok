@@ -562,11 +562,8 @@ public class SSPeriodicInvoice implements Serializable {
             iPeriodStart = SSDateMath.addMonths(iPeriodStart, iPeriod);
             iPeriodEnd = SSDateMath.addMonths(iPeriodStart, iPeriod);
 
-            Calendar iCal = Calendar.getInstance();
-
-            iCal.setTime(iPeriodEnd);
-            iCal.add(Calendar.DATE, -1);
-            iPeriodEnd = iCal.getTime();
+            LocalDate ldPeriodEnd = SSDateUtil.toLocalDate(iPeriodEnd);
+            iPeriodEnd = SSDateUtil.toDate(ldPeriodEnd.minusDays(1));
             iInvoices.add(iInvoice);
         }
 

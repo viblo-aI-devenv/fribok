@@ -8,12 +8,14 @@ import se.swedsoft.bookkeeping.gui.accountplans.util.SSAccountPlanTableModel;
 import se.swedsoft.bookkeeping.gui.util.SSButtonPanel;
 import se.swedsoft.bookkeeping.gui.util.components.SSTableComboBox;
 import se.swedsoft.bookkeeping.gui.util.datechooser.SSDateChooser;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ActionListener;
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 
@@ -100,7 +102,8 @@ public class SSAccountingYearPanel {
     }
 
     /**
-     *
+     * Computes the next accounting year's from and to dates based on the last year,
+     * or defaults to the current calendar year if no previous year exists.
      */
     public void setYearFromAndTo() {
         SSNewAccountingYear iLast = SSDB.getInstance().getLastYear();
@@ -116,52 +119,32 @@ public class SSAccountingYearPanel {
         if (iLast != null) {
             iRadioUseLast.setSelected(true);
 
-            Date iFrom = iLast.getFrom();
-            Date iTo = iLast.getTo();
+            LocalDate lastFrom = SSDateUtil.toLocalDate(iLast.getFrom());
+            LocalDate lastTo = SSDateUtil.toLocalDate(iLast.getTo());
 
-            Calendar calendarFrom = Calendar.getInstance();
-            Calendar calendarTo = Calendar.getInstance();
+            // Compute the length of the last accounting year in months
+            // (lastTo + 1 day) - lastFrom gives the exclusive end
+            LocalDate lastExclEnd = lastTo.plusDays(1);
+            long diffMonths = ChronoUnit.MONTHS.between(lastFrom, lastExclEnd);
 
-            calendarFrom.setTime(iFrom);
-            calendarTo.setTime(iTo);
-            calendarTo.add(Calendar.DAY_OF_MONTH, 1);
+            // New year starts on the day after the last year ended
+            LocalDate newFrom = lastExclEnd;
+            // Set to first day of the month for the start
+            newFrom = newFrom.withDayOfMonth(1);
 
-            // Get the length for the last year
-            int diffYear = calendarTo.get(Calendar.YEAR) - calendarFrom.get(Calendar.YEAR);
-            int diffMonth = calendarTo.get(Calendar.MONTH)
-                    - calendarFrom.get(Calendar.MONTH);
+            // New year ends after the same number of months
+            LocalDate newTo = newFrom.plusMonths(diffMonths).minusDays(1);
 
-            calendarTo.add(Calendar.DAY_OF_MONTH, -1);
-
-            // Add the length of the year to the to table
-            calendarFrom.add(Calendar.YEAR, diffYear);
-            calendarFrom.add(Calendar.MONTH, diffMonth);
-            calendarFrom.set(Calendar.DAY_OF_MONTH,
-                    calendarTo.getActualMinimum(Calendar.DAY_OF_MONTH));
-
-            // Add the length of the year to the to table
-            calendarTo.add(Calendar.YEAR, diffYear);
-            calendarTo.add(Calendar.MONTH, diffMonth);
-            calendarTo.set(Calendar.DAY_OF_MONTH,
-                    calendarTo.getActualMaximum(Calendar.DAY_OF_MONTH));
-
-            this.iFrom.setDate(calendarFrom.getTime());
-            this.iTo.setDate(calendarTo.getTime());
+            this.iFrom.setDate(SSDateUtil.toDate(newFrom));
+            this.iTo.setDate(SSDateUtil.toDate(newTo));
         } else {
-            Calendar iCalendar = Calendar.getInstance();
+            int year = LocalDate.now().getYear();
 
-            int year = iCalendar.get(Calendar.YEAR);
+            LocalDate yearStart = LocalDate.of(year, 1, 1);
+            LocalDate yearEnd = LocalDate.of(year, 12, 31);
 
-            iCalendar.clear();
-            iCalendar.set(Calendar.YEAR, year);
-            iCalendar.set(Calendar.MONTH, 0);
-            iCalendar.set(Calendar.DAY_OF_MONTH, 1);
-
-            iFrom.setDate(iCalendar.getTime());
-
-            iCalendar.set(Calendar.MONTH, 11);
-            iCalendar.set(Calendar.DAY_OF_MONTH, 31);
-            iTo.setDate(iCalendar.getTime());
+            iFrom.setDate(SSDateUtil.toDate(yearStart));
+            iTo.setDate(SSDateUtil.toDate(yearEnd));
 
             iAccountPlan.setSelected(iAccountPlan.getFirst());
         }

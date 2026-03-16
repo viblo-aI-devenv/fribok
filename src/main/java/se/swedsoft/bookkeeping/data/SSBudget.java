@@ -23,8 +23,6 @@ public class SSBudget implements Serializable {
      */
     static final long serialVersionUID = 1L;
 
-    private static Calendar cCalendar = Calendar.getInstance();
-
     private transient SSNewAccountingYear iAccountingYear;
 
     private Date iFrom;

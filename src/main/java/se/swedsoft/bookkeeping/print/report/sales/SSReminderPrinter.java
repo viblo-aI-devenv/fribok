@@ -265,26 +265,22 @@ public class SSReminderPrinter extends SSPrinter {
     }
 
     /**
+     * Calculates the number of delayed days between the due date and now.
      *
-     * @param iInvoice
-     * @return
+     * @param iInvoice the invoice to check
+     * @return the number of delayed days, or 0 if no due date
      */
     private static int getNumDelayedDays(SSInvoice iInvoice) {
         Date iDueDate = iInvoice.getDueDate();
-        Date iNowDate = new Date();
 
         if (iDueDate == null) {
             return 0;
         }
 
-        Calendar iCalendar = Calendar.getInstance();
+        java.time.LocalDate dueLocalDate = se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(iDueDate);
+        java.time.LocalDate now = java.time.LocalDate.now();
 
-        iCalendar.setTimeInMillis(iNowDate.getTime() - iDueDate.getTime());
-
-        int iYear = iCalendar.get(Calendar.YEAR) - 1970;
-        int iDay = iCalendar.get(Calendar.DAY_OF_YEAR);
-
-        return iYear * iCalendar.getActualMaximum(Calendar.DAY_OF_YEAR) + iDay;
+        return (int) java.time.temporal.ChronoUnit.DAYS.between(dueLocalDate, now);
     }
 
     @Override

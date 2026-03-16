@@ -156,12 +156,10 @@ public class SSQuarterReportPrinter extends SSPrinter {
      * @return
      */
     private String getQuarterText() {
-        Calendar iCalendar = Calendar.getInstance();
+        java.time.LocalDate localFrom = se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(iFrom);
 
-        iCalendar.setTime(iFrom);
-
-        String iYear = Integer.toString(iCalendar.get(Calendar.YEAR)).substring(2);
-        String iMonth = Integer.toString(iCalendar.get(Calendar.MONTH) / 3 + 1);
+        String iYear = Integer.toString(localFrom.getYear()).substring(2);
+        String iMonth = Integer.toString((localFrom.getMonthValue() - 1) / 3 + 1);
 
         return iYear + '-' + iMonth;
     }
@@ -173,17 +171,12 @@ public class SSQuarterReportPrinter extends SSPrinter {
     private String getPeriodText() {
         String[] iMonths = new DateFormatSymbols().getMonths();
 
-        Calendar iCalendar = Calendar.getInstance();
+        java.time.LocalDate localFrom = se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(iFrom);
+        java.time.LocalDate localTo = se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(iTo);
 
-        iCalendar.setTime(iFrom);
-
-        String iMonthFrom = iMonths[ iCalendar.get(Calendar.MONTH)];
-
-        iCalendar.setTime(iTo);
-
-        String iMonthTo = iMonths[ iCalendar.get(Calendar.MONTH)];
-
-        String iYear = Integer.toString(iCalendar.get(Calendar.YEAR));
+        String iMonthFrom = iMonths[localFrom.getMonthValue() - 1];
+        String iMonthTo = iMonths[localTo.getMonthValue() - 1];
+        String iYear = Integer.toString(localTo.getYear());
 
         return iMonthFrom + " - " + iMonthTo + ' ' + iYear;
 

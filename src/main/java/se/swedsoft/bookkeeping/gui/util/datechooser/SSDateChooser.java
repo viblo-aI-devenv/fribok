@@ -5,24 +5,26 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.components.SSButton;
 import se.swedsoft.bookkeeping.gui.util.datechooser.panel.SSCalendar;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
-import java.text.DateFormat;
-import java.util.Calendar;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 
 /**
- * User: Andreas Lago
- * Date: 2006-apr-04
- * Time: 09:58:31
- * @version $Id$
+ * Date chooser widget combining a {@link JSpinner} (for keyboard editing)
+ * with a popup {@link SSCalendar} panel.
+ *
+ * <p>Internally the Swing spinner model still uses {@link Date} because
+ * {@link SpinnerDateModel} requires it.  The public API exposes both
+ * {@link Date} (deprecated) and {@link LocalDate} accessors.
  */
 public class SSDateChooser extends JPanel implements ActionListener, ChangeListener {
 
@@ -43,7 +45,7 @@ public class SSDateChooser extends JPanel implements ActionListener, ChangeListe
 
     // The date format string
     private String iDateFormatString;
-    // The calendar field
+    // The calendar field (used by SpinnerDateModel)
     private int iCalendarField;
 
     protected boolean isDateSelected;
@@ -58,7 +60,7 @@ public class SSDateChooser extends JPanel implements ActionListener, ChangeListe
         iChangeListeners = new LinkedList<>();
 
         iDateFormatString = "yyyy-MM-dd";
-        iCalendarField = Calendar.DAY_OF_MONTH;
+        iCalendarField = java.util.Calendar.DAY_OF_MONTH;
 
         iModel = new SpinnerDateModel() {
             @Override
@@ -67,7 +69,7 @@ public class SSDateChooser extends JPanel implements ActionListener, ChangeListe
                 super.setCalendarField(iCalendarField);
             }
         };
-        iModel.setCalendarField(Calendar.MONTH);
+        iModel.setCalendarField(java.util.Calendar.MONTH);
         iModel.addChangeListener(this);
 
         iSpinner = new JSpinner();
@@ -120,9 +122,9 @@ public class SSDateChooser extends JPanel implements ActionListener, ChangeListe
 
     /**
      *
-     * @param invoker
-     * @param x
-     * @param y
+     * @param invoker the invoker component
+     * @param x x offset
+     * @param y y offset
      */
     public void show(Component invoker, int x, int y) {
         if (iPopup == null) {
@@ -143,7 +145,7 @@ public class SSDateChooser extends JPanel implements ActionListener, ChangeListe
     }
 
     /**
-     * @param invoker
+     * @param invoker the invoker component
      */
     private void createPopup(Component invoker) {
         JDialog iDialog = getDialog(invoker);
@@ -170,7 +172,7 @@ public class SSDateChooser extends JPanel implements ActionListener, ChangeListe
     /**
      * Get the parent dialog for this component, or null
      *
-     * @param c
+     * @param c the component
      * @return the owning dialog
      */
     private JDialog getDialog(Component c) {
@@ -188,15 +190,21 @@ public class SSDateChooser extends JPanel implements ActionListener, ChangeListe
     }
 
     /**
-     *
-     * @return
+     * @return the selected date
      */
     public Date getDate() {
         return iModel.getDate();
     }
 
     /**
-     * Set the selected date, if the date is null, the current date is selected
+     * @return the selected date as a {@link LocalDate}
+     */
+    public LocalDate getLocalDate() {
+        return SSDateUtil.toLocalDate(iModel.getDate());
+    }
+
+    /**
+     * Set the selected date, if the date is null, the current date is selected.
      *
      * @param iDate the date
      */
@@ -209,10 +217,23 @@ public class SSDateChooser extends JPanel implements ActionListener, ChangeListe
     }
 
     /**
+     * Set the selected date using a {@link LocalDate}.
+     * If the date is null, the current date is selected.
+     *
+     * @param date the date
+     */
+    public void setLocalDate(LocalDate date) {
+        if (date != null) {
+            iModel.setValue(SSDateUtil.toDate(date));
+        } else {
+            iModel.setValue(new Date());
+        }
+    }
+
+    /**
      * Get the date format string to use for the editor
      *
      * @return the dateformat string
-     * @see DateFormat
      */
     public String getDateFormatString() {
         return iDateFormatString;
@@ -222,7 +243,6 @@ public class SSDateChooser extends JPanel implements ActionListener, ChangeListe
      * Set the date format string to use for the editor
      *
      * @param iDateFormatString the date format string
-     * @see DateFormat
      */
     public void setDateFormatString(String iDateFormatString) {
         this.iDateFormatString = iDateFormatString;
@@ -234,10 +254,12 @@ public class SSDateChooser extends JPanel implements ActionListener, ChangeListe
     }
 
     /**
-     * Set the calendar field the updown shall edit
+     * Set the calendar field the updown shall edit.
      *
-     * @param iCalendarField the field, as specified in Calendar
-     * @see Calendar
+     * <p>This uses {@link java.util.Calendar} field constants because
+     * {@link SpinnerDateModel} requires them.
+     *
+     * @param iCalendarField the field constant from {@link java.util.Calendar}
      */
     public void setCalendarField(int iCalendarField) {
         this.iCalendarField = iCalendarField;
@@ -247,8 +269,7 @@ public class SSDateChooser extends JPanel implements ActionListener, ChangeListe
     /**
      * Get the calendar field the updown are editing
      *
-     * @return the calendar field
-     * @see Calendar
+     * @return the calendar field constant from {@link java.util.Calendar}
      */
     public int getCalendarField() {
         return iCalendarField;
@@ -257,7 +278,7 @@ public class SSDateChooser extends JPanel implements ActionListener, ChangeListe
     /**
      * Invoked when the date changes
      *
-     * @param iActionListener
+     * @param iActionListener the listener
      */
 
     public void addChangeListener(ActionListener iActionListener) {
@@ -295,20 +316,19 @@ public class SSDateChooser extends JPanel implements ActionListener, ChangeListe
         return iSpinner.getEditor();
     }
 
+    /**
+     * Checks whether the currently selected date falls within the current accounting year.
+     *
+     * @return true if the selected date is within the current accounting year
+     */
     public boolean isInCurrentAccountYear() {
-        Date iAccountYearTo = SSDB.getInstance().getCurrentYear().getTo();
-        Date iAccountYearFrom = SSDB.getInstance().getCurrentYear().getFrom();
+        LocalDate accountYearTo = SSDB.getInstance().getCurrentYear().getLocalTo();
+        LocalDate accountYearFrom = SSDB.getInstance().getCurrentYear().getLocalFrom();
 
-        Calendar iCalTo = Calendar.getInstance();
+        // Add end-of-day tolerance (the original code added 23:59 to the 'to' date)
+        LocalDate iCurrent = getLocalDate();
 
-        iCalTo.setTime(iAccountYearTo);
-        iCalTo.add(Calendar.HOUR, 23);
-        iCalTo.add(Calendar.MINUTE, 59);
-        iAccountYearTo = iCalTo.getTime();
-
-        Date iCurrent = iModel.getDate();
-
-        return !(iCurrent.before(iAccountYearFrom) || iCurrent.after(iAccountYearTo));
+        return !(iCurrent.isBefore(accountYearFrom) || iCurrent.isAfter(accountYearTo));
     }
 
     /**
@@ -322,7 +342,7 @@ public class SSDateChooser extends JPanel implements ActionListener, ChangeListe
 
     /**
      *
-     * @param enabled
+     * @param enabled whether the component is enabled
      */
     @Override
     public void setEnabled(boolean enabled) {

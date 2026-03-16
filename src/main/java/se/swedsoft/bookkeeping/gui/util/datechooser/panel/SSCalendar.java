@@ -1,19 +1,23 @@
 package se.swedsoft.bookkeeping.gui.util.datechooser.panel;
 
 
+import se.swedsoft.bookkeeping.util.SSDateUtil;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 
 /**
- * User: Andreas Lago
- * Date: 2006-apr-04
- * Time: 12:07:38
+ * Composite calendar panel that orchestrates {@link SSDayChooser},
+ * {@link SSMonthChooser}, and {@link SSYearChooser}.
+ *
+ * <p>Internally uses {@link LocalDate} for all date arithmetic.
  */
 public class SSCalendar implements ActionListener {
 
@@ -30,8 +34,8 @@ public class SSCalendar implements ActionListener {
     private SSMonthChooser iMonthChooser;
 
     private SSYearChooser iYearChooser;
-    // The selected date
-    private Date iDate;
+    // The selected date (stored as LocalDate internally)
+    private LocalDate iLocalDate;
     // the change listeners
     private List<ActionListener> iChangeListeners;
 
@@ -60,35 +64,53 @@ public class SSCalendar implements ActionListener {
 
     /**
      *
-     * @return
+     * @return the panel
      */
     public JPanel getPanel() {
         return iPanel;
     }
 
     /**
-     *
-     * @return
+     * @return the selected date as a legacy Date
+     * @deprecated Use {@link #getLocalDate()} instead.
      */
+    @Deprecated
     public Date getDate() {
-        return iDate;
+        return SSDateUtil.toDate(iLocalDate);
     }
 
     /**
-     *
-     * @param iDate
+     * @return the selected date
      */
-    public void setDate(Date iDate) {
-        this.iDate = iDate;
+    public LocalDate getLocalDate() {
+        return iLocalDate;
+    }
 
-        iDayChooser.setDate(iDate);
-        iMonthChooser.setDate(iDate);
-        iYearChooser.setDate(iDate);
+    /**
+     * @param iDate the date
+     * @deprecated Use {@link #setLocalDate(LocalDate)} instead.
+     */
+    @Deprecated
+    public void setDate(Date iDate) {
+        setLocalDate(SSDateUtil.toLocalDate(iDate));
+    }
+
+    /**
+     * Set the selected date, updating all sub-choosers.
+     *
+     * @param date the date
+     */
+    public void setLocalDate(LocalDate date) {
+        this.iLocalDate = date;
+
+        iDayChooser.setLocalDate(date);
+        iMonthChooser.setLocalDate(date);
+        iYearChooser.setLocalDate(date);
     }
 
     /**
      *
-     * @return
+     * @return the year chooser
      */
     public SSYearChooser getYearChooser() {
         return iYearChooser;
@@ -97,7 +119,7 @@ public class SSCalendar implements ActionListener {
     /**
      * Invoked when the date changes
      *
-     * @param iActionListener
+     * @param iActionListener the listener
      */
 
     public void addChangeListener(ActionListener iActionListener) {
@@ -106,7 +128,7 @@ public class SSCalendar implements ActionListener {
 
     /**
      *
-     * @return
+     * @return the month chooser
      */
     public SSMonthChooser getMonthChooser() {
         return iMonthChooser;
@@ -114,7 +136,7 @@ public class SSCalendar implements ActionListener {
 
     /**
      *
-     * @return
+     * @return the day chooser
      */
     public SSDayChooser getDayChooser() {
         return iDayChooser;
@@ -122,7 +144,7 @@ public class SSCalendar implements ActionListener {
 
     /**
      *
-     * @param iEvent
+     * @param iEvent the event
      */
     private void notifyChangeListeners(ActionEvent iEvent) {
 
@@ -138,20 +160,20 @@ public class SSCalendar implements ActionListener {
         ActionEvent iEvent = new ActionEvent(this, 0, e.getActionCommand());
 
         if (e.getSource() == iDayChooser) {
-            iDate = iDayChooser.getDate();
+            iLocalDate = iDayChooser.getLocalDate();
 
             notifyChangeListeners(iEvent);
         }
         if (e.getSource() == iYearChooser) {
-            iDate = iYearChooser.getDate();
+            iLocalDate = iYearChooser.getLocalDate();
         }
         if (e.getSource() == iMonthChooser) {
-            iDate = iMonthChooser.getDate();
+            iLocalDate = iMonthChooser.getLocalDate();
         }
 
-        iDayChooser.setDate(iDate);
-        iMonthChooser.setDate(iDate);
-        iYearChooser.setDate(iDate);
+        iDayChooser.setLocalDate(iLocalDate);
+        iMonthChooser.setLocalDate(iLocalDate);
+        iYearChooser.setLocalDate(iLocalDate);
 
     }
 
@@ -181,7 +203,7 @@ public class SSCalendar implements ActionListener {
         iYearChooser.dispose();
         iYearChooser = null;
 
-        iDate = null;
+        iLocalDate = null;
 
         iChangeListeners.removeAll(iChangeListeners);
         iChangeListeners = null;
@@ -193,7 +215,7 @@ public class SSCalendar implements ActionListener {
 
         sb.append("se.swedsoft.bookkeeping.gui.util.datechooser.panel.SSCalendar");
         sb.append("{iChangeListeners=").append(iChangeListeners);
-        sb.append(", iDate=").append(iDate);
+        sb.append(", iLocalDate=").append(iLocalDate);
         sb.append(", iDayChooser=").append(iDayChooser);
         sb.append(", iDayPanel=").append(iDayPanel);
         sb.append(", iMonthChooser=").append(iMonthChooser);

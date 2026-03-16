@@ -7,6 +7,7 @@ import se.swedsoft.bookkeeping.data.SSNewCompany;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -191,14 +192,11 @@ public final class SSDBTestFixture {
     }
 
     private static SSNewAccountingYear buildTestYear() {
-        Calendar cal = Calendar.getInstance();
-        cal.set(2024, Calendar.JANUARY, 1, 0, 0, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        Date from = cal.getTime();
+        LocalDate from = LocalDate.of(2024, 1, 1);
+        LocalDate to = LocalDate.of(2024, 12, 31);
 
-        cal.set(2024, Calendar.DECEMBER, 31, 23, 59, 59);
-        Date to = cal.getTime();
-
-        return new SSNewAccountingYear(from, to);
+        return new SSNewAccountingYear(
+                se.swedsoft.bookkeeping.util.SSDateUtil.toDate(from),
+                se.swedsoft.bookkeeping.util.SSDateUtil.toDate(to));
     }
 }

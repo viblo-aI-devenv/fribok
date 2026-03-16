@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -180,39 +179,39 @@ public class SSMonth  implements Serializable {
     }
 
     /**
+     * Breaks a year into its months.
      *
-     * Breaks a year into it's months
-     *
-     * @param iFrom
-     * @param iTo
-     *
+     * @param iFrom the start date
+     * @param iTo the end date
      * @return List of months
+     * @deprecated Use {@link #splitYearIntoMonths(LocalDate, LocalDate)} instead
      */
+    @Deprecated
     public static List<SSMonth> splitYearIntoMonths(Date iFrom, Date iTo) {
+        return splitYearIntoMonths(SSDateUtil.toLocalDate(iFrom), SSDateUtil.toLocalDate(iTo));
+    }
+
+    /**
+     * Breaks a year into its months.
+     *
+     * @param from the start date
+     * @param to the end date
+     * @return List of months covering each calendar month in the range
+     */
+    public static List<SSMonth> splitYearIntoMonths(LocalDate from, LocalDate to) {
         List<SSMonth> iMonths = new LinkedList<>();
 
-        Calendar iCalendar = Calendar.getInstance();
+        // Start at the first day of the month containing 'from'
+        LocalDate current = from.withDayOfMonth(1);
 
-        // Set the time
-        iCalendar.setTime(iFrom);
-        // Reset the date to the first day of the month
-        iCalendar.set(Calendar.DAY_OF_MONTH, 1);
+        // Loop through all months between the from date and the to date
+        while (current.compareTo(to) < 0) {
+            LocalDate monthStart = current;
+            LocalDate monthEnd = current.withDayOfMonth(current.lengthOfMonth());
 
-        // Loop throught all the months between the from date and the to date
-        while (iCalendar.getTime().compareTo(iTo) < 0) {
-            Date mForm = iCalendar.getTime();
+            iMonths.add(new SSMonth(monthStart, monthEnd));
 
-            iCalendar.set(Calendar.DAY_OF_MONTH,
-                    iCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-
-            Date mTo = iCalendar.getTime();
-
-            SSMonth iMonth = new SSMonth(mForm, mTo);
-
-            iMonths.add(iMonth);
-
-            iCalendar.set(Calendar.DAY_OF_MONTH, 1);
-            iCalendar.add(Calendar.MONTH, 1);
+            current = current.plusMonths(1);
         }
         return iMonths;
     }

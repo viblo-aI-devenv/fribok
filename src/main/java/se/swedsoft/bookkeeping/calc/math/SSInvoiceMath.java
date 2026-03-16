@@ -6,8 +6,12 @@ import se.swedsoft.bookkeeping.data.base.SSSaleRow;
 import se.swedsoft.bookkeeping.data.common.SSInvoiceType;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 
+import se.swedsoft.bookkeeping.util.SSDateUtil;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
@@ -424,27 +428,24 @@ public class SSInvoiceMath extends SSSaleMath {    private static final Logger L
     }
 
     /**
+     * Returns the number of days between the due date and the last payment date.
      *
-     * @param iInvoice
-     * @return
+     * @param iInvoice the invoice
+     * @return the number of delayed days, or 0 if no payment or due date exists
      */
     public static int getNumDelayedDays(SSInvoice iInvoice) {
         Date iPaymentDay = iInvoice.getDueDate();
-
         Date iLastPayment = SSInpaymentMath.getLastInpaymentForInvoice(iInvoice);
 
         if (iLastPayment == null || iPaymentDay == null) {
             return 0;
         }
 
-        Calendar iCalendar = Calendar.getInstance();
+        LocalDate dueDate = SSDateUtil.toLocalDate(iPaymentDay);
+        LocalDate lastPayment = SSDateUtil.toLocalDate(iLastPayment);
 
-        iCalendar.setTimeInMillis(iLastPayment.getTime() - iPaymentDay.getTime());
-
-        int iYear = iCalendar.get(Calendar.YEAR) - 1970;
-        int iDay = iCalendar.get(Calendar.DAY_OF_YEAR);
-
-        return iYear * iCalendar.getActualMaximum(Calendar.DAY_OF_YEAR) + iDay;
+        long days = ChronoUnit.DAYS.between(dueDate, lastPayment);
+        return (int) Math.max(days, 0);
     }
 
     /**

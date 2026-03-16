@@ -125,16 +125,10 @@ public class SSCustomerRevenuePrinter extends SSPrinter {
 
         for (SSInvoice iInvoice : iInvoices) {
             if (iInvoice.getDate().after(iDateFrom) && iInvoice.getDate().before(iDateTo)) {
-                Calendar iCal = Calendar.getInstance();
-
-                iCal.setTime(iInvoice.getDate());
-                iCal.set(Calendar.DAY_OF_MONTH, 1);
-                Date iFrom = iCal.getTime();
-
-                iCal.set(Calendar.DAY_OF_MONTH,
-                        iCal.getActualMaximum(Calendar.DAY_OF_MONTH));
-                Date iTo = iCal.getTime();
-                SSMonth iMonth = new SSMonth(iFrom, iTo);
+                java.time.LocalDate invoiceLocalDate = se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(iInvoice.getDate());
+                java.time.LocalDate monthStart = invoiceLocalDate.withDayOfMonth(1);
+                java.time.LocalDate monthEnd = invoiceLocalDate.withDayOfMonth(invoiceLocalDate.lengthOfMonth());
+                SSMonth iMonth = new SSMonth(monthStart, monthEnd);
 
                 if (iInvoice.getCustomerNr() != null
                         && SSInvoiceMath.getNetSum(iInvoice) != null) {
@@ -164,16 +158,10 @@ public class SSCustomerRevenuePrinter extends SSPrinter {
         for (SSCreditInvoice iCreditInvoice : iCreditInvoices) {
             if (iCreditInvoice.getDate().after(iDateFrom)
                     && iCreditInvoice.getDate().before(iDateTo)) {
-                Calendar iCal = Calendar.getInstance();
-
-                iCal.setTime(iCreditInvoice.getDate());
-                iCal.set(Calendar.DAY_OF_MONTH, 1);
-                Date iFrom = iCal.getTime();
-
-                iCal.set(Calendar.DAY_OF_MONTH,
-                        iCal.getActualMaximum(Calendar.DAY_OF_MONTH));
-                Date iTo = iCal.getTime();
-                SSMonth iMonth = new SSMonth(iFrom, iTo);
+                java.time.LocalDate creditLocalDate = se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(iCreditInvoice.getDate());
+                java.time.LocalDate monthStart = creditLocalDate.withDayOfMonth(1);
+                java.time.LocalDate monthEnd = creditLocalDate.withDayOfMonth(creditLocalDate.lengthOfMonth());
+                SSMonth iMonth = new SSMonth(monthStart, monthEnd);
 
                 if (iCreditInvoice.getCustomerNr() != null
                         && SSCreditInvoiceMath.getNetSum(iCreditInvoice) != null) {

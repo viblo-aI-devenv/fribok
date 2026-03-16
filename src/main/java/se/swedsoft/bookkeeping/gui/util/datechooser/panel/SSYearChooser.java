@@ -1,6 +1,8 @@
 package se.swedsoft.bookkeeping.gui.util.datechooser.panel;
 
 
+import se.swedsoft.bookkeeping.util.SSDateUtil;
+
 import javax.swing.*;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
@@ -9,7 +11,7 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Calendar;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,12 +20,14 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * User: Andreas Lago
- * Date: 2006-apr-04
- * Time: 12:40:37
+ * Year picker panel using a {@link JSpinner} with a number model.
+ *
+ * <p>Internally uses {@link LocalDate} for all date arithmetic.
  */
 public class SSYearChooser extends JPanel implements ChangeListener, CaretListener, ActionListener {    private static final Logger LOG = LoggerFactory.getLogger(SSYearChooser.class);
 
+    private static final int MIN_YEAR = 1;
+    private static final int MAX_YEAR = 9999;
 
     private JPanel iPanel;
 
@@ -33,8 +37,8 @@ public class SSYearChooser extends JPanel implements ChangeListener, CaretListen
 
     private SpinnerNumberModel iModel;
 
-    // The selected date
-    private Date iDate;
+    // The selected date (stored as LocalDate internally)
+    private LocalDate iLocalDate;
     // the change listeners
     private List<ActionListener> iChangeListeners;
 
@@ -42,8 +46,6 @@ public class SSYearChooser extends JPanel implements ChangeListener, CaretListen
         setLayout(new BorderLayout());
 
         add(iPanel, BorderLayout.CENTER);
-
-        Calendar iCalendar = Calendar.getInstance();
 
         iChangeListeners = new LinkedList<>();
 
@@ -54,51 +56,64 @@ public class SSYearChooser extends JPanel implements ChangeListener, CaretListen
         iTextField.addActionListener(this);
 
         iModel = new SpinnerNumberModel();
-        iModel.setMinimum(iCalendar.getMinimum(Calendar.YEAR));
-        iModel.setMaximum(iCalendar.getMaximum(Calendar.YEAR));
+        iModel.setMinimum(MIN_YEAR);
+        iModel.setMaximum(MAX_YEAR);
         iModel.addChangeListener(this);
 
         iSpinner.setEditor(iTextField);
         iSpinner.setModel(iModel);
-        // iSpinner.setBorder(new EmptyBorder(0, 0, 0, 0));
 
-        setDate(new Date());
+        setLocalDate(LocalDate.now());
     }
 
     /**
      *
-     * @return
+     * @return the panel
      */
     public JPanel getPanel() {
         return iPanel;
     }
 
     /**
-     *
-     * @return
+     * @return the selected date as a legacy Date
+     * @deprecated Use {@link #getLocalDate()} instead.
      */
+    @Deprecated
     public Date getDate() {
-        return iDate;
+        return SSDateUtil.toDate(iLocalDate);
     }
 
     /**
-     *
-     * @param iDate
+     * @return the selected date
      */
+    public LocalDate getLocalDate() {
+        return iLocalDate;
+    }
+
+    /**
+     * @param iDate the date
+     * @deprecated Use {@link #setLocalDate(LocalDate)} instead.
+     */
+    @Deprecated
     public void setDate(Date iDate) {
-        this.iDate = iDate;
+        setLocalDate(SSDateUtil.toLocalDate(iDate));
+    }
 
-        Calendar iCalendar = Calendar.getInstance();
+    /**
+     * Set the selected date, updating the spinner to show the correct year.
+     *
+     * @param date the date
+     */
+    public void setLocalDate(LocalDate date) {
+        this.iLocalDate = date;
 
-        iCalendar.setTime(iDate);
-
-        iSpinner.setValue(iCalendar.get(Calendar.YEAR));
+        iSpinner.setValue(date.getYear());
     }
 
     /**
      * Invoked when the date changes
      *
-     * @param iActionListener
+     * @param iActionListener the listener
      */
 
     public void addChangeListener(ActionListener iActionListener) {
@@ -122,16 +137,11 @@ public class SSYearChooser extends JPanel implements ChangeListener, CaretListen
      * @param e a ChangeEvent object
      */
     public void stateChanged(ChangeEvent e) {
-        Calendar iCalendar = Calendar.getInstance();
-
         Number iNumber = iModel.getNumber();
 
         iTextField.setText(iNumber.toString());
 
-        iCalendar.setTime(iDate);
-        iCalendar.set(Calendar.YEAR, iNumber.intValue());
-
-        iDate = iCalendar.getTime();
+        iLocalDate = iLocalDate.withYear(iNumber.intValue());
 
         notifyChangeListeners();
     }
@@ -143,8 +153,6 @@ public class SSYearChooser extends JPanel implements ChangeListener, CaretListen
      * @param e Description of the Parameter
      */
     public void caretUpdate(CaretEvent e) {
-        Calendar iCalendar = Calendar.getInstance();
-
         int iValue;
 
         try {
@@ -155,10 +163,7 @@ public class SSYearChooser extends JPanel implements ChangeListener, CaretListen
             return;
         }
 
-        int iMin = iCalendar.getMinimum(Calendar.YEAR);
-        int iMax = iCalendar.getMaximum(Calendar.YEAR);
-
-        if (iValue < iMin || iValue > iMax) {
+        if (iValue < MIN_YEAR || iValue > MAX_YEAR) {
             iTextField.setForeground(Color.RED);
         } else {
             iTextField.setForeground(Color.BLACK);
@@ -218,7 +223,7 @@ public class SSYearChooser extends JPanel implements ChangeListener, CaretListen
         }
         iModel = null;
 
-        iDate = null;
+        iLocalDate = null;
 
         iChangeListeners.removeAll(iChangeListeners);
         iChangeListeners = null;
@@ -230,7 +235,7 @@ public class SSYearChooser extends JPanel implements ChangeListener, CaretListen
 
         sb.append("se.swedsoft.bookkeeping.gui.util.datechooser.panel.SSYearChooser");
         sb.append("{iChangeListeners=").append(iChangeListeners);
-        sb.append(", iDate=").append(iDate);
+        sb.append(", iLocalDate=").append(iLocalDate);
         sb.append(", iModel=").append(iModel);
         sb.append(", iPanel=").append(iPanel);
         sb.append(", iSpinner=").append(iSpinner);

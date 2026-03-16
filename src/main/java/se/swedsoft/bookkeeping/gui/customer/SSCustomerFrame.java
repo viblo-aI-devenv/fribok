@@ -33,7 +33,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -559,11 +558,9 @@ public class SSCustomerFrame extends SSDefaultTableFrame {
             iDialog.setFrom(SSDB.getInstance().getCurrentYear().getFrom());
             iDialog.setTo(SSDB.getInstance().getCurrentYear().getTo());
         } else {
-            Calendar iCal = Calendar.getInstance();
-
-            iDialog.setFrom(iCal.getTime());
-            iCal.add(Calendar.MONTH, 1);
-            iDialog.setTo(iCal.getTime());
+            java.time.LocalDate now = java.time.LocalDate.now();
+            iDialog.setFrom(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(now));
+            iDialog.setTo(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(now.plusMonths(1)));
         }
         iDialog.setLocationRelativeTo(getMainFrame());
         if (iDialog.showDialog() != JOptionPane.OK_OPTION) {
