@@ -14,6 +14,7 @@ import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSDialog;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSErrorDialog;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSQueryDialog;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -22,7 +23,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Date;
 import java.util.List;
 
 
@@ -179,7 +179,7 @@ public class SSInvoiceDialog {
         SSInvoice iNew = new SSInvoice(iInvoice);
 
         iNew.setNumber(null);
-        iNew.setDate(new Date());
+        iNew.setLocalDate(SSDateUtil.today());
         iNew.setDueDate();
         iNew.setEntered(false);
         iNew.setPrinted(false);

@@ -12,6 +12,7 @@ import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSDialog;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSErrorDialog;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSQueryDialog;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +20,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Date;
 import java.util.ResourceBundle;
 
 
@@ -47,7 +47,7 @@ public class SSTenderDialog {
         SSTender iNew = new SSTender(iTender);
 
         iNew.setNumber(null);
-        iNew.setDate(new Date());
+        iNew.setLocalDate(SSDateUtil.today());
         iNew.setOrder(null);
         iNew.setPrinted(false);
 

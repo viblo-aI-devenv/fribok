@@ -15,6 +15,7 @@ import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSDialog;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSInformationDialog;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSQueryDialog;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -23,7 +24,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -240,10 +240,10 @@ public class SSPurchaseOrderDialog {
         SSPurchaseOrder iNew = new SSPurchaseOrder(iPurchaseOrder);
 
         iNew.setNumber(null);
-        iNew.setDate(new Date());
+        iNew.setLocalDate(SSDateUtil.today());
         iNew.setInvoice(null);
         iNew.setPrinted(false);
-        iNew.setEstimatedDelivery(new Date());
+        iNew.setLocalEstimatedDelivery(SSDateUtil.today());
 
         iPanel.setOrder(iNew);
 

@@ -17,6 +17,7 @@ import se.swedsoft.bookkeeping.gui.util.dialogs.SSDialog;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSErrorDialog;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSInformationDialog;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSQueryDialog;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -25,7 +26,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -247,7 +247,7 @@ public class SSOrderDialog {
         SSOrder iNew = new SSOrder(iOrder);
 
         iNew.setNumber(null);
-        iNew.setDate(new Date());
+        iNew.setLocalDate(SSDateUtil.today());
         iNew.setInvoice(null);
         iNew.setPurchaseOrder(null);
         iNew.setPrinted(false);
@@ -330,7 +330,7 @@ public class SSOrderDialog {
 
         // iInvoice.doAutoIncrecement();
 
-        iInvoice.setDate(new Date());
+        iInvoice.setLocalDate(SSDateUtil.today());
         iInvoice.setNumber(null);
 
         for (SSOrder iCurrent : iOrders) {
@@ -374,7 +374,7 @@ public class SSOrderDialog {
 
         // iInvoice.doAutoIncrecement();
 
-        iInvoice.setDate(new Date());
+        iInvoice.setLocalDate(SSDateUtil.today());
         iInvoice.setNumber(null);
         iInvoice.setType(SSInvoiceType.CASH);
 
@@ -419,7 +419,7 @@ public class SSOrderDialog {
 
         // iInvoice.doAutoIncrecement();
 
-        iInvoice.setDate(new Date());
+        iInvoice.setLocalDate(SSDateUtil.today());
         iInvoice.setNumber(null);
 
         for (SSOrder iCurrent : iOrders) {

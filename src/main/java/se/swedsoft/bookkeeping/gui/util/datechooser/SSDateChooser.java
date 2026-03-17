@@ -117,7 +117,7 @@ public class SSDateChooser extends JPanel implements ActionListener, ChangeListe
         setLayout(new BorderLayout());
         add(iSpinner, BorderLayout.CENTER);
         add(iCalendarButton, BorderLayout.EAST);
-        setDate(new Date());
+        setLocalDate(SSDateUtil.today());
     }
 
     /**
@@ -212,7 +212,7 @@ public class SSDateChooser extends JPanel implements ActionListener, ChangeListe
         if (iDate != null) {
             iModel.setValue(iDate);
         } else {
-            iModel.setValue(new Date());
+            iModel.setValue(SSDateUtil.toDate(SSDateUtil.today()));
         }
     }
 
@@ -226,7 +226,7 @@ public class SSDateChooser extends JPanel implements ActionListener, ChangeListe
         if (date != null) {
             iModel.setValue(SSDateUtil.toDate(date));
         } else {
-            iModel.setValue(new Date());
+            iModel.setValue(SSDateUtil.toDate(SSDateUtil.today()));
         }
     }
 
