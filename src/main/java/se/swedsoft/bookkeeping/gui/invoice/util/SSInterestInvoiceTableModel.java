@@ -15,6 +15,7 @@ import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.gui.util.table.SSTable;
 import se.swedsoft.bookkeeping.gui.util.table.SSTableSearchable;
 import se.swedsoft.bookkeeping.gui.util.table.editors.*;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -229,7 +230,7 @@ public class SSInterestInvoiceTableModel extends SSDefaultTableModel<SSInvoice> 
 
             iInterestInvoice.setNumRemainders(0);
 
-            iInterestInvoice.setDate(new Date());
+            iInterestInvoice.setLocalDate(SSDateUtil.today());
 
             iInterestInvoice.setEuSaleCommodity(false);
 
@@ -412,4 +413,3 @@ public class SSInterestInvoiceTableModel extends SSDefaultTableModel<SSInvoice> 
         return sb.toString();
     }
 }
-

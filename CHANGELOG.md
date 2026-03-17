@@ -51,6 +51,10 @@ diverging from upstream version 2.2-SNAPSHOT.
 - Replaced `SimpleDateFormat` usage with `DateTimeFormatter` throughout the
   codebase (Phase 3 Step 17) (PR #15).
 - Migrated all `Calendar` usage to `java.time` API (Phase 3 Step 18).
+- Continued the date migration in GUI workflows by replacing more
+  `new Date()` defaults with `SSDateUtil.today()` and `LocalDate` setters in
+  invoice, order, purchase order, periodic invoice, tender, and credit invoice
+  dialogs plus related invoice date chooser/table logic.
 - Encapsulated 53 public mutable fields across 7 classes with proper
   getters/setters (Phase 4 Step 19).
 - Introduced `Optional<T>` for ~100 public API methods across SSDB lookups,

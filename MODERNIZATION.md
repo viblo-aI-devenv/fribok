@@ -190,6 +190,12 @@ keeping the application functional throughout.
     - **GUI panels/frames:** SSAccountingYearPanel, SSClearTransactionsDialog,
       SSCustomerFrame, SSSupplierFrame, SSProductFrame, SSProjectFrame,
       SSResultUnitFrame — Calendar fallbacks replaced with `LocalDate`.
+    - **Dialog/default-date flows:** SSInvoiceDialog, SSOrderDialog,
+      SSPurchaseOrderDialog, SSPeriodicInvoiceDialog, SSTenderDialog,
+      SSCreditInvoiceDialog, SSInterestInvoiceTableModel, SSInvoicePanel,
+      SSDateChooser — default/current-date handling switched from
+      `new Date()`/legacy setters to `SSDateUtil.today()` and
+      `LocalDate`-typed APIs.
     - **Print/report:** SSReportFactory, SSVATReportDialog,
       SSQuarterReportPrinter, SSCustomerRevenuePrinter,
       SSSupplierRevenuePrinter, SSResultUnitRevenuePrinter,

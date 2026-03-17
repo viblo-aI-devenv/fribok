@@ -33,6 +33,7 @@ import se.swedsoft.bookkeeping.gui.util.table.editors.SSTaxCodeCellEditor;
 import se.swedsoft.bookkeeping.gui.util.table.editors.SSTaxCodeCellRenderer;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSTableColumn;
 import se.swedsoft.bookkeeping.gui.voucher.util.SSVoucherRowTableModelOld;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
@@ -294,7 +295,7 @@ public class SSInvoicePanel {
                 new SSSelectionListener<>() {
             public void selected(SSPaymentTerm selected) {
                 if (selected != null) {
-                    iPaymentDay.setDate(selected.addDaysToDate(new Date()));
+                    iPaymentDay.setLocalDate(selected.addDaysToLocalDate(SSDateUtil.today()));
                 }
             }
         });
