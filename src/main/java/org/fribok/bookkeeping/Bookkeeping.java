@@ -159,8 +159,6 @@ public class Bookkeeping {    private static final Logger LOG = LoggerFactory.ge
         // Display the main frame.
         iMainFrame.setVisible(true);
 
-        SSDB.getInstance().readOldDatabase();
-
         // Only display the company iMainFrame if there are no companies defined.
         // I would prefer to only open the select company iMainFrame if there are no companies.
         // But Fredrik and Joakim wants it to displayed every time.

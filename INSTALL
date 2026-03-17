@@ -14,6 +14,12 @@ $ java -jar target/fribok-2.1-SNAPSHOT-jar-with-dependencies.jar
 
 The above command must be run from the project root directory.
 
+Upgrade note:
+
+Direct migration from the legacy pre-HSQL `bookkeeper.db` storage format is not
+supported in this fork. Migrate that data with an older Fribok/JFS release
+first, then move to this fork using the regular backup/restore process.
+
 NOTE: In case you have problem with missing files from jasperforge.org
 in the build step above you might want to disable the
 jasperreports.org maven repository prior to building. For your
