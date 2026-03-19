@@ -192,7 +192,7 @@ public class SSTender extends SSSale {
     // //////////////////////////////////////////////////
 
     /**
-     * Returns if the tender is expires, ie new Date().after(iExpires)
+     * Returns whether the tender has expired relative to today.
      *
      * @return if the tender is expired
      */

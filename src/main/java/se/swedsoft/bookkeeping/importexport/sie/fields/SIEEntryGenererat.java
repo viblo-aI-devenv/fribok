@@ -9,6 +9,7 @@ import se.swedsoft.bookkeeping.importexport.sie.util.SIEReader;
 import se.swedsoft.bookkeeping.importexport.sie.util.SIEWriter;
 import se.swedsoft.bookkeeping.importexport.util.SSExportException;
 import se.swedsoft.bookkeeping.importexport.util.SSImportException;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.util.Date;
 
@@ -37,7 +38,7 @@ public class SIEEntryGenererat implements SIEEntry {
     @Override
     public boolean exportEntry(SSSIEExporter iExporter, SIEWriter iWriter, SSNewAccountingYear iYear) throws SSExportException {
         iWriter.append(SIELabel.SIE_GEN);
-        iWriter.append(new Date());
+        iWriter.append(SSDateUtil.toDate(SSDateUtil.now()));
         iWriter.newLine();
 
         return true;

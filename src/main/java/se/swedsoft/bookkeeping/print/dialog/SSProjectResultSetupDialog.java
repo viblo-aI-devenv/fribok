@@ -9,12 +9,14 @@ import se.swedsoft.bookkeeping.gui.util.SSButtonPanel;
 import se.swedsoft.bookkeeping.gui.util.components.SSTableComboBox;
 import se.swedsoft.bookkeeping.gui.util.datechooser.SSDateChooser;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSDialog;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -64,21 +66,21 @@ public class SSProjectResultSetupDialog extends SSDialog {
         iProjects.setModel(SSProjectTableModel.getDropDownModel());
         iProjects.setSelected(iProjects.getFirst());
 
-        Date iFrom = new Date();
-        Date iTo = new Date();
+        LocalDate iFrom = SSDateUtil.today();
+        LocalDate iTo = SSDateUtil.today();
 
         List<SSNewAccountingYear> iYears = SSDB.getInstance().getYears();
 
         for (SSNewAccountingYear iYear : iYears) {
-            if (iFrom.after(iYear.getFrom())) {
-                iFrom = iYear.getFrom();
+            if (iFrom.isAfter(iYear.getLocalFrom())) {
+                iFrom = iYear.getLocalFrom();
             }
-            if (iTo.before(iYear.getTo())) {
-                iTo = iYear.getTo();
+            if (iTo.isBefore(iYear.getLocalTo())) {
+                iTo = iYear.getLocalTo();
             }
         }
-        this.iFrom.setDate(iFrom);
-        this.iTo.setDate(iTo);
+        this.iFrom.setLocalDate(iFrom);
+        this.iTo.setLocalDate(iTo);
     }
 
     /**

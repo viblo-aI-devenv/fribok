@@ -33,13 +33,9 @@ public class SSInvoiceMath extends SSSaleMath {    private static final Logger L
      * @return
      */
     public static boolean expired(SSInvoice iInvoice) {
-        Date iNow = new Date();
-        Date iPaymentDay = iInvoice.getDueDate();
+        LocalDate dueDate = iInvoice.getLocalDueDate();
 
-        iNow = SSDateMath.ceil(iNow);
-        iPaymentDay = SSDateMath.floor(iPaymentDay);
-
-        return iNow.after(iPaymentDay);
+        return dueDate != null && SSDateUtil.today().isAfter(dueDate);
 
     }
 
@@ -555,4 +551,3 @@ public class SSInvoiceMath extends SSSaleMath {    private static final Logger L
     }
 
 }
-

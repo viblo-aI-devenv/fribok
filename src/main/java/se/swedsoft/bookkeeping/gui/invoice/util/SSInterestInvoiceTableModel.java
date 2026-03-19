@@ -240,20 +240,6 @@ public class SSInterestInvoiceTableModel extends SSDefaultTableModel<SSInvoice> 
 
             iInterestInvoice.setInterestInvoiced(false);
 
-            /*
-             if(iInterestInvoice.getPaymentTerm() != null){
-             int iDays = iInterestInvoice.getPaymentTerm().decodeValue();
-
-             Calendar iCalendar = Calendar.getInstance();
-
-             iCalendar.add(Calendar.DAY_OF_MONTH, iDays);
-
-             iInterestInvoice.setDueDate( iCalendar.getTime() );
-             } else {
-             iInterestInvoice.setDueDate( new Date() );
-
-             }     */
-
             SSSaleRow iRow = new SSSaleRow();
 
             iRow.setDescription(iDescription);

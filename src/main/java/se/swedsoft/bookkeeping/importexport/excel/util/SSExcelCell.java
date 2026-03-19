@@ -92,7 +92,7 @@ public class SSExcelCell {
         try {
             return SSDateUtil.toDate(LocalDate.parse(iCell.getContents(), iFormat));
         } catch (DateTimeParseException e) {
-            return new Date();
+            return SSDateUtil.toDate(SSDateUtil.today());
         }
     }
 

@@ -308,7 +308,7 @@ public class SIEIterator implements Iterator<String> {    private static final L
                 LOG.error("Unexpected error", ex);
             }
         }
-        return new Date();
+        return SSDateUtil.toDate(SSDateUtil.today());
     }
 
     /**

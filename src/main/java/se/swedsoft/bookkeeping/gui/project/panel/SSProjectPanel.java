@@ -7,6 +7,7 @@ package se.swedsoft.bookkeeping.gui.project.panel;
 
 import se.swedsoft.bookkeeping.data.SSNewProject;
 import se.swedsoft.bookkeeping.gui.util.datechooser.SSDateChooser;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -185,7 +186,7 @@ public class SSProjectPanel {
         iConcludedDate.setDate(
                 iProject.getConcludedDate() != null
                         ? iProject.getConcludedDate()
-                        : new Date());
+                        : SSDateUtil.toDate(SSDateUtil.today()));
     }
 
     /**

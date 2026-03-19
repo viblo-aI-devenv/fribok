@@ -10,6 +10,7 @@ import se.swedsoft.bookkeeping.data.base.SSSaleRow;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -79,7 +80,7 @@ public class SSReminderPrinter extends SSPrinter {
         SSSalePrinterUtils.addParametersForCompany(iCompany, this);
 
         // Sale parameters
-        addParameter("date", new Date());
+        addParameter("date", SSDateUtil.toDate(SSDateUtil.today()));
         addParameter("text", iCompany.getStandardText(SSStandardText.Reminder));
 
         if (iCustomer != null) {

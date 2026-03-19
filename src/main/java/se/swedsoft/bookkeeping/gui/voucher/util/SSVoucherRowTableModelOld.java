@@ -6,6 +6,7 @@ import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.gui.util.table.SSTable;
 import se.swedsoft.bookkeeping.gui.util.table.editors.*;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -206,11 +207,6 @@ public class SSVoucherRowTableModelOld extends SSDefaultTableModel<SSVoucherRow>
                 iVoucherRow.setAccount((SSAccount) aValue);
             }
 
-            /*
-             if (iEdit && iVoucherRow != iEditingRow) {
-             iVoucherRow.setAdded     (null);
-             iVoucherRow.setEditedDate(new Date());
-             }     */
             break;
 
         case COL_DEBET:
@@ -244,7 +240,7 @@ public class SSVoucherRowTableModelOld extends SSDefaultTableModel<SSVoucherRow>
 
             if (iEdit) {
                 iEditingRow.setAdded(null);
-                iEditingRow.setEditedDate(new Date());
+                iEditingRow.setEditedDate(SSDateUtil.toDate(SSDateUtil.now()));
             }
             add(iEditingRow);
 
@@ -409,4 +405,3 @@ public class SSVoucherRowTableModelOld extends SSDefaultTableModel<SSVoucherRow>
         return sb.toString();
     }
 }
-

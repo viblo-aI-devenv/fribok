@@ -3,6 +3,7 @@ package se.swedsoft.bookkeeping.importexport.supplierpayments.poster;
 
 import se.swedsoft.bookkeeping.importexport.supplierpayments.data.SupplierPaymentConfig;
 import se.swedsoft.bookkeeping.importexport.supplierpayments.util.LBinLine;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.util.Date;
 
@@ -31,7 +32,7 @@ public class LBinPostTK11 extends LBinPost {
      */
     public LBinPostTK11(String iCurrency) {
         iBankGiroNr = SupplierPaymentConfig.getOurBankGiroAccount().replaceAll("-", "");
-        iDate = new Date();
+        iDate = SSDateUtil.toDate(SSDateUtil.today());
         this.iCurrency = iCurrency;
         iText = "LEVERANTÖRSBETALNINGAR";
     }

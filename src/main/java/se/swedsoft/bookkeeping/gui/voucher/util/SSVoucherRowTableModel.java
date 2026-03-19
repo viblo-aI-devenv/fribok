@@ -11,6 +11,7 @@ import se.swedsoft.bookkeeping.gui.util.table.SSTable;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSEditableTableModel;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSTableColumn;
 import se.swedsoft.bookkeeping.gui.voucher.panel.SSVoucherPanel;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,7 +38,7 @@ public class SSVoucherRowTableModel extends SSEditableTableModel<SSVoucherRow> {
 
         if (iReadOnlyCount > 0 && getEditObject() != null) {
             getEditObject().setAdded(null);
-            getEditObject().setEditedDate(new Date());
+            getEditObject().setEditedDate(SSDateUtil.toDate(SSDateUtil.now()));
         }
         return new SSVoucherRow();
     }

@@ -178,7 +178,7 @@ public class SSDayChooser implements ActionListener {
 
         DayOfWeek current = firstDayOfWeek;
         for (JLabel iLabel : this.iDayNames) {
-            // Map DayOfWeek to Calendar day index (SUNDAY=1..SATURDAY=7)
+            // Map DayOfWeek to DateFormatSymbols weekday index (SUNDAY=1..SATURDAY=7)
             int calendarDay = current.getValue() % 7 + 1; // ISO Mon=1..Sun=7 -> Sun=1..Sat=7
             iLabel.setText(dayNames[calendarDay]);
 

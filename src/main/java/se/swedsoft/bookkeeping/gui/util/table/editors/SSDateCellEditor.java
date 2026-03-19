@@ -4,6 +4,7 @@ package se.swedsoft.bookkeeping.gui.util.table.editors;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.components.SSButton;
 import se.swedsoft.bookkeeping.gui.util.datechooser.SSDateChooser;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;
@@ -78,11 +79,11 @@ public class SSDateCellEditor extends AbstractCellEditor implements TableCellEdi
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
         if (value instanceof LocalDate) {
-            setDate(se.swedsoft.bookkeeping.util.SSDateUtil.toDate((LocalDate) value));
+            setDate(SSDateUtil.toDate((LocalDate) value));
         } else if (value instanceof Date) {
             setDate((Date) value);
         } else {
-            setDate(new Date());
+            setDate(SSDateUtil.toDate(SSDateUtil.today()));
         }
 
         return iPanel;
