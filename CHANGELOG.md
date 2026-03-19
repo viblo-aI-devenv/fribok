@@ -60,6 +60,9 @@ diverging from upstream version 2.2-SNAPSHOT.
 - Continued the date migration across calculations, import/export, backup,
   voucher editing, and report cache code so production `new Date()` runtime
   calls are eliminated in favor of `SSDateUtil` and `java.time` comparisons.
+- Continued the date API cleanup by switching `SSDateMath`, `SSMonth`,
+  `SSVoucher`, `SSInvoice`, and `SSSupplierInvoice` workflows and focused tests
+  to prefer `LocalDate` accessors over deprecated `Date` bridges.
 - Dropped the legacy pre-HSQL `bookkeeper.db` import path and its archived
   `db/databas_v1.zip` handoff, requiring very old installations to migrate via
   historical Fribok releases before using this fork.

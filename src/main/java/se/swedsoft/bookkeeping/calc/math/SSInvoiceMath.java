@@ -201,9 +201,7 @@ public class SSInvoiceMath extends SSSaleMath {    private static final Logger L
      */
     public static Map<SSInvoice, BigDecimal> getSaldo(List<SSInvoice> iInvoices, Date iDate) {
         Map<SSInvoice, BigDecimal> iSaldos = new HashMap<>();
-
-        // Ceil the date so the before and after comparisions will be correct
-        iDate = SSDateMath.ceil(iDate);
+        LocalDate localDate = SSDateUtil.toLocalDate(iDate);
 
         HashMap<Integer, BigDecimal> iInpaymentSum = SSInpaymentMath.getSumsForInvoices(
                 iDate);
@@ -213,10 +211,11 @@ public class SSInvoiceMath extends SSSaleMath {    private static final Logger L
 
         // Loop through the invoices
         for (SSInvoice iInvoice : iInvoices) {
-            Date iCurrent = iInvoice.getDate();
+            LocalDate iCurrent = iInvoice.getLocalDate();
 
             // Only put invoices that is added before the specified date
-            if (iCurrent.before(iDate) && iInvoice.getType() != SSInvoiceType.CASH) {
+            if (iCurrent != null && localDate != null && !iCurrent.isAfter(localDate)
+                    && iInvoice.getType() != SSInvoiceType.CASH) {
                 BigDecimal iSum = getTotalSum(iInvoice);
 
                 if (iInpaymentSum.containsKey(iInvoice.getNumber())) {
@@ -431,17 +430,16 @@ public class SSInvoiceMath extends SSSaleMath {    private static final Logger L
      * @return the number of delayed days, or 0 if no payment or due date exists
      */
     public static int getNumDelayedDays(SSInvoice iInvoice) {
-        Date iPaymentDay = iInvoice.getDueDate();
+        LocalDate iPaymentDay = iInvoice.getLocalDueDate();
         Date iLastPayment = SSInpaymentMath.getLastInpaymentForInvoice(iInvoice);
 
         if (iLastPayment == null || iPaymentDay == null) {
             return 0;
         }
 
-        LocalDate dueDate = SSDateUtil.toLocalDate(iPaymentDay);
         LocalDate lastPayment = SSDateUtil.toLocalDate(iLastPayment);
 
-        long days = ChronoUnit.DAYS.between(dueDate, lastPayment);
+        long days = ChronoUnit.DAYS.between(iPaymentDay, lastPayment);
         return (int) Math.max(days, 0);
     }
 

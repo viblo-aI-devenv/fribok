@@ -9,6 +9,7 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSTableColumn;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSTableModel;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -175,12 +176,12 @@ public class SSSupplierInvoiceTableModel extends SSTableModel<SSSupplierInvoice>
             SSBundle.getBundle().getString("supplierinvoicetable.column.4")) {
         @Override
         public Object getValue(SSSupplierInvoice iObject) {
-            return iObject.getDate();
+            return SSDateUtil.toDate(iObject.getLocalDate());
         }
 
         @Override
         public void setValue(SSSupplierInvoice iObject, Object iValue) {
-            iObject.setDate((Date) iValue);
+            iObject.setLocalDate(SSDateUtil.toLocalDate((Date) iValue));
         }
 
         @Override
@@ -201,7 +202,7 @@ public class SSSupplierInvoiceTableModel extends SSTableModel<SSSupplierInvoice>
             SSBundle.getBundle().getString("supplierinvoicetable.column.5")) {
         @Override
         public Object getValue(SSSupplierInvoice iObject) {
-            return iObject.getDueDate();
+            return SSDateUtil.toDate(iObject.getLocalDueDate());
         }
 
         @Override

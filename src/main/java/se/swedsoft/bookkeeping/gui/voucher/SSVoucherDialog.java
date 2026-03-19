@@ -252,7 +252,7 @@ public class SSVoucherDialog {    private static final Logger LOG = LoggerFactor
             iNew.setVoucherRows(new LinkedList<>());
         }
 
-        iNew.setDate(SSVoucherMath.getNextVoucherDate());
+        iNew.setLocalDate(SSVoucherMath.getNextVoucherLocalDate());
         iNew.setDescription(
                 String.format(
                         SSBundle.getBundle().getString("voucherframe.correctsdescription"),
@@ -350,4 +350,3 @@ public class SSVoucherDialog {    private static final Logger LOG = LoggerFactor
         iDialog.setVisible();
     }
 }
-

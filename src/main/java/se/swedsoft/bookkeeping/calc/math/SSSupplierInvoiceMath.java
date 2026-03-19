@@ -29,11 +29,12 @@ public class SSSupplierInvoiceMath {
      * @return
      */
     public static boolean inPeriod(SSSupplierInvoice iSupplierInvoice, Date pFrom, Date pTo) {
-        Date iDate = iSupplierInvoice.getDate();
-        Date iFrom = SSDateMath.floor(pFrom);
-        Date iTo = SSDateMath.ceil(pTo);
+        LocalDate iDate = iSupplierInvoice.getLocalDate();
+        LocalDate iFrom = SSDateUtil.toLocalDate(pFrom);
+        LocalDate iTo = SSDateUtil.toLocalDate(pTo);
 
-        return (iFrom.getTime() <= iDate.getTime()) && (iDate.getTime() <= iTo.getTime());
+        return iDate != null && iFrom != null && iTo != null
+                && !iDate.isBefore(iFrom) && !iDate.isAfter(iTo);
     }
 
     /**
@@ -43,10 +44,10 @@ public class SSSupplierInvoiceMath {
      * @return
      */
     public static boolean inPeriod(SSSupplierInvoice iSupplierInvoice, Date pTo) {
-        Date iDate = iSupplierInvoice.getDate();
-        Date iTo = SSDateMath.ceil(pTo);
+        LocalDate iDate = iSupplierInvoice.getLocalDate();
+        LocalDate iTo = SSDateUtil.toLocalDate(pTo);
 
-        return iDate.getTime() <= iTo.getTime();
+        return iDate != null && iTo != null && !iDate.isAfter(iTo);
     }
 
     /**
@@ -267,9 +268,7 @@ public class SSSupplierInvoiceMath {
 
     public static Map<SSSupplierInvoice, BigDecimal> getSaldo(List<SSSupplierInvoice> iInvoices, Date iDate) {
         Map<SSSupplierInvoice, BigDecimal> iSaldos = new HashMap<>();
-
-        // Ceil the date so the before and after comparisions will be correct
-        iDate = SSDateMath.ceil(iDate);
+        LocalDate localDate = SSDateUtil.toLocalDate(iDate);
 
         HashMap<Integer, BigDecimal> iOutpaymentSum = SSOutpaymentMath.getSumsForSupplierInvoices(
                 iDate);
@@ -279,10 +278,10 @@ public class SSSupplierInvoiceMath {
 
         // Loop through the invoices
         for (SSSupplierInvoice iInvoice : iInvoices) {
-            Date iCurrent = iInvoice.getDate();
+            LocalDate iCurrent = iInvoice.getLocalDate();
 
             // Only put invoices that is added before the specified date
-            if (iCurrent.before(iDate)) {
+            if (iCurrent != null && localDate != null && !iCurrent.isAfter(localDate)) {
                 BigDecimal iSum = getTotalSum(iInvoice);
 
                 if (iOutpaymentSum.containsKey(iInvoice.getNumber())) {

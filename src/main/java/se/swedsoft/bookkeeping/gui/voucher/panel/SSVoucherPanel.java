@@ -252,7 +252,7 @@ public class SSVoucherPanel implements TableModelListener, ListSelectionListener
 
         iDescription.addChangeListener(e -> iVoucher.setDescription(iDescription.getText()));
 
-        iDate.addChangeListener(e -> iVoucher.setDate(iDate.getDate()));
+        iDate.addChangeListener(e -> iVoucher.setLocalDate(iDate.getLocalDate()));
 
         iDate.getEditor().getComponent(0).addKeyListener(new KeyAdapter() {
             @Override
@@ -546,7 +546,7 @@ public class SSVoucherPanel implements TableModelListener, ListSelectionListener
 
         iDescription.setText(pVoucher.getDescription());
         iNumber.setValue(pVoucher.getNumber());
-        iDate.setDate(pVoucher.getDate());
+        iDate.setLocalDate(pVoucher.getLocalDate());
         iStoreAsTemplate.setSelected(false);
 
         iVerifier.setVoucher(iVoucher);

@@ -46,13 +46,13 @@ public class SSVoucher implements Serializable, Cloneable, SSTableSearchable {
      * Default constructor.
      */
     public SSVoucher() {
-        iDate = SSDateUtil.toLocalDate(SSVoucherMath.getNextVoucherDate());
+        iDate = SSVoucherMath.getNextVoucherLocalDate();
         iVoucherRows = new ArrayList<>();
         doAutoIncrecement();
     }
 
     public SSVoucher(Integer iNumber) {
-        iDate = SSDateUtil.toLocalDate(SSVoucherMath.getNextVoucherDate());
+        iDate = SSVoucherMath.getNextVoucherLocalDate();
         iVoucherRows = new ArrayList<>();
         this.iNumber = iNumber;
     }

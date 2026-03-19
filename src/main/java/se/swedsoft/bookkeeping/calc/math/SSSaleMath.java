@@ -13,6 +13,7 @@ import se.swedsoft.bookkeeping.gui.product.SSProductFrame;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.Optional;
 
@@ -32,11 +33,12 @@ public class SSSaleMath {
      * @return
      */
     public static boolean inPeriod(SSSale iSale, Date pFrom, Date pTo) {
-        Date iDate = iSale.getDate();
-        Date iFrom = SSDateMath.floor(pFrom);
-        Date iTo = SSDateMath.ceil(pTo);
+        LocalDate iDate = iSale.getLocalDate();
+        LocalDate iFrom = se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(pFrom);
+        LocalDate iTo = se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(pTo);
 
-        return (iFrom.getTime() <= iDate.getTime()) && (iDate.getTime() <= iTo.getTime());
+        return iDate != null && iFrom != null && iTo != null
+                && !iDate.isBefore(iFrom) && !iDate.isAfter(iTo);
     }
 
     /**
@@ -46,10 +48,10 @@ public class SSSaleMath {
      * @return
      */
     public static boolean inPeriod(SSSale iSale, Date pTo) {
-        Date iDate = iSale.getDate();
-        Date iTo = SSDateMath.ceil(pTo);
+        LocalDate iDate = iSale.getLocalDate();
+        LocalDate iTo = se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(pTo);
 
-        return iDate.getTime() <= iTo.getTime();
+        return iDate != null && iTo != null && !iDate.isAfter(iTo);
     }
 
     /**
