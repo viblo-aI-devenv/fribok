@@ -3,9 +3,11 @@ package se.swedsoft.bookkeeping.calc.math;
 
 import se.swedsoft.bookkeeping.data.*;
 import se.swedsoft.bookkeeping.data.system.SSDB;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -85,13 +87,9 @@ public class SSSupplierInvoiceMath {
      * @return
      */
     public static boolean expired(SSSupplierInvoice iInvoice) {
-        Date iNow = new Date();
-        Date iPaymentDay = iInvoice.getDueDate();
+        LocalDate dueDate = iInvoice.getLocalDueDate();
 
-        iNow = SSDateMath.ceil(iNow);
-        iPaymentDay = SSDateMath.floor(iPaymentDay);
-
-        return iNow.after(iPaymentDay);
+        return dueDate != null && SSDateUtil.today().isAfter(dueDate);
 
     }
 
@@ -559,4 +557,3 @@ public class SSSupplierInvoiceMath {
     }
 
 }
-

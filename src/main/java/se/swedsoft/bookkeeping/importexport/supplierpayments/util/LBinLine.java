@@ -218,7 +218,7 @@ public class LBinLine {
         try {
             return SSDateUtil.toDate(LocalDate.parse(iValue, iDateFormat));
         } catch (DateTimeParseException e) {
-            return new Date();
+            return SSDateUtil.toDate(SSDateUtil.today());
         }
     }
 

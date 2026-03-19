@@ -3,6 +3,7 @@ package se.swedsoft.bookkeeping.data;
 import se.swedsoft.bookkeeping.calc.math.SSVoucherMath;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.table.SSTableSearchable;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -42,7 +43,7 @@ public class SSVoucherTemplate implements Serializable, SSTableSearchable {
     public SSVoucherTemplate() {
         iRows = new LinkedList<>();
         iDescription = null;
-        iDate = new Date();
+        iDate = SSDateUtil.toDate(SSDateUtil.now());
     }
 
     /**
@@ -52,7 +53,7 @@ public class SSVoucherTemplate implements Serializable, SSTableSearchable {
      */
     public SSVoucherTemplate(SSVoucher pVoucher) {
         iDescription = pVoucher.getDescription();
-        iDate = new Date();
+        iDate = SSDateUtil.toDate(SSDateUtil.now());
 
         iRows = new LinkedList<>();
 

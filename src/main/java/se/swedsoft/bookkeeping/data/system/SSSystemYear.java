@@ -4,6 +4,7 @@ package se.swedsoft.bookkeeping.data.system;
 import se.swedsoft.bookkeeping.data.SSAccountPlan;
 import se.swedsoft.bookkeeping.data.SSNewAccountingYear;
 import se.swedsoft.bookkeeping.gui.util.table.SSTableSearchable;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.io.Serializable;
 import java.rmi.server.UID;
@@ -38,8 +39,8 @@ public class SSSystemYear implements Serializable, SSTableSearchable {
      */
     public SSSystemYear() {
         iID = new UID();
-        iDateFrom = new Date();
-        iDateTo = new Date();
+        iDateFrom = SSDateUtil.toDate(SSDateUtil.today());
+        iDateTo = SSDateUtil.toDate(SSDateUtil.today());
         iCurrent = false;
         iAccountPlan = null;
     }

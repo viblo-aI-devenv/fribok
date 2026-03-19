@@ -9,6 +9,7 @@ import se.swedsoft.bookkeeping.data.system.SSSystemCompany;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.frame.SSInternalFrame;
 import se.swedsoft.bookkeeping.util.SSException;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,7 +35,7 @@ public class SSBackupFactory {    private static final Logger LOG = LoggerFactor
      * @return
      */
     public static String getDefaultFileName() {
-        Date iDate = new Date();
+        Date iDate = SSDateUtil.toDate(SSDateUtil.now());
 
         DateFormat iDateFormat = DateFormat.getDateInstance(DateFormat.SHORT);
         DateFormat iTimeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
@@ -54,7 +55,7 @@ public class SSBackupFactory {    private static final Logger LOG = LoggerFactor
      * @return
      */
     public static String getDefaultFileName(SSNewCompany iCompany) {
-        Date iDate = new Date();
+        Date iDate = SSDateUtil.toDate(SSDateUtil.now());
 
         DateFormat iDateFormat = DateFormat.getDateInstance(DateFormat.SHORT);
         DateFormat iTimeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
@@ -78,7 +79,7 @@ public class SSBackupFactory {    private static final Logger LOG = LoggerFactor
     public static SSBackup createBackup(String pFilename) {
         SSBackup iBackup = new SSBackup(SSBackupType.FULL);
 
-        iBackup.setDate(new Date());
+        iBackup.setDate(SSDateUtil.toDate(SSDateUtil.now()));
         iBackup.setFilename(pFilename);
 
         // Get the database files

@@ -50,11 +50,16 @@ diverging from upstream version 2.2-SNAPSHOT.
   (Phase 3 Step 16) (PR #14).
 - Replaced `SimpleDateFormat` usage with `DateTimeFormatter` throughout the
   codebase (Phase 3 Step 17) (PR #15).
-- Migrated all `Calendar` usage to `java.time` API (Phase 3 Step 18).
+- Eliminated all `java.util.Calendar` usage from the codebase, migrating GUI
+  date components, print reports, table renderers, calc utilities, and data
+  classes to `java.time.LocalDate`/`ChronoUnit` (Phase 3 Step 18).
 - Continued the date migration in GUI workflows by replacing more
   `new Date()` defaults with `SSDateUtil.today()` and `LocalDate` setters in
   invoice, order, purchase order, periodic invoice, tender, and credit invoice
   dialogs plus related invoice date chooser/table logic.
+- Continued the date migration across calculations, import/export, backup,
+  voucher editing, and report cache code so production `new Date()` runtime
+  calls are eliminated in favor of `SSDateUtil` and `java.time` comparisons.
 - Dropped the legacy pre-HSQL `bookkeeper.db` import path and its archived
   `db/databas_v1.zip` handoff, requiring very old installations to migrate via
   historical Fribok releases before using this fork.

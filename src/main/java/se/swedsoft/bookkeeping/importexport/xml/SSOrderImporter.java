@@ -118,9 +118,9 @@ public class SSOrderImporter {    private static final Logger LOG = LoggerFactor
 
                         try {
                             iOrder.setDate(
-                                    iValue == null ? new Date() : SSDateUtil.toDate(LocalDate.parse(iValue, iFormat)));
+                                    iValue == null ? SSDateUtil.toDate(SSDateUtil.today()) : SSDateUtil.toDate(LocalDate.parse(iValue, iFormat)));
                         } catch (DateTimeParseException e) {
-                            iOrder.setDate(new Date());
+                            iOrder.setDate(SSDateUtil.toDate(SSDateUtil.today()));
                         }
                     }
 

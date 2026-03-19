@@ -12,7 +12,7 @@ Completed work belongs in `CHANGELOG.md` and git history, not here.
 | Tests | JUnit 5 + integration tests in place |
 | Logging | SLF4J + Logback in place |
 | Build tooling | Checkstyle, SpotBugs, JaCoCo, and CI are configured |
-| Date/time migration | Partially complete: `SimpleDateFormat` is gone, but legacy `Date` usage remains |
+| Date/time migration | `Calendar` and `SimpleDateFormat` are gone; legacy `Date` boundaries remain |
 | Persistence | Still based on Java serialization stored in HSQLDB `OBJECT` columns |
 
 ## Remaining Work
@@ -22,21 +22,18 @@ Completed work belongs in `CHANGELOG.md` and git history, not here.
 Status: partially complete
 
 Current repo state:
-- `134` production files still import `java.util.Date`
-- `47` `new Date()` calls remain in production code
-- `4` `Calendar` usages remain in production code
-- `0` `SimpleDateFormat` usages remain
+- `java.util.Calendar` usage has been eliminated from production code
+- `SimpleDateFormat` usage has been eliminated from production code
+- production `new Date()` runtime calls have been eliminated
+- legacy `Date` imports and bridge methods still remain at Swing, JasperReports, import/export, and persistence boundaries
 
 Remaining tasks:
 - Replace remaining `Date`-based APIs with `java.time` types where practical
 - Remove or isolate deprecated bridge methods that still exist only for legacy callers
-- Eliminate or isolate the remaining `Calendar` usage in:
-  - `src/main/java/se/swedsoft/bookkeeping/gui/invoice/util/SSInterestInvoiceTableModel.java`
-  - `src/main/java/se/swedsoft/bookkeeping/gui/util/datechooser/SSDateChooser.java`
 - Re-evaluate whether GUI date widgets can move fully to `java.time` without `Date` adapters
 
 Done when:
-- production code no longer depends on `Calendar`, or the remaining framework-mandated usage is clearly isolated
+- production code no longer depends on `Calendar`
 - legacy `Date` usage is either removed or clearly constrained to unavoidable framework boundaries
 
 ### 2. Replace Serialization-Based Persistence

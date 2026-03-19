@@ -6,6 +6,7 @@ package se.swedsoft.bookkeeping.data;
 
 
 import se.swedsoft.bookkeeping.data.system.SSDB;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -301,7 +302,7 @@ public class SSVoucherRow implements Serializable, Cloneable {
      */
     public void setCrossed(String pSignature) {
         iCrossed = true;
-        iEditedDate = new Date();
+        iEditedDate = SSDateUtil.toDate(SSDateUtil.now());
         iEditedSignature = pSignature;
     }
 
@@ -329,7 +330,7 @@ public class SSVoucherRow implements Serializable, Cloneable {
      */
     public void setAdded(String pSignature) {
         iAdded = true;
-        iEditedDate = new Date();
+        iEditedDate = SSDateUtil.toDate(SSDateUtil.now());
         iEditedSignature = pSignature;
     }
 

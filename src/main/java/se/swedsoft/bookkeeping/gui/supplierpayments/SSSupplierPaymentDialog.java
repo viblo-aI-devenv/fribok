@@ -122,10 +122,10 @@ public class SSSupplierPaymentDialog extends SSDialog {    private static final 
                                     "supplierinvoiceframe.nosupplierpayments");
                             return;
                         }
-                        Date iDate = new Date();
+                        Date iDate = null;
 
                         for (SupplierPayment iSupplierPayment : iSupplierPayments) {
-                            if (iSupplierPayment.getDate().after(iDate)) {
+                            if (iDate == null || iSupplierPayment.getDate().after(iDate)) {
                                 iDate = iSupplierPayment.getDate();
                             }
                             iSupplierPayment.getSupplierInvoice().setBGCEntered();

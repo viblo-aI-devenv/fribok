@@ -332,7 +332,7 @@ public class SSVoucher implements Serializable, Cloneable, SSTableSearchable {
      SSVoucher        iPrevious = SSVoucherMath.getPreviousVoucher();
      SSNewAccountingYear iYear     = SSDB.getInstance().getCurrentYear();
 
-     Date iDate = iPrevious != null ? iPrevious.getDate() : (iYear != null) ? iYear.getFrom() :  new Date();
+     Date iDate = iPrevious != null ? iPrevious.getDate() : (iYear != null) ? iYear.getFrom() : SSDateUtil.toDate(SSDateUtil.today());
 
      iVoucher.doAutoIncrecement();
      iVoucher.setDate  (iDate      );

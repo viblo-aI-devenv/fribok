@@ -15,6 +15,7 @@ import se.swedsoft.bookkeeping.gui.util.components.SSButton;
 import se.swedsoft.bookkeeping.gui.util.components.SSTableComboBox;
 import se.swedsoft.bookkeeping.gui.util.model.SSAccountTableModel;
 import se.swedsoft.bookkeeping.gui.util.table.SSTable;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
@@ -126,7 +127,7 @@ public class SSInterestInvoicePanel {
             Date iLastInpayment = SSInpaymentMath.getLastInpaymentForInvoice(iInvoice);
 
             if (iLastInpayment == null) {
-                iLastInpayment = new Date();
+                iLastInpayment = SSDateUtil.toDate(SSDateUtil.today());
             }
 
             // Floor the inpayment date so we don't get any credit invoices for invoices payed on the last day

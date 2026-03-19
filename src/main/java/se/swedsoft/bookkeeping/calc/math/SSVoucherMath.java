@@ -629,7 +629,7 @@ public class SSVoucherMath {
             return iAccountingYear.getFrom();
         }
 
-        return new Date();
+        return SSDateUtil.toDate(SSDateUtil.today());
     }
 
     /**
@@ -660,4 +660,3 @@ public class SSVoucherMath {
         iTo.setVoucherRows(iNew);
     }
 }
-

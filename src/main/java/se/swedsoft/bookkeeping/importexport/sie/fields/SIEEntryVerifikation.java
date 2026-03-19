@@ -13,6 +13,7 @@ import se.swedsoft.bookkeeping.importexport.sie.util.SIEReader;
 import se.swedsoft.bookkeeping.importexport.sie.util.SIEWriter;
 import se.swedsoft.bookkeeping.importexport.util.SSExportException;
 import se.swedsoft.bookkeeping.importexport.util.SSImportException;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.util.Date;
 import java.util.List;
@@ -47,7 +48,7 @@ public class SIEEntryVerifikation implements SIEEntry {
 
         String     iSerie = iReader.nextString();
         Integer    iNumber = iReader.nextInteger().orElse(null);
-        Date       iDate = iReader.hasNextDate() ? iReader.nextDate() : new Date();
+        Date       iDate = iReader.hasNextDate() ? iReader.nextDate() : SSDateUtil.toDate(SSDateUtil.today());
         String     iDescription = iReader.hasNextString() ? iReader.nextString() : null;
 
         if (!iSerie.equals("A") && iSerie.length() > 0) {

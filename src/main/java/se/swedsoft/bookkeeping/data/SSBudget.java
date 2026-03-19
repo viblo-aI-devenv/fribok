@@ -2,6 +2,7 @@ package se.swedsoft.bookkeeping.data;
 
 
 import se.swedsoft.bookkeeping.calc.math.SSAccountMath;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -36,8 +37,8 @@ public class SSBudget implements Serializable {
      * Default constructor
      */
     public SSBudget() {
-        iFrom = new Date();
-        iTo = new Date();
+        iFrom = SSDateUtil.toDate(SSDateUtil.today());
+        iTo = SSDateUtil.toDate(SSDateUtil.today());
         iAccountingYear = null;
         iBudget = new HashMap<>();
     }
@@ -420,11 +421,10 @@ public class SSBudget implements Serializable {
         }
 
         if (iBudget.isEmpty() && !iFrom.equals(iTo)) {
-            iFrom = new Date();
-            iTo = new Date();
+            iFrom = SSDateUtil.toDate(SSDateUtil.today());
+            iTo = SSDateUtil.toDate(SSDateUtil.today());
 
         }
     }
 
 }
-

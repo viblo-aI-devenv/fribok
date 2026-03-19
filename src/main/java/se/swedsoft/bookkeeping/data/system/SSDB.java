@@ -1012,9 +1012,9 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 .toLocalDate(iFirstDayOfCurrent).minusDays(1);
 
         for (SSNewAccountingYear iAccountingYear : iYears) {
-            java.time.LocalDate iLastDayOfYear = se.swedsoft.bookkeeping.util.SSDateUtil
+            java.time.LocalDate lastDayOfYear = se.swedsoft.bookkeeping.util.SSDateUtil
                     .toLocalDate(iAccountingYear.getTo());
-            if (dayBeforeCurrent.equals(iLastDayOfYear)) {
+            if (dayBeforeCurrent.equals(lastDayOfYear)) {
                 return Optional.of(iAccountingYear);
             }
         }

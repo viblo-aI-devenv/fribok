@@ -2,6 +2,7 @@ package se.swedsoft.bookkeeping.data;
 
 
 import se.swedsoft.bookkeeping.data.system.SSDB;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -30,7 +31,7 @@ public class SSIndelivery implements Serializable {
      *
      */
     public SSIndelivery() {
-        iDate = new Date();
+        iDate = SSDateUtil.toDate(SSDateUtil.today());
         iText = null;
         iRows = new LinkedList<>();
 

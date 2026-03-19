@@ -6,6 +6,7 @@ import se.swedsoft.bookkeeping.data.SSAddress;
 import se.swedsoft.bookkeeping.data.SSSupplier;
 import se.swedsoft.bookkeeping.data.SSSupplierInvoice;
 import se.swedsoft.bookkeeping.data.system.SSDB;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -43,7 +44,7 @@ public class SupplierPayment {
         iValue = SSSupplierInvoiceMath.getSaldo(iInvoice.getNumber());
         iAccount = getBankGiro();
 
-        iDate = iInvoice.getDueDate() == null ? new Date() : iInvoice.getDueDate();
+        iDate = iInvoice.getDueDate() == null ? SSDateUtil.toDate(SSDateUtil.today()) : iInvoice.getDueDate();
         iCurrency = iInvoice.getCurrency() == null
                 ? "SEK"
                 : iInvoice.getCurrency().getName();

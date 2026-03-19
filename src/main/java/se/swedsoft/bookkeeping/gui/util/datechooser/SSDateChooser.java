@@ -28,6 +28,10 @@ import java.util.List;
  */
 public class SSDateChooser extends JPanel implements ActionListener, ChangeListener {
 
+    private static final int SPINNER_FIELD_MONTH = 2;
+
+    private static final int SPINNER_FIELD_DAY_OF_MONTH = 5;
+
     private JSpinner iSpinner;
 
     private JSpinner.DateEditor iEditor;
@@ -60,7 +64,7 @@ public class SSDateChooser extends JPanel implements ActionListener, ChangeListe
         iChangeListeners = new LinkedList<>();
 
         iDateFormatString = "yyyy-MM-dd";
-        iCalendarField = java.util.Calendar.DAY_OF_MONTH;
+        iCalendarField = SPINNER_FIELD_DAY_OF_MONTH;
 
         iModel = new SpinnerDateModel() {
             @Override
@@ -69,7 +73,7 @@ public class SSDateChooser extends JPanel implements ActionListener, ChangeListe
                 super.setCalendarField(iCalendarField);
             }
         };
-        iModel.setCalendarField(java.util.Calendar.MONTH);
+        iModel.setCalendarField(SPINNER_FIELD_MONTH);
         iModel.addChangeListener(this);
 
         iSpinner = new JSpinner();
@@ -254,12 +258,9 @@ public class SSDateChooser extends JPanel implements ActionListener, ChangeListe
     }
 
     /**
-     * Set the calendar field the updown shall edit.
+     * Set the spinner field the updown shall edit.
      *
-     * <p>This uses {@link java.util.Calendar} field constants because
-     * {@link SpinnerDateModel} requires them.
-     *
-     * @param iCalendarField the field constant from {@link java.util.Calendar}
+     * @param iCalendarField the field identifier expected by {@link SpinnerDateModel}
      */
     public void setCalendarField(int iCalendarField) {
         this.iCalendarField = iCalendarField;
@@ -267,9 +268,9 @@ public class SSDateChooser extends JPanel implements ActionListener, ChangeListe
     }
 
     /**
-     * Get the calendar field the updown are editing
+     * Get the spinner field the updown are editing.
      *
-     * @return the calendar field constant from {@link java.util.Calendar}
+     * @return the field identifier expected by {@link SpinnerDateModel}
      */
     public int getCalendarField() {
         return iCalendarField;

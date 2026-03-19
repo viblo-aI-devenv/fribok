@@ -326,7 +326,7 @@ public class SSPurchaseOrderDialog {
 
         iSupplierInvoice.setNumber(null);
         iSupplierInvoice.setStockInfluencing(true);
-        // iSupplierInvoice.setDate(new Date());
+        // Default date is already initialized by the supplier invoice model.
 
         for (SSPurchaseOrder iCurrent : iPurchaseOrders) {
 
