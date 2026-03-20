@@ -165,10 +165,7 @@ public class SSMonth  implements Serializable {
      * @return
      */
     public static List<SSMonth> splitYearIntoMonths(SSNewAccountingYear pYearData) {
-        Date iFrom = pYearData.getFrom();
-        Date iTo = pYearData.getTo();
-
-        return splitYearIntoMonths(iFrom, iTo);
+        return splitYearIntoMonths(pYearData.getLocalFrom(), pYearData.getLocalTo());
     }
 
     public boolean isDateInMonth(Date iDate) {

@@ -3,11 +3,8 @@ package se.swedsoft.bookkeeping.data;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.swedsoft.bookkeeping.data.common.SSInvoiceType;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -94,15 +91,14 @@ class SSInvoiceTest {
         assertThat(invoice.getCurrencyRate()).isEqualByComparingTo("8.75");
     }
 
-    // ---- setDueDate(Date) / getDueDate ----
+    // ---- setLocalDueDate / getLocalDueDate ----
 
     @Test
-    void setDueDateStoresDate() {
-        // Use a day-boundary Date since fields are now LocalDate internally
-        Date d = SSDateUtil.toDate(LocalDate.of(1970, 1, 2));
-        invoice.setDueDate(d);
+    void setLocalDueDateStoresDate() {
+        LocalDate d = LocalDate.of(1970, 1, 2);
+        invoice.setLocalDueDate(d);
 
-        assertThat(invoice.getDueDate()).isEqualTo(d);
+        assertThat(invoice.getLocalDueDate()).isEqualTo(d);
     }
 
     // ---- setDueDate() no-arg: no payment term → falls back to iDate ----
@@ -110,12 +106,12 @@ class SSInvoiceTest {
     @Test
     void setDueDateNoArgWithNoPaymentTermSetsDueDateToInvoiceDate() {
         // Use a day-boundary Date since fields are now LocalDate internally
-        Date invoiceDate = SSDateUtil.toDate(LocalDate.of(2024, 7, 20));
-        invoice.setDate(invoiceDate);
+        LocalDate invoiceDate = LocalDate.of(2024, 7, 20);
+        invoice.setLocalDate(invoiceDate);
         // iPaymentTerm is null by default when SSDB has no company
         invoice.setDueDate();
 
-        assertThat(invoice.getDueDate()).isEqualTo(invoiceDate);
+        assertThat(invoice.getLocalDueDate()).isEqualTo(invoiceDate);
     }
 
     // ---- setYourOrderNumber / getYourOrderNumber ----

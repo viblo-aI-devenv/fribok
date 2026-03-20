@@ -170,7 +170,7 @@ public class SSSupplierInvoiceDialog {
         SSSupplierInvoice iNew = new SSSupplierInvoice(iCopyFrom);
 
         iNew.setNumber(null);
-        iNew.setDate(iNew.getLastDate());
+        iNew.setLocalDate(iNew.getLastLocalDate());
         iNew.setEntered(false);
         iNew.setBGCEntered(false);
 

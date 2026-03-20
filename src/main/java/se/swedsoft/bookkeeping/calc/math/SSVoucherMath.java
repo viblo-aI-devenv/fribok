@@ -29,11 +29,12 @@ public class SSVoucherMath {
      * @return
      */
     public static boolean inPeriod(SSVoucher iVoucher, Date pFrom, Date pTo) {
-        Date iDate = iVoucher.getDate();
-        Date iFrom = SSDateMath.floor(pFrom);
-        Date iTo = SSDateMath.ceil(pTo);
+        LocalDate iDate = iVoucher.getLocalDate();
+        LocalDate iFrom = SSDateUtil.toLocalDate(pFrom);
+        LocalDate iTo = SSDateUtil.toLocalDate(pTo);
 
-        return (iFrom.getTime() <= iDate.getTime()) && (iDate.getTime() <= iTo.getTime());
+        return iDate != null && iFrom != null && iTo != null
+                && !iDate.isBefore(iFrom) && !iDate.isAfter(iTo);
     }
 
     /**
@@ -44,10 +45,10 @@ public class SSVoucherMath {
      * @return
      */
     public static boolean inPeriod(SSVoucher iVoucher, Date pTo) {
-        Date iDate = iVoucher.getDate();
-        Date iTo = SSDateMath.ceil(pTo);
+        LocalDate iDate = iVoucher.getLocalDate();
+        LocalDate iTo = SSDateUtil.toLocalDate(pTo);
 
-        return iDate.getTime() <= iTo.getTime();
+        return iDate != null && iTo != null && !iDate.isAfter(iTo);
     }
 
     /**
@@ -57,8 +58,12 @@ public class SSVoucherMath {
      * @return
      */
     public static boolean inPeriod(SSVoucher iVoucher, SSMonth iMonth) {
-        return iMonth.getFrom().compareTo(iVoucher.getDate()) <= 0
-                && iMonth.getTo().compareTo(iVoucher.getDate()) >= 0;
+        LocalDate voucherDate = iVoucher.getLocalDate();
+        LocalDate monthFrom = iMonth.getLocalFrom();
+        LocalDate monthTo = iMonth.getLocalTo();
+
+        return voucherDate != null && monthFrom != null && monthTo != null
+                && !voucherDate.isBefore(monthFrom) && !voucherDate.isAfter(monthTo);
     }
 
     /**
@@ -102,10 +107,11 @@ public class SSVoucherMath {
         LocalDate iPrevYearFrom = pFrom.minusYears(1);
         LocalDate iPrevYearTo = pTo.minusYears(1);
 
-        Date prevFrom = SSDateUtil.toDate(iPrevYearFrom);
-        Date prevTo = SSDateUtil.toDate(iPrevYearTo);
+        LocalDate voucherDate = iVoucher.getLocalDate();
 
-        return inPeriod(iVoucher, prevFrom, prevTo);
+        return voucherDate != null
+                && !voucherDate.isBefore(iPrevYearFrom)
+                && !voucherDate.isAfter(iPrevYearTo);
     }
 
     /**
@@ -560,7 +566,7 @@ public class SSVoucherMath {
 
         iNew.setNumber(iVoucher.getNumber());
         iNew.setDescription(iVoucher.getDescription());
-        iNew.setDate(iVoucher.getDate());
+        iNew.setLocalDate(iVoucher.getLocalDate());
         iNew.setCorrects(iVoucher.getCorrects());
         iNew.setCorrectedBy(iVoucher.getCorrectedBy());
 
@@ -596,6 +602,10 @@ public class SSVoucherMath {
      * @return The previous voucher.
      */
     public static Date getNextVoucherDate() {
+        return SSDateUtil.toDate(getNextVoucherLocalDate());
+    }
+
+    public static LocalDate getNextVoucherLocalDate() {
         List<SSVoucher> iVouchers = new LinkedList<>(
                 SSDB.getInstance().getVouchers());
 
@@ -605,8 +615,8 @@ public class SSVoucherMath {
                     return 0;
                 }
 
-                Date iDate1 = iVoucher1.getDate();
-                Date iDate2 = iVoucher2.getDate();
+                LocalDate iDate1 = iVoucher1.getLocalDate();
+                LocalDate iDate2 = iVoucher2.getLocalDate();
 
                 if (iDate1 == null || iDate2 == null) {
                     return 0;
@@ -616,7 +626,7 @@ public class SSVoucherMath {
 
             });
         if (!iVouchers.isEmpty()) {
-            Date iDate = iVouchers.get(0).getDate();
+            LocalDate iDate = iVouchers.get(0).getLocalDate();
 
             if (iDate != null) {
                 return iDate;
@@ -625,11 +635,11 @@ public class SSVoucherMath {
 
         SSNewAccountingYear iAccountingYear = SSDB.getInstance().getCurrentYear();
 
-        if (iAccountingYear != null && iAccountingYear.getFrom() != null) {
-            return iAccountingYear.getFrom();
+        if (iAccountingYear != null && iAccountingYear.getLocalFrom() != null) {
+            return iAccountingYear.getLocalFrom();
         }
 
-        return SSDateUtil.toDate(SSDateUtil.today());
+        return SSDateUtil.today();
     }
 
     /**

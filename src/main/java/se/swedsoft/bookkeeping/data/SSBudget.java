@@ -120,7 +120,7 @@ public class SSBudget implements Serializable {
             iMonths.add(iMonth);
         }
 
-        Collections.sort(iMonths, (o1, o2) -> o1.getDate().compareTo(o2.getDate()));
+        Collections.sort(iMonths, (o1, o2) -> o1.getLocalFrom().compareTo(o2.getLocalFrom()));
 
         return iMonths;
     }
@@ -147,10 +147,10 @@ public class SSBudget implements Serializable {
     public void setYear(SSNewAccountingYear pAccountingYear) {
         iAccountingYear = pAccountingYear;
 
-        if (iAccountingYear.getFrom().compareTo(iFrom) != 0
-                || iAccountingYear.getTo().compareTo(iTo) != 0) {
-            iFrom = iAccountingYear.getFrom();
-            iTo = iAccountingYear.getTo();
+        if (!iAccountingYear.getLocalFrom().equals(SSDateUtil.toLocalDate(iFrom))
+                || !iAccountingYear.getLocalTo().equals(SSDateUtil.toLocalDate(iTo))) {
+            iFrom = SSDateUtil.toDate(iAccountingYear.getLocalFrom());
+            iTo = SSDateUtil.toDate(iAccountingYear.getLocalTo());
 
             iBudget = createBudgetForYear();
         }
@@ -274,7 +274,8 @@ public class SSBudget implements Serializable {
         for (Map.Entry<SSMonth, Map<SSAccount, BigDecimal>> ssMonthMapEntry : iBudget.entrySet()) {
             BigDecimal iValue = ssMonthMapEntry.getValue().get(pAccount);
 
-            if (iValue == null || !ssMonthMapEntry.getKey().isBetween(pFrom, pTo)) {
+            if (iValue == null || !ssMonthMapEntry.getKey().isBetween(
+                    SSDateUtil.toLocalDate(pFrom), SSDateUtil.toLocalDate(pTo))) {
                 continue;
             }
 

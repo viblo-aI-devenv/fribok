@@ -106,7 +106,7 @@ class SSInvoiceIntegrationTest {
     void addedInvoiceDateRoundTrips() {
         Date date = new Date(1_700_000_000_000L);
         SSInvoice inv = invoice("INV-IT-CUST-005", "Date Customer");
-        inv.setDate(date);
+        inv.setLocalDate(se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(date));
         SSDB.getInstance().addInvoice(inv);
 
         try {
@@ -116,10 +116,8 @@ class SSInvoiceIntegrationTest {
             // Date fields are now LocalDate internally, so the time portion
             // is truncated to midnight on round-trip.
             LocalDate expectedLocalDate = se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(date);
-            Date expectedDate = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(expectedLocalDate);
-
             assertThat(fetched).isPresent();
-            assertThat(fetched.get().getDate()).isEqualTo(expectedDate);
+            assertThat(fetched.get().getLocalDate()).isEqualTo(expectedLocalDate);
         } finally {
             SSDB.getInstance().deleteInvoice(inv);
         }
@@ -219,7 +217,7 @@ class SSInvoiceIntegrationTest {
         SSInvoice inv = new SSInvoice();
         inv.setCustomerNr(customerNr);
         inv.setCustomerName(customerName);
-        inv.setDate(new Date());
+        inv.setLocalDate(se.swedsoft.bookkeeping.util.SSDateUtil.today());
         inv.setCurrencyRate(new BigDecimal("1"));
         return inv;
     }

@@ -539,7 +539,7 @@ public class SSInvoicePanel {
         // Ordernummer
         iOrders.setText(getOrderNumbers(iInvoice));
         // Offertdatum
-        iDate.setDate(iInvoice.getDate());
+        iDate.setLocalDate(iInvoice.getLocalDate());
         // Erat ordernummer
         iYourOrderNumber.setText(iInvoice.getYourOrderNumber());
         // Kund nummer
@@ -567,7 +567,7 @@ public class SSInvoicePanel {
         // Betalningsvilkor
         iPaymentTerm.setSelected(iInvoice.getPaymentTerm(), true);
         // Förfallodag
-        iPaymentDay.setDate(iInvoice.getDueDate());
+        iPaymentDay.setLocalDate(iInvoice.getLocalDueDate());
         // Leveransvilkor
         iDeliveryTerm.setSelected(iInvoice.getDeliveryTerm());
         // Leveranssätt
@@ -620,7 +620,7 @@ public class SSInvoicePanel {
     public SSInvoice getInvoice() {
 
         // Offertdatum
-        iInvoice.setDate(iDate.getDate());
+        iInvoice.setLocalDate(iDate.getLocalDate());
         // Kund nummer
         iInvoice.setCustomerNr(iCustomer.getText());
         // Kund namn
@@ -638,7 +638,7 @@ public class SSInvoicePanel {
         // Betalningsvilkor
         iInvoice.setPaymentTerm(iPaymentTerm.getSelected());
         // Förfallodag
-        iInvoice.setDueDate(iPaymentDay.getDate());
+        iInvoice.setLocalDueDate(iPaymentDay.getLocalDate());
         // Leveransvilkor
         iInvoice.setDeliveryTerm(iDeliveryTerm.getSelected());
         // Leveranssätt

@@ -25,6 +25,7 @@ Current repo state:
 - `java.util.Calendar` usage has been eliminated from production code
 - `SimpleDateFormat` usage has been eliminated from production code
 - production `new Date()` runtime calls have been eliminated
+- core date math/month helpers and focused voucher/invoice tests now prefer `LocalDate`
 - legacy `Date` imports and bridge methods still remain at Swing, JasperReports, import/export, and persistence boundaries
 
 Remaining tasks:

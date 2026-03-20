@@ -319,14 +319,11 @@ public class SSSupplierInvoicePanel implements ActionListener {
         SSSupplier nSupplier = iSupplierInvoice.getSupplier();
 
         if (nSupplier != null) {
-            Date nDate = iDate.getDate();
-            Date nDueDate = iDueDate.getDate();
-
-            iSupplierInvoice.setDate(nDate);
+            iSupplierInvoice.setLocalDate(iDate.getLocalDate());
             iPaymentTerm = nSupplier.getPaymentTerm();
             iSupplierInvoice.setPaymentTerm(iPaymentTerm);
             iSupplierInvoice.setDueDate();
-            iDueDate.setDate(iSupplierInvoice.getDueDate());
+            iDueDate.setLocalDate(iSupplierInvoice.getLocalDueDate());
         }
     }
 
@@ -475,7 +472,7 @@ public class SSSupplierInvoicePanel implements ActionListener {
         iNumber.setValue(this.iSupplierInvoice.getNumber());
         // Offertdatum
 
-        iDate.setDate(this.iSupplierInvoice.getDate());
+        iDate.setLocalDate(this.iSupplierInvoice.getLocalDate());
         // Kund nummer
         iSupplier.setSelected(this.iSupplierInvoice.getSupplier(iSuppliers));
 
@@ -506,7 +503,7 @@ public class SSSupplierInvoicePanel implements ActionListener {
         // Valutakurs
         iCurrencyRate.setValue(this.iSupplierInvoice.getCurrencyRate());
         // Förfallodag
-        iDueDate.setDate(this.iSupplierInvoice.getDueDate());
+        iDueDate.setLocalDate(this.iSupplierInvoice.getLocalDueDate());
 
         // Standard konton
         iDefaultAccounts.setDefaultAccounts(this.iSupplierInvoice.getDefaultAccounts());
@@ -527,7 +524,7 @@ public class SSSupplierInvoicePanel implements ActionListener {
      */
     public SSSupplierInvoice getSupplierInvoice() {
         // Offertdatum
-        iSupplierInvoice.setDate(iDate.getDate());
+        iSupplierInvoice.setLocalDate(iDate.getLocalDate());
         // Kund nummer
         iSupplierInvoice.setSupplier(iSupplier.getSelected());
         // OCR/Referens nummer
@@ -537,7 +534,7 @@ public class SSSupplierInvoicePanel implements ActionListener {
         // Valutakurs
         iSupplierInvoice.setCurrencyRate(iCurrencyRate.getValue());
         // Förfallodag
-        iSupplierInvoice.setDueDate(iDueDate.getDate());
+        iSupplierInvoice.setLocalDueDate(iDueDate.getLocalDate());
 
         iSupplierInvoice.setTaxSum(iTaxSum.getValue());
 

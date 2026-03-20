@@ -85,7 +85,7 @@ class SSVoucherIntegrationTest {
     void addedVoucherDateRoundTrips() {
         Date date = new Date(1_700_000_000_000L);
         SSVoucher v = voucher(BASE_NUMBER + 3);
-        v.setDate(date);
+        v.setLocalDate(se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(date));
         SSDB.getInstance().addVoucher(v, true);
 
         try {
@@ -95,10 +95,8 @@ class SSVoucherIntegrationTest {
             // Date fields are now LocalDate internally, so the time portion
             // is truncated to midnight on round-trip.
             LocalDate expectedLocalDate = se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(date);
-            Date expectedDate = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(expectedLocalDate);
-
             assertThat(fetched).isNotNull();
-            assertThat(fetched.getDate()).isEqualTo(expectedDate);
+            assertThat(fetched.getLocalDate()).isEqualTo(expectedLocalDate);
         } finally {
             SSDB.getInstance().deleteVoucher(v);
         }
@@ -208,7 +206,7 @@ class SSVoucherIntegrationTest {
 
     private static SSVoucher voucher(int number) {
         SSVoucher v = new SSVoucher(number);
-        v.setDate(new Date());
+        v.setLocalDate(se.swedsoft.bookkeeping.util.SSDateUtil.today());
         return v;
     }
 

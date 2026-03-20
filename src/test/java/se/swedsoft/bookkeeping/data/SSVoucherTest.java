@@ -1,11 +1,9 @@
 package se.swedsoft.bookkeeping.data;
 
 import org.junit.jupiter.api.Test;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,7 +21,7 @@ class SSVoucherTest {
     /** Creates a minimal voucher without triggering the SSDB auto-increment. */
     private SSVoucher newVoucher(int number) {
         SSVoucher v = new SSVoucher(number);
-        v.setDate(new Date(0));
+        v.setLocalDate(LocalDate.of(1970, 1, 1));
         return v;
     }
 
@@ -53,16 +51,15 @@ class SSVoucherTest {
         assertThat(v.getNumber()).isEqualTo(99);
     }
 
-    // ---- setDate / getDate ----
+    // ---- setLocalDate / getLocalDate ----
 
     @Test
-    void setDateUpdatesDate() {
+    void setLocalDateUpdatesDate() {
         SSVoucher v = newVoucher(1);
-        // Use a day-boundary Date since fields are now LocalDate internally
-        Date d = SSDateUtil.toDate(LocalDate.of(2024, 6, 15));
-        v.setDate(d);
+        LocalDate d = LocalDate.of(2024, 6, 15);
+        v.setLocalDate(d);
 
-        assertThat(v.getDate()).isEqualTo(d);
+        assertThat(v.getLocalDate()).isEqualTo(d);
     }
 
     // ---- setDescription / getDescription ----
@@ -206,14 +203,14 @@ class SSVoucherTest {
         SSVoucher original = newVoucher(7);
         original.setDescription("Original");
         // Use a day-boundary Date since fields are now LocalDate internally
-        Date date = SSDateUtil.toDate(LocalDate.of(2024, 3, 10));
-        original.setDate(date);
+        LocalDate date = LocalDate.of(2024, 3, 10);
+        original.setLocalDate(date);
 
         SSVoucher copy = new SSVoucher(original);
 
         assertThat(copy.getNumber()).isEqualTo(7);
         assertThat(copy.getDescription()).isEqualTo("Original");
-        assertThat(copy.getDate()).isEqualTo(date);
+        assertThat(copy.getLocalDate()).isEqualTo(date);
     }
 
     @Test
