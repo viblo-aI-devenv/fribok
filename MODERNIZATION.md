@@ -26,6 +26,7 @@ Current repo state:
 - `SimpleDateFormat` usage has been eliminated from production code
 - production `new Date()` runtime calls have been eliminated
 - core date math/month helpers and focused voucher/invoice tests now prefer `LocalDate`
+- more payment, credit-note, and periodic-invoice calculations now compare `LocalDate` values directly
 - legacy `Date` imports and bridge methods still remain at Swing, JasperReports, import/export, and persistence boundaries
 
 Remaining tasks:

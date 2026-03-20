@@ -364,35 +364,35 @@ public class SSPeriodicInvoicePanel {
 
         iDate.addChangeListener(e -> {
 
-                Date    iDate = SSPeriodicInvoicePanel.this.iDate.getDate();
+                java.time.LocalDate iDate = SSPeriodicInvoicePanel.this.iDate.getLocalDate();
                 Integer iPeriod = SSPeriodicInvoicePanel.this.iPeriod.getValue();
 
                 if (iPeriod == null || iDate == null) {
                     return;
                 }
 
-                Date iPeriodStart = SSDateMath.getFirstDayInMonth(iDate);
-                Date iPeriodEnd = SSDateMath.addMonths(iPeriodStart, iPeriod);
+                java.time.LocalDate iPeriodStart = SSDateMath.getFirstDayInMonth(iDate);
+                java.time.LocalDate iPeriodEnd = SSDateMath.addMonths(iPeriodStart, iPeriod);
 
-                SSPeriodicInvoicePanel.this.iPeriodStart.setDate(iPeriodStart);
-                SSPeriodicInvoicePanel.this.iPeriodEnd.setDate(iPeriodEnd);
+                SSPeriodicInvoicePanel.this.iPeriodStart.setLocalDate(iPeriodStart);
+                SSPeriodicInvoicePanel.this.iPeriodEnd.setLocalDate(iPeriodEnd);
 
             });
 
         iCount.addActionListener(e -> {
 
-                Date    iDate = SSPeriodicInvoicePanel.this.iDate.getDate();
+                java.time.LocalDate iDate = SSPeriodicInvoicePanel.this.iDate.getLocalDate();
                 Integer iPeriod = SSPeriodicInvoicePanel.this.iPeriod.getValue();
 
                 if (iPeriod == null || iDate == null) {
                     return;
                 }
 
-                Date iPeriodStart = SSDateMath.getFirstDayInMonth(iDate);
-                Date iPeriodEnd = SSDateMath.addMonths(iPeriodStart, iPeriod);
+                java.time.LocalDate iPeriodStart = SSDateMath.getFirstDayInMonth(iDate);
+                java.time.LocalDate iPeriodEnd = SSDateMath.addMonths(iPeriodStart, iPeriod);
 
-                SSPeriodicInvoicePanel.this.iPeriodStart.setDate(iPeriodStart);
-                SSPeriodicInvoicePanel.this.iPeriodEnd.setDate(iPeriodEnd);
+                SSPeriodicInvoicePanel.this.iPeriodStart.setLocalDate(iPeriodStart);
+                SSPeriodicInvoicePanel.this.iPeriodEnd.setLocalDate(iPeriodEnd);
 
             });
 
