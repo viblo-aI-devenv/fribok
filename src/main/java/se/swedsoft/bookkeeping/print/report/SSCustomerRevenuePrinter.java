@@ -13,8 +13,10 @@ import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
 import se.swedsoft.bookkeeping.print.util.SSDefaultJasperDataSource;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -44,8 +46,8 @@ public class SSCustomerRevenuePrinter extends SSPrinter {
      */
     public SSCustomerRevenuePrinter(List<SSCustomer> pCustomers, Date pFrom, Date pTo) {
         iCustomers = pCustomers;
-        iDateFrom = SSDateMath.floor(pFrom);
-        iDateTo = SSDateMath.ceil(pTo);
+        iDateFrom = pFrom;
+        iDateTo = pTo;
         calculate();
         setPageHeader("header_period.jrxml");
         setColumnHeader("customerrevenue.jrxml");
@@ -122,12 +124,15 @@ public class SSCustomerRevenuePrinter extends SSPrinter {
     private void calculate() {
         iCustomerRevenue = new HashMap<>();
         List<SSInvoice> iInvoices = SSDB.getInstance().getInvoices();
+        LocalDate localFrom = SSDateUtil.toLocalDate(iDateFrom);
+        LocalDate localTo = SSDateUtil.toLocalDate(iDateTo);
 
         for (SSInvoice iInvoice : iInvoices) {
-            if (iInvoice.getDate().after(iDateFrom) && iInvoice.getDate().before(iDateTo)) {
-                java.time.LocalDate invoiceLocalDate = se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(iInvoice.getDate());
-                java.time.LocalDate monthStart = invoiceLocalDate.withDayOfMonth(1);
-                java.time.LocalDate monthEnd = invoiceLocalDate.withDayOfMonth(invoiceLocalDate.lengthOfMonth());
+            LocalDate invoiceLocalDate = iInvoice.getLocalDate();
+            if (invoiceLocalDate != null && localFrom != null && localTo != null
+                    && !invoiceLocalDate.isBefore(localFrom) && !invoiceLocalDate.isAfter(localTo)) {
+                LocalDate monthStart = invoiceLocalDate.withDayOfMonth(1);
+                LocalDate monthEnd = invoiceLocalDate.withDayOfMonth(invoiceLocalDate.lengthOfMonth());
                 SSMonth iMonth = new SSMonth(monthStart, monthEnd);
 
                 if (iInvoice.getCustomerNr() != null
@@ -156,11 +161,11 @@ public class SSCustomerRevenuePrinter extends SSPrinter {
         List<SSCreditInvoice> iCreditInvoices = SSDB.getInstance().getCreditInvoices();
 
         for (SSCreditInvoice iCreditInvoice : iCreditInvoices) {
-            if (iCreditInvoice.getDate().after(iDateFrom)
-                    && iCreditInvoice.getDate().before(iDateTo)) {
-                java.time.LocalDate creditLocalDate = se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(iCreditInvoice.getDate());
-                java.time.LocalDate monthStart = creditLocalDate.withDayOfMonth(1);
-                java.time.LocalDate monthEnd = creditLocalDate.withDayOfMonth(creditLocalDate.lengthOfMonth());
+            LocalDate creditLocalDate = iCreditInvoice.getLocalDate();
+            if (creditLocalDate != null && localFrom != null && localTo != null
+                    && !creditLocalDate.isBefore(localFrom) && !creditLocalDate.isAfter(localTo)) {
+                LocalDate monthStart = creditLocalDate.withDayOfMonth(1);
+                LocalDate monthEnd = creditLocalDate.withDayOfMonth(creditLocalDate.lengthOfMonth());
                 SSMonth iMonth = new SSMonth(monthStart, monthEnd);
 
                 if (iCreditInvoice.getCustomerNr() != null
@@ -197,6 +202,10 @@ public class SSCustomerRevenuePrinter extends SSPrinter {
 
         private Date  iTo;
 
+        private LocalDate iLocalFrom;
+
+        private LocalDate iLocalTo;
+
         Map<SSMonth, BigDecimal> iRevenue;
 
         /**
@@ -207,13 +216,15 @@ public class SSCustomerRevenuePrinter extends SSPrinter {
         public SSMonthlyDistributionPrinter(Date pFrom, Date pTo) {
             iFrom = pFrom;
             iTo = pTo;
+            iLocalFrom = SSDateUtil.toLocalDate(pFrom);
+            iLocalTo = SSDateUtil.toLocalDate(pTo);
             setMargins(0, 0, 0, 0);
 
             setDetail("customerrevenue.monthly.jrxml");
             setSummary("customerrevenue.monthly.jrxml");
 
             iModel = new SSDefaultTableModel<>(
-                    SSMonth.splitYearIntoMonths(iFrom, iTo)) {
+                    SSMonth.splitYearIntoMonths(iLocalFrom, iLocalTo)) {
 
                 @Override
                 public Class<?> getType() {
@@ -243,7 +254,7 @@ public class SSCustomerRevenuePrinter extends SSPrinter {
                         break;
 
                     case 3:
-                        value = iMonth.isBetween(iFrom, iTo);
+                        value = iMonth.isBetween(iLocalFrom, iLocalTo);
                         break;
                     }
 

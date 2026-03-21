@@ -27,6 +27,7 @@ Current repo state:
 - production `new Date()` runtime calls have been eliminated
 - core date math/month helpers and focused voucher/invoice tests now prefer `LocalDate`
 - more payment, credit-note, and periodic-invoice calculations now compare `LocalDate` values directly
+- more revenue and report-period printers now use `LocalDate` month boundaries and comparisons directly
 - legacy `Date` imports and bridge methods still remain at Swing, JasperReports, import/export, and persistence boundaries
 
 Remaining tasks:

@@ -5,6 +5,7 @@ import se.swedsoft.bookkeeping.data.SSAccount;
 import se.swedsoft.bookkeeping.data.SSMonth;
 import se.swedsoft.bookkeeping.data.SSNewAccountingYear;
 import se.swedsoft.bookkeeping.data.system.SSDB;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -95,7 +96,8 @@ public class SSOwnReportAccountRow implements Serializable {
 
     public BigDecimal getSumForMonths(Date iFrom, Date iTo) {
         BigDecimal iSum = new BigDecimal(0);
-        List<SSMonth> iMonths = SSMonth.splitYearIntoMonths(iFrom, iTo);
+        List<SSMonth> iMonths = SSMonth.splitYearIntoMonths(
+                SSDateUtil.toLocalDate(iFrom), SSDateUtil.toLocalDate(iTo));
 
         for (SSMonth iMonth : iMonths) {
             if (iBudget.containsKey(iMonth)) {

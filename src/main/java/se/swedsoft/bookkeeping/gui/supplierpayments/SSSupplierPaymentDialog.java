@@ -17,12 +17,13 @@ import se.swedsoft.bookkeeping.importexport.supplierpayments.SSSupplierPaymentEx
 import se.swedsoft.bookkeeping.importexport.supplierpayments.data.SupplierPayment;
 import se.swedsoft.bookkeeping.importexport.supplierpayments.data.SupplierPaymentConfig;
 import se.swedsoft.bookkeeping.importexport.util.SSExportException;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,11 +123,12 @@ public class SSSupplierPaymentDialog extends SSDialog {    private static final 
                                     "supplierinvoiceframe.nosupplierpayments");
                             return;
                         }
-                        Date iDate = null;
+                        LocalDate iDate = null;
 
                         for (SupplierPayment iSupplierPayment : iSupplierPayments) {
-                            if (iDate == null || iSupplierPayment.getDate().after(iDate)) {
-                                iDate = iSupplierPayment.getDate();
+                            LocalDate iPaymentDate = SSDateUtil.toLocalDate(iSupplierPayment.getDate());
+                            if (iDate == null || (iPaymentDate != null && iPaymentDate.isAfter(iDate))) {
+                                iDate = iPaymentDate;
                             }
                             iSupplierPayment.getSupplierInvoice().setBGCEntered();
                             SSDB.getInstance().updateSupplierInvoice(
@@ -134,7 +136,7 @@ public class SSSupplierPaymentDialog extends SSDialog {    private static final 
                         }
                         SupplierPaymentConfig.setOurBankGiroAccount(iOurBankGiroNumber.getText());
                         SupplierPaymentConfig.setMessage(iMessage.getText());
-                        SupplierPaymentConfig.setMessageDate(iDate);
+                        SupplierPaymentConfig.setMessageDate(SSDateUtil.toDate(iDate));
 
                         try {
                             SSSupplierPaymentExporter.Export(iFileChooser.getSelectedFile(),

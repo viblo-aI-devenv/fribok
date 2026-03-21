@@ -11,8 +11,10 @@ import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
 import se.swedsoft.bookkeeping.print.util.SSDefaultJasperDataSource;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.text.DateFormat;
 import java.util.*;
 
@@ -55,11 +57,11 @@ public class SSAccountsRecievablePrinter extends SSPrinter {
         this.iCustomers = iCustomers;
         this.iDate = iDate;
 
-        Date iCeiledDate = SSDateMath.ceil(this.iDate);
+        LocalDate iCeiledDate = SSDateUtil.toLocalDate(this.iDate);
 
-        iInpaymentSum = SSInpaymentMath.getSumsForInvoices(iCeiledDate);
+        iInpaymentSum = SSInpaymentMath.getSumsForInvoices(SSDateUtil.toDate(iCeiledDate));
 
-        iCreditInvoiceSum = SSCreditInvoiceMath.getSumsForInvoices(iCeiledDate);
+        iCreditInvoiceSum = SSCreditInvoiceMath.getSumsForInvoices(SSDateUtil.toDate(iCeiledDate));
 
         iCustomerInvoicesMap = new HashMap<>();
 
@@ -68,7 +70,7 @@ public class SSAccountsRecievablePrinter extends SSPrinter {
 
             for (SSInvoice iInvoice : SSCustomerMath.iInvoicesForCustomers.get(
                     iCustomerNumber)) {
-                if (iInvoice.getDate().before(iCeiledDate)
+                if (iInvoice.getLocalDate() != null && !iInvoice.getLocalDate().isAfter(iCeiledDate)
                         && iInvoice.getType() != SSInvoiceType.CASH) {
                     iInvoicesForCustomer.add(iInvoice);
                 }
