@@ -19,6 +19,7 @@ import se.swedsoft.bookkeeping.gui.util.dialogs.SSProgressDialog;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSQueryDialog;
 import se.swedsoft.bookkeeping.gui.util.frame.SSDefaultTableFrame;
 import se.swedsoft.bookkeeping.print.report.SSStartingAmountPrinter;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -224,8 +225,8 @@ public class SSStartingAmountFrame extends SSDefaultTableFrame {
 
                         SSNewAccountingYear iAccountingYear = SSDB.getInstance().getCurrentYear();
 
-                        Date iFrom = iAccountingYear.getFrom();
-                        Date iTo = iAccountingYear.getTo();
+                        Date iFrom = SSDateUtil.toDate(iAccountingYear.getLocalFrom());
+                        Date iTo = SSDateUtil.toDate(iAccountingYear.getLocalTo());
                         SSStartingAmountPrinter iPrinter = new SSStartingAmountPrinter(
                                 iStartingAmountPanel.getInBalance(), iFrom, iTo);
 
@@ -281,4 +282,3 @@ public class SSStartingAmountFrame extends SSDefaultTableFrame {
         return sb.toString();
     }
 }
-

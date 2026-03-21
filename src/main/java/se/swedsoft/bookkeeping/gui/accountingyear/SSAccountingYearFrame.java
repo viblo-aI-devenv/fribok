@@ -168,7 +168,7 @@ public class SSAccountingYearFrame extends SSDefaultTableFrame {
         // Get the objects.
         List<SSNewAccountingYear> iYears = SSDB.getInstance().getYears();
 
-        Collections.sort(iYears, (o1, o2) -> o1.getFrom().compareTo(o2.getFrom()));
+        Collections.sort(iYears, (o1, o2) -> o1.getLocalFrom().compareTo(o2.getLocalFrom()));
         iModel.setObjects(iYears);
 
         iTable = new SSTable();
@@ -395,4 +395,3 @@ public class SSAccountingYearFrame extends SSDefaultTableFrame {
         return sb.toString();
     }
 }
-

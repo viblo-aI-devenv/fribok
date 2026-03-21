@@ -57,7 +57,8 @@ public class SSBudgetPrinter extends SSPrinter {
      * @param pAccountingYear The accountingyear
      */
     public SSBudgetPrinter(SSNewAccountingYear pAccountingYear) {
-        this(pAccountingYear, pAccountingYear.getFrom(), pAccountingYear.getTo());
+        this(pAccountingYear, SSDateUtil.toDate(pAccountingYear.getLocalFrom()),
+                SSDateUtil.toDate(pAccountingYear.getLocalTo()));
     }
 
     /**

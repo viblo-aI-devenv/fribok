@@ -28,6 +28,8 @@ Current repo state:
 - core date math/month helpers and focused voucher/invoice tests now prefer `LocalDate`
 - more payment, credit-note, and periodic-invoice calculations now compare `LocalDate` values directly
 - more revenue and report-period printers now use `LocalDate` month boundaries and comparisons directly
+- more stock and inventory-related period filters now compare `LocalDate` values directly
+- more accounting-year and report-setup flows now keep year boundaries as `LocalDate` until legacy UI/report APIs require `Date`
 - legacy `Date` imports and bridge methods still remain at Swing, JasperReports, import/export, and persistence boundaries
 
 Remaining tasks:

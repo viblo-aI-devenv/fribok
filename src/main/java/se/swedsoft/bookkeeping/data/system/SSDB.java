@@ -1005,15 +1005,13 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         }
         List<SSNewAccountingYear> iYears = getYears();
 
-        Date iFirstDayOfCurrent = iCurrentYear.getFrom();
+        java.time.LocalDate iFirstDayOfCurrent = iCurrentYear.getLocalFrom();
 
         // Get the last day of the previous year (day before the current year starts)
-        java.time.LocalDate dayBeforeCurrent = se.swedsoft.bookkeeping.util.SSDateUtil
-                .toLocalDate(iFirstDayOfCurrent).minusDays(1);
+        java.time.LocalDate dayBeforeCurrent = iFirstDayOfCurrent.minusDays(1);
 
         for (SSNewAccountingYear iAccountingYear : iYears) {
-            java.time.LocalDate lastDayOfYear = se.swedsoft.bookkeeping.util.SSDateUtil
-                    .toLocalDate(iAccountingYear.getTo());
+            java.time.LocalDate lastDayOfYear = iAccountingYear.getLocalTo();
             if (dayBeforeCurrent.equals(lastDayOfYear)) {
                 return Optional.of(iAccountingYear);
             }
@@ -1039,17 +1037,17 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
                 iResultSet.close();
                 iStatement.close();
 
-                Date iLastDate = null;
+                java.time.LocalDate iLastDate = null;
                 SSNewAccountingYear iAccountingYear = null;
 
                 for (SSNewAccountingYear iYear : iYears) {
                     if (iLastDate == null) {
-                        iLastDate = iYear.getTo();
+                        iLastDate = iYear.getLocalTo();
                         iAccountingYear = iYear;
                     }
-                    Date iTo = iYear.getTo();
+                    java.time.LocalDate iTo = iYear.getLocalTo();
 
-                    if (iTo.after(iLastDate)) {
+                    if (iTo.isAfter(iLastDate)) {
                         iLastDate = iTo;
                         iAccountingYear = iYear;
                     }

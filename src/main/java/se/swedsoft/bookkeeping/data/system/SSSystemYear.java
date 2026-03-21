@@ -9,6 +9,7 @@ import se.swedsoft.bookkeeping.util.SSDateUtil;
 import java.io.Serializable;
 import java.rmi.server.UID;
 import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -53,8 +54,8 @@ public class SSSystemYear implements Serializable, SSTableSearchable {
         iYear = pYear;
         iCurrent = false;
         iID = new UID();
-        iDateFrom = pYear.getFrom();
-        iDateTo = pYear.getTo();
+        iDateFrom = SSDateUtil.toDate(pYear.getLocalFrom());
+        iDateTo = SSDateUtil.toDate(pYear.getLocalTo());
         iAccountPlan = pYear.getAccountPlan() != null
                 ? pYear.getAccountPlan().getName()
                 : null;
@@ -86,6 +87,14 @@ public class SSSystemYear implements Serializable, SSTableSearchable {
         this.iDateFrom = iDateFrom;
     }
 
+    public LocalDate getLocalFrom() {
+        return SSDateUtil.toLocalDate(iDateFrom);
+    }
+
+    public void setLocalFrom(LocalDate iDateFrom) {
+        this.iDateFrom = SSDateUtil.toDate(iDateFrom);
+    }
+
     // ////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -103,6 +112,14 @@ public class SSSystemYear implements Serializable, SSTableSearchable {
      */
     public void setTo(Date iDateTo) {
         this.iDateTo = iDateTo;
+    }
+
+    public LocalDate getLocalTo() {
+        return SSDateUtil.toLocalDate(iDateTo);
+    }
+
+    public void setLocalTo(LocalDate iDateTo) {
+        this.iDateTo = SSDateUtil.toDate(iDateTo);
     }
 
     // ////////////////////////////////////////////////////////////////////////////
@@ -154,8 +171,8 @@ public class SSSystemYear implements Serializable, SSTableSearchable {
     // ////////////////////////////////////////////////////////////////////////////
 
     public void setCurrentYear(SSNewAccountingYear iAccountingYear) {
-        iDateFrom = iAccountingYear.getFrom();
-        iDateTo = iAccountingYear.getTo();
+        iDateFrom = SSDateUtil.toDate(iAccountingYear.getLocalFrom());
+        iDateTo = SSDateUtil.toDate(iAccountingYear.getLocalTo());
         iCurrent = true;
         iAccountPlan = iAccountingYear.getAccountPlan() != null
                 ? iAccountingYear.getAccountPlan().getName()

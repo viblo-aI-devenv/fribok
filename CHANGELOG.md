@@ -69,6 +69,12 @@ diverging from upstream version 2.2-SNAPSHOT.
 - Continued the date migration in revenue, receivable/payable, budget, and
   value report flows by replacing more report-period comparisons and month
   splitting logic with `LocalDate`-based boundaries.
+- Continued the date migration in stock-related math by replacing remaining
+  purchase order, inventory, and in/out-delivery period checks with
+  `LocalDate`-based comparisons.
+- Continued the date migration in accounting-year and report setup flows by
+  preferring `LocalDate` year boundaries and converting back to `Date` only at
+  dialog and Jasper parameter boundaries.
 - Dropped the legacy pre-HSQL `bookkeeper.db` import path and its archived
   `db/databas_v1.zip` handoff, requiring very old installations to migrate via
   historical Fribok releases before using this fork.

@@ -65,8 +65,8 @@ public class SSAccountingYearPanel {
     public void setAccountingYear(SSNewAccountingYear pAccountingYear) {
         iAccountingYear = pAccountingYear;
 
-        iFrom.setDate(iAccountingYear.getFrom());
-        iTo.setDate(iAccountingYear.getTo());
+        iFrom.setLocalDate(iAccountingYear.getLocalFrom());
+        iTo.setLocalDate(iAccountingYear.getLocalTo());
         iAccountPlan.setSelected(iAccountingYear.getAccountPlan());
     }
 
@@ -75,8 +75,8 @@ public class SSAccountingYearPanel {
      * @return
      */
     public SSNewAccountingYear getAccountingYear() {
-        iAccountingYear.setFrom(iFrom.getDate());
-        iAccountingYear.setTo(iTo.getDate());
+        iAccountingYear.setLocalFrom(iFrom.getLocalDate());
+        iAccountingYear.setLocalTo(iTo.getLocalDate());
 
         if (iAccountPlanPanel.isVisible()) {
             SSAccountPlan iAccountPlan = getAccountPlan();
@@ -119,8 +119,8 @@ public class SSAccountingYearPanel {
         if (iLast != null) {
             iRadioUseLast.setSelected(true);
 
-            LocalDate lastFrom = SSDateUtil.toLocalDate(iLast.getFrom());
-            LocalDate lastTo = SSDateUtil.toLocalDate(iLast.getTo());
+            LocalDate lastFrom = iLast.getLocalFrom();
+            LocalDate lastTo = iLast.getLocalTo();
 
             // Compute the length of the last accounting year in months
             // (lastTo + 1 day) - lastFrom gives the exclusive end
@@ -135,16 +135,16 @@ public class SSAccountingYearPanel {
             // New year ends after the same number of months
             LocalDate newTo = newFrom.plusMonths(diffMonths).minusDays(1);
 
-            this.iFrom.setDate(SSDateUtil.toDate(newFrom));
-            this.iTo.setDate(SSDateUtil.toDate(newTo));
+            this.iFrom.setLocalDate(newFrom);
+            this.iTo.setLocalDate(newTo);
         } else {
             int year = LocalDate.now().getYear();
 
             LocalDate yearStart = LocalDate.of(year, 1, 1);
             LocalDate yearEnd = LocalDate.of(year, 12, 31);
 
-            iFrom.setDate(SSDateUtil.toDate(yearStart));
-            iTo.setDate(SSDateUtil.toDate(yearEnd));
+            iFrom.setLocalDate(yearStart);
+            iTo.setLocalDate(yearEnd);
 
             iAccountPlan.setSelected(iAccountPlan.getFirst());
         }
