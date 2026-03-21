@@ -6,6 +6,7 @@ import se.swedsoft.bookkeeping.data.SSNewAccountingYear;
 import se.swedsoft.bookkeeping.data.SSNewCompany;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -135,11 +136,11 @@ public class SSMainStatusBar {    private static final Logger LOG = LoggerFactor
             DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
             StringBuilder year = new StringBuilder();
 
-            year.append(df.format(iAccountingYear.getFrom()));
+            year.append(df.format(SSDateUtil.toDate(iAccountingYear.getLocalFrom())));
             year.append(' ');
             year.append(SSBundle.getBundle().getString("date.separator"));
             year.append(' ');
-            year.append(df.format(iAccountingYear.getTo()));
+            year.append(df.format(SSDateUtil.toDate(iAccountingYear.getLocalTo())));
             iYearLabel.setText(year.toString());
             iYearLabel.setForeground(Color.BLACK);
         }

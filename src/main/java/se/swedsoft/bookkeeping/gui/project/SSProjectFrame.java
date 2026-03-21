@@ -296,8 +296,10 @@ public class SSProjectFrame extends SSDefaultTableFrame {
                 SSBundle.getBundle().getString("projectrevenue.perioddialog.title"));
 
         if (SSDB.getInstance().getCurrentYear() != null) {
-            iDialog.setFrom(SSDB.getInstance().getCurrentYear().getFrom());
-            iDialog.setTo(SSDB.getInstance().getCurrentYear().getTo());
+            iDialog.setFrom(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
+                    SSDB.getInstance().getCurrentYear().getLocalFrom()));
+            iDialog.setTo(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
+                    SSDB.getInstance().getCurrentYear().getLocalTo()));
         } else {
             java.time.LocalDate now = java.time.LocalDate.now();
             iDialog.setFrom(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(now));
