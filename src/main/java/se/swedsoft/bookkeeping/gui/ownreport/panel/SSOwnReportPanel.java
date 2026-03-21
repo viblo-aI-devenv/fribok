@@ -187,7 +187,7 @@ public class SSOwnReportPanel {
         iMonthlyTableModel.addColumn(
                 SSBundle.getBundle().getString("ownreport.monthtable.column.2"));
 
-        Collections.sort(iMonths, (o1, o2) -> o1.getDate().compareTo(o2.getDate()));
+        Collections.sort(iMonths, (o1, o2) -> o1.getLocalFrom().compareTo(o2.getLocalFrom()));
         iMonthlyTableModel.setObjects(iMonths);
         iMonthlyTable.setModel(iMonthlyTableModel);
 

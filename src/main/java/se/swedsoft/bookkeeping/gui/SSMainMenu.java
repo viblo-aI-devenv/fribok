@@ -1,7 +1,6 @@
 package se.swedsoft.bookkeeping.gui;
 
 import org.fribok.bookkeeping.app.Path;
-import se.swedsoft.bookkeeping.calc.math.SSDateMath;
 import se.swedsoft.bookkeeping.calc.math.SSInvoiceMath;
 import se.swedsoft.bookkeeping.calc.math.SSSupplierInvoiceMath;
 import se.swedsoft.bookkeeping.data.*;
@@ -77,6 +76,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -871,7 +871,7 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
 
                 if(iDialog.showDialog() != JOptionPane.OK_OPTION) return;
 
-                final Date iDate = SSDateMath.ceil(iDialog.getDate());
+                final Date iDate = iDialog.getDate();
                 SSConfirmDialog iConfirmDialog;
                 iConfirmDialog = new SSConfirmDialog("helpmenu.cleartransactions.warning",SSDateUtil.toLocalDate(iDate).format(DateTimeFormatter.ISO_LOCAL_DATE));
                 if(iConfirmDialog.openDialog(iMainFrame)!=JOptionPane.OK_OPTION) return;
@@ -883,6 +883,7 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
                 SSDB.getInstance().dropTriggers();
 
                 SSInitDialog.runProgress(SSMainFrame.getInstance(),"Rensar transaktioner...", () -> {
+                        LocalDate iCutoffDate = SSDateUtil.toLocalDate(iDate);
 
                         SSStock iStock = new SSStock(true);
                         Map<String, Integer> iStockStatusStart = new HashMap<>();
@@ -894,7 +895,7 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
                         Map<Integer, BigDecimal> iSaldoMap = SSInvoiceMath.getSaldos(iDate);
 
                         for(SSInpayment iInpayment : SSDB.getInstance().getInpayments()){
-                            if(iInpayment.getDate().before(iDate)){
+                            if(iInpayment.getLocalDate().isBefore(iCutoffDate)){
                                 List<SSInpaymentRow> iSavedRows = new LinkedList<>();
                                 for(SSInpaymentRow iRow : iInpayment.getRows()){
                                     if(iRow.getInvoiceNr() != null && iSaldoMap.containsKey(iRow.getInvoiceNr())){
@@ -912,42 +913,42 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
                         }
 
                         for(SSTender iTender : SSDB.getInstance().getTenders()){
-                            if(iTender.getDate().before(iDate)) SSDB.getInstance().deleteTender(iTender);
+                            if(iTender.getLocalDate().isBefore(iCutoffDate)) SSDB.getInstance().deleteTender(iTender);
                         }
 
                         for(SSOrder iOrder : SSDB.getInstance().getOrders()){
-                            if(iOrder.getDate().before(iDate)) SSDB.getInstance().deleteOrder(iOrder);
+                            if(iOrder.getLocalDate().isBefore(iCutoffDate)) SSDB.getInstance().deleteOrder(iOrder);
                         }
 
                         for(SSInvoice iInvoice : SSDB.getInstance().getInvoices()){
-                            if(iInvoice.getDate().before(iDate) && iSaldoMap.containsKey(iInvoice.getNumber())){
+                            if(iInvoice.getLocalDate().isBefore(iCutoffDate) && iSaldoMap.containsKey(iInvoice.getNumber())){
                                 BigDecimal iSaldo = iSaldoMap.get(iInvoice.getNumber());
                                 if(iSaldo.signum() == 0) SSDB.getInstance().deleteInvoice(iInvoice);
                             }
-                            else if(iInvoice.getDate().before(iDate)){
+                            else if(iInvoice.getLocalDate().isBefore(iCutoffDate)){
                                 SSDB.getInstance().deleteInvoice(iInvoice);
                             }
                         }
 
                         for(SSCreditInvoice iCreditInvoice : SSDB.getInstance().getCreditInvoices()){
-                            if(iCreditInvoice.getDate().before(iDate) && iSaldoMap.containsKey(iCreditInvoice.getCreditingNr())){
+                            if(iCreditInvoice.getLocalDate().isBefore(iCutoffDate) && iSaldoMap.containsKey(iCreditInvoice.getCreditingNr())){
                                 BigDecimal iSaldo = iSaldoMap.get(iCreditInvoice.getCreditingNr());
                                 if(iSaldo.signum() == 0) SSDB.getInstance().deleteCreditInvoice(iCreditInvoice);
                             }
-                            else if(iCreditInvoice.getDate().before(iDate)){
+                            else if(iCreditInvoice.getLocalDate().isBefore(iCutoffDate)){
                                 SSDB.getInstance().deleteCreditInvoice(iCreditInvoice);
                             }
                         }
 
                         for(SSPeriodicInvoice iPeriodicInvoice : SSDB.getInstance().getPeriodicInvoices()){
-                            if(iPeriodicInvoice.getDate().before(iDate) && iPeriodicInvoice.getNextDate().isEmpty())
+                            if(iPeriodicInvoice.getLocalDate().isBefore(iCutoffDate) && iPeriodicInvoice.getNextDate().isEmpty())
                                 SSDB.getInstance().deletePeriodicInvoice(iPeriodicInvoice);
                         }
 
                         Map<Integer, BigDecimal> iPurchaseSaldoMap = SSSupplierInvoiceMath.getSaldos(iDate);
 
                         for(SSOutpayment iOutpayment : SSDB.getInstance().getOutpayments()){
-                            if(iOutpayment.getDate().before(iDate)){
+                            if(iOutpayment.getLocalDate().isBefore(iCutoffDate)){
                                 List<SSOutpaymentRow> iSavedRows = new LinkedList<>();
                                 for(SSOutpaymentRow iRow : iOutpayment.getRows()){
                                     if(iRow.getInvoiceNr() != null && iPurchaseSaldoMap.containsKey(iRow.getInvoiceNr())){
@@ -965,43 +966,43 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
                         }
 
                         for(SSPurchaseOrder iPurchaseOrder : SSDB.getInstance().getPurchaseOrders()){
-                            if(iPurchaseOrder.getDate().before(iDate)) SSDB.getInstance().deletePurchaseOrder(iPurchaseOrder);
+                            if(iPurchaseOrder.getLocalDate().isBefore(iCutoffDate)) SSDB.getInstance().deletePurchaseOrder(iPurchaseOrder);
                         }
 
                         for(SSSupplierInvoice iSupplierInvoice : SSDB.getInstance().getSupplierInvoices()){
-                            if(iSupplierInvoice.getDate().before(iDate) && iPurchaseSaldoMap.containsKey(iSupplierInvoice.getNumber())){
+                            if(iSupplierInvoice.getLocalDate().isBefore(iCutoffDate) && iPurchaseSaldoMap.containsKey(iSupplierInvoice.getNumber())){
                                 BigDecimal iSaldo = iPurchaseSaldoMap.get(iSupplierInvoice.getNumber());
                                 if(iSaldo.signum() == 0) SSDB.getInstance().deleteSupplierInvoice(iSupplierInvoice);
                             }
-                            else if(iSupplierInvoice.getDate().before(iDate)){
+                            else if(iSupplierInvoice.getLocalDate().isBefore(iCutoffDate)){
                                 SSDB.getInstance().deleteSupplierInvoice(iSupplierInvoice);
                             }
                         }
 
                         for(SSSupplierCreditInvoice iSupplierCreditInvoice : SSDB.getInstance().getSupplierCreditInvoices()){
-                            if(iSupplierCreditInvoice.getDate().before(iDate) && iSaldoMap.containsKey(iSupplierCreditInvoice.getCreditingNr())){
+                            if(iSupplierCreditInvoice.getLocalDate().isBefore(iCutoffDate) && iSaldoMap.containsKey(iSupplierCreditInvoice.getCreditingNr())){
                                 BigDecimal iSaldo = iSaldoMap.get(iSupplierCreditInvoice.getCreditingNr());
                                 if(iSaldo.signum() == 0) SSDB.getInstance().deleteSupplierCreditInvoice(iSupplierCreditInvoice);
                             }
-                            else if(iSupplierCreditInvoice.getDate().before(iDate)){
+                            else if(iSupplierCreditInvoice.getLocalDate().isBefore(iCutoffDate)){
                                 SSDB.getInstance().deleteSupplierCreditInvoice(iSupplierCreditInvoice);
                             }
                         }
 
                         for(SSIndelivery iIndelivery : SSDB.getInstance().getIndeliveries()){
-                            if(iIndelivery.getDate().before(iDate)){
+                            if(SSDateUtil.toLocalDate(iIndelivery.getDate()).isBefore(iCutoffDate)){
                                 SSDB.getInstance().deleteIndelivery(iIndelivery);
                             }
                         }
 
                         for(SSOutdelivery iOutdelivery : SSDB.getInstance().getOutdeliveries()){
-                            if(iOutdelivery.getDate().before(iDate)){
+                            if(SSDateUtil.toLocalDate(iOutdelivery.getDate()).isBefore(iCutoffDate)){
                                 SSDB.getInstance().deleteOutdelivery(iOutdelivery);
                             }
                         }
 
                         for(SSInventory iInventory : SSDB.getInstance().getInventories()){
-                            if(iInventory.getDate().before(iDate)){
+                            if(iInventory.getLocalDate().isBefore(iCutoffDate)){
                                 SSDB.getInstance().deleteInventory(iInventory);
                             }
                         }

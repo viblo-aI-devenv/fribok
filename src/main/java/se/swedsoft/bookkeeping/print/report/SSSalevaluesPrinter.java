@@ -8,6 +8,7 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.util.Date;
 import java.util.List;
@@ -34,7 +35,8 @@ public class SSSalevaluesPrinter extends SSPrinter {
         this.iFrom = iFrom;
         this.iTo = iTo;
 
-        iMonths = SSMonth.splitYearIntoMonths(iFrom, iTo);
+        iMonths = SSMonth.splitYearIntoMonths(
+                SSDateUtil.toLocalDate(iFrom), SSDateUtil.toLocalDate(iTo));
 
         setPageHeader("header_period.jrxml");
         setColumnHeader("salevalues.jrxml");

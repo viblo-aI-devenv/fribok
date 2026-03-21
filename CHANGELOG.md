@@ -66,6 +66,9 @@ diverging from upstream version 2.2-SNAPSHOT.
 - Continued the date migration in payment, credit-note, and periodic-invoice
   calculations by replacing more legacy `Date` comparisons with `LocalDate`
   logic in in/out-payment math and period boundary handling.
+- Continued the date migration in revenue, receivable/payable, budget, and
+  value report flows by replacing more report-period comparisons and month
+  splitting logic with `LocalDate`-based boundaries.
 - Dropped the legacy pre-HSQL `bookkeeper.db` import path and its archived
   `db/databas_v1.zip` handoff, requiring very old installations to migrate via
   historical Fribok releases before using this fork.

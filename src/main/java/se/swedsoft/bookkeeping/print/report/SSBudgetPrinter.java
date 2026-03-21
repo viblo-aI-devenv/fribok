@@ -11,11 +11,13 @@ import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
 import se.swedsoft.bookkeeping.print.util.SSDefaultJasperDataSource;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.time.LocalDate;
 
 
 /**
@@ -169,6 +171,10 @@ public class SSBudgetPrinter extends SSPrinter {
 
         private Date  iTo;
 
+        private LocalDate iLocalFrom;
+
+        private LocalDate iLocalTo;
+
         /**
          *
          * @param pAccountingYear
@@ -178,6 +184,8 @@ public class SSBudgetPrinter extends SSPrinter {
         public SSMonthlyDistributionPrinter(SSNewAccountingYear pAccountingYear, Date pFrom, Date pTo) {
             iFrom = pFrom;
             iTo = pTo;
+            iLocalFrom = SSDateUtil.toLocalDate(pFrom);
+            iLocalTo = SSDateUtil.toLocalDate(pTo);
             setMargins(0, 0, 0, 0);
 
             setDetail("budget.monthly.jrxml");
@@ -211,7 +219,7 @@ public class SSBudgetPrinter extends SSPrinter {
                         break;
 
                     case 3:
-                        value = iMonth.isBetween(iFrom, iTo);
+                        value = iMonth.isBetween(iLocalFrom, iLocalTo);
                         break;
                     }
 

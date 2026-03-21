@@ -1,7 +1,6 @@
 package se.swedsoft.bookkeeping.gui.invoice.panel;
 
 
-import se.swedsoft.bookkeeping.calc.math.SSDateMath;
 import se.swedsoft.bookkeeping.calc.math.SSInpaymentMath;
 import se.swedsoft.bookkeeping.calc.math.SSInvoiceMath;
 import se.swedsoft.bookkeeping.data.SSAccount;
@@ -20,6 +19,7 @@ import se.swedsoft.bookkeeping.util.SSDateUtil;
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -130,10 +130,11 @@ public class SSInterestInvoicePanel {
                 iLastInpayment = SSDateUtil.toDate(SSDateUtil.today());
             }
 
-            // Floor the inpayment date so we don't get any credit invoices for invoices payed on the last day
-            iLastInpayment = SSDateMath.floor(iLastInpayment);
+            LocalDate lastInpaymentDate = SSDateUtil.toLocalDate(iLastInpayment);
+            LocalDate dueDate = iInvoice.getLocalDueDate();
 
-            if (iSaldo.signum() == 0 && iLastInpayment.after(iInvoice.getDueDate())) {
+            if (iSaldo.signum() == 0 && dueDate != null && lastInpaymentDate != null
+                    && lastInpaymentDate.isAfter(dueDate)) {
                 iRows.add(iInvoice);
             }
         }
