@@ -6,8 +6,10 @@ import se.swedsoft.bookkeeping.data.SSInpayment;
 import se.swedsoft.bookkeeping.data.SSInpaymentRow;
 import se.swedsoft.bookkeeping.data.SSInvoice;
 import se.swedsoft.bookkeeping.data.system.SSDB;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,11 +32,12 @@ public class SSInpaymentMath {
      * @return
      */
     public static boolean inPeriod(SSInpayment iInpayment, Date pFrom, Date pTo) {
-        Date iDate = iInpayment.getDate();
-        Date iFrom = SSDateMath.floor(pFrom);
-        Date iTo = SSDateMath.ceil(pTo);
+        LocalDate iDate = iInpayment.getLocalDate();
+        LocalDate iFrom = SSDateUtil.toLocalDate(pFrom);
+        LocalDate iTo = SSDateUtil.toLocalDate(pTo);
 
-        return (iFrom.getTime() <= iDate.getTime()) && (iDate.getTime() <= iTo.getTime());
+        return iDate != null && iFrom != null && iTo != null
+                && !iDate.isBefore(iFrom) && !iDate.isAfter(iTo);
     }
 
     /**
@@ -120,9 +123,11 @@ public class SSInpaymentMath {
         HashMap<Integer, BigDecimal> iSums = new HashMap<>();
 
         List<SSInpayment> iInpayments = SSDB.getInstance().getInpayments();
+        LocalDate localDate = SSDateUtil.toLocalDate(iDate);
 
         for (SSInpayment iInpayment : iInpayments) {
-            if (iInpayment.getDate().before(iDate)) {
+            if (iInpayment.getLocalDate() != null && localDate != null
+                    && !iInpayment.getLocalDate().isAfter(localDate)) {
                 for (SSInpaymentRow iRow : iInpayment.getRows()) {
                     if (iRow.getValue() != null) {
                         if (iSums.containsKey(iRow.getInvoiceNr())) {
@@ -148,15 +153,15 @@ public class SSInpaymentMath {
     public static BigDecimal getSumForInvoice(SSInvoice iInvoice, Date iDate) {
         List<SSInpayment> iInpayments = SSDB.getInstance().getInpayments();
 
-        iDate = SSDateMath.ceil(iDate);
+        LocalDate localDate = SSDateUtil.toLocalDate(iDate);
         BigDecimal iSum = new BigDecimal(0);
 
         for (SSInpayment iInpayment : iInpayments) {
-            Date iCurrent = SSDateMath.floor(iInpayment.getDate());
+            LocalDate iCurrent = iInpayment.getLocalDate();
 
             BigDecimal iRowSum = getSumForInvoice(iInpayment, iInvoice);
 
-            if (iCurrent.before(iDate)) {
+            if (iCurrent != null && localDate != null && !iCurrent.isAfter(localDate)) {
                 iSum = iSum.add(iRowSum);
             }
         }

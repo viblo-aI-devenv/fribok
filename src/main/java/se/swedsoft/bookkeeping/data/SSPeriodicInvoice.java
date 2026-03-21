@@ -67,8 +67,8 @@ public class SSPeriodicInvoice implements Serializable {
         iAppendPeriod = false;
         iAppendInformation = false;
         iInformation = "Detta är faktura [FAK] av [TOT].";
-        iPeriodStart = SSDateUtil.toLocalDate(SSDateMath.getFirstDayInMonth(SSDateUtil.toDate(iDate)));
-        iPeriodEnd = SSDateUtil.toLocalDate(SSDateMath.getLastDayMonth(SSDateUtil.toDate(iDate)));
+        iPeriodStart = SSDateMath.getFirstDayInMonth(iDate);
+        iPeriodEnd = SSDateMath.getLastDayInMonth(iDate);
         iInvoices = new LinkedList<>();
         iAdded = new HashMap<>();
         doAutoIncrecement();

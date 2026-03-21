@@ -3,8 +3,10 @@ package se.swedsoft.bookkeeping.calc.math;
 
 import se.swedsoft.bookkeeping.data.*;
 import se.swedsoft.bookkeeping.data.system.SSDB;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -24,11 +26,12 @@ public class SSSupplierCreditInvoiceMath {
      * @return
      */
     public static boolean inPeriod(SSSupplierCreditInvoice iSupplierInvoice, Date pFrom, Date pTo) {
-        Date iDate = iSupplierInvoice.getDate();
-        Date iFrom = SSDateMath.floor(pFrom);
-        Date iTo = SSDateMath.ceil(pTo);
+        LocalDate iDate = iSupplierInvoice.getLocalDate();
+        LocalDate iFrom = SSDateUtil.toLocalDate(pFrom);
+        LocalDate iTo = SSDateUtil.toLocalDate(pTo);
 
-        return (iFrom.getTime() <= iDate.getTime()) && (iDate.getTime() <= iTo.getTime());
+        return iDate != null && iFrom != null && iTo != null
+                && !iDate.isBefore(iFrom) && !iDate.isAfter(iTo);
     }
 
     /**
@@ -64,16 +67,16 @@ public class SSSupplierCreditInvoiceMath {
         // Get all credit invoices from the db
         List<SSSupplierCreditInvoice> iCreditInvoices = SSDB.getInstance().getSupplierCreditInvoices();
 
-        iDate = SSDateMath.ceil(iDate);
+        LocalDate localDate = SSDateUtil.toLocalDate(iDate);
         BigDecimal iSum = new BigDecimal(0);
 
         for (SSSupplierCreditInvoice iCreditInvoice : iCreditInvoices) {
-            Date iCurrent = SSDateMath.floor(iCreditInvoice.getDate());
+            LocalDate iCurrent = iCreditInvoice.getLocalDate();
 
             BigDecimal iRowSum = SSSupplierInvoiceMath.getTotalSum(iCreditInvoice);
 
             if (iRowSum != null && iCreditInvoice.isCrediting(iInvoice)
-                    && iCurrent.before(iDate)) {
+                    && iCurrent != null && localDate != null && !iCurrent.isAfter(localDate)) {
                 iSum = iSum.add(iRowSum);
             }
         }
@@ -102,11 +105,13 @@ public class SSSupplierCreditInvoiceMath {
 
     public static HashMap<Integer, BigDecimal> getSumsForSupplierInvoices(Date iDate) {
         HashMap<Integer, BigDecimal> iSums = new HashMap<>();
+        LocalDate localDate = SSDateUtil.toLocalDate(iDate);
 
         List<SSSupplierCreditInvoice> iSupplierCreditInvoices = SSDB.getInstance().getSupplierCreditInvoices();
 
         for (SSSupplierCreditInvoice iSupplierCreditInvoice : iSupplierCreditInvoices) {
-            if (iSupplierCreditInvoice.getDate().before(iDate)) {
+            if (iSupplierCreditInvoice.getLocalDate() != null && localDate != null
+                    && !iSupplierCreditInvoice.getLocalDate().isAfter(localDate)) {
                 BigDecimal iRowSum = SSSupplierInvoiceMath.getTotalSum(
                         iSupplierCreditInvoice);
 
