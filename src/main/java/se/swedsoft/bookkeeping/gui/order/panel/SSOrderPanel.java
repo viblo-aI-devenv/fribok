@@ -30,6 +30,7 @@ import se.swedsoft.bookkeeping.gui.util.model.SSDeliveryWayTableModel;
 import se.swedsoft.bookkeeping.gui.util.model.SSPaymentTermTableModel;
 import se.swedsoft.bookkeeping.gui.util.table.SSTable;
 import se.swedsoft.bookkeeping.gui.util.table.actions.SSDeleteAction;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 import se.swedsoft.bookkeeping.gui.util.table.actions.SSTraversalAction;
 import se.swedsoft.bookkeeping.gui.util.table.editors.SSTaxCodeCellEditor;
 import se.swedsoft.bookkeeping.gui.util.table.editors.SSTaxCodeCellRenderer;
@@ -387,7 +388,7 @@ public class SSOrderPanel {
         // Offfertnummer
         iNumber.setValue(iOrder.getNumber());
         // Offertdatum
-        iDate.setDate(iOrder.getDate());
+        iDate.setLocalDate(iOrder.getLocalDate());
         // Leveransdatum
         iEstimatedDelivery.setText(iOrder.getEstimatedDelivery());
         // Ert ordernummer
@@ -463,7 +464,7 @@ public class SSOrderPanel {
      */
     public SSOrder getOrder() {
         // Offertdatum
-        iOrder.setDate(iDate.getDate());
+        iOrder.setLocalDate(iDate.getLocalDate());
         // Leveransdatum
         iOrder.setEstimatedDelivery(iEstimatedDelivery.getText());
         // Ert ordernummer
@@ -884,7 +885,8 @@ public class SSOrderPanel {
                 return null;
             }
 
-            BigDecimal iInprice = SSProductMath.getInprice(iProduct, iDate.getDate()).orElse(null);
+            BigDecimal iInprice = SSProductMath.getInprice(iProduct,
+                    SSDateUtil.toDate(iDate.getLocalDate())).orElse(null);
             BigDecimal iUnitprice = iRow.getUnitprice();
             BigDecimal iExchangeRate = getExchangeRate();
 

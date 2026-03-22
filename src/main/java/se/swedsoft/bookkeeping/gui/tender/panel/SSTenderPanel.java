@@ -30,6 +30,7 @@ import se.swedsoft.bookkeeping.gui.util.model.SSDeliveryWayTableModel;
 import se.swedsoft.bookkeeping.gui.util.model.SSPaymentTermTableModel;
 import se.swedsoft.bookkeeping.gui.util.table.SSTable;
 import se.swedsoft.bookkeeping.gui.util.table.actions.SSDeleteAction;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 import se.swedsoft.bookkeeping.gui.util.table.actions.SSTraversalAction;
 import se.swedsoft.bookkeeping.gui.util.table.editors.SSTaxCodeCellEditor;
 import se.swedsoft.bookkeeping.gui.util.table.editors.SSTaxCodeCellRenderer;
@@ -383,9 +384,9 @@ public class SSTenderPanel {
         // Offfertnummer
         iNumber.setValue(iTender.getNumber());
         // Offertdatum
-        iDate.setDate(iTender.getDate());
+        iDate.setLocalDate(iTender.getLocalDate());
         // Giltig tom
-        iExpires.setDate(iTender.getExpires());
+        iExpires.setLocalDate(iTender.getLocalExpires());
 
         // Kund nummer
         iCustomer.setText(iTender.getCustomerNr());
@@ -455,9 +456,9 @@ public class SSTenderPanel {
     public SSTender getTender() {
 
         // Offertdatum
-        iTender.setDate(iDate.getDate());
+        iTender.setLocalDate(iDate.getLocalDate());
         // Giltig tom
-        iTender.setExpires(iExpires.getDate());
+        iTender.setLocalExpires(iExpires.getLocalDate());
         // Kund nummer
         iTender.setCustomerNr(iCustomer.getText());
         // Kund namn
@@ -880,7 +881,8 @@ public class SSTenderPanel {
                 return null;
             }
 
-            BigDecimal iInprice = SSProductMath.getInprice(iProduct, iDate.getDate()).orElse(null);
+            BigDecimal iInprice = SSProductMath.getInprice(iProduct,
+                    SSDateUtil.toDate(iDate.getLocalDate())).orElse(null);
             BigDecimal iUnitprice = iRow.getUnitprice();
             BigDecimal iExchangeRate = getExchangeRate();
 

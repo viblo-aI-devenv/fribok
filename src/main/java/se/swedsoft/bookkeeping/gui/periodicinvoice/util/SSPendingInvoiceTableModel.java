@@ -6,6 +6,7 @@ import se.swedsoft.bookkeeping.data.SSPeriodicInvoice;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSTableColumn;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSTableModel;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.util.*;
 
@@ -191,7 +192,7 @@ public class SSPendingInvoiceTableModel extends SSTableModel<SSPendingInvoiceTab
             SSBundle.getBundle().getString("invoicetable.column.5")) {
         @Override
         public Object getValue(Entry iEntry) {
-            return iEntry.iInvoice.getDate();
+            return SSDateUtil.toDate(iEntry.iInvoice.getLocalDate());
         }
 
         @Override

@@ -146,7 +146,7 @@ public class SSOutdeliveryPanel {
         // Text
         iOutdelivery.setText(iText.getText());
         // Datum
-        iOutdelivery.setDate(iDate.getDate());
+        iOutdelivery.setDate(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(iDate.getLocalDate()));
 
         return iOutdelivery;
     }
@@ -165,7 +165,8 @@ public class SSOutdeliveryPanel {
         // Text
         iText.setText(iInventory.getText());
         // Datum
-        iDate.setDate(iInventory.getDate());
+        iDate.setDate(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
+                se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(iInventory.getDate())));
     }
 
     /**

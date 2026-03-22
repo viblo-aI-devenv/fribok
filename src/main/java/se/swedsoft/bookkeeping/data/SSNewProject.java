@@ -8,10 +8,12 @@ package se.swedsoft.bookkeeping.data;
 import se.swedsoft.bookkeeping.data.base.SSSaleRow;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.table.SSTableSearchable;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +32,7 @@ public class SSNewProject implements Serializable, SSTableSearchable {
 
     private boolean iConcluded;
 
-    private Date iConcludedDate;
+    private LocalDate iConcludedDate;
 
     /**
      * Default constructor.
@@ -56,7 +58,7 @@ public class SSNewProject implements Serializable, SSTableSearchable {
         iName = iOld.getName();
         iDescription = iOld.getDescription();
         iConcluded = iOld.getConcluded();
-        iConcludedDate = iOld.getConcludedDate();
+        iConcludedDate = SSDateUtil.toLocalDate(iOld.getConcludedDate());
     }
 
     // /////////////////////////////////////////////////////////////////////////
@@ -140,7 +142,7 @@ public class SSNewProject implements Serializable, SSTableSearchable {
      * @return
      */
     public Date getConcludedDate() {
-        return iConcludedDate;
+        return SSDateUtil.toDate(iConcludedDate);
     }
 
     /**
@@ -148,6 +150,14 @@ public class SSNewProject implements Serializable, SSTableSearchable {
      * @param pConcluded
      */
     public void setConcludedDate(Date pConcluded) {
+        iConcludedDate = SSDateUtil.toLocalDate(pConcluded);
+    }
+
+    public LocalDate getLocalConcludedDate() {
+        return iConcludedDate;
+    }
+
+    public void setLocalConcludedDate(LocalDate pConcluded) {
         iConcludedDate = pConcluded;
     }
 
@@ -159,8 +169,9 @@ public class SSNewProject implements Serializable, SSTableSearchable {
      * @return
      */
     public boolean isConcluded(Date iDate) {
-        return iConcluded && (iConcludedDate != null)
-                && iConcludedDate.getTime() <= iDate.getTime();
+        LocalDate localDate = SSDateUtil.toLocalDate(iDate);
+        return iConcluded && iConcludedDate != null && localDate != null
+                && !iConcludedDate.isAfter(localDate);
     }
 
     // /////////////////////////////////////////////////////////////////////////

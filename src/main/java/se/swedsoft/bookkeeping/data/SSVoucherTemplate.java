@@ -10,6 +10,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,7 +31,7 @@ public class SSVoucherTemplate implements Serializable, SSTableSearchable {
     private String iDescription;
 
     // The modified date
-    private Date iDate;
+    private LocalDateTime iDate;
 
     //
     private List<SSVoucherTemplateRow> iRows;
@@ -43,7 +44,7 @@ public class SSVoucherTemplate implements Serializable, SSTableSearchable {
     public SSVoucherTemplate() {
         iRows = new LinkedList<>();
         iDescription = null;
-        iDate = SSDateUtil.toDate(SSDateUtil.now());
+        iDate = SSDateUtil.now();
     }
 
     /**
@@ -53,7 +54,7 @@ public class SSVoucherTemplate implements Serializable, SSTableSearchable {
      */
     public SSVoucherTemplate(SSVoucher pVoucher) {
         iDescription = pVoucher.getDescription();
-        iDate = SSDateUtil.toDate(SSDateUtil.now());
+        iDate = SSDateUtil.now();
 
         iRows = new LinkedList<>();
 
@@ -119,7 +120,7 @@ public class SSVoucherTemplate implements Serializable, SSTableSearchable {
      * @return
      */
     public Date getDate() {
-        return iDate;
+        return SSDateUtil.toDate(iDate);
     }
 
     /**
@@ -127,6 +128,14 @@ public class SSVoucherTemplate implements Serializable, SSTableSearchable {
      * @param iDate
      */
     public void setDate(Date iDate) {
+        this.iDate = SSDateUtil.toLocalDateTime(iDate);
+    }
+
+    public LocalDateTime getLocalDateTime() {
+        return iDate;
+    }
+
+    public void setLocalDateTime(LocalDateTime iDate) {
         this.iDate = iDate;
     }
 

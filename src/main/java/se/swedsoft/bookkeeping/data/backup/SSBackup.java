@@ -2,8 +2,10 @@ package se.swedsoft.bookkeeping.data.backup;
 
 
 import se.swedsoft.bookkeeping.data.backup.util.SSBackupType;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -19,7 +21,7 @@ public class SSBackup implements Serializable {
     private String      iFilename;
 
     // The date of the backup
-    private Date        iDate;
+    private LocalDateTime iDate;
 
     // The type of the backup
     private SSBackupType iType;
@@ -55,7 +57,7 @@ public class SSBackup implements Serializable {
      * @return the backupdate
      */
     public Date getDate() {
-        return iDate;
+        return SSDateUtil.toDate(iDate);
     }
 
     /**
@@ -63,6 +65,14 @@ public class SSBackup implements Serializable {
      * @param iDate
      */
     public void setDate(Date iDate) {
+        this.iDate = SSDateUtil.toLocalDateTime(iDate);
+    }
+
+    public LocalDateTime getLocalDateTime() {
+        return iDate;
+    }
+
+    public void setLocalDateTime(LocalDateTime iDate) {
         this.iDate = iDate;
     }
 
@@ -150,4 +160,3 @@ public class SSBackup implements Serializable {
     }
 
 }
-

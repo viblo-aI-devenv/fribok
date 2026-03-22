@@ -9,6 +9,7 @@ import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.graphics.SSIcon;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSTableColumn;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSTableModel;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import java.math.BigDecimal;
@@ -159,12 +160,12 @@ public class SSOrderTableModel extends SSTableModel<SSOrder> {
             SSBundle.getBundle().getString("ordertable.column.4")) {
         @Override
         public Object getValue(SSOrder iOrder) {
-            return iOrder.getDate();
+            return SSDateUtil.toDate(iOrder.getLocalDate());
         }
 
         @Override
         public void setValue(SSOrder iOrder, Object iValue) {
-            iOrder.setDate((Date) iValue);
+            iOrder.setLocalDate(SSDateUtil.toLocalDate((Date) iValue));
         }
 
         @Override

@@ -7,6 +7,7 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSTableColumn;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSTableModel;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -70,12 +71,12 @@ public class SSOutpaymentTableModel extends SSTableModel<SSOutpayment> {
             SSBundle.getBundle().getString("outpaymenttable.column.2")) {
         @Override
         public Object getValue(SSOutpayment iObject) {
-            return iObject.getDate();
+            return SSDateUtil.toDate(iObject.getLocalDate());
         }
 
         @Override
         public void setValue(SSOutpayment iObject, Object iValue) {
-            iObject.setDate((Date) iValue);
+            iObject.setLocalDate(SSDateUtil.toLocalDate((Date) iValue));
 
         }
 

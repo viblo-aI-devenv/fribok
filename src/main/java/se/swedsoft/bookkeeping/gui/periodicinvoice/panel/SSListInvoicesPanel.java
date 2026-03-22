@@ -60,7 +60,7 @@ public class SSListInvoicesPanel {
         // Nummer
         iNumber.setValue(iPeriodicInvoice.getNumber());
         // Första faktueringsdatum
-        iDate.setDate(iPeriodicInvoice.getDate());
+        iDate.setLocalDate(iPeriodicInvoice.getLocalDate());
         // Nästa fakturadatum
         iNext.setDate(iPeriodicInvoice.getNextDate().orElse(null));
         // Antal fakturor

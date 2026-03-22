@@ -330,7 +330,7 @@ public class SSInpaymentPanel {
     public SSInpayment getInpayment() {
 
         // Inbetalningsdatum
-        iInpayment.setDate(iDate.getDate());
+        iInpayment.setLocalDate(iDate.getLocalDate());
         // Text
         iInpayment.setText(iText.getText());
         // Standardkonton
@@ -355,7 +355,7 @@ public class SSInpaymentPanel {
         // Inbetalningsnummer
         iNumber.setValue(iInpayment.getNumber());
         // Inbetalningsdatum
-        iDate.setDate(iInpayment.getDate());
+        iDate.setLocalDate(iInpayment.getLocalDate());
         // Text
         iText.setText(iInpayment.getText());
         // Bokförd

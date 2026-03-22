@@ -8,6 +8,7 @@ import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.graphics.SSIcon;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSTableColumn;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSTableModel;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import java.math.BigDecimal;
@@ -155,7 +156,7 @@ public class SSPurchaseOrderTableModel extends SSTableModel<SSPurchaseOrder> {
             "Inköpsdatum") {
         @Override
         public Object getValue(SSPurchaseOrder iObject) {
-            return iObject.getDate();
+            return SSDateUtil.toDate(iObject.getLocalDate());
         }
 
         @Override

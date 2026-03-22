@@ -468,7 +468,7 @@ public class SSCreditInvoicePanel {
         iCrediting.setValue(iCreditInvoice.getCreditingNr());
         // iCrediting.setSelected(iCreditInvoice.getCrediting( SSDB.getInstance().getInvoices() ) );
         // Offertdatum
-        iDate.setDate(iCreditInvoice.getDate());
+        iDate.setLocalDate(iCreditInvoice.getLocalDate());
         // Kund nummer
         iCustomer.setText(iCreditInvoice.getCustomerNr());
         for (SSCustomer pCustomer : SSDB.getInstance().getCustomers()) {
@@ -537,7 +537,7 @@ public class SSCreditInvoicePanel {
      */
     public SSCreditInvoice getCreditInvoice() {
         // Offertdatum
-        iCreditInvoice.setDate(iDate.getDate());
+        iCreditInvoice.setLocalDate(iDate.getLocalDate());
         // Kund nummer
         iCreditInvoice.setCustomerNr(iCustomer.getText());
         // Kund namn

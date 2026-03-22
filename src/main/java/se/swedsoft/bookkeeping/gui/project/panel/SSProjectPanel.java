@@ -11,9 +11,6 @@ import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import java.awt.event.*;
-import java.util.Date;
-
-
 /**
  * @author
  */
@@ -183,10 +180,10 @@ public class SSProjectPanel {
         iName.setText(iProject.getName());
         iDescription.setText(iProject.getDescription());
         iConcluded.setSelected(iProject.getConcluded());
-        iConcludedDate.setDate(
-                iProject.getConcludedDate() != null
-                        ? iProject.getConcludedDate()
-                        : SSDateUtil.toDate(SSDateUtil.today()));
+        iConcludedDate.setLocalDate(
+                iProject.getLocalConcludedDate() != null
+                        ? iProject.getLocalConcludedDate()
+                        : SSDateUtil.today());
     }
 
     /**
@@ -198,7 +195,7 @@ public class SSProjectPanel {
         iProject.setName(iName.getText());
         iProject.setDescription(iDescription.getText());
         iProject.setConcluded(iConcluded.isSelected());
-        iProject.setConcludedDate(iConcludedDate.getDate());
+        iProject.setLocalConcludedDate(iConcludedDate.getLocalDate());
 
         return iProject;
     }

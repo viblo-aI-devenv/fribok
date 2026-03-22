@@ -549,7 +549,7 @@ public class SSPeriodicInvoicePanel {
         iInvoice = iPeriodicInvoice.getTemplate();
 
         // Första faktueringsdatum
-        iDate.setDate(iPeriodicInvoice.getDate());
+        iDate.setLocalDate(iPeriodicInvoice.getLocalDate());
         // Antal fakturor
         iCount.setValue(iPeriodicInvoice.getCount());
         // Periodtid i månader
@@ -559,9 +559,9 @@ public class SSPeriodicInvoicePanel {
         // Lägg till perioden som en rad i fakturan
         iAppendPeriod.setSelected(iPeriodicInvoice.getAppendPeriod());
         // Första datum i perioden:
-        iPeriodStart.setDate(iPeriodicInvoice.getPeriodStart());
+        iPeriodStart.setLocalDate(iPeriodicInvoice.getLocalPeriodStart());
         // Sista datum i perioden:
-        iPeriodEnd.setDate(iPeriodicInvoice.getPeriodEnd());
+        iPeriodEnd.setLocalDate(iPeriodicInvoice.getLocalPeriodEnd());
 
         iAddInfo.setSelected(iPeriodicInvoice.isAppendInformation());
 
@@ -639,7 +639,7 @@ public class SSPeriodicInvoicePanel {
      */
     public SSPeriodicInvoice getPeriodicInvoice() {
         // Första faktueringsdatum
-        iPeriodicInvoice.setDate(iDate.getDate());
+        iPeriodicInvoice.setLocalDate(iDate.getLocalDate());
         // Antal fakturor
         iPeriodicInvoice.setCount(iCount.getValue());
         // Periodtid i månader
@@ -649,9 +649,9 @@ public class SSPeriodicInvoicePanel {
         // Lägg till perioden som en rad i fakturan
         iPeriodicInvoice.setAppendPeriod(iAppendPeriod.isSelected());
         // Första datum i perioden:
-        iPeriodicInvoice.setPeriodStart(iPeriodStart.getDate());
+        iPeriodicInvoice.setLocalPeriodStart(iPeriodStart.getLocalDate());
         // Sista datum i perioden:
-        iPeriodicInvoice.setPeriodEnd(iPeriodEnd.getDate());
+        iPeriodicInvoice.setLocalPeriodEnd(iPeriodEnd.getLocalDate());
 
         iPeriodicInvoice.setAppendInformation(iAddInfo.isSelected());
 

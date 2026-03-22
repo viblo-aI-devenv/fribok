@@ -265,9 +265,9 @@ public class SSPurchaseOrderPanel {
         // Offfertnummer
         iNumber.setValue(iPurchaseOrder.getNumber());
         // Offertdatum
-        iDate.setDate(iPurchaseOrder.getDate());
+        iDate.setLocalDate(iPurchaseOrder.getLocalDate());
         // Leveransdatum
-        iEstimatedDelivery.setDate(iPurchaseOrder.getEstimatedDelivery());
+        iEstimatedDelivery.setLocalDate(iPurchaseOrder.getLocalEstimatedDelivery());
 
         // Kund nummer
         iSupplier.setSelected(
@@ -310,10 +310,10 @@ public class SSPurchaseOrderPanel {
      */
     public SSPurchaseOrder getOrder() {
         // Offertdatum
-        iPurchaseOrder.setDate(iDate.getDate());
+        iPurchaseOrder.setLocalDate(iDate.getLocalDate());
 
         // Leveransdatum
-        iPurchaseOrder.setEstimatedDelivery(iEstimatedDelivery.getDate());
+        iPurchaseOrder.setLocalEstimatedDelivery(iEstimatedDelivery.getLocalDate());
 
         // Kund nummer
         iPurchaseOrder.setSupplier(iSupplier.getSelected());
