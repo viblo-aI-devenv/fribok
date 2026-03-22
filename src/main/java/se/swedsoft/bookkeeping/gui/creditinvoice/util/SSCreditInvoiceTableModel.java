@@ -9,6 +9,7 @@ import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.graphics.SSIcon;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSTableColumn;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSTableModel;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import java.math.BigDecimal;
@@ -174,12 +175,12 @@ public class SSCreditInvoiceTableModel extends SSTableModel<SSCreditInvoice> {
             SSBundle.getBundle().getString("creditinvoicetable.column.4")) {
         @Override
         public Object getValue(SSCreditInvoice iCreditInvoice) {
-            return iCreditInvoice.getDate();
+            return SSDateUtil.toDate(iCreditInvoice.getLocalDate());
         }
 
         @Override
         public void setValue(SSCreditInvoice iCreditInvoice, Object iValue) {
-            iCreditInvoice.setDate((Date) iValue);
+            iCreditInvoice.setLocalDate(SSDateUtil.toLocalDate((Date) iValue));
         }
 
         @Override
