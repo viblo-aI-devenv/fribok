@@ -20,8 +20,11 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 
 /**
@@ -141,8 +144,8 @@ public class SSSupplierInvoiceListDialog extends SSDialog {
         }
         // Filter by date
         if (iCheckDate.isSelected()) {
-            final Date iDateFrom = iFromDate.getDate();
-            final Date iDateTo = iToDate.getDate();
+            final LocalDate iDateFrom = SSDateUtil.toLocalDate(iFromDate.getDate());
+            final LocalDate iDateTo = SSDateUtil.toLocalDate(iToDate.getDate());
 
             iFactory.applyFilter(new SSFilter<>() {
                 public boolean applyFilter(SSSupplierInvoice iInvoice) {

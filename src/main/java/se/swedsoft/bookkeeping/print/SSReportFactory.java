@@ -312,8 +312,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
             return;
         }
 
-        final Date iFrom = iDialog.getFrom();
-        final Date iTo = iDialog.getTo();
+        final LocalDate iFrom = SSDateUtil.toLocalDate(iDialog.getFrom());
+        final LocalDate iTo = SSDateUtil.toLocalDate(iDialog.getTo());
 
         SSProgressDialog.runProgress(iMainFrame, () -> {
 

@@ -6,9 +6,11 @@ import se.swedsoft.bookkeeping.data.SSSupplierInvoice;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -34,7 +36,9 @@ public class SSSupplierdebtPrinter extends SSPrinter {
      * @param iInvoices
      */
     public SSSupplierdebtPrinter(Date iDate, List<SSSupplierInvoice> iInvoices) {
-        iSaldos = SSSupplierInvoiceMath.getSaldo(iInvoices, iDate);
+        LocalDate localDate = SSDateUtil.toLocalDate(iDate);
+
+        iSaldos = SSSupplierInvoiceMath.getSaldo(iInvoices, localDate);
 
         setPageHeader("header_period.jrxml");
         setColumnHeader("supplierdebt.jrxml");

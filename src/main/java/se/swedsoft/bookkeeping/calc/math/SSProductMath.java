@@ -234,7 +234,7 @@ public class SSProductMath {
 
         for (SSSupplierInvoice iSupplierInvoice : iFiltered) {
 
-            if (iDate == null || SSSupplierInvoiceMath.inPeriod(iSupplierInvoice, SSDateUtil.toDate(iDate))) {
+            if (iDate == null || SSSupplierInvoiceMath.inPeriod(iSupplierInvoice, iDate)) {
 
                 List<SSSupplierInvoiceRow> iRows = iSupplierInvoice.getRows();
 
