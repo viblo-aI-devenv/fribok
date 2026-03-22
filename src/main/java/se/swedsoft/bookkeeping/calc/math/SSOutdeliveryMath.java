@@ -4,7 +4,9 @@ package se.swedsoft.bookkeeping.calc.math;
 import se.swedsoft.bookkeeping.data.SSOutdelivery;
 import se.swedsoft.bookkeeping.data.SSOutdeliveryRow;
 import se.swedsoft.bookkeeping.data.SSProduct;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -26,10 +28,10 @@ public class SSOutdeliveryMath {
      * @return
      */
     public static boolean inPeriod(SSOutdelivery iInventory, Date pTo) {
-        Date iDate = iInventory.getDate();
-        Date iTo = SSDateMath.ceil(pTo);
+        LocalDate iDate = SSDateUtil.toLocalDate(iInventory.getDate());
+        LocalDate iTo = SSDateUtil.toLocalDate(pTo);
 
-        return iDate.getTime() <= iTo.getTime();
+        return iDate != null && iTo != null && !iDate.isAfter(iTo);
 
     }
 
@@ -41,11 +43,12 @@ public class SSOutdeliveryMath {
      * @return
      */
     public static boolean inPeriod(SSOutdelivery iInventory, Date pFrom, Date pTo) {
-        Date iDate = iInventory.getDate();
-        Date iFrom = SSDateMath.floor(pFrom);
-        Date iTo = SSDateMath.ceil(pTo);
+        LocalDate iDate = SSDateUtil.toLocalDate(iInventory.getDate());
+        LocalDate iFrom = SSDateUtil.toLocalDate(pFrom);
+        LocalDate iTo = SSDateUtil.toLocalDate(pTo);
 
-        return (iFrom.getTime() <= iDate.getTime()) && (iDate.getTime() <= iTo.getTime());
+        return iDate != null && iFrom != null && iTo != null
+                && !iDate.isBefore(iFrom) && !iDate.isAfter(iTo);
     }
 
     /**

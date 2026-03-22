@@ -110,8 +110,9 @@ public class SSResultCalculator {
             // If the date of the oucher is in between the start and end date, add to PeriodChange
             boolean inPeriod = SSVoucherMath.inPeriod(iVoucher, iFrom, iTo);
 
-            boolean inYear = SSVoucherMath.inPeriod(iVoucher, iYearData.getFrom(),
-                    iYearData.getTo());
+            boolean inYear = SSVoucherMath.inPeriod(iVoucher,
+                    java.sql.Date.valueOf(iYearData.getLocalFrom()),
+                    java.sql.Date.valueOf(iYearData.getLocalTo()));
 
             boolean inPrevYear = SSVoucherMath.inPeriodPrevYear(iVoucher, iFrom, iTo);
 

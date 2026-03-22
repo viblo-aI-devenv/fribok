@@ -10,6 +10,7 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.util.LinkedList;
@@ -62,8 +63,8 @@ public class SSAccountdiagramPrinter extends SSPrinter {
      */
     @Override
     protected SSDefaultTableModel getModel() {
-        addParameter("dateFrom", iAccountingYear.getFrom());
-        addParameter("dateTo", iAccountingYear.getTo());
+        addParameter("dateFrom", SSDateUtil.toDate(iAccountingYear.getLocalFrom()));
+        addParameter("dateTo", SSDateUtil.toDate(iAccountingYear.getLocalTo()));
 
         final List<SSVoucher> iVouchers = iAccountingYear.getVouchers();
 

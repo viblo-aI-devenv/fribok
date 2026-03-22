@@ -46,11 +46,11 @@ public class SSSystemYearDataModel extends SSDefaultTableModel<SSNewAccountingYe
             break;
 
         case 1:
-            value = year.getFrom();
+            value = year.getLocalFrom() != null ? java.sql.Date.valueOf(year.getLocalFrom()) : null;
             break;
 
         case 2:
-            value = year.getTo();
+            value = year.getLocalTo() != null ? java.sql.Date.valueOf(year.getLocalTo()) : null;
             break;
 
         case 3:
@@ -79,4 +79,3 @@ public class SSSystemYearDataModel extends SSDefaultTableModel<SSNewAccountingYe
 
     }
 }
-

@@ -16,6 +16,7 @@ import se.swedsoft.bookkeeping.gui.util.dialogs.SSProgressDialog;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSQueryDialog;
 import se.swedsoft.bookkeeping.gui.util.frame.SSDefaultTableFrame;
 import se.swedsoft.bookkeeping.print.report.SSBudgetPrinter;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -128,8 +129,10 @@ public class SSBudgetFrame extends SSDefaultTableFrame {
 
                         final SSMainFrame iMainFrame = getMainFrame();
 
-                        final Date iFrom = SSDB.getInstance().getCurrentYear().getFrom();
-                        final Date iTo = SSDB.getInstance().getCurrentYear().getTo();
+                        final Date iFrom = SSDateUtil.toDate(
+                                SSDB.getInstance().getCurrentYear().getLocalFrom());
+                        final Date iTo = SSDateUtil.toDate(
+                                SSDB.getInstance().getCurrentYear().getLocalTo());
 
                         SSProgressDialog.runProgress(iMainFrame, () -> {
 

@@ -8,8 +8,10 @@ import se.swedsoft.bookkeeping.data.SSAccount;
 import se.swedsoft.bookkeeping.data.SSNewAccountingYear;
 import se.swedsoft.bookkeeping.data.SSVoucher;
 import se.swedsoft.bookkeeping.data.SSVoucherRow;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -46,7 +48,7 @@ public class SSBalanceCalculator {
      * @throws SSCalculatorException
      */
     public void calculate() throws SSCalculatorException {
-        calculate(iYearData.getFrom(), iYearData.getTo());
+        calculate(iYearData.getLocalFrom(), iYearData.getLocalTo());
     }
 
     /**
@@ -56,6 +58,11 @@ public class SSBalanceCalculator {
      * @throws SSCalculatorException
      */
     public void calculate(Date pFrom, Date pTo) throws SSCalculatorException {
+        calculate(se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(pFrom),
+                se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(pTo));
+    }
+
+    public void calculate(LocalDate pFrom, LocalDate pTo) throws SSCalculatorException {
         List<SSVoucher> iVouchers = iYearData.getVouchers();
 
         iInBalance = iYearData.getInBalance();
@@ -68,12 +75,14 @@ public class SSBalanceCalculator {
 
         // Loop through all vouchers
         for (SSVoucher iVoucher: iVouchers) {
+            LocalDate voucherDate = iVoucher.getLocalDate();
 
             // If the date of the voucer is before the start date, add to InSaldo
-            boolean inSaldo = pFrom.compareTo(iVoucher.getDate()) > 0;
+            boolean inSaldo = voucherDate != null && pFrom != null && voucherDate.isBefore(pFrom);
 
             // If the date of the oucher is in between the start and end date, add to PeriodChange
-            boolean inPeriod = SSVoucherMath.inPeriod(iVoucher, pFrom, pTo);
+            boolean inPeriod = voucherDate != null && pFrom != null && pTo != null
+                    && !voucherDate.isBefore(pFrom) && !voucherDate.isAfter(pTo);
 
             // Loop through all the voucher rows
             for (SSVoucherRow iRow: iVoucher.getRows()) {

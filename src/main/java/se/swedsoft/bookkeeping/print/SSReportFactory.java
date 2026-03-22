@@ -29,11 +29,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 
 /**
@@ -54,8 +56,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
     public static void buildVoucherReport(final SSMainFrame iMainFrame, final ResourceBundle bundle, final SSNewAccountingYear pYearData) {
         final SSVoucherListDialog iDialog = new SSVoucherListDialog(iMainFrame);
 
-        iDialog.setDateFrom(pYearData.getFrom());
-        iDialog.setDateTo(pYearData.getTo());
+        iDialog.setDateFrom(SSDateUtil.toDate(pYearData.getLocalFrom()));
+        iDialog.setDateTo(SSDateUtil.toDate(pYearData.getLocalTo()));
         iDialog.setLocationRelativeTo(iMainFrame);
         if (iDialog.showDialog() != JOptionPane.OK_OPTION) {
             return;
@@ -107,8 +109,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
     public static void MainbookReport(final SSMainFrame iMainFrame, final SSNewAccountingYear pYearData) {
         final SSMainBookDialog iDialog = new SSMainBookDialog(iMainFrame);
 
-        iDialog.setDateFrom(pYearData.getFrom());
-        iDialog.setDateTo(pYearData.getTo());
+        iDialog.setDateFrom(SSDateUtil.toDate(pYearData.getLocalFrom()));
+        iDialog.setDateTo(SSDateUtil.toDate(pYearData.getLocalTo()));
 
         iDialog.addOkActionListener(e -> {
 
@@ -155,8 +157,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
      * @param lastYearData
      */
     public static void buildResultReport(final SSMainFrame iMainFrame, final ResourceBundle bundle, final SSNewAccountingYear yearData, final SSNewAccountingYear lastYearData) {
-        Date from = yearData.getFrom();
-        Date to = yearData.getTo();
+        Date from = SSDateUtil.toDate(yearData.getLocalFrom());
+        Date to = SSDateUtil.toDate(yearData.getLocalTo());
 
         final SSDialog iDialog = new SSDialog(iMainFrame,
                 bundle.getString("resultreport.perioddialog.title"));
@@ -205,8 +207,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 "Välj period");
         SSNewAccountingYear iYear = SSDB.getInstance().getCurrentYear();
 
-        iDateDialog.setFrom(iYear.getFrom());
-        iDateDialog.setTo(iYear.getTo());
+        iDateDialog.setFrom(SSDateUtil.toDate(iYear.getLocalFrom()));
+        iDateDialog.setTo(SSDateUtil.toDate(iYear.getLocalTo()));
         iDateDialog.setLocationRelativeTo(iMainFrame);
 
         if (iDateDialog.showDialog() != JOptionPane.OK_OPTION) {
@@ -270,8 +272,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         final SSResultUnitResultSetupDialog iDialog = new SSResultUnitResultSetupDialog(
                 iMainFrame, bundle.getString("resultreport.perioddialog.title"));
 
-        iDialog.setFrom(iAccountingYear.getFrom());
-        iDialog.setTo(iAccountingYear.getTo());
+        iDialog.setFrom(SSDateUtil.toDate(iAccountingYear.getLocalFrom()));
+        iDialog.setTo(SSDateUtil.toDate(iAccountingYear.getLocalTo()));
         iDialog.setLocationRelativeTo(iMainFrame);
         if (iDialog.showDialog() != JOptionPane.OK_OPTION) {
             return;
@@ -303,8 +305,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         SSPeriodSelectionDialog iDialog = new SSPeriodSelectionDialog(iMainFrame,
                 bundle.getString("balancereport.perioddialog.title"));
 
-        iDialog.setFrom(iAccountingYear.getFrom());
-        iDialog.setTo(iAccountingYear.getTo());
+        iDialog.setFrom(SSDateUtil.toDate(iAccountingYear.getLocalFrom()));
+        iDialog.setTo(SSDateUtil.toDate(iAccountingYear.getLocalTo()));
         iDialog.setLocationRelativeTo(iMainFrame);
         if (iDialog.showDialog() != JOptionPane.OK_OPTION) {
             return;
@@ -333,8 +335,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         SSPeriodSelectionDialog iDialog = new SSPeriodSelectionDialog(iMainFrame,
                 bundle.getString("budgetreport.perioddialog.title"));
 
-        iDialog.setFrom(iAccountingYear.getFrom());
-        iDialog.setTo(iAccountingYear.getTo());
+        iDialog.setFrom(SSDateUtil.toDate(iAccountingYear.getLocalFrom()));
+        iDialog.setTo(SSDateUtil.toDate(iAccountingYear.getLocalTo()));
         iDialog.setLocationRelativeTo(iMainFrame);
         if (iDialog.showDialog() != JOptionPane.OK_OPTION) {
             return;
@@ -607,8 +609,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         SSPeriodSelectionDialog iDialog = new SSPeriodSelectionDialog(iMainFrame,
                 SSBundle.getBundle().getString("simplestatement.dialog.title"));
 
-        iDialog.setFrom(SSDB.getInstance().getCurrentYear().getFrom());
-        iDialog.setTo(SSDB.getInstance().getCurrentYear().getTo());
+        iDialog.setFrom(SSDateUtil.toDate(SSDB.getInstance().getCurrentYear().getLocalFrom()));
+        iDialog.setTo(SSDateUtil.toDate(SSDB.getInstance().getCurrentYear().getLocalTo()));
         iDialog.setLocationRelativeTo(iMainFrame);
         if (iDialog.showDialog() != JOptionPane.YES_NO_OPTION) {
             return;
@@ -1267,12 +1269,12 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 bundle.getString("salevalues.perioddialog.title"));
 
         if (iAccountingYear != null) {
-            iDialog.setFrom(iAccountingYear.getFrom());
-            iDialog.setTo(iAccountingYear.getTo());
+            iDialog.setFrom(SSDateUtil.toDate(iAccountingYear.getLocalFrom()));
+            iDialog.setTo(SSDateUtil.toDate(iAccountingYear.getLocalTo()));
         } else {
-            java.time.LocalDate now = java.time.LocalDate.now();
-            iDialog.setFrom(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(now));
-            iDialog.setTo(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(now.plusMonths(1)));
+            LocalDate now = LocalDate.now();
+            iDialog.setFrom(SSDateUtil.toDate(now));
+            iDialog.setTo(SSDateUtil.toDate(now.plusMonths(1)));
         }
         iDialog.setLocationRelativeTo(iMainFrame);
         if (iDialog.showDialog() != JOptionPane.OK_OPTION) {
@@ -1302,12 +1304,12 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 bundle.getString("purchasevalues.perioddialog.title"));
 
         if (iAccountingYear != null) {
-            iDialog.setFrom(iAccountingYear.getFrom());
-            iDialog.setTo(iAccountingYear.getTo());
+            iDialog.setFrom(SSDateUtil.toDate(iAccountingYear.getLocalFrom()));
+            iDialog.setTo(SSDateUtil.toDate(iAccountingYear.getLocalTo()));
         } else {
-            java.time.LocalDate now = java.time.LocalDate.now();
-            iDialog.setFrom(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(now));
-            iDialog.setTo(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(now.plusMonths(1)));
+            LocalDate now = LocalDate.now();
+            iDialog.setFrom(SSDateUtil.toDate(now));
+            iDialog.setTo(SSDateUtil.toDate(now.plusMonths(1)));
         }
         iDialog.setLocationRelativeTo(iMainFrame);
         if (iDialog.showDialog() != JOptionPane.OK_OPTION) {
@@ -2739,4 +2741,3 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
     }
 
 }
-

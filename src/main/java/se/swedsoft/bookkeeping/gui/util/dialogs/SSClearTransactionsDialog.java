@@ -34,9 +34,8 @@ public class SSClearTransactionsDialog extends SSDialog {
 
         setPanel(iPanel);
 
-        LocalDate firstDay = SSDateUtil.toLocalDate(
-                SSDB.getInstance().getCurrentYear().getFrom());
-        iDate.setDate(SSDateUtil.toDate(firstDay.minusDays(1)));
+        LocalDate firstDay = SSDB.getInstance().getCurrentYear().getLocalFrom();
+        iDate.setLocalDate(firstDay.minusDays(1));
         iButtonPanel.addCancelActionListener(e -> setModalResult(JOptionPane.CANCEL_OPTION, true));
         iButtonPanel.addOkActionListener(e -> setModalResult(JOptionPane.OK_OPTION, true));
 
