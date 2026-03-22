@@ -30,6 +30,7 @@ import se.swedsoft.bookkeeping.gui.util.model.SSDeliveryWayTableModel;
 import se.swedsoft.bookkeeping.gui.util.model.SSPaymentTermTableModel;
 import se.swedsoft.bookkeeping.gui.util.table.SSTable;
 import se.swedsoft.bookkeeping.gui.util.table.actions.SSDeleteAction;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 import se.swedsoft.bookkeeping.gui.util.table.actions.SSTraversalAction;
 import se.swedsoft.bookkeeping.gui.util.table.editors.SSTaxCodeCellEditor;
 import se.swedsoft.bookkeeping.gui.util.table.editors.SSTaxCodeCellRenderer;

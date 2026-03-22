@@ -44,7 +44,7 @@ public class SSVoucherTemplate implements Serializable, SSTableSearchable {
     public SSVoucherTemplate() {
         iRows = new LinkedList<>();
         iDescription = null;
-        iDate = SSDateUtil.toDate(SSDateUtil.now());
+        iDate = SSDateUtil.now();
     }
 
     /**
@@ -54,7 +54,7 @@ public class SSVoucherTemplate implements Serializable, SSTableSearchable {
      */
     public SSVoucherTemplate(SSVoucher pVoucher) {
         iDescription = pVoucher.getDescription();
-        iDate = SSDateUtil.toDate(SSDateUtil.now());
+        iDate = SSDateUtil.now();
 
         iRows = new LinkedList<>();
 

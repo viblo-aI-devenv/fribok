@@ -58,7 +58,7 @@ public class SSNewProject implements Serializable, SSTableSearchable {
         iName = iOld.getName();
         iDescription = iOld.getDescription();
         iConcluded = iOld.getConcluded();
-        iConcludedDate = iOld.getConcludedDate();
+        iConcludedDate = SSDateUtil.toLocalDate(iOld.getConcludedDate());
     }
 
     // /////////////////////////////////////////////////////////////////////////
