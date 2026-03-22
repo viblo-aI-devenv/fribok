@@ -157,7 +157,7 @@ public class SSNewResultUnit implements Serializable, SSTableSearchable {
         List<SSInvoice> iInvoices = SSDB.getInstance().getInvoices();
 
         for (SSInvoice iInvoice : iInvoices) {
-            if (iMonth.isDateInMonth(iInvoice.getDate())) {
+            if (iMonth.isDateInMonth(iInvoice.getLocalDate())) {
                 for (SSSaleRow iRow : iInvoice.getRows()) {
                     if (iRow.getResultUnitNr() != null) {
                         if (iRow.getResultUnitNr().equals(iNumber)
@@ -174,7 +174,7 @@ public class SSNewResultUnit implements Serializable, SSTableSearchable {
         Double iCreditInvoiceSum = 0.0;
 
         for (SSCreditInvoice iCreditInvoice : iCreditInvoices) {
-            if (iMonth.isDateInMonth(iCreditInvoice.getDate())) {
+            if (iMonth.isDateInMonth(iCreditInvoice.getLocalDate())) {
                 for (SSSaleRow iRow : iCreditInvoice.getRows()) {
                     if (iRow.getResultUnitNr() != null) {
                         if (iRow.getResultUnitNr().equals(iNumber)

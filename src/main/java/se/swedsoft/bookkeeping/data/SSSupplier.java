@@ -508,7 +508,7 @@ public class SSSupplier implements Serializable, SSTableSearchable {
         Double iSupplierInvoiceSum = 0.0;
 
         for (SSSupplierInvoice iSupplierInvoice : SSDB.getInstance().getSupplierInvoices()) {
-            if (iMonth.isDateInMonth(iSupplierInvoice.getDate())) {
+            if (iMonth.isDateInMonth(iSupplierInvoice.getLocalDate())) {
                 if (iSupplierInvoice.getSupplierNr() != null) {
                     if (iSupplierInvoice.getSupplierNr().equals(iNumber)) {
                         iSupplierInvoiceSum += SSSupplierInvoiceMath.getNetSum(iSupplierInvoice).doubleValue()
@@ -521,7 +521,7 @@ public class SSSupplier implements Serializable, SSTableSearchable {
         Double iSupplierCreditInvoiceSum = 0.0;
 
         for (SSSupplierCreditInvoice iSupplierCreditInvoice : SSDB.getInstance().getSupplierCreditInvoices()) {
-            if (iMonth.isDateInMonth(iSupplierCreditInvoice.getDate())) {
+            if (iMonth.isDateInMonth(iSupplierCreditInvoice.getLocalDate())) {
                 if (iSupplierCreditInvoice.getSupplierNr() != null) {
                     if (iSupplierCreditInvoice.getSupplierNr().equals(iNumber)) {
                         iSupplierCreditInvoiceSum += SSSupplierInvoiceMath.getNetSum(iSupplierCreditInvoice).doubleValue()

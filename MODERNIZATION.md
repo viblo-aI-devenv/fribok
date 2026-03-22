@@ -31,6 +31,7 @@ Current repo state:
 - more stock and inventory-related period filters now compare `LocalDate` values directly
 - more accounting-year and report-setup flows now keep year boundaries as `LocalDate` until legacy UI/report APIs require `Date`
 - more payment, inventory, and periodic-invoice panels now read and write `LocalDate` values directly from date choosers where supported
+- more company and domain aggregate helpers now evaluate monthly membership against `LocalDate` values directly
 - legacy `Date` imports and bridge methods still remain at Swing, JasperReports, import/export, and persistence boundaries
 
 Remaining tasks:

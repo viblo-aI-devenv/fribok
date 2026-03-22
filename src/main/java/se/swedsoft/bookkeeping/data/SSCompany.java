@@ -1251,9 +1251,7 @@ public class SSCompany implements Serializable {    private static final Logger 
         Double sum = 0.0;
 
         for (SSTender iTender:iTenders) {
-            Date iTenderDate = iTender.getDate();
-
-            if (iMonth.isDateInMonth(iTenderDate)) {
+            if (iMonth.isDateInMonth(iTender.getLocalDate())) {
                 for (SSSaleRow iRow : iTender.getRows()) {
                     if (iRow.getSum().isPresent()) {
                         sum += iRow.getSum().get().doubleValue()
@@ -1306,9 +1304,7 @@ public class SSCompany implements Serializable {    private static final Logger 
         Double sum = 0.0;
 
         for (SSOrder iOrder:iOrders) {
-            Date iOrderDate = iOrder.getDate();
-
-            if (iMonth.isDateInMonth(iOrderDate)) {
+            if (iMonth.isDateInMonth(iOrder.getLocalDate())) {
                 for (SSSaleRow iRow : iOrder.getRows()) {
                     if (iRow.getSum().isPresent()) {
                         sum += iRow.getSum().get().doubleValue()
@@ -1356,9 +1352,7 @@ public class SSCompany implements Serializable {    private static final Logger 
         Double suminvoices = 0.0;
 
         for (SSInvoice iInvoice:iInvoices) {
-            Date iInvoiceDate = iInvoice.getDate();
-
-            if (iMonth.isDateInMonth(iInvoiceDate)) {
+            if (iMonth.isDateInMonth(iInvoice.getLocalDate())) {
                 for (SSSaleRow iRow : iInvoice.getRows()) {
                     if (iRow.getSum().isPresent()) {
                         suminvoices += iRow.getSum().get().doubleValue()
@@ -1371,9 +1365,7 @@ public class SSCompany implements Serializable {    private static final Logger 
         Double sumcreditinvoices = 0.0;
 
         for (SSCreditInvoice iCreditInvoice:iCreditInvoices) {
-            Date iCreditInvoiceDate = iCreditInvoice.getDate();
-
-            if (iMonth.isDateInMonth(iCreditInvoiceDate)) {
+            if (iMonth.isDateInMonth(iCreditInvoice.getLocalDate())) {
                 for (SSSaleRow iRow : iCreditInvoice.getRows()) {
                     if (iRow.getSum().isPresent()) {
                         sumcreditinvoices += iRow.getSum().get().doubleValue()
@@ -1549,9 +1541,7 @@ public class SSCompany implements Serializable {    private static final Logger 
         Double sum = 0.0;
 
         for (SSPurchaseOrder iPurchaseOrder:iPurchaseOrders) {
-            Date iPurchaseOrderDate = iPurchaseOrder.getDate();
-
-            if (iMonth.isDateInMonth(iPurchaseOrderDate)) {
+            if (iMonth.isDateInMonth(iPurchaseOrder.getLocalDate())) {
                 if (iPurchaseOrder.getSum() != null) {
                     sum += iPurchaseOrder.getSum().doubleValue()
                             * iPurchaseOrder.getCurrencyRate().doubleValue();
@@ -1598,9 +1588,7 @@ public class SSCompany implements Serializable {    private static final Logger 
         Double sumSupplierInvoices = 0.0;
 
         for (SSSupplierInvoice iSupplierInvoice:iSupplierInvoices) {
-            Date iSupplierInvoiceDate = iSupplierInvoice.getDate();
-
-            if (iMonth.isDateInMonth(iSupplierInvoiceDate)) {
+            if (iMonth.isDateInMonth(iSupplierInvoice.getLocalDate())) {
                 if (SSSupplierInvoiceMath.getNetSum(iSupplierInvoice) != null) {
                     sumSupplierInvoices += SSSupplierInvoiceMath.getNetSum(iSupplierInvoice).doubleValue()
                             * iSupplierInvoice.getCurrencyRate().doubleValue();
@@ -1610,9 +1598,7 @@ public class SSCompany implements Serializable {    private static final Logger 
         Double sumSupplierCreditInvoices = 0.0;
 
         for (SSSupplierCreditInvoice iSupplierCreditInvoice:iSupplierCreditinvoices) {
-            Date iSupplierCreditInvoiceDate = iSupplierCreditInvoice.getDate();
-
-            if (iMonth.isDateInMonth(iSupplierCreditInvoiceDate)) {
+            if (iMonth.isDateInMonth(iSupplierCreditInvoice.getLocalDate())) {
                 if (SSSupplierInvoiceMath.getNetSum(iSupplierCreditInvoice) != null) {
                     sumSupplierCreditInvoices += SSSupplierInvoiceMath.getNetSum(iSupplierCreditInvoice).doubleValue()
                             * iSupplierCreditInvoice.getCurrencyRate().doubleValue();

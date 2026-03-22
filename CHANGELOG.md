@@ -78,6 +78,9 @@ diverging from upstream version 2.2-SNAPSHOT.
 - Continued the date migration in payment, inventory, and periodic-invoice UI
   panels by preferring `LocalDate` chooser accessors and only bridging back to
   `Date` for legacy stock-update and table-rendering APIs.
+- Continued the date migration in company, customer, supplier, product,
+  project, and result-unit monthly aggregates by switching more month-membership
+  checks from deprecated `Date` accessors to `LocalDate` values.
 - Dropped the legacy pre-HSQL `bookkeeper.db` import path and its archived
   `db/databas_v1.zip` handoff, requiring very old installations to migrate via
   historical Fribok releases before using this fork.
