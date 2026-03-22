@@ -318,7 +318,7 @@ public class SSOutpaymentPanel {
      */
     public SSOutpayment getOutpayment() {
         // Inbetalningsdatum
-        iOutpayment.setDate(iDate.getDate());
+        iOutpayment.setLocalDate(iDate.getLocalDate());
         // Text
         iOutpayment.setText(iText.getText());
         // Standardkonton
@@ -342,7 +342,7 @@ public class SSOutpaymentPanel {
         // Inbetalningsnummer
         iNumber.setValue(iOutpayment.getNumber());
         // Inbetalningsdatum
-        iDate.setDate(iOutpayment.getDate());
+        iDate.setLocalDate(iOutpayment.getLocalDate());
         // Text
         iText.setText(iOutpayment.getText());
         // Bokförd
