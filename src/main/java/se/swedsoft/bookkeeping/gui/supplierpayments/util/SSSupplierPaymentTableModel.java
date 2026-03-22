@@ -13,6 +13,7 @@ import se.swedsoft.bookkeeping.gui.util.table.model.SSTableColumn;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSTableModel;
 import se.swedsoft.bookkeeping.importexport.supplierpayments.data.PaymentMethod;
 import se.swedsoft.bookkeeping.importexport.supplierpayments.data.SupplierPayment;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -135,12 +136,12 @@ public class SSSupplierPaymentTableModel extends SSTableModel<SupplierPayment> {
             SSBundle.getBundle().getString("supplierpaymenttable.column.4")) {
         @Override
         public Object getValue(SupplierPayment iPayment) {
-            return iPayment.getDate();
+            return SSDateUtil.toDate(iPayment.getLocalDate());
         }
 
         @Override
         public void setValue(SupplierPayment iPayment, Object iValue) {
-            iPayment.setDate((Date) iValue);
+            iPayment.setLocalDate(SSDateUtil.toLocalDate((Date) iValue));
         }
 
         @Override

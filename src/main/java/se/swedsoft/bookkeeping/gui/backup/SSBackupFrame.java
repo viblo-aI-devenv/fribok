@@ -193,7 +193,7 @@ public class SSBackupFrame extends SSDefaultTableFrame {    private static final
 
         List<SSBackup> iBackups = iDatabase.getBackups();
 
-        Collections.sort(iBackups, (o1, o2) -> o2.getDate().compareTo(o1.getDate()));
+        Collections.sort(iBackups, (o1, o2) -> o2.getLocalDateTime().compareTo(o1.getLocalDateTime()));
 
         iTable = new SSTable();
 

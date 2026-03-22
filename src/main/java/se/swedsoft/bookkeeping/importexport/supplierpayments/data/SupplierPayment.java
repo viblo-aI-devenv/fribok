@@ -9,6 +9,7 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,7 +31,7 @@ public class SupplierPayment {
 
     private PaymentMethod iPaymentMethod;
 
-    private Date iDate;
+    private LocalDate iDate;
 
     private String iCurrency;
 
@@ -44,7 +45,7 @@ public class SupplierPayment {
         iValue = SSSupplierInvoiceMath.getSaldo(iInvoice.getNumber());
         iAccount = getBankGiro();
 
-        iDate = iInvoice.getDueDate() == null ? SSDateUtil.toDate(SSDateUtil.today()) : iInvoice.getDueDate();
+        iDate = iInvoice.getLocalDueDate() == null ? SSDateUtil.today() : iInvoice.getLocalDueDate();
         iCurrency = iInvoice.getCurrency() == null
                 ? "SEK"
                 : iInvoice.getCurrency().getName();
@@ -132,7 +133,7 @@ public class SupplierPayment {
      * @return
      */
     public Date getDate() {
-        return iDate;
+        return SSDateUtil.toDate(iDate);
     }
 
     /**
@@ -140,6 +141,14 @@ public class SupplierPayment {
      * @param iDate
      */
     public void setDate(Date iDate) {
+        this.iDate = SSDateUtil.toLocalDate(iDate);
+    }
+
+    public LocalDate getLocalDate() {
+        return iDate;
+    }
+
+    public void setLocalDate(LocalDate iDate) {
         this.iDate = iDate;
     }
 
