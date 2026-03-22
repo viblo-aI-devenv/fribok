@@ -6,8 +6,10 @@ import se.swedsoft.bookkeeping.calc.math.SSVoucherMath;
 import se.swedsoft.bookkeeping.calc.util.SSCalculatorException;
 import se.swedsoft.bookkeeping.data.*;
 import se.swedsoft.bookkeeping.data.system.SSDB;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -57,6 +59,10 @@ public class SSMainBookCalculator {
 
         public Date getDate() {
             return iDate;
+        }
+
+        public LocalDate getLocalDate() {
+            return SSDateUtil.toLocalDate(iDate);
         }
 
         public BigDecimal getDebet() {
@@ -181,9 +187,12 @@ public class SSMainBookCalculator {
         }
 
         for (SSVoucher iVoucher: iVouchers) {
+            LocalDate voucherDate = iVoucher.getLocalDate();
 
             // If the date of the voucer is before the start date, add to InSaldo
-            boolean inSaldo = iDateFrom.compareTo(iVoucher.getDate()) > 0;
+            boolean inSaldo = voucherDate != null
+                    && SSDateUtil.toLocalDate(iDateFrom) != null
+                    && voucherDate.isBefore(SSDateUtil.toLocalDate(iDateFrom));
 
             // If the date of the oucher is in between the start and end date, add to PeriodChange
             boolean inPeriod = SSVoucherMath.inPeriod(iVoucher, iDateFrom, iDateTo);
@@ -223,7 +232,7 @@ public class SSMainBookCalculator {
 
                     iMainBookRow.iNumber = iVoucher.getNumber();
                     iMainBookRow.iDescription = iVoucher.getDescription();
-                    iMainBookRow.iDate = iVoucher.getDate();
+                    iMainBookRow.iDate = SSDateUtil.toDate(voucherDate);
 
                     iMainBookRow.iAdded = iVoucherRow.isAdded();
                     iMainBookRow.iCrossed = iVoucherRow.isCrossed();

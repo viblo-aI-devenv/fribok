@@ -179,18 +179,20 @@ public class SSInpaymentMath {
 
         List<SSInpayment> iInpayments = SSDB.getInstance().getInpayments();
 
-        Date iDate = null;
+        LocalDate iDate = null;
 
         for (SSInpayment iInpayment : iInpayments) {
-            Date iRowDate = iInpayment.getDate();
+            LocalDate iRowDate = iInpayment.getLocalDate();
 
-            if (iInpayment.isPaying(iInvoice) && (iDate == null || iRowDate.after(iDate))) {
+            if (iInpayment.isPaying(iInvoice)
+                    && iRowDate != null
+                    && (iDate == null || iRowDate.isAfter(iDate))) {
                 iDate = iRowDate;
             }
 
         }
 
-        return iDate;
+        return SSDateUtil.toDate(iDate);
     }
 
     /**

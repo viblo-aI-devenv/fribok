@@ -4,9 +4,11 @@ package se.swedsoft.bookkeeping.calc.math;
 import se.swedsoft.bookkeeping.data.*;
 import se.swedsoft.bookkeeping.data.base.SSSaleRow;
 import se.swedsoft.bookkeeping.data.system.SSDB;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.Optional;
 
@@ -61,12 +63,24 @@ public class SSProductMath {
      * @return
      */
     public static BigDecimal getLastPurchasePrice(SSProduct iProduct, Date iDate) {
+        return getLastPurchasePrice(iProduct, SSDateUtil.toLocalDate(iDate));
+    }
+
+    public static BigDecimal getLastPurchasePrice(SSProduct iProduct, LocalDate iDate) {
         List<SSSupplierInvoice> iSupplierInvoices = new LinkedList<>(
                 SSDB.getInstance().getSupplierInvoices());
 
-        Collections.sort(iSupplierInvoices, (o1, o2) -> o2.getDate().compareTo(o1.getDate()));
+        Collections.sort(iSupplierInvoices,
+                Comparator.comparing(SSSupplierInvoice::getLocalDate,
+                        Comparator.nullsLast(Comparator.reverseOrder())));
 
         for (SSSupplierInvoice iSupplierInvoice : iSupplierInvoices) {
+            if (iDate != null) {
+                LocalDate supplierInvoiceDate = iSupplierInvoice.getLocalDate();
+                if (supplierInvoiceDate != null && supplierInvoiceDate.isAfter(iDate)) {
+                    continue;
+                }
+            }
             List<SSSupplierInvoiceRow> iRows = iSupplierInvoice.getRows();
 
             for (SSSupplierInvoiceRow iRow : iRows) {
@@ -144,6 +158,10 @@ public class SSProductMath {
      * @return
      */
     public static Map<SSProduct, BigDecimal> getInprices(List<SSProduct> iProducts, Date iDate) {
+        return getInprices(iProducts, SSDateUtil.toLocalDate(iDate));
+    }
+
+    public static Map<SSProduct, BigDecimal> getInprices(List<SSProduct> iProducts, LocalDate iDate) {
         Map<SSProduct, BigDecimal> IInprices = new HashMap<>();
 
         for (SSProduct iProduct : iProducts) {
@@ -158,7 +176,7 @@ public class SSProductMath {
      * @return
      */
     public static Optional<BigDecimal> getInprice(SSProduct iProduct) {
-        return getInprice(iProduct, null);
+        return getInprice(iProduct, (LocalDate) null);
     }
 
     /**
@@ -168,6 +186,10 @@ public class SSProductMath {
      * @return
      */
     public static Optional<BigDecimal> getInprice(SSProduct iProduct, Date iDate) {
+        return getInprice(iProduct, SSDateUtil.toLocalDate(iDate));
+    }
+
+    public static Optional<BigDecimal> getInprice(SSProduct iProduct, LocalDate iDate) {
         // Paket produkt
         if (iProduct.isParcel()) {
 
@@ -206,11 +228,13 @@ public class SSProductMath {
                 iSupplierInvoices);
 
         // Sortera efter datum i fallande ordning
-        Collections.sort(iFiltered, (o1, o2) -> o2.getDate().compareTo(o1.getDate()));
+        Collections.sort(iFiltered,
+                Comparator.comparing(SSSupplierInvoice::getLocalDate,
+                        Comparator.nullsLast(Comparator.reverseOrder())));
 
         for (SSSupplierInvoice iSupplierInvoice : iFiltered) {
 
-            if (iDate == null || SSSupplierInvoiceMath.inPeriod(iSupplierInvoice, iDate)) {
+            if (iDate == null || SSSupplierInvoiceMath.inPeriod(iSupplierInvoice, SSDateUtil.toDate(iDate))) {
 
                 List<SSSupplierInvoiceRow> iRows = iSupplierInvoice.getRows();
 
@@ -267,6 +291,10 @@ public class SSProductMath {
      * @return
      */
     public static Optional<BigDecimal> getContribution(SSProduct iProduct, Date iDate) {
+        return getContribution(iProduct, SSDateUtil.toLocalDate(iDate));
+    }
+
+    public static Optional<BigDecimal> getContribution(SSProduct iProduct, LocalDate iDate) {
         Optional<BigDecimal> iInprice = getInprice(iProduct, iDate);
 
         if (iInprice.isEmpty() || iProduct.getSellingPrice() == null) {
