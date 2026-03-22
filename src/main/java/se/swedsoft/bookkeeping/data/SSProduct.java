@@ -751,7 +751,7 @@ public class SSProduct implements SSTableSearchable, Serializable {
         List<SSInvoice> iInvoices = SSDB.getInstance().getInvoices();
 
         for (SSInvoice iInvoice : iInvoices) {
-            if (iMonth.isDateInMonth(iInvoice.getDate())) {
+            if (iMonth.isDateInMonth(iInvoice.getLocalDate())) {
                 for (SSSaleRow iRow : iInvoice.getRows()) {
                     if (iRow.getProductNr() != null) {
                         if (iRow.getProductNr().equals(iNumber) && iRow.getSum().isPresent()) {
@@ -767,7 +767,7 @@ public class SSProduct implements SSTableSearchable, Serializable {
         Double iCreditInvoiceSum = 0.0;
 
         for (SSCreditInvoice iCreditInvoice : iCreditInvoices) {
-            if (iMonth.isDateInMonth(iCreditInvoice.getDate())) {
+            if (iMonth.isDateInMonth(iCreditInvoice.getLocalDate())) {
                 for (SSSaleRow iRow : iCreditInvoice.getRows()) {
                     if (iRow.getProductNr() != null) {
                         if (iRow.getProductNr().equals(iNumber) && iRow.getSum().isPresent()) {

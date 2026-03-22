@@ -635,7 +635,7 @@ public class SSCustomer implements Serializable, SSTableSearchable {
         Double iInvoiceSum = 0.0;
 
         for (SSInvoice iInvoice : SSDB.getInstance().getInvoices()) {
-            if (iMonth.isDateInMonth(iInvoice.getDate())) {
+            if (iMonth.isDateInMonth(iInvoice.getLocalDate())) {
                 if (iInvoice.getCustomerNr() != null) {
                     if (iInvoice.getCustomerNr().equals(iCustomerNr)) {
                         iInvoiceSum += SSInvoiceMath.getNetSum(iInvoice).doubleValue()
@@ -649,7 +649,7 @@ public class SSCustomer implements Serializable, SSTableSearchable {
         Double iCreditInvoiceSum = 0.0;
 
         for (SSCreditInvoice iCreditInvoice : SSDB.getInstance().getCreditInvoices()) {
-            if (iMonth.isDateInMonth(iCreditInvoice.getDate())) {
+            if (iMonth.isDateInMonth(iCreditInvoice.getLocalDate())) {
                 if (iCreditInvoice.getCustomerNr() != null) {
                     if (iCreditInvoice.getCustomerNr().equals(iCustomerNr)) {
                         iCreditInvoiceSum += SSInvoiceMath.getNetSum(iCreditInvoice).doubleValue()

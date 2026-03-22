@@ -175,6 +175,12 @@ public class SSMonth  implements Serializable {
                 && checkDate.getYear() == iFrom.getYear();
     }
 
+    public boolean isDateInMonth(LocalDate iDate) {
+        return iDate != null
+                && iDate.getMonth() == iFrom.getMonth()
+                && iDate.getYear() == iFrom.getYear();
+    }
+
     /**
      * Breaks a year into its months.
      *

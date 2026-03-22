@@ -11,10 +11,12 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -297,11 +299,14 @@ public class SSSaleReportPrinter extends SSPrinter {
 
         List<SSSupplierInvoice> iSupplierInvoices = new LinkedList<>(
                 SSDB.getInstance().getSupplierInvoices());
+        LocalDate toDate = SSDateUtil.toLocalDate(iTo);
 
-        Collections.sort(iSupplierInvoices, (o1, o2) -> o2.getDate().compareTo(o1.getDate()));
+        Collections.sort(iSupplierInvoices,
+                Comparator.comparing(SSSupplierInvoice::getLocalDate,
+                        Comparator.nullsLast(Comparator.reverseOrder())));
 
         for (SSSupplierInvoice iSupplierInvoice : iSupplierInvoices) {
-            if (SSSupplierInvoiceMath.inPeriod(iSupplierInvoice, iTo)) {
+            if (SSSupplierInvoiceMath.inPeriod(iSupplierInvoice, toDate)) {
                 for (SSSupplierInvoiceRow iRow : iSupplierInvoice.getRows()) {
                     if (iRow.getProductNr() != null) {
                         SSProduct iProduct = new SSProduct();

@@ -219,7 +219,7 @@ public class SSNewProject implements Serializable, SSTableSearchable {
         List<SSInvoice> iInvoices = SSDB.getInstance().getInvoices();
 
         for (SSInvoice iInvoice : iInvoices) {
-            if (iMonth.isDateInMonth(iInvoice.getDate())) {
+            if (iMonth.isDateInMonth(iInvoice.getLocalDate())) {
                 for (SSSaleRow iRow : iInvoice.getRows()) {
                     if (iRow.getProjectNr() != null) {
                         if (iRow.getProjectNr().equals(iNumber) && iRow.getSum().isPresent()) {
@@ -235,7 +235,7 @@ public class SSNewProject implements Serializable, SSTableSearchable {
         Double iCreditInvoiceSum = 0.0;
 
         for (SSCreditInvoice iCreditInvoice : iCreditInvoices) {
-            if (iMonth.isDateInMonth(iCreditInvoice.getDate())) {
+            if (iMonth.isDateInMonth(iCreditInvoice.getLocalDate())) {
                 for (SSSaleRow iRow : iCreditInvoice.getRows()) {
                     if (iRow.getProjectNr() != null) {
                         if (iRow.getProjectNr().equals(iNumber) && iRow.getSum().isPresent()) {

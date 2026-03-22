@@ -945,7 +945,7 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
                                 SSDB.getInstance().deletePeriodicInvoice(iPeriodicInvoice);
                         }
 
-                        Map<Integer, BigDecimal> iPurchaseSaldoMap = SSSupplierInvoiceMath.getSaldos(iDate);
+                        Map<Integer, BigDecimal> iPurchaseSaldoMap = SSSupplierInvoiceMath.getSaldos(iCutoffDate);
 
                         for(SSOutpayment iOutpayment : SSDB.getInstance().getOutpayments()){
                             if(iOutpayment.getLocalDate().isBefore(iCutoffDate)){
