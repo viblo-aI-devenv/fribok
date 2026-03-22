@@ -487,7 +487,7 @@ public class SSSupplierCreditInvoicePanel {
         // Fakturatnummer
         iNumber.setValue(iSupplierCreditInvoice.getNumber());
         // Offertdatum
-        iDate.setDate(iSupplierCreditInvoice.getDate());
+        iDate.setLocalDate(iSupplierCreditInvoice.getLocalDate());
         // Kund nummer
         iSupplier.setSelected(iSupplierCreditInvoice.getSupplier(iSuppliers));
 
@@ -521,7 +521,7 @@ public class SSSupplierCreditInvoicePanel {
      */
     public SSSupplierCreditInvoice getSupplierCreditInvoice() {
         // Offertdatum
-        iSupplierCreditInvoice.setDate(iDate.getDate());
+        iSupplierCreditInvoice.setLocalDate(iDate.getLocalDate());
         // Kund nummer
         iSupplierCreditInvoice.setSupplier(iSupplier.getSelected());
         // Kund nummer

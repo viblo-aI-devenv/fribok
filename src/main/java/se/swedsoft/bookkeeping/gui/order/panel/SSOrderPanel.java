@@ -387,7 +387,7 @@ public class SSOrderPanel {
         // Offfertnummer
         iNumber.setValue(iOrder.getNumber());
         // Offertdatum
-        iDate.setDate(iOrder.getDate());
+        iDate.setLocalDate(iOrder.getLocalDate());
         // Leveransdatum
         iEstimatedDelivery.setText(iOrder.getEstimatedDelivery());
         // Ert ordernummer
@@ -463,7 +463,7 @@ public class SSOrderPanel {
      */
     public SSOrder getOrder() {
         // Offertdatum
-        iOrder.setDate(iDate.getDate());
+        iOrder.setLocalDate(iDate.getLocalDate());
         // Leveransdatum
         iOrder.setEstimatedDelivery(iEstimatedDelivery.getText());
         // Ert ordernummer
