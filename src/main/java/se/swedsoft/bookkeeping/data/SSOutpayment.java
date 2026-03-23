@@ -425,7 +425,7 @@ public class SSOutpayment implements SSTableSearchable, Serializable {
         iSum = iSum.add(iDifferenceSum);
 
         iVoucher = new SSVoucher();
-        iVoucher.setDate(SSDateUtil.toDate(SSDateUtil.today()));
+        iVoucher.setLocalDate(SSDateUtil.today());
         iVoucher.setNumber(0);
         iVoucher.setDescription(String.format(iDescription, iNumber));
 

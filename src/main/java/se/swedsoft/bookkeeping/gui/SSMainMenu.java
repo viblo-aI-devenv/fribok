@@ -941,7 +941,7 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
                         }
 
                         for(SSPeriodicInvoice iPeriodicInvoice : SSDB.getInstance().getPeriodicInvoices()){
-                            if(iPeriodicInvoice.getLocalDate().isBefore(iCutoffDate) && iPeriodicInvoice.getNextDate().isEmpty())
+                            if(iPeriodicInvoice.getLocalDate().isBefore(iCutoffDate) && iPeriodicInvoice.getNextLocalDate().isEmpty())
                                 SSDB.getInstance().deletePeriodicInvoice(iPeriodicInvoice);
                         }
 

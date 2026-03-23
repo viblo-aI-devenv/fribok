@@ -128,7 +128,7 @@ public class SSPeriodicInvoiceTableModel extends SSTableModel<SSPeriodicInvoice>
             SSBundle.getBundle().getString("periodicinvoicetable.column.4")) {
         @Override
         public Object getValue(SSPeriodicInvoice iObject) {
-            Optional<Date> iNext = iObject.getNextDate();
+            Optional<Date> iNext = iObject.getNextLocalDate().map(SSDateUtil::toDate);
 
             DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 

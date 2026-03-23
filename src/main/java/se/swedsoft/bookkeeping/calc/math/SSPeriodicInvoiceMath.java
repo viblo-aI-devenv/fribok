@@ -6,7 +6,7 @@ import se.swedsoft.bookkeeping.data.SSPeriodicInvoice;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.util.SSDateUtil;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +29,7 @@ public class SSPeriodicInvoiceMath {
 
         Map<SSPeriodicInvoice, List<SSInvoice>> iResult = new HashMap<>();
 
-        Date iNow = SSDateUtil.toDate(SSDateUtil.today());
+        LocalDate iNow = SSDateUtil.today();
 
         for (SSPeriodicInvoice iPeriodicInvoice : iPeriodicInvoices) {
             List<SSInvoice> iInvoices = iPeriodicInvoice.getInvoices(iNow);

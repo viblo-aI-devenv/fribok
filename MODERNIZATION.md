@@ -33,6 +33,7 @@ Current repo state:
 - more payment, inventory, and periodic-invoice panels now read and write `LocalDate` values directly from date choosers where supported
 - more company and domain aggregate helpers now evaluate monthly membership against `LocalDate` values directly
 - more product pricing, inpayment lookup, and main-book calculations now compare `LocalDate` values directly and bridge back to `Date` only for legacy return types
+- more periodic-invoice generation and pending-invoice flows now keep schedule boundaries and next-invoice calculations as `LocalDate` values internally
 - legacy `Date` imports and bridge methods still remain at Swing, JasperReports, import/export, and persistence boundaries
 
 Remaining tasks:

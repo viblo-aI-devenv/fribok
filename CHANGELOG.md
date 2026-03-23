@@ -84,6 +84,9 @@ diverging from upstream version 2.2-SNAPSHOT.
 - Continued the date migration in product pricing, inpayment lookup, and main
   book calculations by comparing `LocalDate` values directly and only bridging
   back to `Date` for legacy method contracts.
+- Continued the date migration in periodic-invoice generation and pending
+  invoice flows by keeping schedule calculations and next-invoice dates as
+  `LocalDate` values internally.
 - Dropped the legacy pre-HSQL `bookkeeper.db` import path and its archived
   `db/databas_v1.zip` handoff, requiring very old installations to migrate via
   historical Fribok releases before using this fork.

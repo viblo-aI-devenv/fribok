@@ -8,10 +8,12 @@ import se.swedsoft.bookkeeping.data.SSVoucher;
 import se.swedsoft.bookkeeping.data.SSVoucherRow;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -67,18 +69,23 @@ public class SSVATUtil {
      * @return The voucher
      */
     public static SSVoucher generateVATVoucher(String name, Date iDateFrom, Date iDateTo, SSAccount iAccountR1, SSAccount iAccountR2, SSAccount iAccountA) {
+        return generateVATVoucher(name, SSDateUtil.toLocalDate(iDateFrom), SSDateUtil.toLocalDate(iDateTo),
+                iAccountR1, iAccountR2, iAccountA);
+    }
+
+    public static SSVoucher generateVATVoucher(String name, LocalDate iDateFrom, LocalDate iDateTo, SSAccount iAccountR1, SSAccount iAccountR2, SSAccount iAccountA) {
 
         DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
         String iDescription = String.format(
                 SSBundle.getBundle().getString("vatreport2015.voucherdescription"),
-                iFormat.format(iDateFrom), iFormat.format(iDateTo));
+                iFormat.format(SSDateUtil.toDate(iDateFrom)), iFormat.format(SSDateUtil.toDate(iDateTo)));
 	// Lagt till momskoder för importmoms: UI1 UI2 UI3
         List<SSAccount> iAccounts = SSAccountMath.getAccountsByVATCode(
                 SSDB.getInstance().getAccounts(), "U1", "U2", "U3", "UVL", "UEU", "UTFU",
                 "I", "IVL", "UI1", "UI2", "UI3");
         List<SSVoucher> iVouchers = SSVoucherMath.getVouchers(
-                SSDB.getInstance().getVouchers(), iDateFrom, iDateTo);
+                SSDB.getInstance().getVouchers(), SSDateUtil.toDate(iDateFrom), SSDateUtil.toDate(iDateTo));
 
         Map<SSAccount, BigDecimal> iCreditMinusDebetSum = SSVoucherMath.getCreditMinusDebetSum(
                 iVouchers);
@@ -89,7 +96,7 @@ public class SSVATUtil {
 
         iVoucher.doAutoIncrecement();
         iVoucher.setDescription(iDescription);
-        iVoucher.setDate(iDateTo);
+        iVoucher.setLocalDate(iDateTo);
 
         BigDecimal iSum = new BigDecimal(0);
         SSVoucherRow iRow;
