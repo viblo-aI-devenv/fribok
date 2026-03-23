@@ -11,6 +11,7 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -131,7 +132,7 @@ public class SSVATControl2015Printer extends SSPrinter {    private static final
 
         iVoucher.doAutoIncrecement();
         iVoucher.setDescription(iDescription);
-        iVoucher.setDate(iDateTo);
+        iVoucher.setLocalDate(SSDateUtil.toLocalDate(iDateTo));
 
         BigDecimal iSum = new BigDecimal(0);
         BigDecimal iRoundedSum = new BigDecimal(0);

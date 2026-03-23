@@ -219,7 +219,7 @@ public class SSSupplierCreditInvoice extends SSSupplierInvoice {
         SSAccountPlan iAccountPlan = SSDB.getInstance().getCurrentAccountPlan();
 
         iVoucher = new SSVoucher();
-        iVoucher.setDate(SSDateUtil.toDate(SSDateUtil.today()));
+        iVoucher.setLocalDate(SSDateUtil.today());
         iVoucher.setNumber(0);
         iVoucher.setDescription(String.format(iDescription, iNumber));
 
