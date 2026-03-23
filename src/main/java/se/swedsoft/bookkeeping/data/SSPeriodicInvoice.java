@@ -459,6 +459,10 @@ public class SSPeriodicInvoice implements Serializable {
      * @return
      */
     public List<SSInvoice> getInvoices(Date iDate) {
+        return getInvoices(SSDateUtil.toLocalDate(iDate));
+    }
+
+    public List<SSInvoice> getInvoices(LocalDate iDate) {
         List<SSInvoice> iFiltered = new LinkedList<>();
 
         for (SSInvoice iInvoice : getInvoices()) {
@@ -482,6 +486,10 @@ public class SSPeriodicInvoice implements Serializable {
      * @return the date
      */
     public Optional<Date> getNextDate() {
+        return getNextLocalDate().map(SSDateUtil::toDate);
+    }
+
+    public Optional<LocalDate> getNextLocalDate() {
 
         for (SSInvoice iInvoice : getInvoices()) {
             // Skip the invoice if its already added
@@ -489,7 +497,7 @@ public class SSPeriodicInvoice implements Serializable {
                 continue;
             }
 
-            return Optional.ofNullable(iInvoice.getDate());
+            return Optional.ofNullable(iInvoice.getLocalDate());
         }
         return Optional.empty();
     }
@@ -505,23 +513,23 @@ public class SSPeriodicInvoice implements Serializable {
             return;
         }
 
-        Date iDate = SSDateUtil.toDate(this.iDate);
-        Date iPeriodStart = SSDateUtil.toDate(this.iPeriodStart);
-        Date iPeriodEnd = SSDateUtil.toDate(this.iPeriodEnd);
+        LocalDate iDate = this.iDate;
+        LocalDate iPeriodStart = this.iPeriodStart;
+        LocalDate iPeriodEnd = this.iPeriodEnd;
 
         DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
         for (int i = 0; i < iCount; i++) {
             SSInvoice iInvoice = new SSInvoice(iTemplate);
 
-            iInvoice.setDate(iDate);
+            iInvoice.setLocalDate(iDate);
             iInvoice.setDueDate();
             iInvoice.setNumber(i);
             iInvoice.setOrderNumbers(iTemplate.getOrderNumbers());
 
             if (iAppendPeriod) {
-                String strPeriodStart = iFormat.format(iPeriodStart);
-                String strPeriodEnd = iFormat.format(iPeriodEnd);
+                String strPeriodStart = iFormat.format(SSDateUtil.toDate(iPeriodStart));
+                String strPeriodEnd = iFormat.format(SSDateUtil.toDate(iPeriodEnd));
 
                 SSSaleRow iRow = new SSSaleRow();
 
@@ -561,10 +569,7 @@ public class SSPeriodicInvoice implements Serializable {
 
             iDate = SSDateMath.addMonths(iDate, iPeriod);
             iPeriodStart = SSDateMath.addMonths(iPeriodStart, iPeriod);
-            iPeriodEnd = SSDateMath.addMonths(iPeriodStart, iPeriod);
-
-            LocalDate ldPeriodEnd = SSDateUtil.toLocalDate(iPeriodEnd);
-            iPeriodEnd = SSDateUtil.toDate(ldPeriodEnd.minusDays(1));
+            iPeriodEnd = SSDateMath.addMonths(iPeriodStart, iPeriod).minusDays(1);
             iInvoices.add(iInvoice);
         }
 
