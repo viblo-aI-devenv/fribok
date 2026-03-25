@@ -104,7 +104,7 @@ public class SSInterestInvoiceTableModel extends SSDefaultTableModel<SSInvoice> 
             break;
 
         case 3:
-            value = iInvoice.getDueDate();
+            value = SSDateUtil.toDate(iInvoice.getLocalDueDate());
             break;
 
         case 4:

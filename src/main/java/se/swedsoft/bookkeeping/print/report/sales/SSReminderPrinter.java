@@ -209,7 +209,7 @@ public class SSReminderPrinter extends SSPrinter {
                         break;
 
                     case 2:
-                        value = iInvoice.getDueDate();
+                        value = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(iInvoice.getLocalDueDate());
                         break;
 
                     case 3:
@@ -272,13 +272,11 @@ public class SSReminderPrinter extends SSPrinter {
      * @return the number of delayed days, or 0 if no due date
      */
     private static int getNumDelayedDays(SSInvoice iInvoice) {
-        Date iDueDate = iInvoice.getDueDate();
+        java.time.LocalDate dueLocalDate = iInvoice.getLocalDueDate();
 
-        if (iDueDate == null) {
+        if (dueLocalDate == null) {
             return 0;
         }
-
-        java.time.LocalDate dueLocalDate = se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(iDueDate);
         java.time.LocalDate now = java.time.LocalDate.now();
 
         return (int) java.time.temporal.ChronoUnit.DAYS.between(dueLocalDate, now);

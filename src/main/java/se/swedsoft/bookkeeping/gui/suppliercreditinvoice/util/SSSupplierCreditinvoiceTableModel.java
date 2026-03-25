@@ -165,7 +165,7 @@ public class SSSupplierCreditinvoiceTableModel extends SSTableModel<SSSupplierCr
             SSBundle.getBundle().getString("suppliercreditinvoicetable.column.5")) {
         @Override
         public Object getValue(SSSupplierCreditInvoice iObject) {
-            return iObject.getDueDate();
+            return SSDateUtil.toDate(iObject.getLocalDueDate());
         }
 
         @Override

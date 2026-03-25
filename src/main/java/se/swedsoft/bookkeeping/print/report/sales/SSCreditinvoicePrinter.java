@@ -130,7 +130,7 @@ public class SSCreditinvoicePrinter extends SSPrinter {
         addParameter("creditinvoice.customernr", iCreditInvoice.getCustomerNr());
         addParameter("creditinvoice.yourcontact", iCreditInvoice.getYourContactPerson());
         addParameter("creditinvoice.yourordernumber", iCreditInvoice.getYourOrderNumber());
-        addParameter("creditinvoice.paymentday", iCreditInvoice.getDueDate());
+        addParameter("creditinvoice.paymentday", SSDateUtil.toDate(iCreditInvoice.getLocalDueDate()));
 
         if (iInvoice != null && iInvoice.getOCRNumber() != null) {
             addParameter("creditinvoice.invoicenumber", iInvoice.getOCRNumber());
@@ -177,9 +177,9 @@ public class SSCreditinvoicePrinter extends SSPrinter {
         uqrData.append("\", \"cr\": \"");
         uqrData.append(iCreditInvoice.getCreditingNr());
         uqrData.append("\", \"idt\": \"");
-        uqrData.append(SSDateUtil.toLocalDate(iCreditInvoice.getDate()).format(iFormat));
+        uqrData.append(iCreditInvoice.getLocalDate().format(iFormat));
         uqrData.append("\", \"ddt\": \"");
-        uqrData.append(SSDateUtil.toLocalDate(iCreditInvoice.getDueDate()).format(iFormat));
+        uqrData.append(iCreditInvoice.getLocalDueDate().format(iFormat));
         uqrData.append("\", \"due\": ");
         uqrData.append(iTotalSum.negate());
         uqrData.append(", \"vat\": ");
