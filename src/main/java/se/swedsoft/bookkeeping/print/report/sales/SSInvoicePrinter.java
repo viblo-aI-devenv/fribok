@@ -133,7 +133,7 @@ public class SSInvoicePrinter extends SSPrinter {
         addParameter("invoice.customernr", iInvoice.getCustomerNr());
         addParameter("invoice.yourcontact", iInvoice.getYourContactPerson());
         addParameter("invoice.yourordernumber", iInvoice.getYourOrderNumber());
-        addParameter("invoice.paymentday", iInvoice.getDueDate());
+        addParameter("invoice.paymentday", SSDateUtil.toDate(iInvoice.getLocalDueDate()));
 
         addParameter("invoice.taxrate1", iInvoice.getTaxRate1().toString());
         addParameter("invoice.taxrate2", iInvoice.getTaxRate2().toString());
@@ -172,9 +172,9 @@ public class SSInvoicePrinter extends SSPrinter {
         uqrData.append("\", \"iref\": \"");
         uqrData.append(iInvoice.hasOCRNumber() ? iInvoice.getOCRNumber() : iInvoice.getNumber());
         uqrData.append("\", \"idt\": \"");
-        uqrData.append(SSDateUtil.toLocalDate(iInvoice.getDate()).format(iFormat));
+        uqrData.append(iInvoice.getLocalDate().format(iFormat));
         uqrData.append("\", \"ddt\": \"");
-        uqrData.append(SSDateUtil.toLocalDate(iInvoice.getDueDate()).format(iFormat));
+        uqrData.append(iInvoice.getLocalDueDate().format(iFormat));
         uqrData.append("\", \"due\": ");
         uqrData.append(iTotalSum);
         uqrData.append(", \"vat\": ");

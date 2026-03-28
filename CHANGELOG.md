@@ -87,6 +87,9 @@ diverging from upstream version 2.2-SNAPSHOT.
 - Continued the date migration in periodic-invoice generation and pending
   invoice flows by keeping schedule calculations and next-invoice dates as
   `LocalDate` values internally.
+- Continued the date migration in invoice due-date table and sales print flows
+  by using `LocalDate` accessors directly and only converting to `Date` at
+  report and table boundaries.
 - Dropped the legacy pre-HSQL `bookkeeper.db` import path and its archived
   `db/databas_v1.zip` handoff, requiring very old installations to migrate via
   historical Fribok releases before using this fork.
