@@ -104,7 +104,9 @@ public class SSSupplierInvoiceListPrinter extends SSPrinter {
                     break;
 
                 case 3:
-                    value = iFormat.format(iInvoice.getDate());
+                    value = iInvoice.getLocalDate() == null
+                            ? null
+                            : iFormat.format(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(iInvoice.getLocalDate()));
                     break;
 
                 case 4:

@@ -85,9 +85,9 @@ public class SSVoucherListPrinter extends SSPrinter {
                     break;
 
                 case 1:
-                    value = iVoucher.getDate() == null
+                    value = iVoucher.getLocalDate() == null
                             ? null
-                            : iFormat.format(iVoucher.getDate());
+                            : iFormat.format(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(iVoucher.getLocalDate()));
                     break;
 
                 case 2:
