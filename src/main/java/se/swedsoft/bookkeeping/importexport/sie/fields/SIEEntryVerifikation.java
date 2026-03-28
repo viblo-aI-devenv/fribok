@@ -65,7 +65,7 @@ public class SIEEntryVerifikation implements SIEEntry {
             iHasNumber = true;
         }
 
-        iVoucher.setDate(iDate);
+        iVoucher.setLocalDate(SSDateUtil.toLocalDate(iDate));
         iVoucher.setDescription(iDescription);
 
         while (iReader.hasNextLine()) {

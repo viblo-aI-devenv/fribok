@@ -10,12 +10,14 @@ import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.importexport.supplierpayments.poster.*;
 import se.swedsoft.bookkeeping.importexport.supplierpayments.util.LBinLine;
 import se.swedsoft.bookkeeping.importexport.util.SSImportException;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -79,12 +81,13 @@ public class SSSupplierPaymentImporter {    private static final Logger LOG = Lo
                 LBinPostTK11 iPostTK11 = (LBinPostTK11) iPost;
 
                 Date iPaymentDate = iPostTK11.getPaymentDate();
+                LocalDate iPaymentLocalDate = SSDateUtil.toLocalDate(iPaymentDate);
 
                 DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
                 iOutpayment = new SSOutpayment();
                 iOutpayment.setText("Leverantörsbetalning");
-                iOutpayment.setDate(iPaymentDate);
+                iOutpayment.setLocalDate(iPaymentLocalDate);
                 iOutpayment.setText(
                         "Leverantörsbetalning " + iFormat.format(iPaymentDate));
 

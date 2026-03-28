@@ -91,7 +91,7 @@ public class SSBgMaxImporter {    private static final Logger LOG = LoggerFactor
             iInpayment.setText("Bankgiro inbetalning " + iAvsnitt.getLopnummer());
             try {
                 LocalDate parsed = LocalDate.parse(iAvsnitt.getBetalningsdag(), iDateFormat);
-                iInpayment.setDate(SSDateUtil.toDate(parsed));
+                iInpayment.setLocalDate(parsed);
             } catch (DateTimeParseException e) {
                 LOG.error("Unexpected error", e);
             }
