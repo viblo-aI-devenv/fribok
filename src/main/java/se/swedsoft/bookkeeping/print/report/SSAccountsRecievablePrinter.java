@@ -214,7 +214,9 @@ public class SSAccountsRecievablePrinter extends SSPrinter {
                         break;
 
                     case 1:
-                        value = iFormat.format(iInvoice.getDate());
+                        value = iInvoice.getLocalDate() == null
+                                ? null
+                                : iFormat.format(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(iInvoice.getLocalDate()));
                         break;
 
                     case 2:

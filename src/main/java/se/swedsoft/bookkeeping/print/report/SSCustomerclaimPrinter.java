@@ -94,9 +94,9 @@ public class SSCustomerclaimPrinter extends SSPrinter {
                     break;
 
                 case 3:
-                    value = iInvoice.getDate() == null
+                    value = iInvoice.getLocalDate() == null
                             ? null
-                            : iFormat.format(iInvoice.getDate());
+                            : iFormat.format(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(iInvoice.getLocalDate()));
                     break;
 
                 case 4:

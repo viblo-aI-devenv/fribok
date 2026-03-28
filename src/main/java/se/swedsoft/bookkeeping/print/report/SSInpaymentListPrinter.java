@@ -95,7 +95,9 @@ public class SSInpaymentListPrinter extends SSPrinter {
                     break;
 
                 case 1:
-                    value = iFormat.format(iInpayment.getDate());
+                    value = iInpayment.getLocalDate() == null
+                            ? null
+                            : iFormat.format(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(iInpayment.getLocalDate()));
                     break;
 
                 case 2:

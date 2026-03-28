@@ -94,7 +94,9 @@ public class SSOutpaymentListPrinter extends SSPrinter {
                     break;
 
                 case 1:
-                    value = iFormat.format(iOutpayment.getDate());
+                    value = iOutpayment.getLocalDate() == null
+                            ? null
+                            : iFormat.format(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(iOutpayment.getLocalDate()));
                     break;
 
                 case 2:

@@ -35,6 +35,7 @@ Current repo state:
 - more product pricing, inpayment lookup, and main-book calculations now compare `LocalDate` values directly and bridge back to `Date` only for legacy return types
 - more periodic-invoice generation and pending-invoice flows now keep schedule boundaries and next-invoice calculations as `LocalDate` values internally
 - more invoice due-date table and sales print flows now read `LocalDate`/`LocalDate` due dates directly and only convert to `Date` at Jasper/table boundaries
+- more list, journal, and debt printers now format `LocalDate` values directly and only bridge to `Date` for `DateFormat`-based rendering
 - legacy `Date` imports and bridge methods still remain at Swing, JasperReports, import/export, and persistence boundaries
 
 Remaining tasks:

@@ -105,9 +105,9 @@ public class SSCreditinvoicejournalPrinter extends SSPrinter {
                     break;
 
                 case 3:
-                    value = iCreditInvoice.getDate() == null
+                    value = iCreditInvoice.getLocalDate() == null
                             ? null
-                            : iFormat.format(iCreditInvoice.getDate());
+                            : iFormat.format(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(iCreditInvoice.getLocalDate()));
                     break;
 
                 case 4:
