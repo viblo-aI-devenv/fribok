@@ -93,7 +93,9 @@ public class SSInventoryListPrinter extends SSPrinter {
                     break;
 
                 case 1:
-                    value = iFormat.format(iInventory.getDate());
+                    value = iInventory.getLocalDate() == null
+                            ? null
+                            : iFormat.format(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(iInventory.getLocalDate()));
                     break;
 
                 case 2:

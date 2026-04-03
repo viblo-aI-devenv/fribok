@@ -10,6 +10,7 @@ import se.swedsoft.bookkeeping.data.common.SSTaxCode;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.util.Locale;
@@ -77,7 +78,7 @@ public class SSTenderPrinter extends SSPrinter {
 
         // Sale parameters
         addParameter("number", iTender.getNumber());
-        addParameter("date", iTender.getDate());
+        addParameter("date", SSDateUtil.toDate(iTender.getLocalDate()));
         addParameter("text", iTender.getText());
 
         addParameter("tender.hasdiscount", SSSaleMath.hasDiscount(iTender));

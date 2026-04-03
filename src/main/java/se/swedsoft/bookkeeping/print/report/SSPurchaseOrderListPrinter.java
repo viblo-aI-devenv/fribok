@@ -103,7 +103,9 @@ public class SSPurchaseOrderListPrinter extends SSPrinter {
                     break;
 
                 case 3:
-                    value = iFormat.format(iOrder.getDate());
+                    value = iOrder.getLocalDate() == null
+                            ? null
+                            : iFormat.format(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(iOrder.getLocalDate()));
                     break;
 
                 case 4:
