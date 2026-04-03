@@ -94,7 +94,9 @@ public class SSOutdeliveryListPrinter extends SSPrinter {
                     break;
 
                 case 1:
-                    value = iFormat.format(iOutdelivery.getDate());
+                    value = iOutdelivery.getLocalDate() == null
+                            ? null
+                            : iFormat.format(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(iOutdelivery.getLocalDate()));
                     break;
 
                 case 2:

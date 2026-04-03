@@ -28,7 +28,7 @@ public class SSOutdeliveryMath {
      * @return
      */
     public static boolean inPeriod(SSOutdelivery iInventory, Date pTo) {
-        LocalDate iDate = SSDateUtil.toLocalDate(iInventory.getDate());
+        LocalDate iDate = iInventory.getLocalDate();
         LocalDate iTo = SSDateUtil.toLocalDate(pTo);
 
         return iDate != null && iTo != null && !iDate.isAfter(iTo);
@@ -43,7 +43,7 @@ public class SSOutdeliveryMath {
      * @return
      */
     public static boolean inPeriod(SSOutdelivery iInventory, Date pFrom, Date pTo) {
-        LocalDate iDate = SSDateUtil.toLocalDate(iInventory.getDate());
+        LocalDate iDate = iInventory.getLocalDate();
         LocalDate iFrom = SSDateUtil.toLocalDate(pFrom);
         LocalDate iTo = SSDateUtil.toLocalDate(pTo);
 
