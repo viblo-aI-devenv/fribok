@@ -93,6 +93,15 @@ diverging from upstream version 2.2-SNAPSHOT.
 - Continued the date migration in list, journal, and debt printers by reading
   local date accessors directly and only bridging to `Date` for final display
   formatting.
+- Continued the date migration in import flows by storing parsed BGMax,
+  supplier-payment, voucher-import, and SIE voucher dates through `LocalDate`
+  setters instead of deprecated `Date` setters.
+- Continued the date migration in in- and out-delivery domain, table, panel,
+  and list-printer flows by adding `LocalDate` accessors and removing immediate
+  `Date` bridge round-trips.
+- Continued the date migration in order, tender, purchase-order, and inventory
+  report/import flows by using `LocalDate` accessors directly and limiting
+  `Date` bridges to XML and Jasper boundaries.
 - Dropped the legacy pre-HSQL `bookkeeper.db` import path and its archived
   `db/databas_v1.zip` handoff, requiring very old installations to migrate via
   historical Fribok releases before using this fork.

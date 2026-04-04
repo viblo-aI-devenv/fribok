@@ -117,10 +117,10 @@ public class SSOrderImporter {    private static final Logger LOG = LoggerFactor
                         DateTimeFormatter iFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
                         try {
-                            iOrder.setDate(
-                                    iValue == null ? SSDateUtil.toDate(SSDateUtil.today()) : SSDateUtil.toDate(LocalDate.parse(iValue, iFormat)));
+                            iOrder.setLocalDate(
+                                    iValue == null ? SSDateUtil.today() : LocalDate.parse(iValue, iFormat));
                         } catch (DateTimeParseException e) {
-                            iOrder.setDate(SSDateUtil.toDate(SSDateUtil.today()));
+                            iOrder.setLocalDate(SSDateUtil.today());
                         }
                     }
 
@@ -916,7 +916,7 @@ public class SSOrderImporter {    private static final Logger LOG = LoggerFactor
                         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
                         try {
-                            iOrder.setDate(SSDateUtil.toDate(LocalDateTime.parse(iFields[1], df)));
+                            iOrder.setLocalDate(LocalDateTime.parse(iFields[1], df).toLocalDate());
                         } catch (DateTimeParseException e) {
                             iBadOrders.add(iOrderNumber + " - Orderdatum är i fel format");
                             continue order;

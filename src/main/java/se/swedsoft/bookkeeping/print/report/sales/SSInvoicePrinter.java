@@ -94,7 +94,7 @@ public class SSInvoicePrinter extends SSPrinter {
 
         // Sale parameters
         addParameter("number", iInvoice.getNumber());
-        addParameter("date", iInvoice.getDate());
+        addParameter("date", SSDateUtil.toDate(iInvoice.getLocalDate()));
         addParameter("text", iInvoice.getText());
 
         addParameter("invoice.hasdiscount", SSInvoiceMath.hasDiscount(iInvoice));

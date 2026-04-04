@@ -5,6 +5,7 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -108,12 +109,20 @@ public class SSOutdelivery implements Serializable {
         return iDate;
     }
 
+    public LocalDate getLocalDate() {
+        return SSDateUtil.toLocalDate(iDate);
+    }
+
     /**
      *
      * @param iDate
      */
     public void setDate(Date iDate) {
         this.iDate = iDate;
+    }
+
+    public void setLocalDate(LocalDate iDate) {
+        this.iDate = SSDateUtil.toDate(iDate);
     }
 
     // /////////////////////////////////////////////////////////////////////////////////////

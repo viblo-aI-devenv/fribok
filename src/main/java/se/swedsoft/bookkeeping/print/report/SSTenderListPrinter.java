@@ -103,7 +103,9 @@ public class SSTenderListPrinter extends SSPrinter {
                     break;
 
                 case 3:
-                    value = iFormat.format(iTender.getDate());
+                    value = iTender.getLocalDate() == null
+                            ? null
+                            : iFormat.format(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(iTender.getLocalDate()));
                     break;
 
                 case 4:

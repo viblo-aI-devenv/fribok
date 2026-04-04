@@ -15,6 +15,7 @@ import se.swedsoft.bookkeeping.importexport.excel.util.SSExcelCell;
 import se.swedsoft.bookkeeping.importexport.excel.util.SSExcelRow;
 import se.swedsoft.bookkeeping.importexport.excel.util.SSExcelSheet;
 import se.swedsoft.bookkeeping.importexport.util.SSImportException;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import java.io.File;
@@ -181,7 +182,7 @@ public class SSVoucherImporter {
                 }
                 if (iColumns.containsKey(SSVoucherExporter.DATUM)
                         && iColumns.get(SSVoucherExporter.DATUM) == col) {
-                    iVoucher.setDate(iCell.getDate());
+                    iVoucher.setLocalDate(SSDateUtil.toLocalDate(iCell.getDate()));
                 }
 
                 if (iColumns.containsKey(SSVoucherExporter.KONTO)

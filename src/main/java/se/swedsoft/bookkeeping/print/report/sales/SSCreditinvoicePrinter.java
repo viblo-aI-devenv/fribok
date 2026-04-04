@@ -86,7 +86,7 @@ public class SSCreditinvoicePrinter extends SSPrinter {
 
         // Sale parameters
         addParameter("number", iCreditInvoice.getNumber());
-        addParameter("date", iCreditInvoice.getDate());
+        addParameter("date", SSDateUtil.toDate(iCreditInvoice.getLocalDate()));
         addParameter("text", iCreditInvoice.getText());
 
         addParameter("creditinvoice.hasdiscount",

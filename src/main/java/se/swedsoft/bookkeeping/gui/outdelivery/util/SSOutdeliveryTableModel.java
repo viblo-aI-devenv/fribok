@@ -78,12 +78,12 @@ public class SSOutdeliveryTableModel extends SSTableModel<SSOutdelivery> {
             SSBundle.getBundle().getString("outdeliverytable.column.2")) {
         @Override
         public Object getValue(SSOutdelivery iIndelivery) {
-            return iIndelivery.getDate();
+            return SSDateUtil.toDate(iIndelivery.getLocalDate());
         }
 
         @Override
         public void setValue(SSOutdelivery iIndelivery, Object iValue) {
-            iIndelivery.setDate(SSDateUtil.toDate(SSDateUtil.toLocalDate((Date) iValue)));
+            iIndelivery.setLocalDate(SSDateUtil.toLocalDate((Date) iValue));
         }
 
         @Override

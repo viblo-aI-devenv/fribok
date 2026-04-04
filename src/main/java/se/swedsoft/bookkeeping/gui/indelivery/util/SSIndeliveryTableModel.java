@@ -78,12 +78,12 @@ public class SSIndeliveryTableModel extends SSTableModel<SSIndelivery> {
             SSBundle.getBundle().getString("indeliverytable.column.2")) {
         @Override
         public Object getValue(SSIndelivery iIndelivery) {
-            return iIndelivery.getDate();
+            return SSDateUtil.toDate(iIndelivery.getLocalDate());
         }
 
         @Override
         public void setValue(SSIndelivery iIndelivery, Object iValue) {
-            iIndelivery.setDate(SSDateUtil.toDate(SSDateUtil.toLocalDate((Date) iValue)));
+            iIndelivery.setLocalDate(SSDateUtil.toLocalDate((Date) iValue));
         }
 
         @Override

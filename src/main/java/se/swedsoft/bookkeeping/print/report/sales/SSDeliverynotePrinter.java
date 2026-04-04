@@ -9,6 +9,7 @@ import se.swedsoft.bookkeeping.data.base.SSSaleRow;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -83,7 +84,7 @@ public class SSDeliverynotePrinter extends SSPrinter {
 
         // Sale parameters
         addParameter("number", iOrder.getNumber());
-        addParameter("date", iOrder.getDate());
+        addParameter("date", SSDateUtil.toDate(iOrder.getLocalDate()));
         addParameter("text", iOrder.getText());
 
         addParameter("order.deliveryadress.name", iOrder.getDeliveryAddress().getName());
