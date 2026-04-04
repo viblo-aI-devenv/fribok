@@ -172,9 +172,9 @@ public class SSMainBookPrinter extends SSPrinter {
 
                 case 6:
                     // voucher.date
-                    value = iRow.getDate();
+                    value = iRow.getLocalDate();
                     if (value != null) {
-                        value = iFormat.format(iRow.getDate());
+                        value = iFormat.format(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(iRow.getLocalDate()));
                     }
                     break;
 

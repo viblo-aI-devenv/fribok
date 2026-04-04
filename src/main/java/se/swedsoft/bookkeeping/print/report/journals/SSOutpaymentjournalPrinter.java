@@ -99,7 +99,7 @@ public class SSOutpaymentjournalPrinter extends SSPrinter {
                     break;
 
                 case 2:
-                    value = iOutpayment.getDate();
+                    value = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(iOutpayment.getLocalDate());
                     break;
 
                 case 3:

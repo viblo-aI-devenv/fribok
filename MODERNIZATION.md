@@ -39,6 +39,7 @@ Current repo state:
 - more import flows now parse incoming dates into `LocalDate` values before handing them to bookkeeping models and vouchers
 - more in- and out-delivery flows now expose `LocalDate` directly in domain objects and keep table, panel, math, and list-printer paths on local dates until display boundaries
 - more order, tender, purchase-order, and inventory report/import paths now use `LocalDate` accessors directly and bridge to `Date` only at XML or Jasper boundaries
+- more payment journal, reminder, main-book, and transaction-cleanup flows now read local dates directly and only bridge to `Date` where report rendering still requires it
 - legacy `Date` imports and bridge methods still remain at Swing, JasperReports, import/export, and persistence boundaries
 
 Remaining tasks:

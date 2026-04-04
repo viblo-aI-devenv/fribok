@@ -205,7 +205,7 @@ public class SSReminderPrinter extends SSPrinter {
                         break;
 
                     case 1:
-                        value = iInvoice.getDate();
+                        value = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(iInvoice.getLocalDate());
                         break;
 
                     case 2:
