@@ -8,6 +8,7 @@ import jxl.write.WritableSheet;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
@@ -139,11 +140,15 @@ public class SSWritableExcelRow {    private static final Logger LOG = LoggerFac
      * @throws WriteException
      */
     public void setDate(int iColumn, Date pValue) throws WriteException {
+        setDate(iColumn, SSDateUtil.toLocalDate(pValue));
+    }
+
+    public void setDate(int iColumn, LocalDate pValue) throws WriteException {
         try {
             if (pValue == null) {
                 iSheet.addCell(new Label(iColumn, iRow, ""));
             } else {
-                iSheet.addCell(new Label(iColumn, iRow, SSDateUtil.toLocalDate(pValue).format(DATE_FORMAT)));
+                iSheet.addCell(new Label(iColumn, iRow, pValue.format(DATE_FORMAT)));
             }
 
         } catch (RowsExceededException e) {
@@ -159,12 +164,15 @@ public class SSWritableExcelRow {    private static final Logger LOG = LoggerFac
      * @throws WriteException
      */
     public void setDate(int iColumn, Date pValue, CellFormat iCellFormat) throws WriteException {
+        setDate(iColumn, SSDateUtil.toLocalDate(pValue), iCellFormat);
+    }
+
+    public void setDate(int iColumn, LocalDate pValue, CellFormat iCellFormat) throws WriteException {
         try {
             if (pValue == null) {
                 iSheet.addCell(new Label(iColumn, iRow, "", iCellFormat));
             } else {
-                iSheet.addCell(
-                        new Label(iColumn, iRow, SSDateUtil.toLocalDate(pValue).format(DATE_FORMAT), iCellFormat));
+                iSheet.addCell(new Label(iColumn, iRow, pValue.format(DATE_FORMAT), iCellFormat));
             }
         } catch (RowsExceededException e) {
             LOG.error("Unexpected error", e);
