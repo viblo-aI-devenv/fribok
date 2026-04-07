@@ -892,7 +892,7 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
                                 iStockStatusStart.put(iProduct.getNumber(), iStock.getQuantity(iProduct));
                         }
 
-                        Map<Integer, BigDecimal> iSaldoMap = SSInvoiceMath.getSaldos(iDate);
+                        Map<Integer, BigDecimal> iSaldoMap = SSInvoiceMath.getSaldos(SSDateUtil.toDate(iDate));
 
                         for(SSInpayment iInpayment : SSDB.getInstance().getInpayments()){
                             if(iInpayment.getLocalDate().isBefore(iCutoffDate)){
