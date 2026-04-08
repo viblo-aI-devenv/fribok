@@ -871,9 +871,9 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
 
                 if(iDialog.showDialog() != JOptionPane.OK_OPTION) return;
 
-                final Date iDate = iDialog.getDate();
+                final LocalDate iDate = iDialog.getLocalDate();
                 SSConfirmDialog iConfirmDialog;
-                iConfirmDialog = new SSConfirmDialog("helpmenu.cleartransactions.warning",SSDateUtil.toLocalDate(iDate).format(DateTimeFormatter.ISO_LOCAL_DATE));
+                iConfirmDialog = new SSConfirmDialog("helpmenu.cleartransactions.warning", iDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
                 if(iConfirmDialog.openDialog(iMainFrame)!=JOptionPane.OK_OPTION) return;
 
                 if (!createBackupDialog())
@@ -883,7 +883,7 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
                 SSDB.getInstance().dropTriggers();
 
                 SSInitDialog.runProgress(SSMainFrame.getInstance(),"Rensar transaktioner...", () -> {
-                        LocalDate iCutoffDate = SSDateUtil.toLocalDate(iDate);
+                        LocalDate iCutoffDate = iDate;
 
                         SSStock iStock = new SSStock(true);
                         Map<String, Integer> iStockStatusStart = new HashMap<>();
@@ -892,7 +892,7 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
                                 iStockStatusStart.put(iProduct.getNumber(), iStock.getQuantity(iProduct));
                         }
 
-                        Map<Integer, BigDecimal> iSaldoMap = SSInvoiceMath.getSaldos(iDate);
+                        Map<Integer, BigDecimal> iSaldoMap = SSInvoiceMath.getSaldos(SSDateUtil.toDate(iDate));
 
                         for(SSInpayment iInpayment : SSDB.getInstance().getInpayments()){
                             if(iInpayment.getLocalDate().isBefore(iCutoffDate)){
@@ -990,13 +990,13 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
                         }
 
                         for(SSIndelivery iIndelivery : SSDB.getInstance().getIndeliveries()){
-                            if(SSDateUtil.toLocalDate(iIndelivery.getDate()).isBefore(iCutoffDate)){
+                            if(iIndelivery.getLocalDate().isBefore(iCutoffDate)){
                                 SSDB.getInstance().deleteIndelivery(iIndelivery);
                             }
                         }
 
                         for(SSOutdelivery iOutdelivery : SSDB.getInstance().getOutdeliveries()){
-                            if(SSDateUtil.toLocalDate(iOutdelivery.getDate()).isBefore(iCutoffDate)){
+                            if(iOutdelivery.getLocalDate().isBefore(iCutoffDate)){
                                 SSDB.getInstance().deleteOutdelivery(iOutdelivery);
                             }
                         }

@@ -126,7 +126,7 @@ public class SSSupplierPaymentDialog extends SSDialog {    private static final 
                         LocalDate iDate = null;
 
                         for (SupplierPayment iSupplierPayment : iSupplierPayments) {
-                            LocalDate iPaymentDate = SSDateUtil.toLocalDate(iSupplierPayment.getDate());
+                            LocalDate iPaymentDate = iSupplierPayment.getLocalDate();
                             if (iDate == null || (iPaymentDate != null && iPaymentDate.isAfter(iDate))) {
                                 iDate = iPaymentDate;
                             }

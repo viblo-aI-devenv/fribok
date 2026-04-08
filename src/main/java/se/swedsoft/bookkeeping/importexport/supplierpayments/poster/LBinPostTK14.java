@@ -3,6 +3,7 @@ package se.swedsoft.bookkeeping.importexport.supplierpayments.poster;
 
 import se.swedsoft.bookkeeping.importexport.supplierpayments.data.SupplierPayment;
 import se.swedsoft.bookkeeping.importexport.supplierpayments.util.LBinLine;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -37,7 +38,7 @@ public class LBinPostTK14 extends LBinPost {
         this.iNumber = iNumber.replaceAll("-", "");
         iReference = iPayment.getReference();
         iValue = iPayment.getValue();
-        iDate = iPayment.getDate();
+        iDate = SSDateUtil.toDate(iPayment.getLocalDate());
         iInvoiceNr = iPayment.getNumber();
     }
 

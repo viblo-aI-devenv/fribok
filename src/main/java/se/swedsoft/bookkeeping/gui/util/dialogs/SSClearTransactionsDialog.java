@@ -47,7 +47,11 @@ public class SSClearTransactionsDialog extends SSDialog {
      * @return
      */
     public Date getDate() {
-        return iDate.getDate();
+        return SSDateUtil.toDate(getLocalDate());
+    }
+
+    public LocalDate getLocalDate() {
+        return iDate.getLocalDate();
     }
 
     @Override

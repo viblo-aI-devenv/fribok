@@ -102,6 +102,21 @@ diverging from upstream version 2.2-SNAPSHOT.
 - Continued the date migration in order, tender, purchase-order, and inventory
   report/import flows by using `LocalDate` accessors directly and limiting
   `Date` bridges to XML and Jasper boundaries.
+- Continued the date migration in payment journal, reminder, main-book, and
+  transaction-cleanup flows by reading local dates directly and only bridging
+  to `Date` where report rendering still requires it.
+- Continued the date migration in supplier-payment export flows by reading
+  `LocalDate` values directly from payment models and only bridging back to
+  `Date` for persisted config values.
+- Continued the date migration in supplier-payment LB export posts by taking
+  `LocalDate` values from payment models and only bridging to `Date` at the
+  file-format boundary.
+- Continued the date migration in Excel voucher export by letting writable row
+  helpers accept `LocalDate` values directly instead of formatting through
+  deprecated voucher `Date` accessors.
+- Continued the date migration in app dialogs by exposing `LocalDate` values
+  directly where menu flows immediately convert legacy `Date` selections back
+  into local dates for processing.
 - Dropped the legacy pre-HSQL `bookkeeper.db` import path and its archived
   `db/databas_v1.zip` handoff, requiring very old installations to migrate via
   historical Fribok releases before using this fork.
