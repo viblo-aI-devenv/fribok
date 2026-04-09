@@ -117,6 +117,9 @@ diverging from upstream version 2.2-SNAPSHOT.
 - Continued the date migration in app dialogs by exposing `LocalDate` values
   directly where menu flows immediately convert legacy `Date` selections back
   into local dates for processing.
+- Continued the date migration in report dialogs by exposing `LocalDate`
+  values directly for single-date reports and reading local date ranges
+  directly from chooser widgets in list dialogs.
 - Dropped the legacy pre-HSQL `bookkeeper.db` import path and its archived
   `db/databas_v1.zip` handoff, requiring very old installations to migrate via
   historical Fribok releases before using this fork.

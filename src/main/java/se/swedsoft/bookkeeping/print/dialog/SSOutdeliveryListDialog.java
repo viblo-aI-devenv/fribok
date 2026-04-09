@@ -15,12 +15,14 @@ import se.swedsoft.bookkeeping.gui.util.SSButtonPanel;
 import se.swedsoft.bookkeeping.gui.util.components.SSTableComboBox;
 import se.swedsoft.bookkeeping.gui.util.datechooser.SSDateChooser;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSDialog;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -107,13 +109,13 @@ public class SSOutdeliveryListDialog extends SSDialog {
         }
         // Filter by date
         if (iCheckDate.isSelected()) {
-            final Date iDateFrom = iFromDate.getDate();
-            final Date iDateTo = iToDate.getDate();
+            final LocalDate iDateFrom = iFromDate.getLocalDate();
+            final LocalDate iDateTo = iToDate.getLocalDate();
 
             iOutdeliveries = SSFilterFactory.doFilter(iOutdeliveries,
                     new SSFilter<>() {
                 public boolean applyFilter(SSOutdelivery iIndelivery) {
-                    return SSOutdeliveryMath.inPeriod(iIndelivery, iDateFrom, iDateTo);
+                    return SSOutdeliveryMath.inPeriod(iIndelivery, SSDateUtil.toDate(iDateFrom), SSDateUtil.toDate(iDateTo));
                 }
             });
         }
@@ -142,7 +144,7 @@ public class SSOutdeliveryListDialog extends SSDialog {
      * @return
      */
     public Date getDateFrom() {
-        return iFromDate.getDate();
+        return SSDateUtil.toDate(getLocalDateFrom());
     }
 
     /**
@@ -150,7 +152,15 @@ public class SSOutdeliveryListDialog extends SSDialog {
      * @return
      */
     public Date getDateTo() {
-        return iToDate.getDate();
+        return SSDateUtil.toDate(getLocalDateTo());
+    }
+
+    public LocalDate getLocalDateFrom() {
+        return iFromDate.getLocalDate();
+    }
+
+    public LocalDate getLocalDateTo() {
+        return iToDate.getLocalDate();
     }
 
     /**

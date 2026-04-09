@@ -144,8 +144,8 @@ public class SSSupplierInvoiceListDialog extends SSDialog {
         }
         // Filter by date
         if (iCheckDate.isSelected()) {
-            final LocalDate iDateFrom = SSDateUtil.toLocalDate(iFromDate.getDate());
-            final LocalDate iDateTo = SSDateUtil.toLocalDate(iToDate.getDate());
+            final LocalDate iDateFrom = iFromDate.getLocalDate();
+            final LocalDate iDateTo = iToDate.getLocalDate();
 
             iFactory.applyFilter(new SSFilter<>() {
                 public boolean applyFilter(SSSupplierInvoice iInvoice) {

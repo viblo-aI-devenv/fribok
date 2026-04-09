@@ -44,6 +44,7 @@ Current repo state:
 - more supplier-payment file-export posts now take `LocalDate` values from application models and only bridge to `Date` at the LB transfer file boundary
 - more Excel export helpers now accept `LocalDate` values directly so voucher exports no longer detour through deprecated `Date` accessors before formatting
 - more app dialogs now expose `LocalDate` values directly where callers immediately convert legacy `Date` values back to local dates for business logic
+- more report dialogs now expose `LocalDate` directly for single-date flows and read local date ranges directly from chooser widgets in list dialogs
 - legacy `Date` imports and bridge methods still remain at Swing, JasperReports, import/export, and persistence boundaries
 
 Remaining tasks:
