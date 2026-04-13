@@ -39,6 +39,9 @@ diverging from upstream version 2.2-SNAPSHOT.
   (Phase 3 Step 15) (PR #9).
 
 ### Changed
+- Restored backup create/restore compatibility after the `SSBackup` metadata
+  date migration by making serialized `backup.info` and `backup.history`
+  files readable across both legacy `Date` and `LocalDateTime` formats.
 - Modernized Java syntax (Phase 1): replaced anonymous inner classes with
   lambdas, added diamond operator, converted loops to streams, adopted
   try-with-resources for I/O (PR #4).

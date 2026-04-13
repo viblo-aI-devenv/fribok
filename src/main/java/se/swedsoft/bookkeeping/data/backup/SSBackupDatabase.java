@@ -69,8 +69,10 @@ public class SSBackupDatabase {    private static final Logger LOG = LoggerFacto
             iData = (SSBackupData) iObjectInputStream.readObject();
         } catch (IOException e) {
             LOG.error("Unexpected error", e);
+            newDatabase();
         } catch (ClassNotFoundException e) {
             LOG.error("Unexpected error", e);
+            newDatabase();
         }
     }
 
