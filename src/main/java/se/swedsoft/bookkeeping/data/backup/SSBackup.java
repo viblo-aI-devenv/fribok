@@ -5,6 +5,8 @@ import se.swedsoft.bookkeeping.data.backup.util.SSBackupType;
 import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.io.*;
+import java.io.ObjectInputStream.GetField;
+import java.io.ObjectOutputStream.PutField;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -16,6 +18,12 @@ import java.util.Date;
 public class SSBackup implements Serializable {
 
     static final long serialVersionUID = 1L;
+
+    private static final ObjectStreamField[] serialPersistentFields = {
+            new ObjectStreamField("iFilename", String.class),
+            new ObjectStreamField("iDate", Object.class),
+            new ObjectStreamField("iType", SSBackupType.class)
+    };
 
     // The filename of the backup
     private String      iFilename;
@@ -143,6 +151,32 @@ public class SSBackup implements Serializable {
         try (ObjectOutputStream iObjectOutputStream = new ObjectOutputStream(
                 new BufferedOutputStream(new FileOutputStream(iFile)))) {
             iObjectOutputStream.writeObject(iBackup);
+        }
+    }
+
+    private void writeObject(ObjectOutputStream outputStream) throws IOException {
+        PutField fields = outputStream.putFields();
+
+        fields.put("iFilename", iFilename);
+        fields.put("iDate", getDate());
+        fields.put("iType", iType);
+
+        outputStream.writeFields();
+    }
+
+    private void readObject(ObjectInputStream inputStream) throws IOException, ClassNotFoundException {
+        GetField fields = inputStream.readFields();
+
+        iFilename = (String) fields.get("iFilename", null);
+        iType = (SSBackupType) fields.get("iType", null);
+
+        Object rawDate = fields.get("iDate", null);
+        if (rawDate instanceof LocalDateTime) {
+            iDate = (LocalDateTime) rawDate;
+        } else if (rawDate == null || rawDate instanceof Date) {
+            iDate = SSDateUtil.toLocalDateTime((Date) rawDate);
+        } else {
+            throw new InvalidObjectException("Unsupported backup date type: " + rawDate.getClass().getName());
         }
     }
 
