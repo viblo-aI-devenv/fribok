@@ -29,12 +29,14 @@ public class SSVoucherMath {
      * @return
      */
     public static boolean inPeriod(SSVoucher iVoucher, Date pFrom, Date pTo) {
-        LocalDate iDate = iVoucher.getLocalDate();
-        LocalDate iFrom = SSDateUtil.toLocalDate(pFrom);
-        LocalDate iTo = SSDateUtil.toLocalDate(pTo);
+        return inPeriod(iVoucher, SSDateUtil.toLocalDate(pFrom), SSDateUtil.toLocalDate(pTo));
+    }
 
-        return iDate != null && iFrom != null && iTo != null
-                && !iDate.isBefore(iFrom) && !iDate.isAfter(iTo);
+    public static boolean inPeriod(SSVoucher iVoucher, LocalDate pFrom, LocalDate pTo) {
+        LocalDate iDate = iVoucher.getLocalDate();
+
+        return iDate != null && pFrom != null && pTo != null
+                && !iDate.isBefore(pFrom) && !iDate.isAfter(pTo);
     }
 
     /**
@@ -45,10 +47,13 @@ public class SSVoucherMath {
      * @return
      */
     public static boolean inPeriod(SSVoucher iVoucher, Date pTo) {
-        LocalDate iDate = iVoucher.getLocalDate();
-        LocalDate iTo = SSDateUtil.toLocalDate(pTo);
+        return inPeriod(iVoucher, SSDateUtil.toLocalDate(pTo));
+    }
 
-        return iDate != null && iTo != null && !iDate.isAfter(iTo);
+    public static boolean inPeriod(SSVoucher iVoucher, LocalDate pTo) {
+        LocalDate iDate = iVoucher.getLocalDate();
+
+        return iDate != null && pTo != null && !iDate.isAfter(pTo);
     }
 
     /**
