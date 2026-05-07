@@ -26,12 +26,14 @@ public class SSSupplierCreditInvoiceMath {
      * @return
      */
     public static boolean inPeriod(SSSupplierCreditInvoice iSupplierInvoice, Date pFrom, Date pTo) {
-        LocalDate iDate = iSupplierInvoice.getLocalDate();
-        LocalDate iFrom = SSDateUtil.toLocalDate(pFrom);
-        LocalDate iTo = SSDateUtil.toLocalDate(pTo);
+        return inPeriod(iSupplierInvoice, SSDateUtil.toLocalDate(pFrom), SSDateUtil.toLocalDate(pTo));
+    }
 
-        return iDate != null && iFrom != null && iTo != null
-                && !iDate.isBefore(iFrom) && !iDate.isAfter(iTo);
+    public static boolean inPeriod(SSSupplierCreditInvoice iSupplierInvoice, LocalDate pFrom, LocalDate pTo) {
+        LocalDate iDate = iSupplierInvoice.getLocalDate();
+
+        return iDate != null && pFrom != null && pTo != null
+                && !iDate.isBefore(pFrom) && !iDate.isAfter(pTo);
     }
 
     /**

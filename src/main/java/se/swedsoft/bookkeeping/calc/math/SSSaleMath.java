@@ -10,6 +10,7 @@ import se.swedsoft.bookkeeping.data.common.SSTaxCode;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.customer.SSCustomerFrame;
 import se.swedsoft.bookkeeping.gui.product.SSProductFrame;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -33,12 +34,14 @@ public class SSSaleMath {
      * @return
      */
     public static boolean inPeriod(SSSale iSale, Date pFrom, Date pTo) {
-        LocalDate iDate = iSale.getLocalDate();
-        LocalDate iFrom = se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(pFrom);
-        LocalDate iTo = se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(pTo);
+        return inPeriod(iSale, SSDateUtil.toLocalDate(pFrom), SSDateUtil.toLocalDate(pTo));
+    }
 
-        return iDate != null && iFrom != null && iTo != null
-                && !iDate.isBefore(iFrom) && !iDate.isAfter(iTo);
+    public static boolean inPeriod(SSSale iSale, LocalDate pFrom, LocalDate pTo) {
+        LocalDate iDate = iSale.getLocalDate();
+
+        return iDate != null && pFrom != null && pTo != null
+                && !iDate.isBefore(pFrom) && !iDate.isAfter(pTo);
     }
 
     /**
@@ -48,10 +51,13 @@ public class SSSaleMath {
      * @return
      */
     public static boolean inPeriod(SSSale iSale, Date pTo) {
-        LocalDate iDate = iSale.getLocalDate();
-        LocalDate iTo = se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(pTo);
+        return inPeriod(iSale, SSDateUtil.toLocalDate(pTo));
+    }
 
-        return iDate != null && iTo != null && !iDate.isAfter(iTo);
+    public static boolean inPeriod(SSSale iSale, LocalDate pTo) {
+        LocalDate iDate = iSale.getLocalDate();
+
+        return iDate != null && pTo != null && !iDate.isAfter(pTo);
     }
 
     /**
