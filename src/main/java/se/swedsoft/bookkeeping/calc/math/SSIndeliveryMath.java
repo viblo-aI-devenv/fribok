@@ -28,10 +28,13 @@ public class SSIndeliveryMath {
      * @return
      */
     public static boolean inPeriod(SSIndelivery iInventory, Date pTo) {
-        LocalDate iDate = iInventory.getLocalDate();
-        LocalDate iTo = SSDateUtil.toLocalDate(pTo);
+        return inPeriod(iInventory, SSDateUtil.toLocalDate(pTo));
+    }
 
-        return iDate != null && iTo != null && !iDate.isAfter(iTo);
+    public static boolean inPeriod(SSIndelivery iInventory, LocalDate pTo) {
+        LocalDate iDate = iInventory.getLocalDate();
+
+        return iDate != null && pTo != null && !iDate.isAfter(pTo);
 
     }
 
@@ -43,12 +46,14 @@ public class SSIndeliveryMath {
      * @return
      */
     public static boolean inPeriod(SSIndelivery iInventory, Date pFrom, Date pTo) {
-        LocalDate iDate = iInventory.getLocalDate();
-        LocalDate iFrom = SSDateUtil.toLocalDate(pFrom);
-        LocalDate iTo = SSDateUtil.toLocalDate(pTo);
+        return inPeriod(iInventory, SSDateUtil.toLocalDate(pFrom), SSDateUtil.toLocalDate(pTo));
+    }
 
-        return iDate != null && iFrom != null && iTo != null
-                && !iDate.isBefore(iFrom) && !iDate.isAfter(iTo);
+    public static boolean inPeriod(SSIndelivery iInventory, LocalDate pFrom, LocalDate pTo) {
+        LocalDate iDate = iInventory.getLocalDate();
+
+        return iDate != null && pFrom != null && pTo != null
+                && !iDate.isBefore(pFrom) && !iDate.isAfter(pTo);
     }
 
     /**
