@@ -1,4 +1,4 @@
-package org.fribok.bookkeeping.data.util;
+package org.bokfri.bookkeeping.data.util;
 
 public enum ConnectionSecurity {
     NONE (0, ""),

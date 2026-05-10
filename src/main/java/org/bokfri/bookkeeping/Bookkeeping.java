@@ -1,4 +1,4 @@
-package org.fribok.bookkeeping;
+package org.bokfri.bookkeeping;
 
 import com.jgoodies.looks.plastic.Plastic3DLookAndFeel;
 import com.jgoodies.looks.plastic.PlasticLookAndFeel;
@@ -7,8 +7,8 @@ import com.jgoodies.looks.FontPolicies;
 import com.jgoodies.looks.FontSet;
 import com.jgoodies.looks.FontSets;
 
-import org.fribok.bookkeeping.app.Path;
-import org.fribok.bookkeeping.app.Version;
+import org.bokfri.bookkeeping.app.Path;
+import org.bokfri.bookkeeping.app.Version;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.data.util.SSConfig;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;

@@ -9,7 +9,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.fribok.bookkeeping.app.Path;
+import org.bokfri.bookkeeping.app.Path;
 import se.swedsoft.bookkeeping.data.SSNewAccountingYear;
 
 import java.io.File;
@@ -157,7 +157,7 @@ public class SSDBConfig {    private static final Logger LOG = LoggerFactory.get
     static {
         load();
     }
-    
+
     /*
      * Create a config file if not found
     */
@@ -168,7 +168,7 @@ public class SSDBConfig {    private static final Logger LOG = LoggerFactory.get
         }
         if (CONFIG_FILE.createNewFile()) {
             LOG.info("Creating database config file.");
-            
+
             XMLSerializer serializer = new XMLSerializer(new FileOutputStream(CONFIG_FILE),
                 new OutputFormat("XML", "UTF-8", true));
 
@@ -192,7 +192,7 @@ public class SSDBConfig {    private static final Logger LOG = LoggerFactory.get
 
         try {
             createIfNotExists();
-            
+
             // parser.set(false)
             iParser.parse(new InputSource(new FileInputStream(CONFIG_FILE)));
 

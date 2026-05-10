@@ -1,8 +1,8 @@
 package se.swedsoft.bookkeeping.print.report.sales;
 
 import com.google.zxing.WriterException;
-import org.fribok.bookkeeping.app.Path;
-import org.fribok.bookkeeping.data.util.CreateQRCode;
+import org.bokfri.bookkeeping.app.Path;
+import org.bokfri.bookkeeping.data.util.CreateQRCode;
 import se.swedsoft.bookkeeping.data.SSNewCompany;
 import se.swedsoft.bookkeeping.print.SSPrinter;
 
@@ -61,7 +61,7 @@ public class SSSalePrinterUtils {    private static final Logger LOG = LoggerFac
     }
 
     /**
-     * 
+     *
      * @param urqData
      * @param iPrinter
      */
@@ -111,7 +111,7 @@ public class SSSalePrinterUtils {    private static final Logger LOG = LoggerFac
 
     }
 
-    
+
     public static String getPrimaryPaymentMethod(final SSNewCompany iCompany) {
         // fixme! - Check SE, NO, DK
         if (!"".equals(iCompany.getBankGiroNumber())) {
@@ -126,7 +126,7 @@ public class SSSalePrinterUtils {    private static final Logger LOG = LoggerFac
         }
         return "IBAN";
     }
-    
+
     public static String getPrimaryPaymentAccount(final SSNewCompany iCompany) {
         // fixme! - Check SE, NO, DK
         if (!"".equals(iCompany.getBankGiroNumber())) {

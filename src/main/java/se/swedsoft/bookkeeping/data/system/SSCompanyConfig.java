@@ -1,7 +1,7 @@
 package se.swedsoft.bookkeeping.data.system;
 
 
-import org.fribok.bookkeeping.app.Path;
+import org.bokfri.bookkeeping.app.Path;
 import se.swedsoft.bookkeeping.data.SSNewCompany;
 
 import java.io.*;

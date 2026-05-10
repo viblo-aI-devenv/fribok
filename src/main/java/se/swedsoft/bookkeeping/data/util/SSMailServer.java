@@ -1,6 +1,6 @@
 package se.swedsoft.bookkeeping.data.util;
 
-import org.fribok.bookkeeping.data.util.ConnectionSecurity;
+import org.bokfri.bookkeeping.data.util.ConnectionSecurity;
 import se.swedsoft.bookkeeping.util.SSUtil;
 
 import java.io.Serializable;
@@ -12,7 +12,7 @@ import java.net.URISyntaxException;
  * Class to store data about a mail server. Immutable.
  *
  * $Id$
- * 
+ *
  * @author jensli
  * @author ljo
  */
@@ -137,7 +137,7 @@ public class SSMailServer implements Serializable {
     public boolean isNoConnectionSecurity() {
         return !isSSL() && !isStartTLS();
     }
-    
+
     public ConnectionSecurity getConnectionSecurity() {
 	return connectionSecurity;
     }

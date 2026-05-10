@@ -1,4 +1,4 @@
-package org.fribok.bookkeeping.data.util;
+package org.bokfri.bookkeeping.data.util;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;

@@ -1,6 +1,6 @@
 package se.swedsoft.bookkeeping.data.system;
 
-import org.fribok.bookkeeping.app.Path;
+import org.bokfri.bookkeeping.app.Path;
 import se.swedsoft.bookkeeping.data.SSCustomer;
 import se.swedsoft.bookkeeping.data.SSNewCompany;
 import se.swedsoft.bookkeeping.data.SSStandardText;
@@ -40,7 +40,7 @@ public class SSMail {
     // Change this to get detailed debug info form JavaMail
     private static final boolean SHOULD_DEBUG_PRINT = false;
 
-    // This dir is where to look for pdf to send as attachments. 
+    // This dir is where to look for pdf to send as attachments.
     private static final File PDF_FILE_DIR = new File(Path.get(Path.APP_DATA), "pdftoemail");
 
     private SSMail() {}

@@ -1,7 +1,7 @@
 package se.swedsoft.bookkeeping.gui.voucher;
 
 
-import org.fribok.bookkeeping.app.Version;
+import org.bokfri.bookkeeping.app.Version;
 import se.swedsoft.bookkeeping.data.SSVoucher;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 

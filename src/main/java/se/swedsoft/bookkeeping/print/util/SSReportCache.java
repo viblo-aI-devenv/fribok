@@ -4,8 +4,8 @@ package se.swedsoft.bookkeeping.print.util;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperReport;
-import org.fribok.bookkeeping.app.Path;
-import org.fribok.bookkeeping.app.Version;
+import org.bokfri.bookkeeping.app.Path;
+import org.bokfri.bookkeeping.app.Version;
 import se.swedsoft.bookkeeping.util.SSException;
 
 import java.io.*;
@@ -112,7 +112,7 @@ public class SSReportCache {    private static final Logger LOG = LoggerFactory.
 		    // ta bort den kompilerade versionen?
 		    LOG.info(ex.getMessage());
 		}
-		
+
                 LOG.info("Precompiled report exists, but report is changed ...");
             }
 

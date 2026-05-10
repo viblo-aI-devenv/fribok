@@ -15,7 +15,7 @@
                <para/>
                <para>I det här formuläret kan du ändra registrerad data för en kopierad inleverans. Du ändrar data genom att ersätta texten i textfält, fylla i text i tomma fält eller välja annan text i uppslagskolumner. Du tar bort produktrader genom att markera produktraden och trycka på knappen "Del" på tangentbordet. Tryck på knappen "Ok" när du är klara med era ändringar.Följande flikar och fält finns när du skall ändra en kopierad inleverans:NummerHär uppräknas ett unikt nummer enligt en sekventiell nummerserie för att kunna identifiera en inleverans.DatumHär skriver du in eller väljer ett datum för inleveransen. Du kan välja datum genom att trycka på "Kalendern" och däri välja månad, år och dag. Du kan också stega din upp en dag genom att trycka på "pil upp" och stega din ner en dag genom att trycka på knappen "pil ned".TextHär skriver du in en text för att beskriva inleveransen.ProduktnrHär skriver du in eller väljer en produkt från uppslagskolumnen.BeskrivningHär visas produktens beskrivning enligt vald produkt från produktregistret.AntalHär skriver du in antalet enheter för produkten som har levererats till ert lager.</para>
                <para/>
-               <para>Copyright 2006-2018 - Fribok.org</para>
+               <para>Copyright 2006-2018 - Bokfri.org</para>
             </entry>
          </row></tbody></tgroup>
    </informaltable>

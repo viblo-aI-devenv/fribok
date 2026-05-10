@@ -2,7 +2,7 @@ package se.swedsoft.bookkeeping.data.system;
 
 
 import se.swedsoft.bookkeeping.SSTriggerHandler;
-import org.fribok.bookkeeping.app.Path;
+import org.bokfri.bookkeeping.app.Path;
 import se.swedsoft.bookkeeping.calc.math.*;
 import se.swedsoft.bookkeeping.calc.util.SSAutoIncrement;
 import se.swedsoft.bookkeeping.data.*;
@@ -124,10 +124,10 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
         createNewTables();
         // dropTriggers();
         createLocalTriggers();
-        
+
         checkCreateExampleCompany();
         checkImportDefaultAccountPlans();
-        
+
         // Läs in företaget och året som senast var öppet.
         Integer iLastCompany = SSDBConfig.getCompanyId();
         Integer iLastYear = SSDBConfig.getYearId();
@@ -320,7 +320,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             LOG.error("Unexpected error", e);
         }
     }
-    
+
     /* skapa exempelföretaget i databasen */
     private void checkCreateExampleCompany() {
         try {
@@ -347,7 +347,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             LOG.error("Unexpected error", e);
         }
     }
-    
+
     /* Create default account plans if no account plan exists in DB */
     private void checkImportDefaultAccountPlans() {
         try {
@@ -364,7 +364,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             }
             iStatement.close();
 
-            LOG.info("Creating default account plans.");  
+            LOG.info("Creating default account plans.");
 
             String[] defaults = new String[]{
                 "BAS96(07)-AB & EF.xls",
@@ -7716,7 +7716,7 @@ public class SSDB {    private static final Logger LOG = LoggerFactory.getLogger
             if (iConnection == null || iConnection.isClosed()) {
                 return;
             }
-            
+
             String q = SSUtil.readResourceToString("sql/create_tables.sql");
 
             PreparedStatement iStatement = iConnection.prepareStatement(q);

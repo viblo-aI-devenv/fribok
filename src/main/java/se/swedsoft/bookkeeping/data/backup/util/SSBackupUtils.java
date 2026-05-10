@@ -1,7 +1,7 @@
 package se.swedsoft.bookkeeping.data.backup.util;
 
 
-import org.fribok.bookkeeping.app.Path;
+import org.bokfri.bookkeeping.app.Path;
 import se.swedsoft.bookkeeping.data.system.SSSystemCompany;
 import se.swedsoft.bookkeeping.data.system.SSSystemYear;
 

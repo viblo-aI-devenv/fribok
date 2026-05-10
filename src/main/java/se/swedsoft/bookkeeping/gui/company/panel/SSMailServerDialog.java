@@ -1,7 +1,7 @@
 package se.swedsoft.bookkeeping.gui.company.panel;
 
 
-import org.fribok.bookkeeping.data.util.ConnectionSecurity;
+import org.bokfri.bookkeeping.data.util.ConnectionSecurity;
 import se.swedsoft.bookkeeping.data.system.SSMail;
 import se.swedsoft.bookkeeping.data.util.SSMailServer;
 import se.swedsoft.bookkeeping.data.util.SSMailServerException;
@@ -93,7 +93,7 @@ public class SSMailServerDialog extends SSDialog {    private static final Logge
         authCheckbox.setSelected(server.isAuth());
 	try {
 	    connectionSecurityCombobox.setSelectedIndex(server.getConnectionSecurity().getIndex());
-	} catch (NullPointerException ex) { 
+	} catch (NullPointerException ex) {
 	    LOG.info("Just missing new connection security values of dialogue. Nothing to worry about.");
 	}
         usernameText.setText(server.getUsername());
