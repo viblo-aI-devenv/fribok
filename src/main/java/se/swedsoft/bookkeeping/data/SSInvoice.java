@@ -69,7 +69,7 @@ public class SSInvoice extends SSSale {
         iStockInfluencing = true;
         iNumReminders = 0;
         if (iPaymentTerm != null) {
-            iPaymentDay = SSDateUtil.toLocalDate(iPaymentTerm.addDaysToDate(SSDateUtil.toDate(SSDateUtil.today())));
+            iPaymentDay = iPaymentTerm.addDaysToLocalDate(SSDateUtil.today());
         }
     }
 
