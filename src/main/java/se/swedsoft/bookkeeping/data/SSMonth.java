@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -108,13 +107,6 @@ public class SSMonth  implements Serializable {
      */
     public static List<SSMonth> splitYearIntoMonths(SSNewAccountingYear pYearData) {
         return splitYearIntoMonths(pYearData.getLocalFrom(), pYearData.getLocalTo());
-    }
-
-    public boolean isDateInMonth(Date iDate) {
-        LocalDate checkDate = SSDateUtil.toLocalDate(iDate);
-        return checkDate != null
-                && checkDate.getMonth() == iFrom.getMonth()
-                && checkDate.getYear() == iFrom.getYear();
     }
 
     public boolean isDateInMonth(LocalDate iDate) {
