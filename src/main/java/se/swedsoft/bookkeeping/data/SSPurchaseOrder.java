@@ -206,24 +206,6 @@ public class SSPurchaseOrder implements SSTableSearchable, Serializable {
     }
 
     /**
-     *
-     * @return
-     */
-    @Deprecated
-    public Date getDate() {
-        return SSDateUtil.toDate(iDate);
-    }
-
-    /**
-     *
-     * @param iDate
-     */
-    @Deprecated
-    public void setDate(Date iDate) {
-        this.iDate = SSDateUtil.toLocalDate(iDate);
-    }
-
-    /**
      * @return the date as a LocalDate
      */
     public LocalDate getLocalDate() {
@@ -267,24 +249,6 @@ public class SSPurchaseOrder implements SSTableSearchable, Serializable {
      */
     public void setSupplierName(String iSupplierName) {
         this.iSupplierName = iSupplierName;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Deprecated
-    public Date getEstimatedDelivery() {
-        return SSDateUtil.toDate(iEstimatedDelivery);
-    }
-
-    /**
-     *
-     * @param iEstimatedDelivery
-     */
-    @Deprecated
-    public void setEstimatedDelivery(Date iEstimatedDelivery) {
-        this.iEstimatedDelivery = SSDateUtil.toLocalDate(iEstimatedDelivery);
     }
 
     /**
