@@ -14,6 +14,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
 
+import se.swedsoft.bookkeeping.util.SSDateUtil;
+
 import static se.swedsoft.bookkeeping.print.report.SSSaleReportPrinter.SortingMode;
 
 
@@ -45,8 +47,8 @@ public class SSSaleReportDialog extends SSDialog {
         SSNewAccountingYear iCurrentYear = SSDB.getInstance().getCurrentYear();
 
         if (iCurrentYear != null) {
-            iFromDate.setDate(iCurrentYear.getFrom());
-            iToDate.setDate(iCurrentYear.getTo());
+            iFromDate.setDate(SSDateUtil.toDate(iCurrentYear.getLocalFrom()));
+            iToDate.setDate(SSDateUtil.toDate(iCurrentYear.getLocalTo()));
         }
 
         setPanel(iPanel);
