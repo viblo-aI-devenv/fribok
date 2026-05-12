@@ -28,29 +28,11 @@ public class SSMonth  implements Serializable {
     private LocalDate iTo;
 
     /**
-     * @deprecated Use {@link #SSMonth(LocalDate)} instead.
-     */
-    @Deprecated
-    public SSMonth(Date pFrom) {
-        iFrom = SSDateUtil.toLocalDate(pFrom);
-        iTo = null;
-    }
-
-    /**
      * @param pFrom the start date as a LocalDate
      */
     public SSMonth(LocalDate pFrom) {
         iFrom = pFrom;
         iTo = null;
-    }
-
-    /**
-     * @deprecated Use {@link #SSMonth(LocalDate, LocalDate)} instead.
-     */
-    @Deprecated
-    public SSMonth(Date pFrom, Date pTo) {
-        iFrom = SSDateUtil.toLocalDate(pFrom);
-        iTo = SSDateUtil.toLocalDate(pTo);
     }
 
     /**
@@ -63,24 +45,6 @@ public class SSMonth  implements Serializable {
     }
 
     /**
-     *
-     * @return The date
-     */
-    @Deprecated
-    public Date getDate() {
-        return SSDateUtil.toDate(iFrom);
-    }
-
-    /**
-     *
-     * @return The date
-     */
-    @Deprecated
-    public Date getFrom() {
-        return SSDateUtil.toDate(iFrom);
-    }
-
-    /**
      * @return the from date as a LocalDate
      */
     public LocalDate getLocalFrom() {
@@ -88,32 +52,10 @@ public class SSMonth  implements Serializable {
     }
 
     /**
-     *
-     * @return The date
-     */
-    @Deprecated
-    public Date getTo() {
-        return SSDateUtil.toDate(iTo);
-    }
-
-    /**
      * @return the to date as a LocalDate
      */
     public LocalDate getLocalTo() {
         return iTo;
-    }
-
-    /**
-     *
-     * @param pFrom
-     * @param pTo
-     * @return boolean
-     */
-    @Deprecated
-    public boolean isBetween(Date pFrom, Date pTo) {
-        LocalDate localFrom = SSDateUtil.toLocalDate(pFrom);
-        LocalDate localTo = SSDateUtil.toLocalDate(pTo);
-        return !iFrom.isBefore(localFrom) && !iFrom.isAfter(localTo);
     }
 
     /**
@@ -179,19 +121,6 @@ public class SSMonth  implements Serializable {
         return iDate != null
                 && iDate.getMonth() == iFrom.getMonth()
                 && iDate.getYear() == iFrom.getYear();
-    }
-
-    /**
-     * Breaks a year into its months.
-     *
-     * @param iFrom the start date
-     * @param iTo the end date
-     * @return List of months
-     * @deprecated Use {@link #splitYearIntoMonths(LocalDate, LocalDate)} instead
-     */
-    @Deprecated
-    public static List<SSMonth> splitYearIntoMonths(Date iFrom, Date iTo) {
-        return splitYearIntoMonths(SSDateUtil.toLocalDate(iFrom), SSDateUtil.toLocalDate(iTo));
     }
 
     /**
