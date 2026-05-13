@@ -6,9 +6,11 @@ package se.swedsoft.bookkeeping.data;
 
 
 import se.swedsoft.bookkeeping.gui.util.table.SSTableSearchable;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.io.Serializable;
 import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -134,6 +136,10 @@ public class SSProject implements Serializable, SSTableSearchable {
      */
     public Date getConcludedDate() {
         return iConcludedDate;
+    }
+
+    public LocalDate getLocalConcludedDate() {
+        return SSDateUtil.toLocalDate(iConcludedDate);
     }
 
     /**

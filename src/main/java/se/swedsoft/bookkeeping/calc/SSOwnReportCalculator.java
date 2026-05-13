@@ -6,6 +6,7 @@ import se.swedsoft.bookkeeping.calc.util.SSCalculatorException;
 import se.swedsoft.bookkeeping.data.*;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.ownreport.util.SSOwnReportAccountRow;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -142,7 +143,7 @@ public class SSOwnReportCalculator {
      * @return
      */
     private boolean inProject(SSNewProject pRowProject, SSNewProject pProject) {
-        return pRowProject != null && !pRowProject.isConcluded(iTo)
+        return pRowProject != null && !pRowProject.isConcluded(SSDateUtil.toLocalDate(iTo))
                 && pRowProject.equals(pProject);
     }
 
