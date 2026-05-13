@@ -53,17 +53,6 @@ public class SSNewAccountingYear implements Serializable, SSTableSearchable {
 
     /**
      *
-     * @param pFrom
-     * @param pTo
-     */
-    public SSNewAccountingYear(Date pFrom, Date pTo) {
-        this();
-        iFrom = SSDateUtil.toLocalDate(pFrom);
-        iTo = SSDateUtil.toLocalDate(pTo);
-    }
-
-    /**
-     *
      * @param pAccountingYear
      */
     public SSNewAccountingYear(SSNewAccountingYear pAccountingYear) {
@@ -72,8 +61,8 @@ public class SSNewAccountingYear implements Serializable, SSTableSearchable {
     }
 
     public SSNewAccountingYear(SSAccountingYear iOldYear) {
-        iFrom = SSDateUtil.toLocalDate(iOldYear.getFrom());
-        iTo = SSDateUtil.toLocalDate(iOldYear.getTo());
+        iFrom = iOldYear.getLocalFrom();
+        iTo = iOldYear.getLocalTo();
         iPlan = iOldYear.getAccountPlan();
         iInBalance = iOldYear.getInBalance();
         iBudget = iOldYear.getBudget();
@@ -108,24 +97,6 @@ public class SSNewAccountingYear implements Serializable, SSTableSearchable {
     }
 
     /**
-     *
-     * @return the from date
-     */
-    @Deprecated
-    public Date getFrom() {
-        return SSDateUtil.toDate(iFrom);
-    }
-
-    /**
-     *
-     * @param pFrom
-     */
-    @Deprecated
-    public void setFrom(Date pFrom) {
-        iFrom = SSDateUtil.toLocalDate(pFrom);
-    }
-
-    /**
      * @return the from date as a LocalDate
      */
     public LocalDate getLocalFrom() {
@@ -137,24 +108,6 @@ public class SSNewAccountingYear implements Serializable, SSTableSearchable {
      */
     public void setLocalFrom(LocalDate pFrom) {
         iFrom = pFrom;
-    }
-
-    /**
-     *
-     * @return the todate
-     */
-    @Deprecated
-    public Date getTo() {
-        return SSDateUtil.toDate(iTo);
-    }
-
-    /**
-     *
-     * @param pTo
-     */
-    @Deprecated
-    public void setTo(Date pTo) {
-        iTo = SSDateUtil.toLocalDate(pTo);
     }
 
     /**

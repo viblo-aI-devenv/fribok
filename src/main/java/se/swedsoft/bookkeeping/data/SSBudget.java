@@ -9,6 +9,7 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.Optional;
 
@@ -27,9 +28,9 @@ public class SSBudget implements Serializable {
 
     private transient SSNewAccountingYear iAccountingYear;
 
-    private Date iFrom;
+    private LocalDate iFrom;
 
-    private Date iTo;
+    private LocalDate iTo;
 
     private Map<SSMonth, Map<SSAccount, BigDecimal>> iBudget;
 
@@ -37,8 +38,8 @@ public class SSBudget implements Serializable {
      * Default constructor
      */
     public SSBudget() {
-        iFrom = SSDateUtil.toDate(SSDateUtil.today());
-        iTo = SSDateUtil.toDate(SSDateUtil.today());
+        iFrom = SSDateUtil.today();
+        iTo = SSDateUtil.today();
         iAccountingYear = null;
         iBudget = new HashMap<>();
     }
@@ -70,22 +71,6 @@ public class SSBudget implements Serializable {
      */
     public void clear() {
         iBudget = createBudgetForYear();
-    }
-
-    /**
-     *
-     * @return the from date
-     */
-    public Date getFrom() {
-        return iFrom;
-    }
-
-    /**
-     *
-     * @return the to date
-     */
-    public Date getTo() {
-        return iTo;
     }
 
     /**
@@ -147,10 +132,10 @@ public class SSBudget implements Serializable {
     public void setYear(SSNewAccountingYear pAccountingYear) {
         iAccountingYear = pAccountingYear;
 
-        if (!iAccountingYear.getLocalFrom().equals(SSDateUtil.toLocalDate(iFrom))
-                || !iAccountingYear.getLocalTo().equals(SSDateUtil.toLocalDate(iTo))) {
-            iFrom = SSDateUtil.toDate(iAccountingYear.getLocalFrom());
-            iTo = SSDateUtil.toDate(iAccountingYear.getLocalTo());
+        if (!iAccountingYear.getLocalFrom().equals(iFrom)
+                || !iAccountingYear.getLocalTo().equals(iTo)) {
+            iFrom = iAccountingYear.getLocalFrom();
+            iTo = iAccountingYear.getLocalTo();
 
             iBudget = createBudgetForYear();
         }
@@ -269,13 +254,25 @@ public class SSBudget implements Serializable {
      * @return The sum
      */
     public BigDecimal getSumForAccount(SSAccount pAccount, Date pFrom, Date pTo) {
+        return getSumForAccount(pAccount, SSDateUtil.toLocalDate(pFrom), SSDateUtil.toLocalDate(pTo));
+    }
+
+    /**
+     * Get the budget sum for an account.
+     *
+     * @param pAccount The account to get the sum from.
+     * @param pFrom
+     * @param pTo
+     *
+     * @return The sum
+     */
+    public BigDecimal getSumForAccount(SSAccount pAccount, LocalDate pFrom, LocalDate pTo) {
         BigDecimal iSum = new BigDecimal(0);
 
         for (Map.Entry<SSMonth, Map<SSAccount, BigDecimal>> ssMonthMapEntry : iBudget.entrySet()) {
             BigDecimal iValue = ssMonthMapEntry.getValue().get(pAccount);
 
-            if (iValue == null || !ssMonthMapEntry.getKey().isBetween(
-                    SSDateUtil.toLocalDate(pFrom), SSDateUtil.toLocalDate(pTo))) {
+            if (iValue == null || !ssMonthMapEntry.getKey().isBetween(pFrom, pTo)) {
                 continue;
             }
 
@@ -306,6 +303,17 @@ public class SSBudget implements Serializable {
      * @return The sum
      */
     public Map<SSAccount, BigDecimal> getSumForAccounts(Date pFrom, Date pTo) {
+        return getSumForAccounts(SSDateUtil.toLocalDate(pFrom), SSDateUtil.toLocalDate(pTo));
+    }
+
+    /**
+     * Get the budget sum for all accounts.
+     * @param pFrom
+     * @param pTo
+     *
+     * @return The sum
+     */
+    public Map<SSAccount, BigDecimal> getSumForAccounts(LocalDate pFrom, LocalDate pTo) {
         Map<SSAccount, BigDecimal> sum = new HashMap<>();
 
         for (SSAccount account: getAccounts()) {
@@ -384,9 +392,9 @@ public class SSBudget implements Serializable {
         StringBuffer b = new StringBuffer();
 
         b.append("Budget for ");
-        b.append(format.format(iFrom));
+        b.append(format.format(SSDateUtil.toDate(iFrom)));
         b.append(" to");
-        b.append(format.format(iTo));
+        b.append(format.format(SSDateUtil.toDate(iTo)));
 
         for (SSMonth iMonth: getMonths()) {
             b.append("Month: ");
@@ -414,16 +422,21 @@ public class SSBudget implements Serializable {
      * @throws IOException
      * @throws ClassNotFoundException
      */
+    @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream iObjectInputStream)  throws IOException, ClassNotFoundException {
-        iObjectInputStream.defaultReadObject();
+        ObjectInputStream.GetField fields = iObjectInputStream.readFields();
+        iFrom = SSDateUtil.readLocalDate(fields.get("iFrom", null));
+        iTo = SSDateUtil.readLocalDate(fields.get("iTo", null));
+        iBudget = (Map<SSMonth, Map<SSAccount, BigDecimal>>) fields.get("iBudget", null);
+        iAccountingYear = null;
 
         if (iBudget == null) {
             iBudget = new HashMap<>();
         }
 
         if (iBudget.isEmpty() && !iFrom.equals(iTo)) {
-            iFrom = SSDateUtil.toDate(SSDateUtil.today());
-            iTo = SSDateUtil.toDate(SSDateUtil.today());
+            iFrom = SSDateUtil.today();
+            iTo = SSDateUtil.today();
 
         }
     }

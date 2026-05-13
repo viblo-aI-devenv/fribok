@@ -2143,7 +2143,7 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                         SSBundle.getBundle().getString(
                                 "invoicejournal.voucher.description"),
                                 iNumber));
-        iVoucher.setDate(iTo);
+        iVoucher.setLocalDate(SSDateUtil.toLocalDate(iTo));
 
         for (SSInvoice iInvoice : iFiltered) {
             SSVoucher iCurrent = iInvoice.generateVoucher();
@@ -2248,7 +2248,7 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                         SSBundle.getBundle().getString(
                                 "creditinvoicejournal.voucher.description"),
                                 iNumber));
-        iVoucher.setDate(iTo);
+        iVoucher.setLocalDate(SSDateUtil.toLocalDate(iTo));
 
         for (SSCreditInvoice iCreditInvoice : iFiltered) {
             SSVoucher iCurrent = iCreditInvoice.generateVoucher();
@@ -2358,7 +2358,7 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                         SSBundle.getBundle().getString(
                                 "inpaymentjournal.voucher.description"),
                                 iNumber));
-        iVoucher.setDate(iTo);
+        iVoucher.setLocalDate(SSDateUtil.toLocalDate(iTo));
 
         for (SSInpayment iInpayment : iFiltered) {
             SSVoucher iCurrent = iInpayment.generateVoucher();
@@ -2466,7 +2466,7 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                         SSBundle.getBundle().getString(
                                 "supplierinvoicejournal.voucher.description"),
                                 iNumber));
-        iVoucher.setDate(iTo);
+        iVoucher.setLocalDate(SSDateUtil.toLocalDate(iTo));
 
         for (SSSupplierInvoice iInvoice : iFiltered) {
             SSVoucher iCurrent = iInvoice.generateVoucher();
@@ -2577,7 +2577,7 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                         SSBundle.getBundle().getString(
                                 "suppliercreditinvoicejournal.voucher.description"),
                                 iNumber));
-        iVoucher.setDate(iTo);
+        iVoucher.setLocalDate(SSDateUtil.toLocalDate(iTo));
 
         for (SSSupplierCreditInvoice iInvoice : iFiltered) {
             SSVoucher iCurrent = iInvoice.generateVoucher();
@@ -2685,7 +2685,7 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                         SSBundle.getBundle().getString(
                                 "outpaymentjournal.voucher.description"),
                                 iNumber));
-        iVoucher.setDate(iTo);
+        iVoucher.setLocalDate(SSDateUtil.toLocalDate(iTo));
 
         for (SSOutpayment iOutpayment : iFiltered) {
             SSVoucher iCurrent = iOutpayment.generateVoucher();

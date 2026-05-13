@@ -14,7 +14,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 
@@ -58,7 +57,7 @@ public class SSNewProject implements Serializable, SSTableSearchable {
         iName = iOld.getName();
         iDescription = iOld.getDescription();
         iConcluded = iOld.getConcluded();
-        iConcludedDate = SSDateUtil.toLocalDate(iOld.getConcludedDate());
+        iConcludedDate = iOld.getLocalConcludedDate();
     }
 
     // /////////////////////////////////////////////////////////////////////////
@@ -137,22 +136,6 @@ public class SSNewProject implements Serializable, SSTableSearchable {
 
     // /////////////////////////////////////////////////////////////////////////
 
-    /**
-     *
-     * @return
-     */
-    public Date getConcludedDate() {
-        return SSDateUtil.toDate(iConcludedDate);
-    }
-
-    /**
-     *
-     * @param pConcluded
-     */
-    public void setConcludedDate(Date pConcluded) {
-        iConcludedDate = SSDateUtil.toLocalDate(pConcluded);
-    }
-
     public LocalDate getLocalConcludedDate() {
         return iConcludedDate;
     }
@@ -163,15 +146,9 @@ public class SSNewProject implements Serializable, SSTableSearchable {
 
     // /////////////////////////////////////////////////////////////////////////
 
-    /**
-     *
-     * @param iDate
-     * @return
-     */
-    public boolean isConcluded(Date iDate) {
-        LocalDate localDate = SSDateUtil.toLocalDate(iDate);
-        return iConcluded && iConcludedDate != null && localDate != null
-                && !iConcludedDate.isAfter(localDate);
+    public boolean isConcluded(LocalDate iDate) {
+        return iConcluded && iConcludedDate != null && iDate != null
+                && !iConcludedDate.isAfter(iDate);
     }
 
     // /////////////////////////////////////////////////////////////////////////
@@ -188,7 +165,7 @@ public class SSNewProject implements Serializable, SSTableSearchable {
         sb.append(iDescription);
         if (iConcluded) {
             sb.append("(Concluded ");
-            sb.append(iFormat.format(iConcludedDate));
+            sb.append(iFormat.format(SSDateUtil.toDate(iConcludedDate)));
             sb.append(") ");
         }
         return sb.toString();

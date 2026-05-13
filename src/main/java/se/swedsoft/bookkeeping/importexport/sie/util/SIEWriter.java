@@ -136,11 +136,18 @@ public class SIEWriter {
      * @param pValue
      */
     public void append(Date pValue) {
+        append(SSDateUtil.toLocalDate(pValue));
+    }
+
+    /**
+     *
+     * @param pValue
+     */
+    public void append(LocalDate pValue) {
         String iValue;
 
         if (pValue != null) {
-            LocalDate localDate = SSDateUtil.toLocalDate(pValue);
-            iValue = localDate.format(DATE_FORMAT);
+            iValue = pValue.format(DATE_FORMAT);
         } else {
             iValue = "00000000";
         }

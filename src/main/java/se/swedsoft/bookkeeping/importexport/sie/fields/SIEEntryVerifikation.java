@@ -106,7 +106,7 @@ public class SIEEntryVerifikation implements SIEEntry {
             iWriter.append(SIELabel.SIE_VER);
             iWriter.append("A"); // Serie A
             iWriter.append(iVoucher.getNumber());
-            iWriter.append(iVoucher.getDate());
+            iWriter.append(iVoucher.getLocalDate());
             iWriter.append(iVoucher.getDescription());
             iWriter.newLine();
 

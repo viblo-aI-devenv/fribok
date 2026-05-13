@@ -175,26 +175,6 @@ public class SSPeriodicInvoice implements Serializable {
     // //////////////////////////////////////////////////
 
     /**
-     *
-     * @return
-     */
-    @Deprecated
-    public Date getDate() {
-        return SSDateUtil.toDate(iDate);
-    }
-
-    /**
-     *
-     * @param iValue
-     */
-    @Deprecated
-    public void setDate(Date iValue) {
-        iDate = SSDateUtil.toLocalDate(iValue);
-
-        // createInvoices();
-    }
-
-    /**
      * @return the date as a LocalDate
      */
     public LocalDate getLocalDate() {
