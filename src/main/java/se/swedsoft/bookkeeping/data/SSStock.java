@@ -194,15 +194,6 @@ public class SSStock {
                 iSupplierCreditInvoices, iInventories, iIndeliveries, iOutdeliveries);
     }
 
-    /**
-     *
-     * @param iFrom
-     * @param iTo
-     */
-    public void update(final Date iFrom, final Date iTo) {
-        update(SSDateUtil.toLocalDate(iFrom), SSDateUtil.toLocalDate(iTo));
-    }
-
     public void update(final LocalDate iFrom, final LocalDate iTo) {
         final Date iFromDate = SSDateUtil.toDate(iFrom);
         final Date iToDate = SSDateUtil.toDate(iTo);
