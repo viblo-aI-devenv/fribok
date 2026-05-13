@@ -8,10 +8,11 @@ package se.swedsoft.bookkeeping.data;
 import se.swedsoft.bookkeeping.gui.util.table.SSTableSearchable;
 import se.swedsoft.bookkeeping.util.SSDateUtil;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 
 
 /**
@@ -29,7 +30,7 @@ public class SSProject implements Serializable, SSTableSearchable {
 
     private boolean iConcluded;
 
-    private Date iConcludedDate;
+    private LocalDate iConcludedDate;
 
     /**
      * Default constructor.
@@ -130,36 +131,12 @@ public class SSProject implements Serializable, SSTableSearchable {
 
     // /////////////////////////////////////////////////////////////////////////
 
-    /**
-     *
-     * @return
-     */
-    public Date getConcludedDate() {
+    public LocalDate getLocalConcludedDate() {
         return iConcludedDate;
     }
 
-    public LocalDate getLocalConcludedDate() {
-        return SSDateUtil.toLocalDate(iConcludedDate);
-    }
-
-    /**
-     *
-     * @param pConcluded
-     */
-    public void setConcludedDate(Date pConcluded) {
+    public void setLocalConcludedDate(LocalDate pConcluded) {
         iConcludedDate = pConcluded;
-    }
-
-    // /////////////////////////////////////////////////////////////////////////
-
-    /**
-     *
-     * @param iDate
-     * @return
-     */
-    public boolean isConcluded(Date iDate) {
-        return iConcluded && (iConcludedDate != null)
-                && iConcludedDate.getTime() <= iDate.getTime();
     }
 
     // /////////////////////////////////////////////////////////////////////////
@@ -176,7 +153,7 @@ public class SSProject implements Serializable, SSTableSearchable {
         sb.append(iDescription);
         if (iConcluded) {
             sb.append("(Concluded ");
-            sb.append(iFormat.format(iConcludedDate));
+            sb.append(iFormat.format(SSDateUtil.toDate(iConcludedDate)));
             sb.append(") ");
         }
         return sb.toString();
@@ -200,6 +177,21 @@ public class SSProject implements Serializable, SSTableSearchable {
      */
     public String toRenderString() {
         return Integer.toString(iNumber);
+    }
+
+    /**
+     * Custom deserialization to handle backward compatibility.
+     * Pre-migration serialized streams stored {@code iConcludedDate} as
+     * {@code java.util.Date}.  This method reads it as a raw object and converts
+     * via {@link SSDateUtil#readLocalDate(Object)}.
+     */
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        ObjectInputStream.GetField fields = in.readFields();
+        iNumber = fields.get("iNumber", 0);
+        iName = (String) fields.get("iName", null);
+        iDescription = (String) fields.get("iDescription", null);
+        iConcluded = fields.get("iConcluded", false);
+        iConcludedDate = SSDateUtil.readLocalDate(fields.get("iConcludedDate", null));
     }
 
 }
