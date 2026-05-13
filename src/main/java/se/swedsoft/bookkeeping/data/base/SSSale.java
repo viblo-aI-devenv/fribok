@@ -193,24 +193,6 @@ public abstract class SSSale implements SSTableSearchable, Serializable {
     // //////////////////////////////////////////////////
 
     /**
-     * @return the date as a legacy {@link Date}
-     * @deprecated Use {@link #getLocalDate()} instead.
-     */
-    @Deprecated
-    public Date getDate() {
-        return SSDateUtil.toDate(iDate);
-    }
-
-    /**
-     * @param iDate the date as a legacy {@link Date}
-     * @deprecated Use {@link #setLocalDate(LocalDate)} instead.
-     */
-    @Deprecated
-    public void setDate(Date iDate) {
-        this.iDate = SSDateUtil.toLocalDate(iDate);
-    }
-
-    /**
      * Returns the date as a {@link LocalDate}.
      *
      * @return the date

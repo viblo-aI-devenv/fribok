@@ -18,7 +18,6 @@ import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import se.swedsoft.bookkeeping.util.SSDateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,7 +62,7 @@ public class SSOrderExporter {    private static final Logger LOG = LoggerFactor
             DateTimeFormatter iFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
             iNode = iXmlDoc.createTextNode(
-                    iOrder.getDate() == null ? "" : SSDateUtil.toLocalDate(iOrder.getDate()).format(iFormat));
+                    iOrder.getLocalDate() == null ? "" : iOrder.getLocalDate().format(iFormat));
             iSubElement.appendChild(iNode);
 
             iSubElement = iXmlDoc.createElementNS(null, "CustomerNumber");
