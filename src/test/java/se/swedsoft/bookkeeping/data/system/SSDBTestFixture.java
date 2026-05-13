@@ -195,8 +195,10 @@ public final class SSDBTestFixture {
         LocalDate from = LocalDate.of(2024, 1, 1);
         LocalDate to = LocalDate.of(2024, 12, 31);
 
-        return new SSNewAccountingYear(
-                se.swedsoft.bookkeeping.util.SSDateUtil.toDate(from),
-                se.swedsoft.bookkeeping.util.SSDateUtil.toDate(to));
+        SSNewAccountingYear year = new SSNewAccountingYear();
+
+        year.setLocalFrom(from);
+        year.setLocalTo(to);
+        return year;
     }
 }
