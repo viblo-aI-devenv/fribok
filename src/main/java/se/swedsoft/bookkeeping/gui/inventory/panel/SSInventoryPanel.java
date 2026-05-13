@@ -78,7 +78,7 @@ public class SSInventoryPanel {
 
         iDate.addChangeListener(e -> {
 
-                iStock.update(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(iDate.getLocalDate()));
+                iStock.update(iDate.getLocalDate());
 
                 for (SSInventoryRow iRow : iInventory.getRows()) {
                     SSProduct iProduct = iRow.getProduct();
