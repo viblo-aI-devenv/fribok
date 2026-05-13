@@ -24,9 +24,11 @@ public class SSPurchaseOrderMath {
      * @return
      */
     public static boolean inPeriod(SSPurchaseOrder iPurchaseOrder, Date pFrom, Date pTo) {
+        return inPeriod(iPurchaseOrder, SSDateUtil.toLocalDate(pFrom), SSDateUtil.toLocalDate(pTo));
+    }
+
+    public static boolean inPeriod(SSPurchaseOrder iPurchaseOrder, LocalDate iFrom, LocalDate iTo) {
         LocalDate iDate = iPurchaseOrder.getLocalDate();
-        LocalDate iFrom = SSDateUtil.toLocalDate(pFrom);
-        LocalDate iTo = SSDateUtil.toLocalDate(pTo);
 
         return iDate != null && iFrom != null && iTo != null
                 && !iDate.isBefore(iFrom) && !iDate.isAfter(iTo);
@@ -39,8 +41,11 @@ public class SSPurchaseOrderMath {
      * @return
      */
     public static boolean inPeriod(SSPurchaseOrder iPurchaseOrder, Date pTo) {
+        return inPeriod(iPurchaseOrder, SSDateUtil.toLocalDate(pTo));
+    }
+
+    public static boolean inPeriod(SSPurchaseOrder iPurchaseOrder, LocalDate iTo) {
         LocalDate iDate = iPurchaseOrder.getLocalDate();
-        LocalDate iTo = SSDateUtil.toLocalDate(pTo);
 
         return iDate != null && iTo != null && !iDate.isAfter(iTo);
     }
