@@ -234,24 +234,6 @@ public class SSSupplierInvoice implements SSTableSearchable, Serializable {
     // //////////////////////////////////////////////////
 
     /**
-     *
-     * @return
-     */
-    @Deprecated
-    public Date getDate() {
-        return SSDateUtil.toDate(iDate);
-    }
-
-    /**
-     *
-     * @param iDate
-     */
-    @Deprecated
-    public void setDate(Date iDate) {
-        this.iDate = SSDateUtil.toLocalDate(iDate);
-    }
-
-    /**
      * @return the date as a LocalDate
      */
     public LocalDate getLocalDate() {
