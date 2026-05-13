@@ -185,7 +185,7 @@ public class SSVoucherRowTableModelOld extends SSDefaultTableModel<SSVoucherRow>
             break;
 
         case COL_EDITED_DATE:
-            value = iVoucherRow.getEditedDate();
+            value = SSDateUtil.toDate(iVoucherRow.getLocalEditedDate());
             break;
 
         case COL_EDITED_SIGNATURE:
@@ -240,7 +240,7 @@ public class SSVoucherRowTableModelOld extends SSDefaultTableModel<SSVoucherRow>
 
             if (iEdit) {
                 iEditingRow.setAdded(null);
-                iEditingRow.setEditedDate(SSDateUtil.toDate(SSDateUtil.now()));
+                iEditingRow.setLocalEditedDate(SSDateUtil.now());
             }
             add(iEditingRow);
 

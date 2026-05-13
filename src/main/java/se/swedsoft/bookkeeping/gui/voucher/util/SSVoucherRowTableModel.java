@@ -38,7 +38,7 @@ public class SSVoucherRowTableModel extends SSEditableTableModel<SSVoucherRow> {
 
         if (iReadOnlyCount > 0 && getEditObject() != null) {
             getEditObject().setAdded(null);
-            getEditObject().setEditedDate(SSDateUtil.toDate(SSDateUtil.now()));
+            getEditObject().setLocalEditedDate(SSDateUtil.now());
         }
         return new SSVoucherRow();
     }
@@ -303,7 +303,7 @@ public class SSVoucherRowTableModel extends SSEditableTableModel<SSVoucherRow> {
             SSBundle.getBundle().getString("voucherrowtable.column.7")) {
         @Override
         public Object getValue(SSVoucherRow iVoucherRow) {
-            return  iVoucherRow.getEditedDate();
+            return SSDateUtil.toDate(iVoucherRow.getLocalEditedDate());
         }
 
         @Override

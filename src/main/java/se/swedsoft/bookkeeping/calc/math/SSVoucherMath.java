@@ -663,7 +663,7 @@ public class SSVoucherMath {
 
             iNewRow.setAdded(false);
             iNewRow.setEditedSignature(null);
-            iNewRow.setEditedDate(null);
+            iNewRow.setLocalEditedDate(null);
 
             iNew.add(iNewRow);
         }
