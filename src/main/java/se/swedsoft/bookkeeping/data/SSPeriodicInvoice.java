@@ -15,7 +15,6 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.Optional;
 
 
 /**
@@ -392,16 +391,6 @@ public class SSPeriodicInvoice implements Serializable {
         return iInvoices;
     }
 
-    /**
-     * Returns all invoices that isnt added up till the selected date
-     *
-     * @param iDate
-     * @return
-     */
-    public List<SSInvoice> getInvoices(Date iDate) {
-        return getInvoices(SSDateUtil.toLocalDate(iDate));
-    }
-
     public List<SSInvoice> getInvoices(LocalDate iDate) {
         List<SSInvoice> iFiltered = new LinkedList<>();
 
@@ -418,15 +407,6 @@ public class SSPeriodicInvoice implements Serializable {
             }
         }
         return iFiltered;
-    }
-
-    /**
-     * Returns the date of the next invoice
-     *
-     * @return the date
-     */
-    public Optional<Date> getNextDate() {
-        return getNextLocalDate().map(SSDateUtil::toDate);
     }
 
     public Optional<LocalDate> getNextLocalDate() {
