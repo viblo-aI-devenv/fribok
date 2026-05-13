@@ -31,9 +31,11 @@ public class SSOutpaymentMath {
      * @return
      */
     public static boolean inPeriod(SSOutpayment iOutpayment, Date pFrom, Date pTo) {
+        return inPeriod(iOutpayment, SSDateUtil.toLocalDate(pFrom), SSDateUtil.toLocalDate(pTo));
+    }
+
+    public static boolean inPeriod(SSOutpayment iOutpayment, LocalDate iFrom, LocalDate iTo) {
         LocalDate iDate = iOutpayment.getLocalDate();
-        LocalDate iFrom = SSDateUtil.toLocalDate(pFrom);
-        LocalDate iTo = SSDateUtil.toLocalDate(pTo);
 
         return iDate != null && iFrom != null && iTo != null
                 && !iDate.isBefore(iFrom) && !iDate.isAfter(iTo);
