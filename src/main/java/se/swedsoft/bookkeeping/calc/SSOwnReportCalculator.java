@@ -9,6 +9,7 @@ import se.swedsoft.bookkeeping.gui.ownreport.util.SSOwnReportAccountRow;
 import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -83,11 +84,14 @@ public class SSOwnReportCalculator {
             iVouchers.addAll(iCurrent.getVouchers());
         }
 
+        LocalDate iLocalFrom = SSDateUtil.toLocalDate(iFrom);
+        LocalDate iLocalTo = SSDateUtil.toLocalDate(iTo);
+
         // Loop through all vouchers
         for (SSVoucher iVoucher: iVouchers) {
 
             // If the date of the oucher is in between the start and end date, add to PeriodChange
-            boolean inPeriod = SSVoucherMath.inPeriod(iVoucher, iFrom, iTo);
+            boolean inPeriod = SSVoucherMath.inPeriod(iVoucher, iLocalFrom, iLocalTo);
 
             // Loop through all the voucher rows
             for (SSVoucherRow iRow: iVoucher.getRows()) {

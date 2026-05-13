@@ -175,6 +175,8 @@ public class SSMainBookCalculator {
     public void calculate() throws SSCalculatorException {
 
         List<SSVoucher> iVouchers = iYearData.getVouchers();
+        LocalDate iLocalDateFrom = SSDateUtil.toLocalDate(iDateFrom);
+        LocalDate iLocalDateTo = SSDateUtil.toLocalDate(iDateTo);
 
         // List<SSAccount> iAccounts = iYearData.getAccounts();
 
@@ -191,11 +193,11 @@ public class SSMainBookCalculator {
 
             // If the date of the voucer is before the start date, add to InSaldo
             boolean inSaldo = voucherDate != null
-                    && SSDateUtil.toLocalDate(iDateFrom) != null
-                    && voucherDate.isBefore(SSDateUtil.toLocalDate(iDateFrom));
+                    && iLocalDateFrom != null
+                    && voucherDate.isBefore(iLocalDateFrom);
 
             // If the date of the oucher is in between the start and end date, add to PeriodChange
-            boolean inPeriod = SSVoucherMath.inPeriod(iVoucher, iDateFrom, iDateTo);
+            boolean inPeriod = SSVoucherMath.inPeriod(iVoucher, iLocalDateFrom, iLocalDateTo);
 
             // Loop through all the rows
             for (SSVoucherRow iVoucherRow: iVoucher.getRows()) {
