@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -112,24 +111,6 @@ public class SSVoucher implements Serializable, Cloneable, SSTableSearchable {
     }
 
     // //////////////////////////////////////////////////////////////////
-
-    /**
-     * @return the date as a legacy {@link Date}
-     * @deprecated Use {@link #getLocalDate()} instead.
-     */
-    @Deprecated
-    public Date getDate() {
-        return SSDateUtil.toDate(iDate);
-    }
-
-    /**
-     * @param date the date as a legacy {@link Date}
-     * @deprecated Use {@link #setLocalDate(LocalDate)} instead.
-     */
-    @Deprecated
-    public void setDate(Date date) {
-        iDate = SSDateUtil.toLocalDate(date);
-    }
 
     /**
      * Returns the date as a {@link LocalDate}.
@@ -332,10 +313,10 @@ public class SSVoucher implements Serializable, Cloneable, SSTableSearchable {
      SSVoucher        iPrevious = SSVoucherMath.getPreviousVoucher();
      SSNewAccountingYear iYear     = SSDB.getInstance().getCurrentYear();
 
-     Date iDate = iPrevious != null ? iPrevious.getDate() : (iYear != null) ? iYear.getFrom() : SSDateUtil.toDate(SSDateUtil.today());
+     LocalDate iDate = iPrevious != null ? iPrevious.getLocalDate() : (iYear != null) ? iYear.getLocalFrom() : SSDateUtil.today();
 
      iVoucher.doAutoIncrecement();
-     iVoucher.setDate  (iDate      );
+     iVoucher.setLocalDate(iDate);
 
      return iVoucher;
      }
