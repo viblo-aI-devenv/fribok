@@ -9,6 +9,7 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -160,10 +161,12 @@ public class SSResultCalculator {
         }
 
         SSBudget       iBudget = iYearData.getBudget();
+        LocalDate iLocalFrom = SSDateUtil.toLocalDate(iFrom);
+        LocalDate iLocalTo = SSDateUtil.toLocalDate(iTo);
 
         // Fill the budget map
         for (SSAccount iAccount: iBudget.getAccounts()) {
-            BigDecimal iSum = iBudget.getSumForAccount(iAccount, iFrom, iTo);
+            BigDecimal iSum = iBudget.getSumForAccount(iAccount, iLocalFrom, iLocalTo);
 
             if (iSum != null && iSum.signum() != 0) {
                 addValueToMap(iChangeBudget, iAccount, iSum);
