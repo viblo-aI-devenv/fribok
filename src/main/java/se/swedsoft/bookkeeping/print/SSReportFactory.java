@@ -882,8 +882,11 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                         SSInventoryListPrinter iPrinter = new SSInventoryListPrinter(iInventories);
 
                         if (isDateSelected) {
-                            iPrinter.addParameter("dateFrom", iDialog.getDateFrom());
-                            iPrinter.addParameter("dateTo", iDialog.getDateTo());
+                            LocalDate iDateFrom = iDialog.getLocalDateFrom();
+                            LocalDate iDateTo = iDialog.getLocalDateTo();
+
+                            iPrinter.addParameter("dateFrom", SSDateUtil.toDate(iDateFrom));
+                            iPrinter.addParameter("dateTo", SSDateUtil.toDate(iDateTo));
                         }
                         if (isProductSelected) {
                             SSProduct iProduct = iDialog.getProduct();
@@ -923,8 +926,11 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                                 iIndeliveries);
 
                         if (isDateSelected) {
-                            iPrinter.addParameter("dateFrom", iDialog.getDateFrom());
-                            iPrinter.addParameter("dateTo", iDialog.getDateTo());
+                            LocalDate iDateFrom = iDialog.getLocalDateFrom();
+                            LocalDate iDateTo = iDialog.getLocalDateTo();
+
+                            iPrinter.addParameter("dateFrom", SSDateUtil.toDate(iDateFrom));
+                            iPrinter.addParameter("dateTo", SSDateUtil.toDate(iDateTo));
                         }
                         if (isProductSelected) {
                             SSProduct iProduct = iDialog.getProduct();

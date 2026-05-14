@@ -15,15 +15,12 @@ import se.swedsoft.bookkeeping.gui.util.SSButtonPanel;
 import se.swedsoft.bookkeeping.gui.util.components.SSTableComboBox;
 import se.swedsoft.bookkeeping.gui.util.datechooser.SSDateChooser;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSDialog;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
-
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 
@@ -137,22 +134,6 @@ public class SSOutdeliveryListDialog extends SSDialog {
      */
     public boolean isProductSelected() {
         return iCheckProduct.isSelected();
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Date getDateFrom() {
-        return SSDateUtil.toDate(getLocalDateFrom());
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Date getDateTo() {
-        return SSDateUtil.toDate(getLocalDateTo());
     }
 
     public LocalDate getLocalDateFrom() {
