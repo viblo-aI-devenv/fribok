@@ -477,7 +477,7 @@ public class SSSaleReportPrinter extends SSPrinter {
             }
 
             iContributionRate.put(iProduct.getNumber(),
-                    SSProductMath.getContributionRate(iProduct, iTo,
+                    SSProductMath.getContributionRate(iProduct, toDate,
                     iContribution.get(iProduct.getNumber())).orElse(null));
         }
     }

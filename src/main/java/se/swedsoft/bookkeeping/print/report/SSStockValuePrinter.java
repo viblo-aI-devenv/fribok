@@ -10,9 +10,11 @@ import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.graphics.SSImage;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -57,7 +59,9 @@ public class SSStockValuePrinter extends SSPrinter {
         iProducts = SSProductMath.getStockProducts(SSDB.getInstance().getProducts());
         iStock = new SSStock();
         this.iDate = iDate;
-        iInprices = SSProductMath.getInprices(iProducts, iDate);
+        LocalDate localDate = SSDateUtil.toLocalDate(iDate);
+
+        iInprices = SSProductMath.getInprices(iProducts, localDate);
 
         iStock.update(iDate);
 
