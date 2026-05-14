@@ -886,7 +886,7 @@ public class SSOrderPanel {
             }
 
             BigDecimal iInprice = SSProductMath.getInprice(iProduct,
-                    SSDateUtil.toDate(iDate.getLocalDate())).orElse(null);
+                    iDate.getLocalDate()).orElse(null);
             BigDecimal iUnitprice = iRow.getUnitprice();
             BigDecimal iExchangeRate = getExchangeRate();
 

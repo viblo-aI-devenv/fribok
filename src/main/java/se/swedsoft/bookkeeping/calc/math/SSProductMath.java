@@ -334,6 +334,10 @@ public class SSProductMath {
      * @return
      */
     public static Optional<BigDecimal> getContributionRate(SSProduct iProduct, Date iDate) {
+        return getContributionRate(iProduct, SSDateUtil.toLocalDate(iDate));
+    }
+
+    public static Optional<BigDecimal> getContributionRate(SSProduct iProduct, LocalDate iDate) {
         Optional<BigDecimal> iContribution = getContribution(iProduct, iDate);
         BigDecimal iSellingPrice = iProduct.getSellingPrice();
 
@@ -351,6 +355,10 @@ public class SSProductMath {
     }
 
     public static Optional<BigDecimal> getContributionRate(SSProduct iProduct, Date iDate, BigDecimal iContribution) {
+        return getContributionRate(iProduct, SSDateUtil.toLocalDate(iDate), iContribution);
+    }
+
+    public static Optional<BigDecimal> getContributionRate(SSProduct iProduct, LocalDate iDate, BigDecimal iContribution) {
         // BigDecimal iContribution = getContribution(iProduct, iDate);
         BigDecimal iSellingPrice = iProduct.getSellingPrice();
 
@@ -373,7 +381,7 @@ public class SSProductMath {
      * @return
      */
     public static Integer getSaleCount(SSProduct iProduct) {
-        return getSaleCount(iProduct, null, null);
+        return getSaleCount(iProduct, (LocalDate) null, null);
     }
 
     /**
@@ -384,6 +392,10 @@ public class SSProductMath {
      * @return
      */
     public static Integer getSaleCount(SSProduct iProduct, Date iFrom, Date iTo) {
+        return getSaleCount(iProduct, SSDateUtil.toLocalDate(iFrom), SSDateUtil.toLocalDate(iTo));
+    }
+
+    public static Integer getSaleCount(SSProduct iProduct, LocalDate iFrom, LocalDate iTo) {
         List<SSInvoice>       iInvoices = SSDB.getInstance().getInvoices();
         List<SSCreditInvoice> iCreditInvoices = SSDB.getInstance().getCreditInvoices();
 
@@ -419,7 +431,7 @@ public class SSProductMath {
      * @return
      */
     public static BigDecimal getAverageSellingPrice(SSProduct iProduct) {
-        return getAverageSellingPrice(iProduct, null, null);
+        return getAverageSellingPrice(iProduct, (LocalDate) null, null);
     }
 
     /**
@@ -430,6 +442,10 @@ public class SSProductMath {
      * @return
      */
     public static BigDecimal getAverageSellingPrice(SSProduct iProduct, Date iFrom, Date iTo) {
+        return getAverageSellingPrice(iProduct, SSDateUtil.toLocalDate(iFrom), SSDateUtil.toLocalDate(iTo));
+    }
+
+    public static BigDecimal getAverageSellingPrice(SSProduct iProduct, LocalDate iFrom, LocalDate iTo) {
         List<SSInvoice>       iInvoices = SSDB.getInstance().getInvoices();
         List<SSCreditInvoice> iCreditInvoices = SSDB.getInstance().getCreditInvoices();
 
