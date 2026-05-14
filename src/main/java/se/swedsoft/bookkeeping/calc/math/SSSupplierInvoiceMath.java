@@ -227,27 +227,6 @@ public class SSSupplierInvoiceMath {
      *
      * @return map of the invoices and their saldo
      */
-    
-    /* public static Map<SSSupplierInvoice, BigDecimal> getSaldo(List<SSSupplierInvoice> iInvoices, Date iDate) {
-     Map<SSSupplierInvoice, BigDecimal> iSaldos = new HashMap<>();
-
-     // Ceil the date so the before and after comparisions will be correct
-     iDate = SSDateMath.ceil(iDate);
-
-     // Loop through the invoices
-     for (SSSupplierInvoice iInvoice : iInvoices) {
-     Date iCurrent = iInvoice.getDate();
-
-     // Only put invoices that is added before the specified date
-     if( iCurrent.before(iDate)){
-     BigDecimal iSaldo = getSaldo(iInvoice, iDate);
-
-     iSaldos.put(iInvoice, iSaldo);
-     }
-     }
-     return iSaldos;
-     } */
-
     public static Map<SSSupplierInvoice, BigDecimal> getSaldo(List<SSSupplierInvoice> iInvoices, LocalDate iDate) {
         Map<SSSupplierInvoice, BigDecimal> iSaldos = new HashMap<>();
 
