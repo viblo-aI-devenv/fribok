@@ -29,7 +29,7 @@ public class SSMainBookCalculator {
 
         private String       iDescription;
 
-        private Date         iDate;
+        private LocalDate    iDate;
 
         private boolean      iCrossed;
 
@@ -57,12 +57,8 @@ public class SSMainBookCalculator {
             return iDescription;
         }
 
-        public Date getDate() {
-            return iDate;
-        }
-
         public LocalDate getLocalDate() {
-            return SSDateUtil.toLocalDate(iDate);
+            return iDate;
         }
 
         public BigDecimal getDebet() {
@@ -232,7 +228,7 @@ public class SSMainBookCalculator {
 
                     iMainBookRow.iNumber = iVoucher.getNumber();
                     iMainBookRow.iDescription = iVoucher.getDescription();
-                    iMainBookRow.iDate = SSDateUtil.toDate(voucherDate);
+                    iMainBookRow.iDate = voucherDate;
 
                     iMainBookRow.iAdded = iVoucherRow.isAdded();
                     iMainBookRow.iCrossed = iVoucherRow.isCrossed();
