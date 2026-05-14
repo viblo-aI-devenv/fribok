@@ -10,8 +10,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.rmi.server.UID;
-import java.text.DateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
 
 /**
@@ -180,16 +181,16 @@ public class SSSystemYear implements Serializable, SSTableSearchable {
     }
 
     public String toString() {
-        DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+        DateTimeFormatter iFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 
         StringBuilder sb = new StringBuilder();
 
         sb.append("SSSystemYear (");
         sb.append(iID);
         sb.append("): ");
-        sb.append(iFormat.format(SSDateUtil.toDate(iDateFrom)));
+        sb.append(iDateFrom.format(iFormat));
         sb.append("- ");
-        sb.append(iFormat.format(SSDateUtil.toDate(iDateTo)));
+        sb.append(iDateTo.format(iFormat));
         sb.append(", ");
         sb.append(iAccountPlan);
 
@@ -202,9 +203,9 @@ public class SSSystemYear implements Serializable, SSTableSearchable {
      * @return The searchable string
      */
     public String toRenderString() {
-        DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT);
+        DateTimeFormatter format = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 
-        return format.format(SSDateUtil.toDate(iDateFrom)) + " - " + format.format(SSDateUtil.toDate(iDateTo));
+        return iDateFrom.format(format) + " - " + iDateTo.format(format);
     }
 
     /**
