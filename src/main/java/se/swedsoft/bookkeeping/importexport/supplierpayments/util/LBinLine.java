@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Date;
 
 import se.swedsoft.bookkeeping.util.SSDateUtil;
 
@@ -144,18 +143,6 @@ public class LBinLine {
      * @param iFormat
      * @return the new position
      */
-    public int append(Date iDate, int iLength, String iFormat) {
-        return append(SSDateUtil.toLocalDate(iDate), iLength, iFormat);
-    }
-
-    /**
-     * Append a date
-     *
-     * @param iDate
-     * @param iLength
-     * @param iFormat
-     * @return the new position
-     */
     public int append(LocalDate iDate, int iLength, String iFormat) {
         DateTimeFormatter iDateFormat = DateTimeFormatter.ofPattern(iFormat);
 
@@ -213,17 +200,6 @@ public class LBinLine {
             }
         }
         return iField.trim();
-    }
-
-    /**
-     *
-     * @param iStart
-     * @param iEnd
-     * @param iFormat
-     * @return
-     */
-    public Date readDate(int iStart, int iEnd, String iFormat) {
-        return SSDateUtil.toDate(readLocalDate(iStart, iEnd, iFormat));
     }
 
     /**
