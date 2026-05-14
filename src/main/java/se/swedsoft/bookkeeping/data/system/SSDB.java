@@ -41,7 +41,6 @@ import java.io.*;
 import java.rmi.server.UID;
 import java.sql.*;
 import java.util.*;
-import java.util.Date;
 import java.util.Optional;
 import se.swedsoft.bookkeeping.importexport.excel.SSAccountPlanImporter;
 import se.swedsoft.bookkeeping.importexport.util.SSImportException;

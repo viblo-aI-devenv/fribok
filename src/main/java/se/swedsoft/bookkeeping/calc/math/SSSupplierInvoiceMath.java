@@ -177,9 +177,8 @@ public class SSSupplierInvoiceMath {
 
         BigDecimal iTotalSum = getTotalSum(iInvoice);
 
-        BigDecimal iCreditingSum = SSSupplierCreditInvoiceMath.getSumForInvoice(iInvoice,
-                SSDateUtil.toDate(iDate));
-        BigDecimal iInpaymentSum = SSOutpaymentMath.getSumForInvoice(iInvoice, SSDateUtil.toDate(iDate));
+        BigDecimal iCreditingSum = SSSupplierCreditInvoiceMath.getSumForInvoice(iInvoice, iDate);
+        BigDecimal iInpaymentSum = SSOutpaymentMath.getSumForInvoice(iInvoice, iDate);
 
         iTotalSum = iTotalSum.subtract(iCreditingSum);
         iTotalSum = iTotalSum.subtract(iInpaymentSum);
@@ -223,11 +222,10 @@ public class SSSupplierInvoiceMath {
     public static Map<Integer, BigDecimal> getSaldos(LocalDate iDate) {
         Map<Integer, BigDecimal> iSaldos = new HashMap<>();
 
-        HashMap<Integer, BigDecimal> iOutpaymentSum = SSOutpaymentMath.getSumsForSupplierInvoices(
-                SSDateUtil.toDate(iDate));
+        HashMap<Integer, BigDecimal> iOutpaymentSum = SSOutpaymentMath.getSumsForSupplierInvoices(iDate);
 
         HashMap<Integer, BigDecimal> iSupplierCreditInvoiceSum = SSSupplierCreditInvoiceMath.getSumsForSupplierInvoices(
-                SSDateUtil.toDate(iDate));
+                iDate);
 
         List<SSSupplierInvoice> iSupplierInvoices = SSDB.getInstance().getSupplierInvoices();
 
@@ -286,11 +284,10 @@ public class SSSupplierInvoiceMath {
     public static Map<SSSupplierInvoice, BigDecimal> getSaldo(List<SSSupplierInvoice> iInvoices, LocalDate iDate) {
         Map<SSSupplierInvoice, BigDecimal> iSaldos = new HashMap<>();
 
-        HashMap<Integer, BigDecimal> iOutpaymentSum = SSOutpaymentMath.getSumsForSupplierInvoices(
-                SSDateUtil.toDate(iDate));
+        HashMap<Integer, BigDecimal> iOutpaymentSum = SSOutpaymentMath.getSumsForSupplierInvoices(iDate);
 
         HashMap<Integer, BigDecimal> iSupplierCreditInvoiceSum = SSSupplierCreditInvoiceMath.getSumsForSupplierInvoices(
-                SSDateUtil.toDate(iDate));
+                iDate);
 
         // Loop through the invoices
         for (SSSupplierInvoice iInvoice : iInvoices) {

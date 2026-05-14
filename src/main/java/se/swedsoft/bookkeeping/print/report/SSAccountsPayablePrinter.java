@@ -58,10 +58,10 @@ public class SSAccountsPayablePrinter extends SSPrinter {
 
         LocalDate iCeiledDate = SSDateUtil.toLocalDate(this.iDate);
 
-        iOutpaymentSum = SSOutpaymentMath.getSumsForSupplierInvoices(SSDateUtil.toDate(iCeiledDate));
+        iOutpaymentSum = SSOutpaymentMath.getSumsForSupplierInvoices(iCeiledDate);
 
         iSupplierCreditInvoiceSum = SSSupplierCreditInvoiceMath.getSumsForSupplierInvoices(
-                SSDateUtil.toDate(iCeiledDate));
+                iCeiledDate);
 
         iSupplierInvoicesMap = new HashMap<>();
 

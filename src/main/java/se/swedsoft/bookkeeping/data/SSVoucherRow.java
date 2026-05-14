@@ -9,11 +9,12 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.io.IOException;
+import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -36,7 +37,7 @@ public class SSVoucherRow implements Serializable, Cloneable {
 
     private BigDecimal iCredit;
 
-    private Date iEditedDate;
+    private LocalDateTime iEditedDate;
 
     private String iEditedSignature;
 
@@ -248,7 +249,7 @@ public class SSVoucherRow implements Serializable, Cloneable {
      *
      * @return
      */
-    public Date getEditedDate() {
+    public LocalDateTime getLocalEditedDate() {
         return iEditedDate;
     }
 
@@ -256,7 +257,7 @@ public class SSVoucherRow implements Serializable, Cloneable {
      *
      * @param pEditedDate
      */
-    public void setEditedDate(Date pEditedDate) {
+    public void setLocalEditedDate(LocalDateTime pEditedDate) {
         iEditedDate = pEditedDate;
     }
 
@@ -302,7 +303,7 @@ public class SSVoucherRow implements Serializable, Cloneable {
      */
     public void setCrossed(String pSignature) {
         iCrossed = true;
-        iEditedDate = SSDateUtil.toDate(SSDateUtil.now());
+        iEditedDate = SSDateUtil.now();
         iEditedSignature = pSignature;
     }
 
@@ -330,7 +331,7 @@ public class SSVoucherRow implements Serializable, Cloneable {
      */
     public void setAdded(String pSignature) {
         iAdded = true;
-        iEditedDate = SSDateUtil.toDate(SSDateUtil.now());
+        iEditedDate = SSDateUtil.now();
         iEditedSignature = pSignature;
     }
 
@@ -463,7 +464,33 @@ public class SSVoucherRow implements Serializable, Cloneable {
      * @throws ClassNotFoundException
      */
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject();
+        ObjectInputStream.GetField fields = in.readFields();
+
+        iAccountNr = (Integer) fields.get("iAccountNr", null);
+        iProjectNumber = (String) fields.get("iProjectNumber", null);
+        iProjectNr = (Integer) fields.get("iProjectNr", null);
+        iResultUnitNumber = (String) fields.get("iResultUnitNumber", null);
+        iResultUnitNr = (Integer) fields.get("iResultUnitNr", null);
+        iDebet = (BigDecimal) fields.get("iDebet", null);
+        iCredit = (BigDecimal) fields.get("iCredit", null);
+
+        Object rawEditedDate = fields.get("iEditedDate", null);
+        if (rawEditedDate instanceof LocalDateTime) {
+            iEditedDate = (LocalDateTime) rawEditedDate;
+        } else if (rawEditedDate == null || rawEditedDate instanceof java.util.Date) {
+            iEditedDate = SSDateUtil.toLocalDateTime((java.util.Date) rawEditedDate);
+        } else {
+            throw new InvalidObjectException(
+                    "Unsupported voucher row edited date type: " + rawEditedDate.getClass().getName());
+        }
+
+        iEditedSignature = (String) fields.get("iEditedSignature", null);
+        iCrossed = fields.get("iCrossed", false);
+        iAdded = fields.get("iAdded", false);
+        iAccount = (SSAccount) fields.get("iAccount", null);
+        iProject = (SSNewProject) fields.get("iProject", null);
+        iResultUnit = (SSNewResultUnit) fields.get("iResultUnit", null);
+
         if (iAccount != null) {
             iAccountNr = iAccount.getNumber();
         }

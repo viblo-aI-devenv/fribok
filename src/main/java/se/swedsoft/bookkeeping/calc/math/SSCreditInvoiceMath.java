@@ -62,14 +62,17 @@ public class SSCreditInvoiceMath extends SSInvoiceMath {
     }
 
     public static HashMap<Integer, BigDecimal> getSumsForInvoices(Date iDate) {
+        return getSumsForInvoices(SSDateUtil.toLocalDate(iDate));
+    }
+
+    public static HashMap<Integer, BigDecimal> getSumsForInvoices(LocalDate iDate) {
         HashMap<Integer, BigDecimal> iSums = new HashMap<>();
 
         List<SSCreditInvoice> iCreditInvoices = SSDB.getInstance().getCreditInvoices();
-        LocalDate localDate = SSDateUtil.toLocalDate(iDate);
 
         for (SSCreditInvoice iCreditInvoice : iCreditInvoices) {
-            if (iCreditInvoice.getLocalDate() != null && localDate != null
-                    && !iCreditInvoice.getLocalDate().isAfter(localDate)) {
+            if (iCreditInvoice.getLocalDate() != null && iDate != null
+                    && !iCreditInvoice.getLocalDate().isAfter(iDate)) {
                 BigDecimal iRowSum = getTotalSum(iCreditInvoice);
 
                 if (iRowSum != null && iCreditInvoice.getCreditingNr() != null) {
@@ -93,10 +96,13 @@ public class SSCreditInvoiceMath extends SSInvoiceMath {
      * @return the sum
      */
     public static BigDecimal getSumForInvoice(SSInvoice iInvoice, Date iDate) {
+        return getSumForInvoice(iInvoice, SSDateUtil.toLocalDate(iDate));
+    }
+
+    public static BigDecimal getSumForInvoice(SSInvoice iInvoice, LocalDate iDate) {
         // Get all credit invoices from the db
         List<SSCreditInvoice> iCreditInvoices = SSDB.getInstance().getCreditInvoices();
 
-        LocalDate localDate = SSDateUtil.toLocalDate(iDate);
         BigDecimal iSum = new BigDecimal(0);
 
         for (SSCreditInvoice iCreditInvoice : iCreditInvoices) {
@@ -105,7 +111,7 @@ public class SSCreditInvoiceMath extends SSInvoiceMath {
             BigDecimal iRowSum = getTotalSum(iCreditInvoice);
 
             if (iRowSum != null && iCreditInvoice.isCrediting(iInvoice)
-                    && iCurrent != null && localDate != null && !iCurrent.isAfter(localDate)) {
+                    && iCurrent != null && iDate != null && !iCurrent.isAfter(iDate)) {
                 iSum = iSum.add(iRowSum);
             }
         }

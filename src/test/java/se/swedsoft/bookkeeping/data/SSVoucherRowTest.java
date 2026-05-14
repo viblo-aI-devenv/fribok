@@ -251,7 +251,7 @@ class SSVoucherRowTest {
 
         assertThat(row.isCrossed()).isTrue();
         assertThat(row.getEditedSignature()).isEqualTo("admin");
-        assertThat(row.getEditedDate()).isNotNull();
+        assertThat(row.getLocalEditedDate()).isNotNull();
     }
 
     @Test
@@ -262,7 +262,7 @@ class SSVoucherRowTest {
 
         assertThat(row.isAdded()).isTrue();
         assertThat(row.getEditedSignature()).isEqualTo("admin");
-        assertThat(row.getEditedDate()).isNotNull();
+        assertThat(row.getLocalEditedDate()).isNotNull();
     }
 
     // ---- toString ----

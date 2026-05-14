@@ -125,7 +125,7 @@ public class SSStock {
 
         iOrders = SSFilterFactory.doFilter(iOrders, new SSFilter<>() {
             public boolean applyFilter(SSOrder iOrder) {
-                return SSOrderMath.inPeriod(iOrder, SSDateUtil.toDate(iDate));
+                return SSOrderMath.inPeriod(iOrder, iDate);
             }
         });
 
@@ -133,7 +133,7 @@ public class SSStock {
                 new SSFilter<>() {
             public boolean applyFilter(SSInvoice iInvoice) {
                 return iInvoice.isStockInfluencing()
-                        && SSInvoiceMath.inPeriod(iInvoice, SSDateUtil.toDate(iDate));
+                        && SSInvoiceMath.inPeriod(iInvoice, iDate);
             }
         });
 
@@ -141,7 +141,7 @@ public class SSStock {
                 new SSFilter<>() {
             public boolean applyFilter(SSCreditInvoice iCreditInvoice) {
                 return iCreditInvoice.isStockInfluencing()
-                        && SSInvoiceMath.inPeriod(iCreditInvoice, SSDateUtil.toDate(iDate));
+                        && SSInvoiceMath.inPeriod(iCreditInvoice, iDate);
             }
         });
 
@@ -149,7 +149,7 @@ public class SSStock {
                 new SSFilter<>() {
             public boolean applyFilter(SSPurchaseOrder iPurchaseOrder) {
                 return iPurchaseOrder.isStockInfluencing()
-                        && SSPurchaseOrderMath.inPeriod(iPurchaseOrder, SSDateUtil.toDate(iDate));
+                        && SSPurchaseOrderMath.inPeriod(iPurchaseOrder, iDate);
             }
         });
 
@@ -172,21 +172,21 @@ public class SSStock {
         iInventories = SSFilterFactory.doFilter(iInventories,
                 new SSFilter<>() {
             public boolean applyFilter(SSInventory iInventory) {
-                return SSInventoryMath.inPeriod(iInventory, SSDateUtil.toDate(iDate));
+                return SSInventoryMath.inPeriod(iInventory, iDate);
             }
         });
 
         iIndeliveries = SSFilterFactory.doFilter(iIndeliveries,
                 new SSFilter<>() {
             public boolean applyFilter(SSIndelivery iIndelivery) {
-                return SSIndeliveryMath.inPeriod(iIndelivery, SSDateUtil.toDate(iDate));
+                return SSIndeliveryMath.inPeriod(iIndelivery, iDate);
             }
         });
 
         iOutdeliveries = SSFilterFactory.doFilter(iOutdeliveries,
                 new SSFilter<>() {
             public boolean applyFilter(SSOutdelivery iOutdelivery) {
-                return SSOutdeliveryMath.inPeriod(iOutdelivery, SSDateUtil.toDate(iDate));
+                return SSOutdeliveryMath.inPeriod(iOutdelivery, iDate);
             }
         });
 
@@ -194,12 +194,7 @@ public class SSStock {
                 iSupplierCreditInvoices, iInventories, iIndeliveries, iOutdeliveries);
     }
 
-    /**
-     *
-     * @param iFrom
-     * @param iTo
-     */
-    public void update(final Date iFrom, final Date iTo) {
+    public void update(final LocalDate iFrom, final LocalDate iTo) {
         List<SSOrder>                 iOrders = SSDB.getInstance().getOrders();
         List<SSInvoice>               iInvoices = SSDB.getInstance().getInvoices();
         List<SSCreditInvoice>         iCreditInvoices = SSDB.getInstance().getCreditInvoices();

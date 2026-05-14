@@ -59,9 +59,9 @@ public class SSAccountsRecievablePrinter extends SSPrinter {
 
         LocalDate iCeiledDate = SSDateUtil.toLocalDate(this.iDate);
 
-        iInpaymentSum = SSInpaymentMath.getSumsForInvoices(SSDateUtil.toDate(iCeiledDate));
+        iInpaymentSum = SSInpaymentMath.getSumsForInvoices(iCeiledDate);
 
-        iCreditInvoiceSum = SSCreditInvoiceMath.getSumsForInvoices(SSDateUtil.toDate(iCeiledDate));
+        iCreditInvoiceSum = SSCreditInvoiceMath.getSumsForInvoices(iCeiledDate);
 
         iCustomerInvoicesMap = new HashMap<>();
 

@@ -15,7 +15,6 @@ import se.swedsoft.bookkeeping.gui.util.SSButtonPanel;
 import se.swedsoft.bookkeeping.gui.util.components.SSTableComboBox;
 import se.swedsoft.bookkeeping.gui.util.datechooser.SSDateChooser;
 import se.swedsoft.bookkeeping.gui.util.dialogs.SSDialog;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -136,7 +135,7 @@ public class SSPurchaseOrderListDialog extends SSDialog {
             iFactory.applyFilter(
                     new SSFilter<>() {
                 public boolean applyFilter(SSPurchaseOrder iPurchaseOrder) {
-                    return SSPurchaseOrderMath.inPeriod(iPurchaseOrder, SSDateUtil.toDate(iDateFrom), SSDateUtil.toDate(iDateTo));
+                    return SSPurchaseOrderMath.inPeriod(iPurchaseOrder, iDateFrom, iDateTo);
                 }
             });
         }

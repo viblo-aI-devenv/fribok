@@ -253,19 +253,6 @@ public class SSBudget implements Serializable {
      *
      * @return The sum
      */
-    public BigDecimal getSumForAccount(SSAccount pAccount, Date pFrom, Date pTo) {
-        return getSumForAccount(pAccount, SSDateUtil.toLocalDate(pFrom), SSDateUtil.toLocalDate(pTo));
-    }
-
-    /**
-     * Get the budget sum for an account.
-     *
-     * @param pAccount The account to get the sum from.
-     * @param pFrom
-     * @param pTo
-     *
-     * @return The sum
-     */
     public BigDecimal getSumForAccount(SSAccount pAccount, LocalDate pFrom, LocalDate pTo) {
         BigDecimal iSum = new BigDecimal(0);
 
@@ -293,17 +280,6 @@ public class SSBudget implements Serializable {
             sum.put(account, getSumForAccount(account));
         }
         return sum;
-    }
-
-    /**
-     * Get the budget sum for all accounts.
-     * @param pFrom
-     * @param pTo
-     *
-     * @return The sum
-     */
-    public Map<SSAccount, BigDecimal> getSumForAccounts(Date pFrom, Date pTo) {
-        return getSumForAccounts(SSDateUtil.toLocalDate(pFrom), SSDateUtil.toLocalDate(pTo));
     }
 
     /**

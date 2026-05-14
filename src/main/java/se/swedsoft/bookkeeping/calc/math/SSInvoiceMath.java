@@ -135,13 +135,15 @@ public class SSInvoiceMath extends SSSaleMath {    private static final Logger L
     }
 
     public static Map<Integer, BigDecimal> getSaldos(Date iDate) {
+        return getSaldos(SSDateUtil.toLocalDate(iDate));
+    }
+
+    public static Map<Integer, BigDecimal> getSaldos(LocalDate iDate) {
         Map<Integer, BigDecimal> iSaldos = new HashMap<>();
 
-        HashMap<Integer, BigDecimal> iInpaymentSum = SSInpaymentMath.getSumsForInvoices(
-                iDate);
+        HashMap<Integer, BigDecimal> iInpaymentSum = SSInpaymentMath.getSumsForInvoices(iDate);
 
-        HashMap<Integer, BigDecimal> iCreditInvoiceSum = SSCreditInvoiceMath.getSumsForInvoices(
-                iDate);
+        HashMap<Integer, BigDecimal> iCreditInvoiceSum = SSCreditInvoiceMath.getSumsForInvoices(iDate);
 
         List<SSInvoice> iInvoices = SSDB.getInstance().getInvoices();
 
@@ -175,6 +177,10 @@ public class SSInvoiceMath extends SSSaleMath {    private static final Logger L
      * @return  the saldo
      */
     public static BigDecimal getSaldo(SSInvoice iInvoice, Date iDate) {
+        return getSaldo(iInvoice, SSDateUtil.toLocalDate(iDate));
+    }
+
+    public static BigDecimal getSaldo(SSInvoice iInvoice, LocalDate iDate) {
         // a cash sales cant have any saldo
         if (iInvoice.getType() == SSInvoiceType.CASH) {
             return new BigDecimal(0);
@@ -200,21 +206,22 @@ public class SSInvoiceMath extends SSSaleMath {    private static final Logger L
      * @return map of the invoices and their saldo
      */
     public static Map<SSInvoice, BigDecimal> getSaldo(List<SSInvoice> iInvoices, Date iDate) {
+        return getSaldo(iInvoices, SSDateUtil.toLocalDate(iDate));
+    }
+
+    public static Map<SSInvoice, BigDecimal> getSaldo(List<SSInvoice> iInvoices, LocalDate iDate) {
         Map<SSInvoice, BigDecimal> iSaldos = new HashMap<>();
-        LocalDate localDate = SSDateUtil.toLocalDate(iDate);
 
-        HashMap<Integer, BigDecimal> iInpaymentSum = SSInpaymentMath.getSumsForInvoices(
-                iDate);
+        HashMap<Integer, BigDecimal> iInpaymentSum = SSInpaymentMath.getSumsForInvoices(iDate);
 
-        HashMap<Integer, BigDecimal> iCreditInvoiceSum = SSCreditInvoiceMath.getSumsForInvoices(
-                iDate);
+        HashMap<Integer, BigDecimal> iCreditInvoiceSum = SSCreditInvoiceMath.getSumsForInvoices(iDate);
 
         // Loop through the invoices
         for (SSInvoice iInvoice : iInvoices) {
             LocalDate iCurrent = iInvoice.getLocalDate();
 
             // Only put invoices that is added before the specified date
-            if (iCurrent != null && localDate != null && !iCurrent.isAfter(localDate)
+            if (iCurrent != null && iDate != null && !iCurrent.isAfter(iDate)
                     && iInvoice.getType() != SSInvoiceType.CASH) {
                 BigDecimal iSum = getTotalSum(iInvoice);
 
@@ -431,15 +438,13 @@ public class SSInvoiceMath extends SSSaleMath {    private static final Logger L
      */
     public static int getNumDelayedDays(SSInvoice iInvoice) {
         LocalDate iPaymentDay = iInvoice.getLocalDueDate();
-        Date iLastPayment = SSInpaymentMath.getLastInpaymentForInvoice(iInvoice);
+        LocalDate iLastPayment = SSInpaymentMath.getLastLocalInpaymentForInvoice(iInvoice);
 
         if (iLastPayment == null || iPaymentDay == null) {
             return 0;
         }
 
-        LocalDate lastPayment = SSDateUtil.toLocalDate(iLastPayment);
-
-        long days = ChronoUnit.DAYS.between(iPaymentDay, lastPayment);
+        long days = ChronoUnit.DAYS.between(iPaymentDay, iLastPayment);
         return (int) Math.max(days, 0);
     }
 
