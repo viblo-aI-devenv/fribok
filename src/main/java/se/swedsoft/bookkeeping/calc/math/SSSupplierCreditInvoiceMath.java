@@ -3,8 +3,6 @@ package se.swedsoft.bookkeeping.calc.math;
 
 import se.swedsoft.bookkeeping.data.*;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
@@ -17,17 +15,6 @@ import java.util.*;
  */
 public class SSSupplierCreditInvoiceMath {
     private SSSupplierCreditInvoiceMath() {}
-
-    /**
-     *
-     * @param iSupplierInvoice
-     * @param pFrom
-     * @param pTo
-     * @return
-     */
-    public static boolean inPeriod(SSSupplierCreditInvoice iSupplierInvoice, Date pFrom, Date pTo) {
-        return inPeriod(iSupplierInvoice, SSDateUtil.toLocalDate(pFrom), SSDateUtil.toLocalDate(pTo));
-    }
 
     public static boolean inPeriod(SSSupplierCreditInvoice iSupplierInvoice, LocalDate iFrom, LocalDate iTo) {
         LocalDate iDate = iSupplierInvoice.getLocalDate();

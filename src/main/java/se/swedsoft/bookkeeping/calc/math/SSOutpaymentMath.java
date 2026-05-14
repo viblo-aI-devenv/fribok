@@ -5,11 +5,9 @@ import se.swedsoft.bookkeeping.data.SSOutpayment;
 import se.swedsoft.bookkeeping.data.SSOutpaymentRow;
 import se.swedsoft.bookkeeping.data.SSSupplierInvoice;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -22,17 +20,6 @@ import java.util.Optional;
  */
 public class SSOutpaymentMath {
     private SSOutpaymentMath() {}
-
-    /**
-     *
-     * @param iOutpayment
-     * @param pFrom
-     * @param pTo
-     * @return
-     */
-    public static boolean inPeriod(SSOutpayment iOutpayment, Date pFrom, Date pTo) {
-        return inPeriod(iOutpayment, SSDateUtil.toLocalDate(pFrom), SSDateUtil.toLocalDate(pTo));
-    }
 
     public static boolean inPeriod(SSOutpayment iOutpayment, LocalDate iFrom, LocalDate iTo) {
         LocalDate iDate = iOutpayment.getLocalDate();

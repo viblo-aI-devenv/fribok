@@ -2347,10 +2347,12 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
 
         final Date iFrom = iDialog.getFrom();
         final Date iTo = iDialog.getTo();
+        final LocalDate localFrom = SSDateUtil.toLocalDate(iFrom);
+        final LocalDate localTo = SSDateUtil.toLocalDate(iTo);
 
         final List<SSInpayment> iFiltered = iInpayments.stream()
                 .filter(iInpayment -> !iInpayment.isEntered()
-                        && SSInpaymentMath.inPeriod(iInpayment, iFrom, iTo))
+                        && SSInpaymentMath.inPeriod(iInpayment, localFrom, localTo))
                 .collect(Collectors.toList());
         if (iFiltered.isEmpty()) {
             new SSInformationDialog(iMainFrame, "inpaymentjournal.dialog.norows");
@@ -2564,10 +2566,12 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
 
         final Date iFrom = iDialog.getFrom();
         final Date iTo = iDialog.getTo();
+        final LocalDate localFrom = SSDateUtil.toLocalDate(iFrom);
+        final LocalDate localTo = SSDateUtil.toLocalDate(iTo);
 
         final List<SSSupplierCreditInvoice> iFiltered = iInvoices.stream()
                 .filter(iInvoice -> !iInvoice.isEntered()
-                        && SSSupplierCreditInvoiceMath.inPeriod(iInvoice, iFrom, iTo))
+                        && SSSupplierCreditInvoiceMath.inPeriod(iInvoice, localFrom, localTo))
                 .collect(Collectors.toList());
         if (iFiltered.isEmpty()) {
             new SSInformationDialog(iMainFrame,
@@ -2674,10 +2678,12 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
 
         final Date iFrom = iDialog.getFrom();
         final Date iTo = iDialog.getTo();
+        final LocalDate localFrom = SSDateUtil.toLocalDate(iFrom);
+        final LocalDate localTo = SSDateUtil.toLocalDate(iTo);
 
         final List<SSOutpayment> iFiltered = iOutpayments.stream()
                 .filter(iOutpayment -> !iOutpayment.isEntered()
-                        && SSOutpaymentMath.inPeriod(iOutpayment, iFrom, iTo))
+                        && SSOutpaymentMath.inPeriod(iOutpayment, localFrom, localTo))
                 .collect(Collectors.toList());
         if (iFiltered.isEmpty()) {
             new SSInformationDialog(iMainFrame, "outpaymentjournal.dialog.norows");
