@@ -85,7 +85,7 @@ public class SSVATUtil {
                 SSDB.getInstance().getAccounts(), "U1", "U2", "U3", "UVL", "UEU", "UTFU",
                 "I", "IVL", "UI1", "UI2", "UI3");
         List<SSVoucher> iVouchers = SSVoucherMath.getVouchers(
-                SSDB.getInstance().getVouchers(), SSDateUtil.toDate(iDateFrom), SSDateUtil.toDate(iDateTo));
+                SSDB.getInstance().getVouchers(), iDateFrom, iDateTo);
 
         Map<SSAccount, BigDecimal> iCreditMinusDebetSum = SSVoucherMath.getCreditMinusDebetSum(
                 iVouchers);

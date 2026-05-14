@@ -397,7 +397,7 @@ public class SSVoucherMath {
      * @param pTo
      * @return
      */
-    public static List<SSVoucher> getVouchers(List<SSVoucher> pVouchers, Date pFrom, Date pTo) {
+    public static List<SSVoucher> getVouchers(List<SSVoucher> pVouchers, LocalDate pFrom, LocalDate pTo) {
 
         return pVouchers.stream()
                 .filter(iVoucher -> inPeriod(iVoucher, pFrom, pTo))

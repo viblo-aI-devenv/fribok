@@ -16,6 +16,7 @@ import se.swedsoft.bookkeeping.util.SSDateUtil;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -74,8 +75,10 @@ public class SSVATControl2007Printer extends SSPrinter {
      */
     private void calculate() {
         // Get all vouchers
+        LocalDate iLocalDateFrom = SSDateUtil.toLocalDate(iDateFrom);
+        LocalDate iLocalDateTo = SSDateUtil.toLocalDate(iDateTo);
         List<SSVoucher> iVouchers = SSVoucherMath.getVouchers(
-                iAccountingYear.getVouchers(), iDateFrom, iDateTo);
+                iAccountingYear.getVouchers(), iLocalDateFrom, iLocalDateTo);
 
         iCreditMinusDebetSum = SSVoucherMath.getCreditMinusDebetSum(iVouchers);
         iDebetMinusCreditSum = SSVoucherMath.getDebetMinusCreditSum(iVouchers);
