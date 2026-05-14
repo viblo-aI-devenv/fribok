@@ -21,32 +21,11 @@ import java.util.stream.Collectors;
 public class SSSupplierInvoiceMath {
     private SSSupplierInvoiceMath() {}
 
-    /**
-     *
-     * @param iSupplierInvoice
-     * @param pFrom
-     * @param pTo
-     * @return
-     */
-    public static boolean inPeriod(SSSupplierInvoice iSupplierInvoice, Date pFrom, Date pTo) {
-        return inPeriod(iSupplierInvoice, SSDateUtil.toLocalDate(pFrom), SSDateUtil.toLocalDate(pTo));
-    }
-
     public static boolean inPeriod(SSSupplierInvoice iSupplierInvoice, LocalDate pFrom, LocalDate pTo) {
         LocalDate iDate = iSupplierInvoice.getLocalDate();
 
         return iDate != null && pFrom != null && pTo != null
                 && !iDate.isBefore(pFrom) && !iDate.isAfter(pTo);
-    }
-
-    /**
-     *
-     * @param iSupplierInvoice
-     * @param pTo
-     * @return
-     */
-    public static boolean inPeriod(SSSupplierInvoice iSupplierInvoice, Date pTo) {
-        return inPeriod(iSupplierInvoice, SSDateUtil.toLocalDate(pTo));
     }
 
     public static boolean inPeriod(SSSupplierInvoice iSupplierInvoice, LocalDate pTo) {

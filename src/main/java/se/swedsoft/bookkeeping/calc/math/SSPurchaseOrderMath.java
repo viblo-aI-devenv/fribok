@@ -3,7 +3,6 @@ package se.swedsoft.bookkeeping.calc.math;
 
 import se.swedsoft.bookkeeping.data.*;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -17,31 +16,11 @@ import java.util.*;
 public class SSPurchaseOrderMath {
     private SSPurchaseOrderMath() {}
 
-    /*
-     * @param iSale
-     * @param pFrom
-     * @param pTo
-     * @return
-     */
-    public static boolean inPeriod(SSPurchaseOrder iPurchaseOrder, Date pFrom, Date pTo) {
-        return inPeriod(iPurchaseOrder, SSDateUtil.toLocalDate(pFrom), SSDateUtil.toLocalDate(pTo));
-    }
-
     public static boolean inPeriod(SSPurchaseOrder iPurchaseOrder, LocalDate iFrom, LocalDate iTo) {
         LocalDate iDate = iPurchaseOrder.getLocalDate();
 
         return iDate != null && iFrom != null && iTo != null
                 && !iDate.isBefore(iFrom) && !iDate.isAfter(iTo);
-    }
-
-    /**
-     *
-     * @param iPurchaseOrder
-     * @param pTo
-     * @return
-     */
-    public static boolean inPeriod(SSPurchaseOrder iPurchaseOrder, Date pTo) {
-        return inPeriod(iPurchaseOrder, SSDateUtil.toLocalDate(pTo));
     }
 
     public static boolean inPeriod(SSPurchaseOrder iPurchaseOrder, LocalDate iTo) {

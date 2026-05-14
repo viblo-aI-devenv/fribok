@@ -2457,10 +2457,12 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
 
         final Date iFrom = iDialog.getFrom();
         final Date iTo = iDialog.getTo();
+        final LocalDate localFrom = SSDateUtil.toLocalDate(iFrom);
+        final LocalDate localTo = SSDateUtil.toLocalDate(iTo);
 
         final List<SSSupplierInvoice> iFiltered = iInvoices.stream()
                 .filter(iInvoice -> !iInvoice.isEntered()
-                        && SSSupplierInvoiceMath.inPeriod(iInvoice, iFrom, iTo))
+                        && SSSupplierInvoiceMath.inPeriod(iInvoice, localFrom, localTo))
                 .collect(Collectors.toList());
         if (iFiltered.isEmpty()) {
             new SSInformationDialog(iMainFrame, "supplierinvoicejournal.dialog.norows");
