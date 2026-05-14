@@ -15,7 +15,7 @@ import se.swedsoft.bookkeeping.importexport.util.SSExportException;
 import se.swedsoft.bookkeeping.importexport.util.SSImportException;
 import se.swedsoft.bookkeeping.util.SSDateUtil;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import static se.swedsoft.bookkeeping.importexport.sie.util.SIEReader.SIEDataType.STRING;
@@ -48,7 +48,7 @@ public class SIEEntryVerifikation implements SIEEntry {
 
         String     iSerie = iReader.nextString();
         Integer    iNumber = iReader.nextInteger().orElse(null);
-        Date       iDate = iReader.hasNextDate() ? iReader.nextDate() : SSDateUtil.toDate(SSDateUtil.today());
+        LocalDate  iDate = iReader.hasNextDate() ? iReader.nextDate() : SSDateUtil.today();
         String     iDescription = iReader.hasNextString() ? iReader.nextString() : null;
 
         if (!iSerie.equals("A") && iSerie.length() > 0) {
@@ -65,7 +65,7 @@ public class SIEEntryVerifikation implements SIEEntry {
             iHasNumber = true;
         }
 
-        iVoucher.setLocalDate(SSDateUtil.toLocalDate(iDate));
+        iVoucher.setLocalDate(iDate);
         iVoucher.setDescription(iDescription);
 
         while (iReader.hasNextLine()) {
