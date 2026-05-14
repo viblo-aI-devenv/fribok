@@ -409,8 +409,10 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         String voucherName = String.format(bundle.getString("vatbasis.vouchername"),
                 format.format(localFrom), format.format(localTo));
 
-        final SSVoucher iVoucher = SSVATUtil.generateVATVoucher(voucherName, localFrom,
-                localTo, accountR1, accountR2, accountA);
+        final LocalDate localDateFrom = SSDateUtil.toLocalDate(localFrom);
+        final LocalDate localDateTo = SSDateUtil.toLocalDate(localTo);
+        final SSVoucher iVoucher = SSVATUtil.generateVATVoucher(voucherName, localDateFrom,
+                localDateTo, accountR1, accountR2, accountA);
 
         // This runs the report generations with a progress iDialog
         SSProgressDialog.runProgress(iMainFrame,
