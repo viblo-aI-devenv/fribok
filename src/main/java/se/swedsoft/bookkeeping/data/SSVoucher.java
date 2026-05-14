@@ -13,8 +13,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -274,7 +275,7 @@ public class SSVoucher implements Serializable, Cloneable, SSTableSearchable {
     }
 
     public String toString() {
-        DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+        DateTimeFormatter iFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 
         StringBuilder sb = new StringBuilder();
 
@@ -282,7 +283,7 @@ public class SSVoucher implements Serializable, Cloneable, SSTableSearchable {
         sb.append(", ");
         sb.append(iDescription);
         sb.append(", ");
-        sb.append(iDate != null ? iFormat.format(SSDateUtil.toDate(iDate)) : "null"); /*
+        sb.append(iDate != null ? iDate.format(iFormat) : "null"); /*
          sb.append( ", " );
          sb.append( iVoucherRows.size() );
          sb.append( " rows.{\n" );
