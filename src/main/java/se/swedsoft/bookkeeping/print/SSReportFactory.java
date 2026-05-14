@@ -2133,9 +2133,11 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
 
         final Date iFrom = iDialog.getFrom();
         final Date iTo = iDialog.getTo();
+        final LocalDate localFrom = SSDateUtil.toLocalDate(iFrom);
+        final LocalDate localTo = SSDateUtil.toLocalDate(iTo);
 
         final List<SSInvoice> iFiltered = iInvoices.stream()
-                .filter(iInvoice -> !iInvoice.isEntered() && SSInvoiceMath.inPeriod(iInvoice, iFrom, iTo))
+                .filter(iInvoice -> !iInvoice.isEntered() && SSInvoiceMath.inPeriod(iInvoice, localFrom, localTo))
                 .collect(Collectors.toList());
         if (iFiltered.isEmpty()) {
             new SSInformationDialog(iMainFrame, "invoicejournal.dialog.norows");
@@ -2237,10 +2239,12 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
 
         final Date iFrom = iDialog.getFrom();
         final Date iTo = iDialog.getTo();
+        final LocalDate localFrom = SSDateUtil.toLocalDate(iFrom);
+        final LocalDate localTo = SSDateUtil.toLocalDate(iTo);
 
         final List<SSCreditInvoice> iFiltered = iCreditInvoices.stream()
                 .filter(iCreditInvoice -> !iCreditInvoice.isEntered()
-                        && SSInvoiceMath.inPeriod(iCreditInvoice, iFrom, iTo))
+                        && SSInvoiceMath.inPeriod(iCreditInvoice, localFrom, localTo))
                 .collect(Collectors.toList());
         if (iFiltered.isEmpty()) {
             new SSInformationDialog(iMainFrame, "creditinvoicejournal.dialog.norows");

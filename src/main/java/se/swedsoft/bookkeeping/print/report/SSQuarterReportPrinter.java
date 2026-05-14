@@ -63,6 +63,8 @@ public class SSQuarterReportPrinter extends SSPrinter {
 
         Map<String, List<SSInvoice>> iInvoicesForCustomers = SSInvoiceMath.getInvoicesforCustomers();
         Map<String, List<SSCreditInvoice>> iCreditInvoicesForCustomers = SSCreditInvoiceMath.getCreditInvoicesforCustomers();
+        java.time.LocalDate localFrom = se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(iFrom);
+        java.time.LocalDate localTo = se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(iTo);
 
         // List<SSInvoice>       iInvoices       = SSDB.getInstance().getInvoices();
         // List<SSCreditInvoice> iCreditInvoices = SSDB.getInstance().getCreditInvoices();
@@ -79,7 +81,7 @@ public class SSQuarterReportPrinter extends SSPrinter {
             if (iInvoicesForCustomer != null) {
                 for (SSInvoice iInvoice : iInvoicesForCustomer) {
 
-                    if (!SSInvoiceMath.inPeriod(iInvoice, iFrom, iTo)) {
+                    if (!SSInvoiceMath.inPeriod(iInvoice, localFrom, localTo)) {
                         continue;
                     }
 
@@ -102,7 +104,7 @@ public class SSQuarterReportPrinter extends SSPrinter {
             if (iCreditInvoicesForCustomer != null) {
                 for (SSCreditInvoice iCreditInvoice : iCreditInvoicesForCustomer) {
 
-                    if (!SSCreditInvoiceMath.inPeriod(iCreditInvoice, iFrom, iTo)) {
+                    if (!SSCreditInvoiceMath.inPeriod(iCreditInvoice, localFrom, localTo)) {
                         continue;
                     }
 

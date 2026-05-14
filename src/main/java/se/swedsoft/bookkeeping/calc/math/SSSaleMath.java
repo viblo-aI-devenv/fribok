@@ -25,33 +25,11 @@ import java.util.Optional;
  */
 public class SSSaleMath {
 
-    /**
-     *
-     * @param iSale
-     * @param pFrom
-     * @param pTo
-     * @return
-     */
-    public static boolean inPeriod(SSSale iSale, Date pFrom, Date pTo) {
-        return inPeriod(iSale, se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(pFrom),
-                se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(pTo));
-    }
-
     public static boolean inPeriod(SSSale iSale, LocalDate iFrom, LocalDate iTo) {
         LocalDate iDate = iSale.getLocalDate();
 
         return iDate != null && iFrom != null && iTo != null
                 && !iDate.isBefore(iFrom) && !iDate.isAfter(iTo);
-    }
-
-    /**
-     *
-     * @param iSale
-     * @param pTo
-     * @return
-     */
-    public static boolean inPeriod(SSSale iSale, Date pTo) {
-        return inPeriod(iSale, se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(pTo));
     }
 
     public static boolean inPeriod(SSSale iSale, LocalDate iTo) {

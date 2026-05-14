@@ -296,10 +296,11 @@ public class SSSaleReportPrinter extends SSPrinter {
         iContributionRate = new HashMap<>();
         iAverageSellingPrice = new HashMap<>();
         iInprices = new HashMap<>();
+        LocalDate fromDate = SSDateUtil.toLocalDate(iFrom);
+        LocalDate toDate = SSDateUtil.toLocalDate(iTo);
 
         List<SSSupplierInvoice> iSupplierInvoices = new LinkedList<>(
                 SSDB.getInstance().getSupplierInvoices());
-        LocalDate toDate = SSDateUtil.toLocalDate(iTo);
 
         Collections.sort(iSupplierInvoices,
                 Comparator.comparing(SSSupplierInvoice::getLocalDate,
@@ -338,7 +339,7 @@ public class SSSaleReportPrinter extends SSPrinter {
         List<SSInvoice> iInvoices = SSDB.getInstance().getInvoices();
 
         for (SSInvoice iInvoice : iInvoices) {
-            if (SSInvoiceMath.inPeriod(iInvoice, iFrom, iTo)) {
+            if (SSInvoiceMath.inPeriod(iInvoice, fromDate, toDate)) {
                 for (SSSaleRow iRow : iInvoice.getRows()) {
                     if (iRow.getProductNr() != null) {
                         SSProduct iProduct = SSDB.getInstance().getProduct(
@@ -374,7 +375,7 @@ public class SSSaleReportPrinter extends SSPrinter {
         List<SSCreditInvoice> iCreditInvoices = SSDB.getInstance().getCreditInvoices();
 
         for (SSCreditInvoice iCreditInvoice : iCreditInvoices) {
-            if (SSInvoiceMath.inPeriod(iCreditInvoice, iFrom, iTo)) {
+            if (SSInvoiceMath.inPeriod(iCreditInvoice, fromDate, toDate)) {
                 for (SSSaleRow iRow : iCreditInvoice.getRows()) {
                     if (iRow.getProductNr() != null) {
                         SSProduct iProduct = SSDB.getInstance().getProduct(
