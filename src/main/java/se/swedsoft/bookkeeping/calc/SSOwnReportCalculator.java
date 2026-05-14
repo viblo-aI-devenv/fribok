@@ -6,7 +6,6 @@ import se.swedsoft.bookkeeping.calc.util.SSCalculatorException;
 import se.swedsoft.bookkeeping.data.*;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.ownreport.util.SSOwnReportAccountRow;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -44,8 +43,8 @@ public class SSOwnReportCalculator {
 
     private SSOwnReport iOwnReport;
 
-    private Date         iFrom;
-    private Date         iTo;
+    private LocalDate         iFrom;
+    private LocalDate         iTo;
     private SSNewProject    iProject;
     private SSNewResultUnit iResultUnit;
 
@@ -53,7 +52,7 @@ public class SSOwnReportCalculator {
 
     private Map<SSAccount, BigDecimal> iChangeBudget;
 
-    public SSOwnReportCalculator(Date pFrom, Date pTo, SSOwnReport pOwnReport, SSNewProject pProject, SSNewResultUnit pResultUnit) {
+    public SSOwnReportCalculator(LocalDate pFrom, LocalDate pTo, SSOwnReport pOwnReport, SSNewProject pProject, SSNewResultUnit pResultUnit) {
         iFrom = pFrom;
         iTo = pTo;
         iOwnReport = pOwnReport;
@@ -84,14 +83,11 @@ public class SSOwnReportCalculator {
             iVouchers.addAll(iCurrent.getVouchers());
         }
 
-        LocalDate iLocalFrom = SSDateUtil.toLocalDate(iFrom);
-        LocalDate iLocalTo = SSDateUtil.toLocalDate(iTo);
-
         // Loop through all vouchers
         for (SSVoucher iVoucher: iVouchers) {
 
             // If the date of the oucher is in between the start and end date, add to PeriodChange
-            boolean inPeriod = SSVoucherMath.inPeriod(iVoucher, iLocalFrom, iLocalTo);
+            boolean inPeriod = SSVoucherMath.inPeriod(iVoucher, iFrom, iTo);
 
             // Loop through all the voucher rows
             for (SSVoucherRow iRow: iVoucher.getRows()) {
@@ -147,7 +143,7 @@ public class SSOwnReportCalculator {
      * @return
      */
     private boolean inProject(SSNewProject pRowProject, SSNewProject pProject) {
-        return pRowProject != null && !pRowProject.isConcluded(SSDateUtil.toLocalDate(iTo))
+        return pRowProject != null && !pRowProject.isConcluded(iTo)
                 && pRowProject.equals(pProject);
     }
 
