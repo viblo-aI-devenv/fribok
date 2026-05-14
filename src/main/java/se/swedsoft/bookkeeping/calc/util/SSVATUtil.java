@@ -8,12 +8,12 @@ import se.swedsoft.bookkeeping.data.SSVoucher;
 import se.swedsoft.bookkeeping.data.SSVoucherRow;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.Map;
 
@@ -59,11 +59,11 @@ public class SSVATUtil {
 
     public static SSVoucher generateVATVoucher(String name, LocalDate iDateFrom, LocalDate iDateTo, SSAccount iAccountR1, SSAccount iAccountR2, SSAccount iAccountA) {
 
-        DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+        DateTimeFormatter iFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 
         String iDescription = String.format(
                 SSBundle.getBundle().getString("vatreport2015.voucherdescription"),
-                iFormat.format(SSDateUtil.toDate(iDateFrom)), iFormat.format(SSDateUtil.toDate(iDateTo)));
+                iDateFrom.format(iFormat), iDateTo.format(iFormat));
 	// Lagt till momskoder för importmoms: UI1 UI2 UI3
         List<SSAccount> iAccounts = SSAccountMath.getAccountsByVATCode(
                 SSDB.getInstance().getAccounts(), "U1", "U2", "U3", "UVL", "UEU", "UTFU",
