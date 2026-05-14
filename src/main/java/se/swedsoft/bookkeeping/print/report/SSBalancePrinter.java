@@ -10,8 +10,10 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -77,7 +79,10 @@ public class SSBalancePrinter extends SSPrinter {
 
         SSBalanceCalculator iCalculator = new SSBalanceCalculator(iYearData);
 
-        iCalculator.calculate(iDateFrom, iDateTo);
+        LocalDate iLocalDateFrom = SSDateUtil.toLocalDate(iDateFrom);
+        LocalDate iLocalDateTo = SSDateUtil.toLocalDate(iDateTo);
+
+        iCalculator.calculate(iLocalDateFrom, iLocalDateTo);
 
         final Map<SSAccount, BigDecimal> iInBalance = iCalculator.getInBalance();
         final Map<SSAccount, BigDecimal> iInSaldo = iCalculator.getInSaldo();
