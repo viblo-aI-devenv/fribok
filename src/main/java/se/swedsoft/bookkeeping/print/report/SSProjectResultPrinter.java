@@ -62,7 +62,7 @@ public class SSProjectResultPrinter extends SSResultPrinter {
      */
     @Override
     protected SSResultCalculator getCalculator() {
-        return new SSResultCalculator(iYearData, iDateFrom, iDateTo, iProject, null);
+        return new SSResultCalculator(iYearData, getLocalDateFrom(), getLocalDateTo(), iProject, null);
     }
 
     /**
