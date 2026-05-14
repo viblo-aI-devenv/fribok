@@ -18,7 +18,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import org.slf4j.Logger;
@@ -80,16 +79,15 @@ public class SSSupplierPaymentImporter {    private static final Logger LOG = Lo
             if (iPost instanceof LBinPostTK11) {
                 LBinPostTK11 iPostTK11 = (LBinPostTK11) iPost;
 
-                Date iPaymentDate = iPostTK11.getPaymentDate();
-                LocalDate iPaymentLocalDate = SSDateUtil.toLocalDate(iPaymentDate);
+                LocalDate iPaymentDate = iPostTK11.getPaymentDate();
 
                 DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
                 iOutpayment = new SSOutpayment();
                 iOutpayment.setText("Leverantörsbetalning");
-                iOutpayment.setLocalDate(iPaymentLocalDate);
+                iOutpayment.setLocalDate(iPaymentDate);
                 iOutpayment.setText(
-                        "Leverantörsbetalning " + iFormat.format(iPaymentDate));
+                        "Leverantörsbetalning " + iFormat.format(SSDateUtil.toDate(iPaymentDate)));
 
                 iOutpayments.add(iOutpayment);
             }

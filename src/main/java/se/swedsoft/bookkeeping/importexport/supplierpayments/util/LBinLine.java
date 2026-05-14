@@ -145,9 +145,21 @@ public class LBinLine {
      * @return the new position
      */
     public int append(Date iDate, int iLength, String iFormat) {
+        return append(SSDateUtil.toLocalDate(iDate), iLength, iFormat);
+    }
+
+    /**
+     * Append a date
+     *
+     * @param iDate
+     * @param iLength
+     * @param iFormat
+     * @return the new position
+     */
+    public int append(LocalDate iDate, int iLength, String iFormat) {
         DateTimeFormatter iDateFormat = DateTimeFormatter.ofPattern(iFormat);
 
-        return append(SSDateUtil.toLocalDate(iDate).format(iDateFormat), iLength, ' ');
+        return append(iDate.format(iDateFormat), iLength, ' ');
     }
 
     /**
@@ -211,14 +223,25 @@ public class LBinLine {
      * @return
      */
     public Date readDate(int iStart, int iEnd, String iFormat) {
+        return SSDateUtil.toDate(readLocalDate(iStart, iEnd, iFormat));
+    }
+
+    /**
+     *
+     * @param iStart
+     * @param iEnd
+     * @param iFormat
+     * @return
+     */
+    public LocalDate readLocalDate(int iStart, int iEnd, String iFormat) {
         DateTimeFormatter iDateFormat = DateTimeFormatter.ofPattern(iFormat);
 
         String iValue = readString(iStart, iEnd);
 
         try {
-            return SSDateUtil.toDate(LocalDate.parse(iValue, iDateFormat));
+            return LocalDate.parse(iValue, iDateFormat);
         } catch (DateTimeParseException e) {
-            return SSDateUtil.toDate(SSDateUtil.today());
+            return SSDateUtil.today();
         }
     }
 

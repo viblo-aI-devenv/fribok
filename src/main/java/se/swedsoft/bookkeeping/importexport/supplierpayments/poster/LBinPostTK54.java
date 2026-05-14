@@ -3,10 +3,9 @@ package se.swedsoft.bookkeeping.importexport.supplierpayments.poster;
 
 import se.swedsoft.bookkeeping.importexport.supplierpayments.data.SupplierPayment;
 import se.swedsoft.bookkeeping.importexport.supplierpayments.util.LBinLine;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 
 /**
@@ -17,7 +16,7 @@ public class LBinPostTK54 extends LBinPost {
     private String     iPlusGiro;
     private String     iReference;
     private BigDecimal iValue;
-    private Date       iDate;
+    private LocalDate  iDate;
     private Integer   iInvoiceNr;
 
     public LBinPostTK54() {}
@@ -30,7 +29,7 @@ public class LBinPostTK54 extends LBinPost {
         iPlusGiro = iPayment.getPlusGiro().replaceAll("-", "").replaceAll(" ", "");
         iReference = iPayment.getReference();
         iValue = iPayment.getValue();
-        iDate = SSDateUtil.toDate(iPayment.getLocalDate());
+        iDate = iPayment.getLocalDate();
         iInvoiceNr = iPayment.getNumber();
 
     }
@@ -115,7 +114,7 @@ public class LBinPostTK54 extends LBinPost {
      *
      * @return
      */
-    public Date getDate() {
+    public LocalDate getDate() {
         return iDate;
     }
 
@@ -123,7 +122,7 @@ public class LBinPostTK54 extends LBinPost {
      *
      * @param iDate
      */
-    public void setDate(Date iDate) {
+    public void setDate(LocalDate iDate) {
         this.iDate = iDate;
     }
 
