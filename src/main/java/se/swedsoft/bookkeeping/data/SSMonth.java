@@ -6,9 +6,9 @@ import se.swedsoft.bookkeeping.util.SSDateUtil;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,6 +21,8 @@ public class SSMonth  implements Serializable {
 
     // Constant for serialization versioning.
     static final long serialVersionUID = 1L;
+
+    private static final DateTimeFormatter MONTH_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM");
 
     private LocalDate iFrom;
 
@@ -82,9 +84,7 @@ public class SSMonth  implements Serializable {
     }
 
     public String toString() {
-        DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT);
-
-        return format.format(SSDateUtil.toDate(iFrom)).substring(0, 7);
+        return iFrom.format(MONTH_FORMAT);
     }
 
     /**
