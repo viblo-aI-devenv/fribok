@@ -290,14 +290,15 @@ public class SSSaleReportPrinter extends SSPrinter {
      *
      */
     private void calculate() {
-        iDays = SSDateMath.getDaysBetween(iFrom, iTo);
+        LocalDate fromDate = SSDateUtil.toLocalDate(iFrom);
+        LocalDate toDate = SSDateUtil.toLocalDate(iTo);
+
+        iDays = SSDateMath.getDaysBetween(fromDate, toDate);
         iCount = new HashMap<>();
         iContribution = new HashMap<>();
         iContributionRate = new HashMap<>();
         iAverageSellingPrice = new HashMap<>();
         iInprices = new HashMap<>();
-        LocalDate fromDate = SSDateUtil.toLocalDate(iFrom);
-        LocalDate toDate = SSDateUtil.toLocalDate(iTo);
 
         List<SSSupplierInvoice> iSupplierInvoices = new LinkedList<>(
                 SSDB.getInstance().getSupplierInvoices());

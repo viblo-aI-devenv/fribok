@@ -1185,7 +1185,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 () -> {
 
                         SSCustomerclaimPrinter iPrinter = new SSCustomerclaimPrinter(
-                                SSDateMath.ceil(iDate));
+                                SSDateUtil.toDate(SSDateUtil.toLocalDate(iDate)
+                                        .atTime(23, 59, 59, 999_000_000)));
 
                         iPrinter.preview(iMainFrame);
 
