@@ -188,14 +188,17 @@ public class SSOutpaymentMath {
     }
 
     public static HashMap<Integer, BigDecimal> getSumsForSupplierInvoices(Date iDate) {
+        return getSumsForSupplierInvoices(SSDateUtil.toLocalDate(iDate));
+    }
+
+    public static HashMap<Integer, BigDecimal> getSumsForSupplierInvoices(LocalDate iDate) {
         HashMap<Integer, BigDecimal> iSums = new HashMap<>();
 
         List<SSOutpayment> iOutpayments = SSDB.getInstance().getOutpayments();
-        LocalDate localDate = SSDateUtil.toLocalDate(iDate);
 
         for (SSOutpayment iOutpayment : iOutpayments) {
-            if (iOutpayment.getLocalDate() != null && localDate != null
-                    && !iOutpayment.getLocalDate().isAfter(localDate)) {
+            if (iOutpayment.getLocalDate() != null && iDate != null
+                    && !iOutpayment.getLocalDate().isAfter(iDate)) {
                 for (SSOutpaymentRow iRow : iOutpayment.getRows()) {
                     if (iRow.getValue() != null) {
                         if (iSums.containsKey(iRow.getInvoiceNr())) {
@@ -219,9 +222,12 @@ public class SSOutpaymentMath {
      * @return the sum
      */
     public static BigDecimal getSumForInvoice(SSSupplierInvoice iInvoice, Date iDate) {
+        return getSumForInvoice(iInvoice, SSDateUtil.toLocalDate(iDate));
+    }
+
+    public static BigDecimal getSumForInvoice(SSSupplierInvoice iInvoice, LocalDate iDate) {
         List<SSOutpayment> iOutpayments = SSDB.getInstance().getOutpayments();
 
-        LocalDate localDate = SSDateUtil.toLocalDate(iDate);
         BigDecimal iSum = new BigDecimal(0);
 
         for (SSOutpayment iOutpayment : iOutpayments) {
@@ -229,7 +235,7 @@ public class SSOutpaymentMath {
 
             BigDecimal iRowSum = getSumForInvoice(iOutpayment, iInvoice);
 
-            if (iCurrent != null && localDate != null && !iCurrent.isAfter(localDate)) {
+            if (iCurrent != null && iDate != null && !iCurrent.isAfter(iDate)) {
                 iSum = iSum.add(iRowSum);
             }
         }
