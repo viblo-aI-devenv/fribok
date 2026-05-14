@@ -187,10 +187,6 @@ public class SSOutpaymentMath {
         return iSums;
     }
 
-    public static HashMap<Integer, BigDecimal> getSumsForSupplierInvoices(Date iDate) {
-        return getSumsForSupplierInvoices(SSDateUtil.toLocalDate(iDate));
-    }
-
     public static HashMap<Integer, BigDecimal> getSumsForSupplierInvoices(LocalDate iDate) {
         HashMap<Integer, BigDecimal> iSums = new HashMap<>();
 
@@ -212,17 +208,6 @@ public class SSOutpaymentMath {
             }
         }
         return iSums;
-    }
-
-    /**
-     * Get the sum of all outpayments for the supplied supplier invoice in the invoice currency up and including to the selected date
-     *
-     * @param iInvoice
-     * @param iDate
-     * @return the sum
-     */
-    public static BigDecimal getSumForInvoice(SSSupplierInvoice iInvoice, Date iDate) {
-        return getSumForInvoice(iInvoice, SSDateUtil.toLocalDate(iDate));
     }
 
     public static BigDecimal getSumForInvoice(SSSupplierInvoice iInvoice, LocalDate iDate) {
