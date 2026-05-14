@@ -438,15 +438,13 @@ public class SSInvoiceMath extends SSSaleMath {    private static final Logger L
      */
     public static int getNumDelayedDays(SSInvoice iInvoice) {
         LocalDate iPaymentDay = iInvoice.getLocalDueDate();
-        Date iLastPayment = SSInpaymentMath.getLastInpaymentForInvoice(iInvoice);
+        LocalDate iLastPayment = SSInpaymentMath.getLastLocalInpaymentForInvoice(iInvoice);
 
         if (iLastPayment == null || iPaymentDay == null) {
             return 0;
         }
 
-        LocalDate lastPayment = SSDateUtil.toLocalDate(iLastPayment);
-
-        long days = ChronoUnit.DAYS.between(iPaymentDay, lastPayment);
+        long days = ChronoUnit.DAYS.between(iPaymentDay, iLastPayment);
         return (int) Math.max(days, 0);
     }
 

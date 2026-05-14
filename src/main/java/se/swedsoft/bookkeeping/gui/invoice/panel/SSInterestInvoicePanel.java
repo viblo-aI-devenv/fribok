@@ -20,7 +20,6 @@ import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -124,17 +123,15 @@ public class SSInterestInvoicePanel {
 
             BigDecimal iSaldo = SSInvoiceMath.getSaldo(iInvoice.getNumber());
 
-            Date iLastInpayment = SSInpaymentMath.getLastInpaymentForInvoice(iInvoice);
+            LocalDate iLastInpayment = SSInpaymentMath.getLastLocalInpaymentForInvoice(iInvoice);
 
             if (iLastInpayment == null) {
-                iLastInpayment = SSDateUtil.toDate(SSDateUtil.today());
+                iLastInpayment = SSDateUtil.today();
             }
 
-            LocalDate lastInpaymentDate = SSDateUtil.toLocalDate(iLastInpayment);
             LocalDate dueDate = iInvoice.getLocalDueDate();
 
-            if (iSaldo.signum() == 0 && dueDate != null && lastInpaymentDate != null
-                    && lastInpaymentDate.isAfter(dueDate)) {
+            if (iSaldo.signum() == 0 && dueDate != null && iLastInpayment.isAfter(dueDate)) {
                 iRows.add(iInvoice);
             }
         }

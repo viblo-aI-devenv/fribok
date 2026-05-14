@@ -184,6 +184,10 @@ public class SSInpaymentMath {
      * @return the sum
      */
     public static Date getLastInpaymentForInvoice(SSInvoice iInvoice) {
+        return SSDateUtil.toDate(getLastLocalInpaymentForInvoice(iInvoice));
+    }
+
+    public static LocalDate getLastLocalInpaymentForInvoice(SSInvoice iInvoice) {
 
         List<SSInpayment> iInpayments = SSDB.getInstance().getInpayments();
 
@@ -200,7 +204,7 @@ public class SSInpaymentMath {
 
         }
 
-        return SSDateUtil.toDate(iDate);
+        return iDate;
     }
 
     /**
