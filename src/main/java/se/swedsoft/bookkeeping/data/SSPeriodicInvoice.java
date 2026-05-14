@@ -402,7 +402,7 @@ public class SSPeriodicInvoice implements Serializable {
             }
 
             // The invoice date is before the date
-            if (SSInvoiceMath.inPeriod(iInvoice, SSDateUtil.toDate(iDate))) {
+            if (SSInvoiceMath.inPeriod(iInvoice, iDate)) {
                 iFiltered.add(iInvoice);
             }
         }
