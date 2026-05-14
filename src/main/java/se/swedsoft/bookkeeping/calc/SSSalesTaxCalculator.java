@@ -10,7 +10,7 @@ import se.swedsoft.bookkeeping.data.SSVoucher;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -27,9 +27,9 @@ public class SSSalesTaxCalculator {    private static final Logger LOG = LoggerF
 
     private SSNewAccountingYear iAccountingYear;
 
-    private Date iDateFrom;
+    private LocalDate iDateFrom;
 
-    private Date iDateTo;
+    private LocalDate iDateTo;
 
     private List<SSVATReportGroup> iReportGroups;
 
@@ -41,7 +41,7 @@ public class SSSalesTaxCalculator {    private static final Logger LOG = LoggerF
      * @param pDateFrom
      * @param pDateTo
      */
-    public SSSalesTaxCalculator(SSNewAccountingYear pAccountingYear, Date pDateFrom, Date pDateTo) {
+    public SSSalesTaxCalculator(SSNewAccountingYear pAccountingYear, LocalDate pDateFrom, LocalDate pDateTo) {
         iAccountingYear = pAccountingYear;
         iDateFrom = pDateFrom;
         iDateTo = pDateTo;

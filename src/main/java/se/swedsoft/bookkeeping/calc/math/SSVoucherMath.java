@@ -21,33 +21,11 @@ public class SSVoucherMath {
 
     private SSVoucherMath() {}
 
-    /**
-     *
-     * @param iVoucher
-     * @param pFrom
-     * @param pTo
-     * @return
-     */
-    public static boolean inPeriod(SSVoucher iVoucher, Date pFrom, Date pTo) {
-        return inPeriod(iVoucher, SSDateUtil.toLocalDate(pFrom), SSDateUtil.toLocalDate(pTo));
-    }
-
     public static boolean inPeriod(SSVoucher iVoucher, LocalDate iFrom, LocalDate iTo) {
         LocalDate iDate = iVoucher.getLocalDate();
 
         return iDate != null && iFrom != null && iTo != null
                 && !iDate.isBefore(iFrom) && !iDate.isAfter(iTo);
-    }
-
-    /**
-     * Return true if the voucher's date is before the supplied date
-     *
-     * @param iVoucher
-     * @param pTo
-     * @return
-     */
-    public static boolean inPeriod(SSVoucher iVoucher, Date pTo) {
-        return inPeriod(iVoucher, SSDateUtil.toLocalDate(pTo));
     }
 
     public static boolean inPeriod(SSVoucher iVoucher, LocalDate iTo) {
@@ -81,23 +59,6 @@ public class SSVoucherMath {
     public static boolean inPeriod(SSVoucher iVoucher, SSVoucher pFrom, SSVoucher pTo) {
         return pFrom.getNumber() <= iVoucher.getNumber()
                 && pTo.getNumber() >= iVoucher.getNumber();
-    }
-
-    /**
-     * Checks if a voucher falls within the same period one year earlier.
-     *
-     * @param iVoucher the voucher to check
-     * @param pFrom the start of the period
-     * @param pTo the end of the period
-     * @return true if the voucher date is in the previous year's equivalent period
-     * @deprecated Use {@link #inPeriodPrevYear(SSVoucher, LocalDate, LocalDate)} instead
-     */
-    @Deprecated
-    public static boolean inPeriodPrevYear(SSVoucher iVoucher, Date pFrom, Date pTo) {
-        LocalDate from = SSDateUtil.toLocalDate(pFrom);
-        LocalDate to = SSDateUtil.toLocalDate(pTo);
-
-        return inPeriodPrevYear(iVoucher, from, to);
     }
 
     /**
@@ -397,7 +358,7 @@ public class SSVoucherMath {
      * @param pTo
      * @return
      */
-    public static List<SSVoucher> getVouchers(List<SSVoucher> pVouchers, Date pFrom, Date pTo) {
+    public static List<SSVoucher> getVouchers(List<SSVoucher> pVouchers, LocalDate pFrom, LocalDate pTo) {
 
         return pVouchers.stream()
                 .filter(iVoucher -> inPeriod(iVoucher, pFrom, pTo))
@@ -606,10 +567,6 @@ public class SSVoucherMath {
      *
      * @return The previous voucher.
      */
-    public static Date getNextVoucherDate() {
-        return SSDateUtil.toDate(getNextVoucherLocalDate());
-    }
-
     public static LocalDate getNextVoucherLocalDate() {
         List<SSVoucher> iVouchers = new LinkedList<>(
                 SSDB.getInstance().getVouchers());

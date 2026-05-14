@@ -72,7 +72,7 @@ public class SSResultUnitResultPrinter extends SSResultPrinter {
      */
     @Override
     protected SSResultCalculator getCalculator() {
-        return new SSResultCalculator(iYearData, iDateFrom, iDateTo, null, iResultUnit);
+        return new SSResultCalculator(iYearData, getLocalDateFrom(), getLocalDateTo(), null, iResultUnit);
     }
 
     /**

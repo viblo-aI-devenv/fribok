@@ -4,10 +4,7 @@ package se.swedsoft.bookkeeping.calc.math;
 import se.swedsoft.bookkeeping.data.SSOutdelivery;
 import se.swedsoft.bookkeeping.data.SSOutdeliveryRow;
 import se.swedsoft.bookkeeping.data.SSProduct;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
-
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,32 +18,11 @@ import java.util.Map;
 public class SSOutdeliveryMath {
     private SSOutdeliveryMath() {}
 
-    /**
-     *
-     * @param iInventory
-     * @param pTo
-     * @return
-     */
-    public static boolean inPeriod(SSOutdelivery iInventory, Date pTo) {
-        return inPeriod(iInventory, SSDateUtil.toLocalDate(pTo));
-    }
-
     public static boolean inPeriod(SSOutdelivery iInventory, LocalDate iTo) {
         LocalDate iDate = iInventory.getLocalDate();
 
         return iDate != null && iTo != null && !iDate.isAfter(iTo);
 
-    }
-
-    /**
-     *
-     * @param iInventory
-     * @param pFrom
-     * @param pTo
-     * @return
-     */
-    public static boolean inPeriod(SSOutdelivery iInventory, Date pFrom, Date pTo) {
-        return inPeriod(iInventory, SSDateUtil.toLocalDate(pFrom), SSDateUtil.toLocalDate(pTo));
     }
 
     public static boolean inPeriod(SSOutdelivery iInventory, LocalDate iFrom, LocalDate iTo) {

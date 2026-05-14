@@ -6,8 +6,6 @@ import se.swedsoft.bookkeeping.calc.math.SSVoucherMath;
 import se.swedsoft.bookkeeping.calc.util.SSCalculatorException;
 import se.swedsoft.bookkeeping.data.*;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
@@ -47,8 +45,8 @@ public class SSResultCalculator {
 
     private SSNewAccountingYear   iYearData;
 
-    private Date         iFrom;
-    private Date         iTo;
+    private LocalDate         iFrom;
+    private LocalDate         iTo;
     private SSNewProject    iProject;
     private SSNewResultUnit iResultUnit;
 
@@ -68,7 +66,7 @@ public class SSResultCalculator {
 
     private Map<SSAccount, BigDecimal> iResultunitChangePeriod;
 
-    public SSResultCalculator(SSNewAccountingYear pYearData, Date pFrom, Date pTo, SSNewProject pProject, SSNewResultUnit pResultUnit) {
+    public SSResultCalculator(SSNewAccountingYear pYearData, LocalDate pFrom, LocalDate pTo, SSNewProject pProject, SSNewResultUnit pResultUnit) {
         iYearData = pYearData;
         iFrom = pFrom;
         iTo = pTo;
@@ -106,20 +104,17 @@ public class SSResultCalculator {
             iVouchers.addAll(iCurrent.getVouchers());
         }
 
-        LocalDate iLocalFrom = SSDateUtil.toLocalDate(iFrom);
-        LocalDate iLocalTo = SSDateUtil.toLocalDate(iTo);
-
         // Loop through all vouchers
         for (SSVoucher iVoucher: iVouchers) {
 
             // If the date of the oucher is in between the start and end date, add to PeriodChange
-            boolean inPeriod = SSVoucherMath.inPeriod(iVoucher, iLocalFrom, iLocalTo);
+            boolean inPeriod = SSVoucherMath.inPeriod(iVoucher, iFrom, iTo);
 
             boolean inYear = SSVoucherMath.inPeriod(iVoucher,
                     iYearData.getLocalFrom(),
                     iYearData.getLocalTo());
 
-            boolean inPrevYear = SSVoucherMath.inPeriodPrevYear(iVoucher, iLocalFrom, iLocalTo);
+            boolean inPrevYear = SSVoucherMath.inPeriodPrevYear(iVoucher, iFrom, iTo);
 
             // Loop through all the voucher rows
             for (SSVoucherRow iRow: iVoucher.getRows()) {
@@ -167,7 +162,7 @@ public class SSResultCalculator {
 
         // Fill the budget map
         for (SSAccount iAccount: iBudget.getAccounts()) {
-            BigDecimal iSum = iBudget.getSumForAccount(iAccount, iLocalFrom, iLocalTo);
+            BigDecimal iSum = iBudget.getSumForAccount(iAccount, iFrom, iTo);
 
             if (iSum != null && iSum.signum() != 0) {
                 addValueToMap(iChangeBudget, iAccount, iSum);
@@ -183,7 +178,7 @@ public class SSResultCalculator {
      * @return
      */
     private boolean inProject(SSNewProject pRowProject, SSNewProject pProject) {
-        return (pRowProject != null) && !pRowProject.isConcluded(SSDateUtil.toLocalDate(iTo))
+        return (pRowProject != null) && !pRowProject.isConcluded(iTo)
                 && ((pProject == null) || pRowProject.equals(pProject));
     }
 

@@ -24,17 +24,6 @@ import java.util.Optional;
 public class SSInpaymentMath {
     private SSInpaymentMath() {}
 
-    /**
-     *
-     * @param iInpayment
-     * @param pFrom
-     * @param pTo
-     * @return
-     */
-    public static boolean inPeriod(SSInpayment iInpayment, Date pFrom, Date pTo) {
-        return inPeriod(iInpayment, SSDateUtil.toLocalDate(pFrom), SSDateUtil.toLocalDate(pTo));
-    }
-
     public static boolean inPeriod(SSInpayment iInpayment, LocalDate iFrom, LocalDate iTo) {
         LocalDate iDate = iInpayment.getLocalDate();
 
@@ -121,10 +110,6 @@ public class SSInpaymentMath {
         return iSums;
     }
 
-    public static HashMap<Integer, BigDecimal> getSumsForInvoices(Date iDate) {
-        return getSumsForInvoices(SSDateUtil.toLocalDate(iDate));
-    }
-
     public static HashMap<Integer, BigDecimal> getSumsForInvoices(LocalDate iDate) {
         HashMap<Integer, BigDecimal> iSums = new HashMap<>();
 
@@ -146,17 +131,6 @@ public class SSInpaymentMath {
             }
         }
         return iSums;
-    }
-
-    /**
-     * Get the sum of all inpayments for the supplied sales in the sales currency up and including to the selected date
-     *
-     * @param iInvoice
-     * @param iDate
-     * @return the sum
-     */
-    public static BigDecimal getSumForInvoice(SSInvoice iInvoice, Date iDate) {
-        return getSumForInvoice(iInvoice, SSDateUtil.toLocalDate(iDate));
     }
 
     public static BigDecimal getSumForInvoice(SSInvoice iInvoice, LocalDate iDate) {

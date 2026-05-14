@@ -12,8 +12,10 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -300,8 +302,16 @@ public class SSOwnReportPrinter extends SSPrinter {
      * @return iCalculator
      */
     protected SSOwnReportCalculator getCalculator() {
-        return new SSOwnReportCalculator(iDateFrom, iDateTo, iOwnReport, iProject,
+        return new SSOwnReportCalculator(getLocalDateFrom(), getLocalDateTo(), iOwnReport, iProject,
                 iResultUnit);
+    }
+
+    protected LocalDate getLocalDateFrom() {
+        return SSDateUtil.toLocalDate(iDateFrom);
+    }
+
+    protected LocalDate getLocalDateTo() {
+        return SSDateUtil.toLocalDate(iDateTo);
     }
 
     protected Map<SSAccount, BigDecimal> iColumn1;
@@ -419,4 +429,3 @@ public class SSOwnReportPrinter extends SSPrinter {
         return sb.toString();
     }
 }
-

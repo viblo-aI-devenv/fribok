@@ -409,8 +409,10 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         String voucherName = String.format(bundle.getString("vatbasis.vouchername"),
                 format.format(localFrom), format.format(localTo));
 
-        final SSVoucher iVoucher = SSVATUtil.generateVATVoucher(voucherName, localFrom,
-                localTo, accountR1, accountR2, accountA);
+        final LocalDate localDateFrom = SSDateUtil.toLocalDate(localFrom);
+        final LocalDate localDateTo = SSDateUtil.toLocalDate(localTo);
+        final SSVoucher iVoucher = SSVATUtil.generateVATVoucher(voucherName, localDateFrom,
+                localDateTo, accountR1, accountR2, accountA);
 
         // This runs the report generations with a progress iDialog
         SSProgressDialog.runProgress(iMainFrame,
@@ -882,8 +884,11 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                         SSInventoryListPrinter iPrinter = new SSInventoryListPrinter(iInventories);
 
                         if (isDateSelected) {
-                            iPrinter.addParameter("dateFrom", iDialog.getDateFrom());
-                            iPrinter.addParameter("dateTo", iDialog.getDateTo());
+                            LocalDate iDateFrom = iDialog.getLocalDateFrom();
+                            LocalDate iDateTo = iDialog.getLocalDateTo();
+
+                            iPrinter.addParameter("dateFrom", SSDateUtil.toDate(iDateFrom));
+                            iPrinter.addParameter("dateTo", SSDateUtil.toDate(iDateTo));
                         }
                         if (isProductSelected) {
                             SSProduct iProduct = iDialog.getProduct();
@@ -923,8 +928,11 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                                 iIndeliveries);
 
                         if (isDateSelected) {
-                            iPrinter.addParameter("dateFrom", iDialog.getDateFrom());
-                            iPrinter.addParameter("dateTo", iDialog.getDateTo());
+                            LocalDate iDateFrom = iDialog.getLocalDateFrom();
+                            LocalDate iDateTo = iDialog.getLocalDateTo();
+
+                            iPrinter.addParameter("dateFrom", SSDateUtil.toDate(iDateFrom));
+                            iPrinter.addParameter("dateTo", SSDateUtil.toDate(iDateTo));
                         }
                         if (isProductSelected) {
                             SSProduct iProduct = iDialog.getProduct();
@@ -1177,7 +1185,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 () -> {
 
                         SSCustomerclaimPrinter iPrinter = new SSCustomerclaimPrinter(
-                                SSDateMath.ceil(iDate));
+                                SSDateUtil.toDate(SSDateUtil.toLocalDate(iDate)
+                                        .atTime(23, 59, 59, 999_000_000)));
 
                         iPrinter.preview(iMainFrame);
 
@@ -2125,9 +2134,11 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
 
         final Date iFrom = iDialog.getFrom();
         final Date iTo = iDialog.getTo();
+        final LocalDate localFrom = SSDateUtil.toLocalDate(iFrom);
+        final LocalDate localTo = SSDateUtil.toLocalDate(iTo);
 
         final List<SSInvoice> iFiltered = iInvoices.stream()
-                .filter(iInvoice -> !iInvoice.isEntered() && SSInvoiceMath.inPeriod(iInvoice, iFrom, iTo))
+                .filter(iInvoice -> !iInvoice.isEntered() && SSInvoiceMath.inPeriod(iInvoice, localFrom, localTo))
                 .collect(Collectors.toList());
         if (iFiltered.isEmpty()) {
             new SSInformationDialog(iMainFrame, "invoicejournal.dialog.norows");
@@ -2229,10 +2240,12 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
 
         final Date iFrom = iDialog.getFrom();
         final Date iTo = iDialog.getTo();
+        final LocalDate localFrom = SSDateUtil.toLocalDate(iFrom);
+        final LocalDate localTo = SSDateUtil.toLocalDate(iTo);
 
         final List<SSCreditInvoice> iFiltered = iCreditInvoices.stream()
                 .filter(iCreditInvoice -> !iCreditInvoice.isEntered()
-                        && SSInvoiceMath.inPeriod(iCreditInvoice, iFrom, iTo))
+                        && SSInvoiceMath.inPeriod(iCreditInvoice, localFrom, localTo))
                 .collect(Collectors.toList());
         if (iFiltered.isEmpty()) {
             new SSInformationDialog(iMainFrame, "creditinvoicejournal.dialog.norows");
@@ -2339,10 +2352,12 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
 
         final Date iFrom = iDialog.getFrom();
         final Date iTo = iDialog.getTo();
+        final LocalDate localFrom = SSDateUtil.toLocalDate(iFrom);
+        final LocalDate localTo = SSDateUtil.toLocalDate(iTo);
 
         final List<SSInpayment> iFiltered = iInpayments.stream()
                 .filter(iInpayment -> !iInpayment.isEntered()
-                        && SSInpaymentMath.inPeriod(iInpayment, iFrom, iTo))
+                        && SSInpaymentMath.inPeriod(iInpayment, localFrom, localTo))
                 .collect(Collectors.toList());
         if (iFiltered.isEmpty()) {
             new SSInformationDialog(iMainFrame, "inpaymentjournal.dialog.norows");
@@ -2447,10 +2462,12 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
 
         final Date iFrom = iDialog.getFrom();
         final Date iTo = iDialog.getTo();
+        final LocalDate localFrom = SSDateUtil.toLocalDate(iFrom);
+        final LocalDate localTo = SSDateUtil.toLocalDate(iTo);
 
         final List<SSSupplierInvoice> iFiltered = iInvoices.stream()
                 .filter(iInvoice -> !iInvoice.isEntered()
-                        && SSSupplierInvoiceMath.inPeriod(iInvoice, iFrom, iTo))
+                        && SSSupplierInvoiceMath.inPeriod(iInvoice, localFrom, localTo))
                 .collect(Collectors.toList());
         if (iFiltered.isEmpty()) {
             new SSInformationDialog(iMainFrame, "supplierinvoicejournal.dialog.norows");
@@ -2556,10 +2573,12 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
 
         final Date iFrom = iDialog.getFrom();
         final Date iTo = iDialog.getTo();
+        final LocalDate localFrom = SSDateUtil.toLocalDate(iFrom);
+        final LocalDate localTo = SSDateUtil.toLocalDate(iTo);
 
         final List<SSSupplierCreditInvoice> iFiltered = iInvoices.stream()
                 .filter(iInvoice -> !iInvoice.isEntered()
-                        && SSSupplierCreditInvoiceMath.inPeriod(iInvoice, iFrom, iTo))
+                        && SSSupplierCreditInvoiceMath.inPeriod(iInvoice, localFrom, localTo))
                 .collect(Collectors.toList());
         if (iFiltered.isEmpty()) {
             new SSInformationDialog(iMainFrame,
@@ -2666,10 +2685,12 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
 
         final Date iFrom = iDialog.getFrom();
         final Date iTo = iDialog.getTo();
+        final LocalDate localFrom = SSDateUtil.toLocalDate(iFrom);
+        final LocalDate localTo = SSDateUtil.toLocalDate(iTo);
 
         final List<SSOutpayment> iFiltered = iOutpayments.stream()
                 .filter(iOutpayment -> !iOutpayment.isEntered()
-                        && SSOutpaymentMath.inPeriod(iOutpayment, iFrom, iTo))
+                        && SSOutpaymentMath.inPeriod(iOutpayment, localFrom, localTo))
                 .collect(Collectors.toList());
         if (iFiltered.isEmpty()) {
             new SSInformationDialog(iMainFrame, "outpaymentjournal.dialog.norows");

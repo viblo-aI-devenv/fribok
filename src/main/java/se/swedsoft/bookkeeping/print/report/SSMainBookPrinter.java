@@ -10,6 +10,7 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -114,7 +115,8 @@ public class SSMainBookPrinter extends SSPrinter {
         addParameter("periodText", "");
 
         SSMainBookCalculator iCalculator = new SSMainBookCalculator(iYearData,
-                iAccountFrom, iAccountTo, iDateFrom, iDateTo, iProject, iResultUnit);
+                iAccountFrom, iAccountTo, SSDateUtil.toLocalDate(iDateFrom),
+                SSDateUtil.toLocalDate(iDateTo), iProject, iResultUnit);
 
         // Calculate all fields
         iCalculator.calculate();
@@ -174,7 +176,7 @@ public class SSMainBookPrinter extends SSPrinter {
                     // voucher.date
                     value = iRow.getLocalDate();
                     if (value != null) {
-                        value = iFormat.format(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(iRow.getLocalDate()));
+                        value = iFormat.format(SSDateUtil.toDate(iRow.getLocalDate()));
                     }
                     break;
 

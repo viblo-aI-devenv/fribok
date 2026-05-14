@@ -21,32 +21,11 @@ import java.util.stream.Collectors;
 public class SSSupplierInvoiceMath {
     private SSSupplierInvoiceMath() {}
 
-    /**
-     *
-     * @param iSupplierInvoice
-     * @param pFrom
-     * @param pTo
-     * @return
-     */
-    public static boolean inPeriod(SSSupplierInvoice iSupplierInvoice, Date pFrom, Date pTo) {
-        return inPeriod(iSupplierInvoice, SSDateUtil.toLocalDate(pFrom), SSDateUtil.toLocalDate(pTo));
-    }
-
     public static boolean inPeriod(SSSupplierInvoice iSupplierInvoice, LocalDate pFrom, LocalDate pTo) {
         LocalDate iDate = iSupplierInvoice.getLocalDate();
 
         return iDate != null && pFrom != null && pTo != null
                 && !iDate.isBefore(pFrom) && !iDate.isAfter(pTo);
-    }
-
-    /**
-     *
-     * @param iSupplierInvoice
-     * @param pTo
-     * @return
-     */
-    public static boolean inPeriod(SSSupplierInvoice iSupplierInvoice, Date pTo) {
-        return inPeriod(iSupplierInvoice, SSDateUtil.toLocalDate(pTo));
     }
 
     public static boolean inPeriod(SSSupplierInvoice iSupplierInvoice, LocalDate pTo) {
@@ -169,10 +148,6 @@ public class SSSupplierInvoiceMath {
      *
      * @return  the saldo
      */
-    public static BigDecimal getSaldo(SSSupplierInvoice iInvoice, Date iDate) {
-        return getSaldo(iInvoice, SSDateUtil.toLocalDate(iDate));
-    }
-
     public static BigDecimal getSaldo(SSSupplierInvoice iInvoice, LocalDate iDate) {
 
         BigDecimal iTotalSum = getTotalSum(iInvoice);
@@ -215,10 +190,6 @@ public class SSSupplierInvoiceMath {
         }
     }
 
-    public static Map<Integer, BigDecimal> getSaldos(Date iDate) {
-        return getSaldos(SSDateUtil.toLocalDate(iDate));
-    }
-
     public static Map<Integer, BigDecimal> getSaldos(LocalDate iDate) {
         Map<Integer, BigDecimal> iSaldos = new HashMap<>();
 
@@ -256,31 +227,6 @@ public class SSSupplierInvoiceMath {
      *
      * @return map of the invoices and their saldo
      */
-    
-    /* public static Map<SSSupplierInvoice, BigDecimal> getSaldo(List<SSSupplierInvoice> iInvoices, Date iDate) {
-     Map<SSSupplierInvoice, BigDecimal> iSaldos = new HashMap<>();
-
-     // Ceil the date so the before and after comparisions will be correct
-     iDate = SSDateMath.ceil(iDate);
-
-     // Loop through the invoices
-     for (SSSupplierInvoice iInvoice : iInvoices) {
-     Date iCurrent = iInvoice.getDate();
-
-     // Only put invoices that is added before the specified date
-     if( iCurrent.before(iDate)){
-     BigDecimal iSaldo = getSaldo(iInvoice, iDate);
-
-     iSaldos.put(iInvoice, iSaldo);
-     }
-     }
-     return iSaldos;
-     } */
-
-    public static Map<SSSupplierInvoice, BigDecimal> getSaldo(List<SSSupplierInvoice> iInvoices, Date iDate) {
-        return getSaldo(iInvoices, SSDateUtil.toLocalDate(iDate));
-    }
-
     public static Map<SSSupplierInvoice, BigDecimal> getSaldo(List<SSSupplierInvoice> iInvoices, LocalDate iDate) {
         Map<SSSupplierInvoice, BigDecimal> iSaldos = new HashMap<>();
 
@@ -322,10 +268,6 @@ public class SSSupplierInvoiceMath {
      *
      * @return the saldo sum
      */
-    public static BigDecimal getSaldoSum(List<SSSupplierInvoice> iInvoices, Date iDate) {
-        return getSaldoSum(iInvoices, SSDateUtil.toLocalDate(iDate));
-    }
-
     public static BigDecimal getSaldoSum(List<SSSupplierInvoice> iInvoices, LocalDate iDate) {
         Map<SSSupplierInvoice, BigDecimal> iSaldos = getSaldo(iInvoices, iDate);
 
@@ -368,10 +310,6 @@ public class SSSupplierInvoiceMath {
      * @param iDate
      * @return the invoices for the supplier
      */
-    public static List<SSSupplierInvoice> getInvoicesForSupplier(SSSupplier iSupplier, Date iDate) {
-        return getInvoicesForSupplier(iSupplier, SSDateUtil.toLocalDate(iDate));
-    }
-
     public static List<SSSupplierInvoice> getInvoicesForSupplier(SSSupplier iSupplier, LocalDate iDate) {
         return getInvoicesForSupplier(SSDB.getInstance().getSupplierInvoices(), iSupplier,
                 iDate);
@@ -385,10 +323,6 @@ public class SSSupplierInvoiceMath {
      * @param iDate
      * @return the invoices for the customer
      */
-    public static List<SSSupplierInvoice> getInvoicesForSupplier(List<SSSupplierInvoice> iInvoices, SSSupplier iSupplier, Date iDate) {
-        return getInvoicesForSupplier(iInvoices, iSupplier, SSDateUtil.toLocalDate(iDate));
-    }
-
     public static List<SSSupplierInvoice> getInvoicesForSupplier(List<SSSupplierInvoice> iInvoices, SSSupplier iSupplier, LocalDate iDate) {
         return iInvoices.stream()
                 .filter(iInvoice -> iInvoice.hasSupplier(iSupplier) && inPeriod(iInvoice, iDate))

@@ -290,7 +290,10 @@ public class SSSaleReportPrinter extends SSPrinter {
      *
      */
     private void calculate() {
-        iDays = SSDateMath.getDaysBetween(iFrom, iTo);
+        LocalDate fromDate = SSDateUtil.toLocalDate(iFrom);
+        LocalDate toDate = SSDateUtil.toLocalDate(iTo);
+
+        iDays = SSDateMath.getDaysBetween(fromDate, toDate);
         iCount = new HashMap<>();
         iContribution = new HashMap<>();
         iContributionRate = new HashMap<>();
@@ -299,7 +302,6 @@ public class SSSaleReportPrinter extends SSPrinter {
 
         List<SSSupplierInvoice> iSupplierInvoices = new LinkedList<>(
                 SSDB.getInstance().getSupplierInvoices());
-        LocalDate toDate = SSDateUtil.toLocalDate(iTo);
 
         Collections.sort(iSupplierInvoices,
                 Comparator.comparing(SSSupplierInvoice::getLocalDate,
@@ -338,7 +340,7 @@ public class SSSaleReportPrinter extends SSPrinter {
         List<SSInvoice> iInvoices = SSDB.getInstance().getInvoices();
 
         for (SSInvoice iInvoice : iInvoices) {
-            if (SSInvoiceMath.inPeriod(iInvoice, iFrom, iTo)) {
+            if (SSInvoiceMath.inPeriod(iInvoice, fromDate, toDate)) {
                 for (SSSaleRow iRow : iInvoice.getRows()) {
                     if (iRow.getProductNr() != null) {
                         SSProduct iProduct = SSDB.getInstance().getProduct(
@@ -374,7 +376,7 @@ public class SSSaleReportPrinter extends SSPrinter {
         List<SSCreditInvoice> iCreditInvoices = SSDB.getInstance().getCreditInvoices();
 
         for (SSCreditInvoice iCreditInvoice : iCreditInvoices) {
-            if (SSInvoiceMath.inPeriod(iCreditInvoice, iFrom, iTo)) {
+            if (SSInvoiceMath.inPeriod(iCreditInvoice, fromDate, toDate)) {
                 for (SSSaleRow iRow : iCreditInvoice.getRows()) {
                     if (iRow.getProductNr() != null) {
                         SSProduct iProduct = SSDB.getInstance().getProduct(
@@ -477,7 +479,7 @@ public class SSSaleReportPrinter extends SSPrinter {
             }
 
             iContributionRate.put(iProduct.getNumber(),
-                    SSProductMath.getContributionRate(iProduct, iTo,
+                    SSProductMath.getContributionRate(iProduct, toDate,
                     iContribution.get(iProduct.getNumber())).orElse(null));
         }
     }

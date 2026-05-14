@@ -14,7 +14,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -58,21 +57,6 @@ public class SSVATUtil {
         debetMinusCreditSum.put(account, new BigDecimal(0));
     }
 
-    /**
-     * @param name
-     * @param iDateFrom
-     * @param iDateTo
-     * @param iAccountR1 The account with the VAT code R1
-     * @param iAccountR2 The account with the VAT code R2
-     * @param iAccountA The account with the VAT code A
-     *
-     * @return The voucher
-     */
-    public static SSVoucher generateVATVoucher(String name, Date iDateFrom, Date iDateTo, SSAccount iAccountR1, SSAccount iAccountR2, SSAccount iAccountA) {
-        return generateVATVoucher(name, SSDateUtil.toLocalDate(iDateFrom), SSDateUtil.toLocalDate(iDateTo),
-                iAccountR1, iAccountR2, iAccountA);
-    }
-
     public static SSVoucher generateVATVoucher(String name, LocalDate iDateFrom, LocalDate iDateTo, SSAccount iAccountR1, SSAccount iAccountR2, SSAccount iAccountA) {
 
         DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
@@ -85,7 +69,7 @@ public class SSVATUtil {
                 SSDB.getInstance().getAccounts(), "U1", "U2", "U3", "UVL", "UEU", "UTFU",
                 "I", "IVL", "UI1", "UI2", "UI3");
         List<SSVoucher> iVouchers = SSVoucherMath.getVouchers(
-                SSDB.getInstance().getVouchers(), SSDateUtil.toDate(iDateFrom), SSDateUtil.toDate(iDateTo));
+                SSDB.getInstance().getVouchers(), iDateFrom, iDateTo);
 
         Map<SSAccount, BigDecimal> iCreditMinusDebetSum = SSVoucherMath.getCreditMinusDebetSum(
                 iVouchers);
