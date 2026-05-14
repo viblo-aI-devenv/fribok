@@ -134,10 +134,6 @@ public class SSInvoiceMath extends SSSaleMath {    private static final Logger L
         }
     }
 
-    public static Map<Integer, BigDecimal> getSaldos(Date iDate) {
-        return getSaldos(SSDateUtil.toLocalDate(iDate));
-    }
-
     public static Map<Integer, BigDecimal> getSaldos(LocalDate iDate) {
         Map<Integer, BigDecimal> iSaldos = new HashMap<>();
 
@@ -176,10 +172,6 @@ public class SSInvoiceMath extends SSSaleMath {    private static final Logger L
      *
      * @return  the saldo
      */
-    public static BigDecimal getSaldo(SSInvoice iInvoice, Date iDate) {
-        return getSaldo(iInvoice, SSDateUtil.toLocalDate(iDate));
-    }
-
     public static BigDecimal getSaldo(SSInvoice iInvoice, LocalDate iDate) {
         // a cash sales cant have any saldo
         if (iInvoice.getType() == SSInvoiceType.CASH) {
@@ -205,10 +197,6 @@ public class SSInvoiceMath extends SSSaleMath {    private static final Logger L
      *
      * @return map of the invoices and their saldo
      */
-    public static Map<SSInvoice, BigDecimal> getSaldo(List<SSInvoice> iInvoices, Date iDate) {
-        return getSaldo(iInvoices, SSDateUtil.toLocalDate(iDate));
-    }
-
     public static Map<SSInvoice, BigDecimal> getSaldo(List<SSInvoice> iInvoices, LocalDate iDate) {
         Map<SSInvoice, BigDecimal> iSaldos = new HashMap<>();
 
@@ -249,7 +237,7 @@ public class SSInvoiceMath extends SSSaleMath {    private static final Logger L
      *
      * @return the saldo sum
      */
-    public static BigDecimal getSaldoSum(List<SSInvoice> iInvoices, Date iDate) {
+    public static BigDecimal getSaldoSum(List<SSInvoice> iInvoices, LocalDate iDate) {
         Map<SSInvoice, BigDecimal> iSaldos = getSaldo(iInvoices, iDate);
 
         BigDecimal iSum = new BigDecimal(0);
@@ -269,7 +257,7 @@ public class SSInvoiceMath extends SSSaleMath {    private static final Logger L
      * @param iDate
      * @return  the saldo
      */
-    public static BigDecimal getSumMinusCredited(SSInvoice iInvoice, Date iDate) {
+    public static BigDecimal getSumMinusCredited(SSInvoice iInvoice, LocalDate iDate) {
         // a cash sales cant have any saldo
         if (iInvoice.getType() == SSInvoiceType.CASH) {
             return new BigDecimal(0);
@@ -356,7 +344,7 @@ public class SSInvoiceMath extends SSSaleMath {    private static final Logger L
      * @param iDate
      * @return the invoices for the customer
      */
-    public static List<SSInvoice> getInvoicesForCustomer(SSCustomer iCustomer, Date iDate) {
+    public static List<SSInvoice> getInvoicesForCustomer(SSCustomer iCustomer, LocalDate iDate) {
         return getInvoicesForCustomer(SSDB.getInstance().getInvoices(), iCustomer, iDate);
     }
 
@@ -368,7 +356,7 @@ public class SSInvoiceMath extends SSSaleMath {    private static final Logger L
      * @param iDate
      * @return the invoices for the customer
      */
-    public static List<SSInvoice> getInvoicesForCustomer(List<SSInvoice> iInvoices, SSCustomer iCustomer, Date iDate) {
+    public static List<SSInvoice> getInvoicesForCustomer(List<SSInvoice> iInvoices, SSCustomer iCustomer, LocalDate iDate) {
         return iInvoices.stream()
                 .filter(iInvoice -> iInvoice.hasCustomer(iCustomer) && inPeriod(iInvoice, iDate))
                 .collect(Collectors.toList());
