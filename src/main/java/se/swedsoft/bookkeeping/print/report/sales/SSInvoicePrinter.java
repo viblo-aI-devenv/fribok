@@ -16,9 +16,6 @@ import java.math.RoundingMode;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import se.swedsoft.bookkeeping.util.SSDateUtil;
-
-
 /**
  *
  * $Id$
@@ -94,7 +91,7 @@ public class SSInvoicePrinter extends SSPrinter {
 
         // Sale parameters
         addParameter("number", iInvoice.getNumber());
-        addParameter("date", SSDateUtil.toDate(iInvoice.getLocalDate()));
+        addParameter("date", iInvoice.getLocalDate());
         addParameter("text", iInvoice.getText());
 
         addParameter("invoice.hasdiscount", SSInvoiceMath.hasDiscount(iInvoice));
@@ -133,7 +130,7 @@ public class SSInvoicePrinter extends SSPrinter {
         addParameter("invoice.customernr", iInvoice.getCustomerNr());
         addParameter("invoice.yourcontact", iInvoice.getYourContactPerson());
         addParameter("invoice.yourordernumber", iInvoice.getYourOrderNumber());
-        addParameter("invoice.paymentday", SSDateUtil.toDate(iInvoice.getLocalDueDate()));
+        addParameter("invoice.paymentday", iInvoice.getLocalDueDate());
 
         addParameter("invoice.taxrate1", iInvoice.getTaxRate1().toString());
         addParameter("invoice.taxrate2", iInvoice.getTaxRate2().toString());

@@ -19,9 +19,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import se.swedsoft.bookkeeping.util.SSDateUtil;
-
-
 /**
  * Date: 2006-mar-03
  * Time: 15:32:42
@@ -86,7 +83,7 @@ public class SSCreditinvoicePrinter extends SSPrinter {
 
         // Sale parameters
         addParameter("number", iCreditInvoice.getNumber());
-        addParameter("date", SSDateUtil.toDate(iCreditInvoice.getLocalDate()));
+        addParameter("date", iCreditInvoice.getLocalDate());
         addParameter("text", iCreditInvoice.getText());
 
         addParameter("creditinvoice.hasdiscount",
@@ -130,7 +127,7 @@ public class SSCreditinvoicePrinter extends SSPrinter {
         addParameter("creditinvoice.customernr", iCreditInvoice.getCustomerNr());
         addParameter("creditinvoice.yourcontact", iCreditInvoice.getYourContactPerson());
         addParameter("creditinvoice.yourordernumber", iCreditInvoice.getYourOrderNumber());
-        addParameter("creditinvoice.paymentday", SSDateUtil.toDate(iCreditInvoice.getLocalDueDate()));
+        addParameter("creditinvoice.paymentday", iCreditInvoice.getLocalDueDate());
 
         if (iInvoice != null && iInvoice.getOCRNumber() != null) {
             addParameter("creditinvoice.invoicenumber", iInvoice.getOCRNumber());
