@@ -13,6 +13,7 @@ import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -232,7 +233,7 @@ public class SSInvoiceTableModel extends SSTableModel<SSInvoice> {
             SSBundle.getBundle().getString("invoicetable.column.5")) {
         @Override
         public Object getValue(SSInvoice iInvoice) {
-            return SSDateUtil.toDate(iInvoice.getLocalDate());
+            return iInvoice.getLocalDate();
         }
 
         @Override
@@ -242,7 +243,7 @@ public class SSInvoiceTableModel extends SSTableModel<SSInvoice> {
 
         @Override
         public Class getColumnClass() {
-            return Date.class;
+            return LocalDate.class;
         }
 
         @Override
@@ -258,7 +259,7 @@ public class SSInvoiceTableModel extends SSTableModel<SSInvoice> {
             SSBundle.getBundle().getString("invoicetable.column.6")) {
         @Override
         public Object getValue(SSInvoice iInvoice) {
-            return SSDateUtil.toDate(iInvoice.getLocalDueDate());
+            return iInvoice.getLocalDueDate();
         }
 
         @Override
@@ -268,7 +269,7 @@ public class SSInvoiceTableModel extends SSTableModel<SSInvoice> {
 
         @Override
         public Class getColumnClass() {
-            return Date.class;
+            return LocalDate.class;
         }
 
         @Override

@@ -7,10 +7,9 @@ import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.table.editors.SSDateTimeCellRenderer;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSTableColumn;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSTableModel;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.table.TableCellRenderer;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -45,7 +44,7 @@ public class SSBackupTableModel extends SSTableModel<SSBackup> {
             SSBundle.getBundle().getString("backuptable.column.1")) {
         @Override
         public Object getValue(SSBackup iBackup) {
-            return SSDateUtil.toDate(iBackup.getLocalDateTime());
+            return iBackup.getLocalDateTime();
         }
 
         @Override
@@ -53,7 +52,7 @@ public class SSBackupTableModel extends SSTableModel<SSBackup> {
 
         @Override
         public Class getColumnClass() {
-            return Date.class;
+            return LocalDateTime.class;
         }
 
         @Override

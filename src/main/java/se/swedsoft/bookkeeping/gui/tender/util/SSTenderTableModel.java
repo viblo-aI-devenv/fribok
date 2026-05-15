@@ -13,6 +13,7 @@ import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -160,7 +161,7 @@ public class SSTenderTableModel extends SSTableModel<SSTender> {
             SSBundle.getBundle().getString("tendertable.column.4")) {
         @Override
         public Object getValue(SSTender iTender) {
-            return SSDateUtil.toDate(iTender.getLocalDate());
+            return iTender.getLocalDate();
         }
 
         @Override
@@ -170,7 +171,7 @@ public class SSTenderTableModel extends SSTableModel<SSTender> {
 
         @Override
         public Class getColumnClass() {
-            return Date.class;
+            return LocalDate.class;
         }
 
         @Override

@@ -8,11 +8,10 @@ import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.graphics.SSIcon;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSTableColumn;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSTableModel;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -156,7 +155,7 @@ public class SSPurchaseOrderTableModel extends SSTableModel<SSPurchaseOrder> {
             "Inköpsdatum") {
         @Override
         public Object getValue(SSPurchaseOrder iObject) {
-            return SSDateUtil.toDate(iObject.getLocalDate());
+            return iObject.getLocalDate();
         }
 
         @Override
@@ -164,7 +163,7 @@ public class SSPurchaseOrderTableModel extends SSTableModel<SSPurchaseOrder> {
 
         @Override
         public Class getColumnClass() {
-            return Date.class;
+            return LocalDate.class;
         }
 
         @Override
@@ -230,7 +229,7 @@ public class SSPurchaseOrderTableModel extends SSTableModel<SSPurchaseOrder> {
             "Beräknad leverans") {
         @Override
         public Object getValue(SSPurchaseOrder iObject) {
-            return SSDateUtil.toDate(iObject.getLocalEstimatedDelivery());
+            return iObject.getLocalEstimatedDelivery();
         }
 
         @Override
@@ -238,7 +237,7 @@ public class SSPurchaseOrderTableModel extends SSTableModel<SSPurchaseOrder> {
 
         @Override
         public Class getColumnClass() {
-            return Date.class;
+            return LocalDate.class;
         }
 
         @Override

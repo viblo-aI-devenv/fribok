@@ -8,6 +8,7 @@ import se.swedsoft.bookkeeping.gui.util.table.model.SSTableColumn;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSTableModel;
 import se.swedsoft.bookkeeping.util.SSDateUtil;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -86,7 +87,7 @@ public class SSVoucherTemplateTableModel extends SSTableModel<SSVoucherTemplate>
             SSBundle.getBundle().getString("vouchertable.column.2")) {
         @Override
         public Object getValue(SSVoucherTemplate iVoucher) {
-            return SSDateUtil.toDate(iVoucher.getLocalDateTime());
+            return iVoucher.getLocalDateTime();
         }
 
         @Override
@@ -96,7 +97,7 @@ public class SSVoucherTemplateTableModel extends SSTableModel<SSVoucherTemplate>
 
         @Override
         public Class getColumnClass() {
-            return Date.class;
+            return LocalDateTime.class;
         }
 
         @Override
