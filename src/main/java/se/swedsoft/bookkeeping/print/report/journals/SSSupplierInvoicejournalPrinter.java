@@ -10,7 +10,6 @@ import se.swedsoft.bookkeeping.print.SSPrinter;
 import se.swedsoft.bookkeeping.print.util.SSDefaultJasperDataSource;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Collections;
@@ -181,8 +180,6 @@ public class SSSupplierInvoicejournalPrinter extends SSPrinter {
             // setSummary("journals/invoicejournal.rows.jrxml");
 
             iModel = new SSDefaultTableModel<>() {
-
-                DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
                 @Override
                 public Class<?> getType() {
