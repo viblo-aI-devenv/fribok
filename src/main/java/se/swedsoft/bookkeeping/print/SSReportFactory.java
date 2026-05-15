@@ -1268,7 +1268,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 SSBundle.getBundle().getString("salereport.title"),
                 () -> {
 
-                        SSSaleReportPrinter iPrinter = new SSSaleReportPrinter(iFrom, iTo,
+                        SSSaleReportPrinter iPrinter = new SSSaleReportPrinter(
+                                SSDateUtil.toLocalDate(iFrom), SSDateUtil.toLocalDate(iTo),
                                 iSortingMode, iAscending);
 
                         iPrinter.preview(iMainFrame);
