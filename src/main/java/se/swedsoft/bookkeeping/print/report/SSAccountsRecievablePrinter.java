@@ -15,7 +15,8 @@ import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.text.DateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.*;
 
 
@@ -196,7 +197,7 @@ public class SSAccountsRecievablePrinter extends SSPrinter {
 
             iModel = new SSDefaultTableModel<>() {
 
-                DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+                DateTimeFormatter iFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 
                 @Override
                 public Class<?> getType() {
@@ -216,7 +217,7 @@ public class SSAccountsRecievablePrinter extends SSPrinter {
                     case 1:
                         value = iInvoice.getLocalDate() == null
                                 ? null
-                                : iFormat.format(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(iInvoice.getLocalDate()));
+                                : iInvoice.getLocalDate().format(iFormat);
                         break;
 
                     case 2:
