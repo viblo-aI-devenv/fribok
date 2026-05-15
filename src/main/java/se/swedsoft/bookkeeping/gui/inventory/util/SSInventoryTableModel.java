@@ -8,6 +8,7 @@ import se.swedsoft.bookkeeping.gui.util.table.model.SSTableColumn;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSTableModel;
 import se.swedsoft.bookkeeping.util.SSDateUtil;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -78,7 +79,7 @@ public class SSInventoryTableModel extends SSTableModel<SSInventory> {
             SSBundle.getBundle().getString("inventorytable.column.2")) {
         @Override
         public Object getValue(SSInventory iInventory) {
-            return SSDateUtil.toDate(iInventory.getLocalDate());
+            return iInventory.getLocalDate();
         }
 
         @Override
@@ -88,7 +89,7 @@ public class SSInventoryTableModel extends SSTableModel<SSInventory> {
 
         @Override
         public Class getColumnClass() {
-            return Date.class;
+            return LocalDate.class;
         }
 
         @Override

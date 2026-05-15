@@ -10,10 +10,9 @@ import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.gui.util.table.SSTable;
 import se.swedsoft.bookkeeping.gui.util.table.editors.SSBigDecimalCellRenderer;
 import se.swedsoft.bookkeeping.gui.util.table.editors.SSDateCellRenderer;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -61,7 +60,7 @@ public class SSInpaymentTableModel extends SSDefaultTableModel<SSInpayment> {
             break;
 
         case 1:
-            value = SSDateUtil.toDate(iInpayment.getLocalDate());
+            value = iInpayment.getLocalDate();
             break;
 
         case 2:
@@ -83,7 +82,7 @@ public class SSInpaymentTableModel extends SSDefaultTableModel<SSInpayment> {
             return String.class;
 
         case 1:
-            return Date.class;
+            return LocalDate.class;
 
         case 2:
             return String.class;
@@ -104,7 +103,7 @@ public class SSInpaymentTableModel extends SSDefaultTableModel<SSInpayment> {
         iTable.getColumnModel().getColumn(2).setPreferredWidth(470);
         iTable.getColumnModel().getColumn(3).setPreferredWidth(95);
 
-        iTable.setDefaultRenderer(Date.class, new SSDateCellRenderer());
+        iTable.setDefaultRenderer(LocalDate.class, new SSDateCellRenderer());
 
         iTable.setDefaultRenderer(BigDecimal.class, new SSBigDecimalCellRenderer(2));
     }
