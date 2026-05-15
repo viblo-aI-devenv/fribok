@@ -13,7 +13,6 @@ import se.swedsoft.bookkeeping.print.SSPrinter;
 import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -93,8 +92,6 @@ public class SSStockValuePrinter extends SSPrinter {
         addParameter("image.check", SSImage.getImage("CHECK"));
 
         SSDefaultTableModel<SSProduct> iModel = new SSDefaultTableModel<>() {
-
-            DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
             @Override
             public Class<?> getType() {

@@ -11,7 +11,6 @@ import se.swedsoft.bookkeeping.gui.util.graphics.SSImage;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
 
-import java.text.DateFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -81,8 +80,6 @@ public class SSInventoryBasisPrinter extends SSPrinter {
         addParameter("image.check", SSImage.getImage("CHECK"));
 
         SSDefaultTableModel<SSProduct> iModel = new SSDefaultTableModel<>() {
-
-            DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
             @Override
             public Class<?> getType() {

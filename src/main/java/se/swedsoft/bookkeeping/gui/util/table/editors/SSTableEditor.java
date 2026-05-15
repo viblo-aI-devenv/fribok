@@ -49,6 +49,7 @@ public class SSTableEditor {
         iTable.setDefaultRenderer(Date.class, new SSDateCellRenderer());
         iTable.setDefaultEditor(Date.class, new SSDateCellEditor());
         iTable.setDefaultRenderer(LocalDate.class, new SSDateCellRenderer());
+        iTable.setDefaultEditor(LocalDate.class, new SSDateCellEditor());
         iTable.setDefaultRenderer(LocalDateTime.class, new SSDateTimeCellRenderer());
 
         iTable.setDefaultRenderer(SSOrder.class, new SSOrderCellRenderer());

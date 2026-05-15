@@ -10,7 +10,6 @@ import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
 import se.swedsoft.bookkeeping.print.util.SSDefaultJasperDataSource;
 
-import java.text.DateFormat;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Arrays;
@@ -175,8 +174,6 @@ public class SSVoucherPrinter extends SSPrinter {
             setSummary("voucher.rows.jrxml");
 
             iModel = new SSDefaultTableModel<>() {
-
-                DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
                 @Override
                 public Class<?> getType() {
