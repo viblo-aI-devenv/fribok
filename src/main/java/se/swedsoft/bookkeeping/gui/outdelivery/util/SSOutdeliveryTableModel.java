@@ -9,6 +9,7 @@ import se.swedsoft.bookkeeping.gui.util.table.model.SSTableColumn;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSTableModel;
 import se.swedsoft.bookkeeping.util.SSDateUtil;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -78,7 +79,7 @@ public class SSOutdeliveryTableModel extends SSTableModel<SSOutdelivery> {
             SSBundle.getBundle().getString("outdeliverytable.column.2")) {
         @Override
         public Object getValue(SSOutdelivery iIndelivery) {
-            return SSDateUtil.toDate(iIndelivery.getLocalDate());
+            return iIndelivery.getLocalDate();
         }
 
         @Override
@@ -88,7 +89,7 @@ public class SSOutdeliveryTableModel extends SSTableModel<SSOutdelivery> {
 
         @Override
         public Class getColumnClass() {
-            return Date.class;
+            return LocalDate.class;
         }
 
         @Override
