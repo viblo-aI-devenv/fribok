@@ -108,7 +108,7 @@ public class SSInterestInvoiceTableModel extends SSDefaultTableModel<SSInvoice> 
             break;
 
         case 4:
-            value = SSInpaymentMath.getLastInpaymentForInvoice(iInvoice);
+            value = SSDateUtil.toDate(SSInpaymentMath.getLastLocalInpaymentForInvoice(iInvoice));
             break;
 
         case 5:

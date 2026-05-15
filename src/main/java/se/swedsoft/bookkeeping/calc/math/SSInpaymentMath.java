@@ -6,11 +6,9 @@ import se.swedsoft.bookkeeping.data.SSInpayment;
 import se.swedsoft.bookkeeping.data.SSInpaymentRow;
 import se.swedsoft.bookkeeping.data.SSInvoice;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -149,16 +147,6 @@ public class SSInpaymentMath {
         }
 
         return iSum;
-    }
-
-    /**
-     * Get the date of the last inpayment for the supplied sales, or
-     *
-     * @param iInvoice
-     * @return the sum
-     */
-    public static Date getLastInpaymentForInvoice(SSInvoice iInvoice) {
-        return SSDateUtil.toDate(getLastLocalInpaymentForInvoice(iInvoice));
     }
 
     public static LocalDate getLastLocalInpaymentForInvoice(SSInvoice iInvoice) {
