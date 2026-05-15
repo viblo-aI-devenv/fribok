@@ -30,6 +30,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.text.DateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,8 +58,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
     public static void buildVoucherReport(final SSMainFrame iMainFrame, final ResourceBundle bundle, final SSNewAccountingYear pYearData) {
         final SSVoucherListDialog iDialog = new SSVoucherListDialog(iMainFrame);
 
-        iDialog.setDateFrom(SSDateUtil.toDate(pYearData.getLocalFrom()));
-        iDialog.setDateTo(SSDateUtil.toDate(pYearData.getLocalTo()));
+        iDialog.setDateFrom(pYearData.getLocalFrom());
+        iDialog.setDateTo(pYearData.getLocalTo());
         iDialog.setLocationRelativeTo(iMainFrame);
         if (iDialog.showDialog() != JOptionPane.OK_OPTION) {
             return;
@@ -67,18 +69,18 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
 
                         List<SSVoucher> iVouchers = iDialog.getElementsToPrint();
 
-                        DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+                        DateTimeFormatter iFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 
                         SSVoucherListPrinter iPrinter = new SSVoucherListPrinter(iVouchers);
 
                         if (iDialog.isDateSelected()) {
-                            Date iDateFrom = iDialog.getDateFrom();
-                            Date iDateTo = iDialog.getDateTo();
+                            LocalDate iDateFrom = iDialog.getLocalDateFrom();
+                            LocalDate iDateTo = iDialog.getLocalDateTo();
 
                             iPrinter.addParameter("periodTitle",
                                     String.format(
                                     SSBundle.getBundle().getString("voucherlistreport.period.date"),
-                                    iFormat.format(iDateFrom), iFormat.format(iDateTo)));
+                                    iDateFrom.format(iFormat), iDateTo.format(iFormat)));
                             iPrinter.addParameter("periodText", " ");
                         }
 
