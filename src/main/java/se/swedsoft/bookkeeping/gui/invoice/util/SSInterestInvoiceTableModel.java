@@ -21,6 +21,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
 
@@ -104,11 +105,11 @@ public class SSInterestInvoiceTableModel extends SSDefaultTableModel<SSInvoice> 
             break;
 
         case 3:
-            value = SSDateUtil.toDate(iInvoice.getLocalDueDate());
+            value = iInvoice.getLocalDueDate();
             break;
 
         case 4:
-            value = SSDateUtil.toDate(SSInpaymentMath.getLastLocalInpaymentForInvoice(iInvoice));
+            value = SSInpaymentMath.getLastLocalInpaymentForInvoice(iInvoice);
             break;
 
         case 5:
@@ -150,10 +151,10 @@ public class SSInterestInvoiceTableModel extends SSDefaultTableModel<SSInvoice> 
             return String.class;
 
         case 3:
-            return Date.class;
+            return LocalDate.class;
 
         case 4:
-            return Date.class;
+            return LocalDate.class;
 
         case 5:
             return BigDecimal.class;
@@ -280,7 +281,7 @@ public class SSInterestInvoiceTableModel extends SSDefaultTableModel<SSInvoice> 
 
         iTable.getColumnModel().getColumn(7).setCellRenderer(new SSPercentCellRenderer(2));
 
-        iTable.setDefaultRenderer(Date.class, new SSDateCellRenderer());
+        iTable.setDefaultRenderer(LocalDate.class, new SSDateCellRenderer());
 
         iTable.setDefaultRenderer(SSCurrency.class, new SSCurrencyCellRenderer());
 
