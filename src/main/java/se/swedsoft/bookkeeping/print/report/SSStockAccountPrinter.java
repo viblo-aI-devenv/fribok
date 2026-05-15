@@ -11,7 +11,6 @@ import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
 import se.swedsoft.bookkeeping.print.util.SSDefaultJasperDataSource;
 
-import java.text.DateFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -86,8 +85,6 @@ public class SSStockAccountPrinter extends SSPrinter {
     protected SSDefaultTableModel getModel() {
 
         SSDefaultTableModel<SSProduct> iModel = new SSDefaultTableModel<>() {
-
-            DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
             @Override
             public Class<?> getType() {
