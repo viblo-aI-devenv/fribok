@@ -11,7 +11,8 @@ import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
 import se.swedsoft.bookkeeping.print.util.SSDefaultJasperDataSource;
 
-import java.text.DateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -76,7 +77,7 @@ public class SSOutpaymentListPrinter extends SSPrinter {
 
         SSDefaultTableModel<SSOutpayment> iModel = new SSDefaultTableModel<>() {
 
-            DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+            DateTimeFormatter iLocalDateFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 
             @Override
             public Class<?> getType() {
@@ -96,7 +97,7 @@ public class SSOutpaymentListPrinter extends SSPrinter {
                 case 1:
                     value = iOutpayment.getLocalDate() == null
                             ? null
-                            : iFormat.format(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(iOutpayment.getLocalDate()));
+                            : iOutpayment.getLocalDate().format(iLocalDateFormat);
                     break;
 
                 case 2:
