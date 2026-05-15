@@ -11,9 +11,8 @@ import se.swedsoft.bookkeeping.importexport.sie.util.SIEReader;
 import se.swedsoft.bookkeeping.importexport.sie.util.SIEWriter;
 import se.swedsoft.bookkeeping.importexport.util.SSExportException;
 import se.swedsoft.bookkeeping.importexport.util.SSImportException;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import static se.swedsoft.bookkeeping.importexport.sie.util.SIEReader.SIEDataType.INT;
 import static se.swedsoft.bookkeeping.importexport.sie.util.SIEReader.SIEDataType.STRING;
@@ -44,12 +43,12 @@ public class SIEEntryRAR implements SIEEntry {
         }
 
         int        iYear = iReader.nextInteger().orElse(0);
-        Date       iFrom = iReader.nextDate();
-        Date       iTo = iReader.nextDate();
+        LocalDate  iFrom = iReader.nextDate();
+        LocalDate  iTo = iReader.nextDate();
 
         if (iYear == 0 && iCurrentYearData != null) {
-            iCurrentYearData.setLocalFrom(SSDateUtil.toLocalDate(iFrom));
-            iCurrentYearData.setLocalTo(SSDateUtil.toLocalDate(iTo));
+            iCurrentYearData.setLocalFrom(iFrom);
+            iCurrentYearData.setLocalTo(iTo);
             SSDB.getInstance().updateAccountingYear(iCurrentYearData);
         }
 
@@ -72,16 +71,16 @@ public class SIEEntryRAR implements SIEEntry {
         if (iPreviousYearData != null) {
             iWriter.append(SIELabel.SIE_RAR);
             iWriter.append("-1");
-            iWriter.append(SSDateUtil.toDate(iPreviousYearData.getLocalFrom()));
-            iWriter.append(SSDateUtil.toDate(iPreviousYearData.getLocalTo()));
+            iWriter.append(iPreviousYearData.getLocalFrom());
+            iWriter.append(iPreviousYearData.getLocalTo());
             iWriter.newLine();
         }
 
         if (iCurrentYearData != null) {
             iWriter.append(SIELabel.SIE_RAR);
             iWriter.append("0");
-            iWriter.append(SSDateUtil.toDate(iCurrentYearData.getLocalFrom()));
-            iWriter.append(SSDateUtil.toDate(iCurrentYearData.getLocalTo()));
+            iWriter.append(iCurrentYearData.getLocalFrom());
+            iWriter.append(iCurrentYearData.getLocalTo());
             iWriter.newLine();
         }
 

@@ -5,6 +5,7 @@ import se.swedsoft.bookkeeping.data.SSMonth;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.Optional;
 
@@ -331,7 +332,7 @@ public class SIEReader implements Iterator<String> {
      *
      * @return
      */
-    public Date nextDate() {
+    public LocalDate nextDate() {
         return iValues.nextDate();
     }
 

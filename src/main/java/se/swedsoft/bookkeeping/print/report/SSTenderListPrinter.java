@@ -12,7 +12,8 @@ import se.swedsoft.bookkeeping.print.SSPrinter;
 import se.swedsoft.bookkeeping.print.util.SSDefaultJasperDataSource;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -77,7 +78,7 @@ public class SSTenderListPrinter extends SSPrinter {
 
         SSDefaultTableModel<SSTender> iModel = new SSDefaultTableModel<>() {
 
-            DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+            DateTimeFormatter iLocalDateFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 
             @Override
             public Class<?> getType() {
@@ -105,7 +106,7 @@ public class SSTenderListPrinter extends SSPrinter {
                 case 3:
                     value = iTender.getLocalDate() == null
                             ? null
-                            : iFormat.format(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(iTender.getLocalDate()));
+                            : iTender.getLocalDate().format(iLocalDateFormat);
                     break;
 
                 case 4:

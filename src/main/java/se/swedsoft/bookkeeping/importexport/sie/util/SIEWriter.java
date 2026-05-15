@@ -2,14 +2,12 @@ package se.swedsoft.bookkeeping.importexport.sie.util;
 
 
 import se.swedsoft.bookkeeping.data.SSMonth;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -129,14 +127,6 @@ public class SIEWriter {
     public void append(SIELabel pValue) {
         iStringBuilder.append(pValue.getName());
         iStringBuilder.append(' ');
-    }
-
-    /**
-     *
-     * @param pValue
-     */
-    public void append(Date pValue) {
-        append(SSDateUtil.toLocalDate(pValue));
     }
 
     /**

@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Date;
 
 import se.swedsoft.bookkeeping.util.SSDateUtil;
 
@@ -144,10 +143,10 @@ public class LBinLine {
      * @param iFormat
      * @return the new position
      */
-    public int append(Date iDate, int iLength, String iFormat) {
+    public int append(LocalDate iDate, int iLength, String iFormat) {
         DateTimeFormatter iDateFormat = DateTimeFormatter.ofPattern(iFormat);
 
-        return append(SSDateUtil.toLocalDate(iDate).format(iDateFormat), iLength, ' ');
+        return append(iDate.format(iDateFormat), iLength, ' ');
     }
 
     /**
@@ -210,15 +209,15 @@ public class LBinLine {
      * @param iFormat
      * @return
      */
-    public Date readDate(int iStart, int iEnd, String iFormat) {
+    public LocalDate readLocalDate(int iStart, int iEnd, String iFormat) {
         DateTimeFormatter iDateFormat = DateTimeFormatter.ofPattern(iFormat);
 
         String iValue = readString(iStart, iEnd);
 
         try {
-            return SSDateUtil.toDate(LocalDate.parse(iValue, iDateFormat));
+            return LocalDate.parse(iValue, iDateFormat);
         } catch (DateTimeParseException e) {
-            return SSDateUtil.toDate(SSDateUtil.today());
+            return SSDateUtil.today();
         }
     }
 

@@ -12,8 +12,9 @@ import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
 
 
@@ -154,7 +155,7 @@ public class SSNewProject implements Serializable, SSTableSearchable {
     // /////////////////////////////////////////////////////////////////////////
 
     public String toString() {
-        DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+        DateTimeFormatter iFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 
         StringBuilder sb = new StringBuilder();
 
@@ -165,7 +166,7 @@ public class SSNewProject implements Serializable, SSTableSearchable {
         sb.append(iDescription);
         if (iConcluded) {
             sb.append("(Concluded ");
-            sb.append(iFormat.format(SSDateUtil.toDate(iConcludedDate)));
+            sb.append(iConcludedDate.format(iFormat));
             sb.append(") ");
         }
         return sb.toString();

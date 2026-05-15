@@ -13,7 +13,8 @@ import se.swedsoft.bookkeeping.print.SSPrinter;
 import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.*;
 
 import static se.swedsoft.bookkeeping.calc.SSMainBookCalculator.SSMainBookRow;
@@ -88,7 +89,7 @@ public class SSMainBookPrinter extends SSPrinter {
      */
     @Override
     protected SSDefaultTableModel getModel() {
-        final DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+        final DateTimeFormatter iLocalDateFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 
         addParameter("dateFrom", iDateFrom);
         addParameter("dateTo", iDateTo);
@@ -176,7 +177,7 @@ public class SSMainBookPrinter extends SSPrinter {
                     // voucher.date
                     value = iRow.getLocalDate();
                     if (value != null) {
-                        value = iFormat.format(SSDateUtil.toDate(iRow.getLocalDate()));
+                        value = iRow.getLocalDate().format(iLocalDateFormat);
                     }
                     break;
 

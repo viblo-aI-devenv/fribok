@@ -5,7 +5,6 @@ import se.swedsoft.bookkeeping.importexport.supplierpayments.data.SupplierPaymen
 import se.swedsoft.bookkeeping.importexport.supplierpayments.util.LBinLine;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 
 /**

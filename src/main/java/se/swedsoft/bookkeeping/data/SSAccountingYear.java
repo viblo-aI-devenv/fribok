@@ -16,8 +16,9 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.rmi.server.UID;
-import java.text.DateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.*;
 
 
@@ -230,21 +231,21 @@ public class SSAccountingYear implements Serializable, SSTableSearchable {
      * @return The searchable string
      */
     public String toRenderString() {
-        DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+        DateTimeFormatter iFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 
-        return iFormat.format(SSDateUtil.toDate(iFrom)) + " - " + iFormat.format(SSDateUtil.toDate(iTo));
+        return iFrom.format(iFormat) + " - " + iTo.format(iFormat);
     }
 
     public String toString() {
-        DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+        DateTimeFormatter iFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 
         StringBuilder sb = new StringBuilder();
 
-        sb.append(iFormat.format(SSDateUtil.toDate(iFrom)));
+        sb.append(iFrom.format(iFormat));
         sb.append(' ');
         sb.append(SSBundle.getBundle().getString("date.separator"));
         sb.append(' ');
-        sb.append(iFormat.format(SSDateUtil.toDate(iTo)));
+        sb.append(iTo.format(iFormat));
 
         return sb.toString();
     }

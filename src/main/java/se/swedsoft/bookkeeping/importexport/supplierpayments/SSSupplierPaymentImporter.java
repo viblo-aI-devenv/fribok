@@ -10,15 +10,14 @@ import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.importexport.supplierpayments.poster.*;
 import se.swedsoft.bookkeeping.importexport.supplierpayments.util.LBinLine;
 import se.swedsoft.bookkeeping.importexport.util.SSImportException;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.LinkedList;
 import java.util.List;
 import org.slf4j.Logger;
@@ -80,16 +79,14 @@ public class SSSupplierPaymentImporter {    private static final Logger LOG = Lo
             if (iPost instanceof LBinPostTK11) {
                 LBinPostTK11 iPostTK11 = (LBinPostTK11) iPost;
 
-                Date iPaymentDate = iPostTK11.getPaymentDate();
-                LocalDate iPaymentLocalDate = SSDateUtil.toLocalDate(iPaymentDate);
+                LocalDate iPaymentDate = iPostTK11.getPaymentDate();
 
-                DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+                DateTimeFormatter iFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 
                 iOutpayment = new SSOutpayment();
                 iOutpayment.setText("Leverantörsbetalning");
-                iOutpayment.setLocalDate(iPaymentLocalDate);
-                iOutpayment.setText(
-                        "Leverantörsbetalning " + iFormat.format(iPaymentDate));
+                iOutpayment.setLocalDate(iPaymentDate);
+                iOutpayment.setText("Leverantörsbetalning " + iPaymentDate.format(iFormat));
 
                 iOutpayments.add(iOutpayment);
             }

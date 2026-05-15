@@ -10,9 +10,7 @@ import jxl.write.biff.RowsExceededException;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
-import se.swedsoft.bookkeeping.util.SSDateUtil;
 import java.util.LinkedList;
 import java.util.List;
 import org.slf4j.Logger;
@@ -133,16 +131,6 @@ public class SSWritableExcelRow {    private static final Logger LOG = LoggerFac
         }
     }
 
-    /**
-     *
-     * @param iColumn
-     * @param pValue
-     * @throws WriteException
-     */
-    public void setDate(int iColumn, Date pValue) throws WriteException {
-        setDate(iColumn, SSDateUtil.toLocalDate(pValue));
-    }
-
     public void setDate(int iColumn, LocalDate pValue) throws WriteException {
         try {
             if (pValue == null) {
@@ -154,17 +142,6 @@ public class SSWritableExcelRow {    private static final Logger LOG = LoggerFac
         } catch (RowsExceededException e) {
             LOG.error("Unexpected error", e);
         }
-    }
-
-    /**
-     *
-     * @param iColumn
-     * @param pValue
-     * @param iCellFormat
-     * @throws WriteException
-     */
-    public void setDate(int iColumn, Date pValue, CellFormat iCellFormat) throws WriteException {
-        setDate(iColumn, SSDateUtil.toLocalDate(pValue), iCellFormat);
     }
 
     public void setDate(int iColumn, LocalDate pValue, CellFormat iCellFormat) throws WriteException {

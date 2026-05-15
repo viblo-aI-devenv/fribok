@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Date;
 import java.util.Optional;
 
 import se.swedsoft.bookkeeping.util.SSDateUtil;
@@ -81,18 +80,18 @@ public class SSExcelCell {
      *
      * @return
      */
-    public Date getDate() {
+    public LocalDate getLocalDate() {
         if (iCell instanceof DateCell) {
             DateCell   iDateCell = (DateCell) iCell;
 
-            return iDateCell.getDate();
+            return SSDateUtil.toLocalDate(iDateCell.getDate());
         }
         DateTimeFormatter iFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         try {
-            return SSDateUtil.toDate(LocalDate.parse(iCell.getContents(), iFormat));
+            return LocalDate.parse(iCell.getContents(), iFormat);
         } catch (DateTimeParseException e) {
-            return SSDateUtil.toDate(SSDateUtil.today());
+            return SSDateUtil.today();
         }
     }
 

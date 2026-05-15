@@ -293,7 +293,7 @@ public class SIEIterator implements Iterator<String> {    private static final L
      *
      * @return
      */
-    public Date nextDate() {
+    public LocalDate nextDate() {
         String iValue = next();
 
         if (iValue != null && iValue.length() == 8) {
@@ -302,13 +302,12 @@ public class SIEIterator implements Iterator<String> {    private static final L
                     + iValue.substring(6, 8);
 
             try {
-                LocalDate localDate = LocalDate.parse(iValue, ISO_DATE_FORMAT);
-                return SSDateUtil.toDate(localDate);
+                return LocalDate.parse(iValue, ISO_DATE_FORMAT);
             } catch (DateTimeParseException ex) {
                 LOG.error("Unexpected error", ex);
             }
         }
-        return SSDateUtil.toDate(SSDateUtil.today());
+        return SSDateUtil.today();
     }
 
     /**

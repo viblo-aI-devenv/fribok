@@ -12,6 +12,8 @@ import se.swedsoft.bookkeeping.print.util.SSDefaultJasperDataSource;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -84,7 +86,7 @@ public class SSSuppliercreditinvoicejournalPrinter extends SSPrinter {
 
         SSDefaultTableModel<SSSupplierCreditInvoice> iModel = new SSDefaultTableModel<>() {
 
-            DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+            DateTimeFormatter iLocalDateFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 
             @Override
             public Class<?> getType() {
@@ -112,7 +114,7 @@ public class SSSuppliercreditinvoicejournalPrinter extends SSPrinter {
                 case 3:
                     value = iInvoice.getLocalDate() == null
                             ? null
-                            : iFormat.format(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(iInvoice.getLocalDate()));
+                            : iInvoice.getLocalDate().format(iLocalDateFormat);
                     break;
 
                 case 4:

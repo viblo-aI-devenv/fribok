@@ -6,9 +6,9 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
 
-import java.text.DateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
 
 
@@ -55,7 +55,7 @@ public class SSProjectsPrinter extends SSPrinter {
     @Override
     protected SSDefaultTableModel getModel() {
 
-        final DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+        final DateTimeFormatter iFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 
         SSDefaultTableModel<SSNewProject> iModel = new SSDefaultTableModel<>() {
 
@@ -83,7 +83,7 @@ public class SSProjectsPrinter extends SSPrinter {
 
                 case 3:
                     value = iProject.getConcluded()
-                            ? iFormat.format(SSDateUtil.toDate(iProject.getLocalConcludedDate()))
+                            ? iProject.getLocalConcludedDate().format(iFormat)
                             : null;
                     break;
                 }

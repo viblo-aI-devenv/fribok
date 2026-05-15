@@ -12,8 +12,9 @@ import se.swedsoft.bookkeeping.util.SSDateUtil;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.*;
 
 
@@ -437,7 +438,7 @@ public class SSPeriodicInvoice implements Serializable {
         LocalDate iPeriodStart = this.iPeriodStart;
         LocalDate iPeriodEnd = this.iPeriodEnd;
 
-        DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+        DateTimeFormatter iFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 
         for (int i = 0; i < iCount; i++) {
             SSInvoice iInvoice = new SSInvoice(iTemplate);
@@ -448,8 +449,8 @@ public class SSPeriodicInvoice implements Serializable {
             iInvoice.setOrderNumbers(iTemplate.getOrderNumbers());
 
             if (iAppendPeriod) {
-                String strPeriodStart = iFormat.format(SSDateUtil.toDate(iPeriodStart));
-                String strPeriodEnd = iFormat.format(SSDateUtil.toDate(iPeriodEnd));
+                String strPeriodStart = iPeriodStart.format(iFormat);
+                String strPeriodEnd = iPeriodEnd.format(iFormat);
 
                 SSSaleRow iRow = new SSSaleRow();
 

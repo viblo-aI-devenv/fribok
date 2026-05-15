@@ -6,13 +6,13 @@ import se.swedsoft.bookkeeping.data.SSNewAccountingYear;
 import se.swedsoft.bookkeeping.data.SSNewCompany;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.text.DateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -133,14 +133,14 @@ public class SSMainStatusBar {    private static final Logger LOG = LoggerFactor
             iYearLabel.setText(SSBundle.getBundle().getString("mainframe.status.noyear"));
             iYearLabel.setForeground(Color.RED);
         } else {
-            DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
+            DateTimeFormatter df = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
             StringBuilder year = new StringBuilder();
 
-            year.append(df.format(SSDateUtil.toDate(iAccountingYear.getLocalFrom())));
+            year.append(iAccountingYear.getLocalFrom().format(df));
             year.append(' ');
             year.append(SSBundle.getBundle().getString("date.separator"));
             year.append(' ');
-            year.append(df.format(SSDateUtil.toDate(iAccountingYear.getLocalTo())));
+            year.append(iAccountingYear.getLocalTo().format(df));
             iYearLabel.setText(year.toString());
             iYearLabel.setForeground(Color.BLACK);
         }

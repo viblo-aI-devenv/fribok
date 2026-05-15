@@ -10,7 +10,6 @@ import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -127,22 +126,6 @@ public class SupplierPayment {
     }
 
     // //////////////////////////////////////////////////////////////////////////////////////
-
-    /**
-     *
-     * @return
-     */
-    public Date getDate() {
-        return SSDateUtil.toDate(iDate);
-    }
-
-    /**
-     *
-     * @param iDate
-     */
-    public void setDate(Date iDate) {
-        this.iDate = SSDateUtil.toLocalDate(iDate);
-    }
 
     public LocalDate getLocalDate() {
         return iDate;

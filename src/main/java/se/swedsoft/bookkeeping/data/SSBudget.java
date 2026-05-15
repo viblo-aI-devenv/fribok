@@ -8,8 +8,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.*;
 import java.util.Optional;
 
@@ -363,14 +364,14 @@ public class SSBudget implements Serializable {
     }
 
     public String toString() {
-        DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT);
+        DateTimeFormatter format = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 
         StringBuffer b = new StringBuffer();
 
         b.append("Budget for ");
-        b.append(format.format(SSDateUtil.toDate(iFrom)));
+        b.append(iFrom.format(format));
         b.append(" to");
-        b.append(format.format(SSDateUtil.toDate(iTo)));
+        b.append(iTo.format(format));
 
         for (SSMonth iMonth: getMonths()) {
             b.append("Month: ");

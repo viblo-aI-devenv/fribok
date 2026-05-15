@@ -5,7 +5,7 @@ import se.swedsoft.bookkeeping.importexport.supplierpayments.data.SupplierPaymen
 import se.swedsoft.bookkeeping.importexport.supplierpayments.util.LBinLine;
 import se.swedsoft.bookkeeping.util.SSDateUtil;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 
 /**
@@ -17,8 +17,8 @@ public class LBinPostTK11 extends LBinPost {
 
     private String iCurrency;
     private String iBankGiroNr;
-    private Date   iDate;
-    private Date   iPaymentDate;
+    private LocalDate iDate;
+    private LocalDate iPaymentDate;
     private String iText;
 
     /**
@@ -32,7 +32,7 @@ public class LBinPostTK11 extends LBinPost {
      */
     public LBinPostTK11(String iCurrency) {
         iBankGiroNr = SupplierPaymentConfig.getOurBankGiroAccount().replaceAll("-", "");
-        iDate = SSDateUtil.toDate(SSDateUtil.today());
+        iDate = SSDateUtil.today();
         this.iCurrency = iCurrency;
         iText = "LEVERANTÖRSBETALNINGAR";
     }
@@ -60,9 +60,9 @@ public class LBinPostTK11 extends LBinPost {
     @Override
     public void read(LBinLine iLine) {
         iBankGiroNr = iLine.readString(3, 12); // 3 => 12: Bakngiro
-        iDate = iLine.readDate(13, 18, "yyMMdd"); // 13 => 18: Skrivdatum
+        iDate = iLine.readLocalDate(13, 18, "yyMMdd"); // 13 => 18: Skrivdatum
         iText = iLine.readString(19, 40); // 19 => 40: Text
-        iPaymentDate = iLine.readDate(41, 46, "yyMMdd"); // 41 => 46: betalningsdatum
+        iPaymentDate = iLine.readLocalDate(41, 46, "yyMMdd"); // 41 => 46: betalningsdatum
         iCurrency = iLine.readString(60, 62); // 60 => 62: Valuta
 
     }
@@ -103,7 +103,7 @@ public class LBinPostTK11 extends LBinPost {
      *
      * @return
      */
-    public Date getDate() {
+    public LocalDate getDate() {
         return iDate;
     }
 
@@ -111,7 +111,7 @@ public class LBinPostTK11 extends LBinPost {
      *
      * @param iDate
      */
-    public void setDate(Date iDate) {
+    public void setDate(LocalDate iDate) {
         this.iDate = iDate;
     }
 
@@ -119,7 +119,7 @@ public class LBinPostTK11 extends LBinPost {
      *
      * @return
      */
-    public Date getPaymentDate() {
+    public LocalDate getPaymentDate() {
         return iPaymentDate;
     }
 
@@ -127,7 +127,7 @@ public class LBinPostTK11 extends LBinPost {
      *
      * @param iPaymentDate
      */
-    public void setPaymentDate(Date iPaymentDate) {
+    public void setPaymentDate(LocalDate iPaymentDate) {
         this.iPaymentDate = iPaymentDate;
     }
 
