@@ -8,10 +8,9 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSTableColumn;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSTableModel;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 
 /**
@@ -141,7 +140,7 @@ public class SSSupplierCreditinvoiceTableModel extends SSTableModel<SSSupplierCr
             SSBundle.getBundle().getString("suppliercreditinvoicetable.column.4")) {
         @Override
         public Object getValue(SSSupplierCreditInvoice iObject) {
-            return SSDateUtil.toDate(iObject.getLocalDate());
+            return iObject.getLocalDate();
         }
 
         @Override
@@ -149,7 +148,7 @@ public class SSSupplierCreditinvoiceTableModel extends SSTableModel<SSSupplierCr
 
         @Override
         public Class getColumnClass() {
-            return Date.class;
+            return LocalDate.class;
         }
 
         @Override
@@ -165,7 +164,7 @@ public class SSSupplierCreditinvoiceTableModel extends SSTableModel<SSSupplierCr
             SSBundle.getBundle().getString("suppliercreditinvoicetable.column.5")) {
         @Override
         public Object getValue(SSSupplierCreditInvoice iObject) {
-            return SSDateUtil.toDate(iObject.getLocalDueDate());
+            return iObject.getLocalDueDate();
         }
 
         @Override
@@ -173,7 +172,7 @@ public class SSSupplierCreditinvoiceTableModel extends SSTableModel<SSSupplierCr
 
         @Override
         public Class getColumnClass() {
-            return Date.class;
+            return LocalDate.class;
         }
 
         @Override
