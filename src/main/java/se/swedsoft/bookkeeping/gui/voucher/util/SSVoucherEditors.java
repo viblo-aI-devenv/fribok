@@ -20,6 +20,7 @@ import java.awt.*;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -325,6 +326,7 @@ public class SSVoucherEditors {
         // Set the default renderer for the date cells.
         // pTable.setDefaultRenderer(Date.class      , createDateRenderer(pModel));
         pTable.setDefaultRenderer(Date.class, new SSDateCellRenderer());
+        pTable.setDefaultRenderer(LocalDateTime.class, new SSDateTimeCellRenderer());
 
         // pTable.setDefaultRenderer(BigDecimal.class, createBigDecimalRenderer(pModel) );
         pTable.setDefaultRenderer(BigDecimal.class, new SSBigDecimalCellRenderer(2));
@@ -359,4 +361,3 @@ public class SSVoucherEditors {
         } catch (ArrayIndexOutOfBoundsException ignored) {}
     }
 }
-

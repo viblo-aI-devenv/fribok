@@ -11,9 +11,9 @@ import se.swedsoft.bookkeeping.gui.util.table.model.SSTableModel;
 import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Date;
-import java.util.Optional;
 
 
 /**
@@ -128,12 +128,10 @@ public class SSPeriodicInvoiceTableModel extends SSTableModel<SSPeriodicInvoice>
             SSBundle.getBundle().getString("periodicinvoicetable.column.4")) {
         @Override
         public Object getValue(SSPeriodicInvoice iObject) {
-            Optional<Date> iNext = iObject.getNextLocalDate().map(SSDateUtil::toDate);
+            DateTimeFormatter iFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 
-            DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
-
-            return iNext.isPresent()
-                    ? iFormat.format(iNext.get())
+            return iObject.getNextLocalDate().isPresent()
+                    ? iObject.getNextLocalDate().get().format(iFormat)
                     : SSBundle.getBundle().getString("periodicinvoiceframe.concluded");
         }
 

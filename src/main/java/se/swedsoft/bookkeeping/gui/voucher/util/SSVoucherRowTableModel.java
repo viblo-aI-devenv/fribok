@@ -16,7 +16,7 @@ import se.swedsoft.bookkeeping.util.SSDateUtil;
 import javax.swing.*;
 import java.awt.*;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -303,7 +303,7 @@ public class SSVoucherRowTableModel extends SSEditableTableModel<SSVoucherRow> {
             SSBundle.getBundle().getString("voucherrowtable.column.7")) {
         @Override
         public Object getValue(SSVoucherRow iVoucherRow) {
-            return SSDateUtil.toDate(iVoucherRow.getLocalEditedDate());
+            return iVoucherRow.getLocalEditedDate();
         }
 
         @Override
@@ -311,7 +311,7 @@ public class SSVoucherRowTableModel extends SSEditableTableModel<SSVoucherRow> {
 
         @Override
         public Class getColumnClass() {
-            return Date.class;
+            return LocalDateTime.class;
         }
 
         @Override

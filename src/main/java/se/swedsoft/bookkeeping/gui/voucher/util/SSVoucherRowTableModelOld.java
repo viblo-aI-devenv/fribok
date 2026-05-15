@@ -11,6 +11,7 @@ import se.swedsoft.bookkeeping.util.SSDateUtil;
 import javax.swing.*;
 import java.awt.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.LinkedList;
 
@@ -185,7 +186,7 @@ public class SSVoucherRowTableModelOld extends SSDefaultTableModel<SSVoucherRow>
             break;
 
         case COL_EDITED_DATE:
-            value = SSDateUtil.toDate(iVoucherRow.getLocalEditedDate());
+            value = iVoucherRow.getLocalEditedDate();
             break;
 
         case COL_EDITED_SIGNATURE:
@@ -279,7 +280,7 @@ public class SSVoucherRowTableModelOld extends SSDefaultTableModel<SSVoucherRow>
             return SSNewResultUnit.class;
 
         case COL_EDITED_DATE:
-            return Date.class;
+            return LocalDateTime.class;
 
         case COL_EDITED_SIGNATURE:
             return String.class;
@@ -370,6 +371,7 @@ public class SSVoucherRowTableModelOld extends SSDefaultTableModel<SSVoucherRow>
 
         // Set the default renderer for the date cells.
         iTable.setDefaultRenderer(Date.class, new SSDateCellRenderer());
+        iTable.setDefaultRenderer(LocalDateTime.class, new SSDateTimeCellRenderer());
 
         iTable.setDefaultRenderer(BigDecimal.class, new SSBigDecimalCellRenderer(2));
         iTable.setDefaultEditor(BigDecimal.class, new SSBigDecimalCellEditor(2));
