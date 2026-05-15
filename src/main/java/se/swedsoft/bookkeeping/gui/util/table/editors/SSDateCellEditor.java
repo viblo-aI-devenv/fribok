@@ -35,6 +35,8 @@ public class SSDateCellEditor extends AbstractCellEditor implements TableCellEdi
 
     private Date iDate;
 
+    private boolean iReturnLocalDate;
+
     /**
      * Default constructor.
      */
@@ -73,11 +75,13 @@ public class SSDateCellEditor extends AbstractCellEditor implements TableCellEdi
      * @return the value contained in the editor
      */
     public Object getCellEditorValue() {
-        return iDate;
+        return iReturnLocalDate ? SSDateUtil.toLocalDate(iDate) : iDate;
     }
 
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+        iReturnLocalDate = LocalDate.class.equals(table.getColumnClass(column)) || value instanceof LocalDate;
+
         if (value instanceof LocalDate) {
             setDate(SSDateUtil.toDate((LocalDate) value));
         } else if (value instanceof Date) {

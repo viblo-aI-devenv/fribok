@@ -8,12 +8,11 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSTableColumn;
 import se.swedsoft.bookkeeping.gui.util.table.model.SSTableModel;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.Date;
 
 
 /**
@@ -101,18 +100,18 @@ public class SSPeriodicInvoiceTableModel extends SSTableModel<SSPeriodicInvoice>
             SSBundle.getBundle().getString("periodicinvoicetable.column.3")) {
         @Override
         public Object getValue(SSPeriodicInvoice iObject) {
-            return SSDateUtil.toDate(iObject.getLocalDate());
+            return iObject.getLocalDate();
         }
 
         @Override
         public void setValue(SSPeriodicInvoice iObject, Object iValue) {
-            iObject.setLocalDate(SSDateUtil.toLocalDate((Date) iValue));
+            iObject.setLocalDate((LocalDate) iValue);
 
         }
 
         @Override
         public Class getColumnClass() {
-            return Date.class;
+            return LocalDate.class;
         }
 
         @Override
