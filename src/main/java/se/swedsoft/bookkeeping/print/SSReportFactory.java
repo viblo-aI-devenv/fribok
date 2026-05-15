@@ -1304,7 +1304,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
 
         SSProgressDialog.runProgress(iMainFrame, () -> {
 
-                SSSalevaluesPrinter iPrinter = new SSSalevaluesPrinter(iFrom, iTo);
+                SSSalevaluesPrinter iPrinter = new SSSalevaluesPrinter(SSDateUtil.toLocalDate(iFrom),
+                        SSDateUtil.toLocalDate(iTo));
 
                 iPrinter.preview(iMainFrame);
 
@@ -1339,7 +1340,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
 
         SSProgressDialog.runProgress(iMainFrame, () -> {
 
-                SSPurchasevaluePrinter iPrinter = new SSPurchasevaluePrinter(iFrom, iTo);
+                SSPurchasevaluePrinter iPrinter = new SSPurchasevaluePrinter(SSDateUtil.toLocalDate(iFrom),
+                        SSDateUtil.toLocalDate(iTo));
 
                 iPrinter.preview(iMainFrame);
 
