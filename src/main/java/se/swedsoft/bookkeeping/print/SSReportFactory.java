@@ -210,16 +210,16 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 "Välj period");
         SSNewAccountingYear iYear = SSDB.getInstance().getCurrentYear();
 
-        iDateDialog.setFrom(SSDateUtil.toDate(iYear.getLocalFrom()));
-        iDateDialog.setTo(SSDateUtil.toDate(iYear.getLocalTo()));
+        iDateDialog.setFrom(iYear.getLocalFrom());
+        iDateDialog.setTo(iYear.getLocalTo());
         iDateDialog.setLocationRelativeTo(iMainFrame);
 
         if (iDateDialog.showDialog() != JOptionPane.OK_OPTION) {
             return;
         }
 
-        final LocalDate iFrom = SSDateUtil.toLocalDate(iDateDialog.getFrom());
-        final LocalDate iTo = SSDateUtil.toLocalDate(iDateDialog.getTo());
+        final LocalDate iFrom = iDateDialog.getFrom();
+        final LocalDate iTo = iDateDialog.getTo();
 
         SSProgressDialog.runProgress(iMainFrame,
                 () -> {
@@ -307,20 +307,19 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         SSPeriodSelectionDialog iDialog = new SSPeriodSelectionDialog(iMainFrame,
                 bundle.getString("balancereport.perioddialog.title"));
 
-        iDialog.setFrom(SSDateUtil.toDate(iAccountingYear.getLocalFrom()));
-        iDialog.setTo(SSDateUtil.toDate(iAccountingYear.getLocalTo()));
+        iDialog.setFrom(iAccountingYear.getLocalFrom());
+        iDialog.setTo(iAccountingYear.getLocalTo());
         iDialog.setLocationRelativeTo(iMainFrame);
         if (iDialog.showDialog() != JOptionPane.OK_OPTION) {
             return;
         }
 
-        final Date iFrom = iDialog.getFrom();
-        final Date iTo = iDialog.getTo();
+        final LocalDate iFrom = iDialog.getFrom();
+        final LocalDate iTo = iDialog.getTo();
 
         SSProgressDialog.runProgress(iMainFrame, () -> {
 
-                SSBalancePrinter iPrinter = new SSBalancePrinter(SSDateUtil.toLocalDate(iFrom),
-                        SSDateUtil.toLocalDate(iTo));
+                SSBalancePrinter iPrinter = new SSBalancePrinter(iFrom, iTo);
 
                 iPrinter.preview(iMainFrame);
 
@@ -338,20 +337,19 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         SSPeriodSelectionDialog iDialog = new SSPeriodSelectionDialog(iMainFrame,
                 bundle.getString("budgetreport.perioddialog.title"));
 
-        iDialog.setFrom(SSDateUtil.toDate(iAccountingYear.getLocalFrom()));
-        iDialog.setTo(SSDateUtil.toDate(iAccountingYear.getLocalTo()));
+        iDialog.setFrom(iAccountingYear.getLocalFrom());
+        iDialog.setTo(iAccountingYear.getLocalTo());
         iDialog.setLocationRelativeTo(iMainFrame);
         if (iDialog.showDialog() != JOptionPane.OK_OPTION) {
             return;
         }
 
-        final Date iFrom = iDialog.getFrom();
-        final Date iTo = iDialog.getTo();
+        final LocalDate iFrom = iDialog.getFrom();
+        final LocalDate iTo = iDialog.getTo();
 
         SSProgressDialog.runProgress(iMainFrame, () -> {
 
-                SSBudgetPrinter iPrinter = new SSBudgetPrinter(SSDateUtil.toLocalDate(iFrom),
-                        SSDateUtil.toLocalDate(iTo));
+                SSBudgetPrinter iPrinter = new SSBudgetPrinter(iFrom, iTo);
 
                 iPrinter.preview(iMainFrame);
 
@@ -370,10 +368,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 + SSDB.getInstance().getCurrentYear().getId();
 
         java.time.LocalDate prevMonth = java.time.LocalDate.now().minusMonths(1);
-        Date iFrom = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
-                prevMonth.withDayOfMonth(1));
-        Date iTo = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
-                prevMonth.withDayOfMonth(prevMonth.lengthOfMonth()));
+        LocalDate iFrom = prevMonth.withDayOfMonth(1);
+        LocalDate iTo = prevMonth.withDayOfMonth(prevMonth.lengthOfMonth());
 
         SSPeriodSelectionDialog iDialog = new SSPeriodSelectionDialog(iMainFrame,
                 bundle.getString("vatreport.perioddialog.title"));
@@ -387,8 +383,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
             return;
         }
 
-        final Date localFrom = iDialog.getFrom();
-        final Date localTo = iDialog.getTo();
+        final LocalDate localFrom = iDialog.getFrom();
+        final LocalDate localTo = iDialog.getTo();
 
         // Get the active accounts
         List<SSAccount> iAccounts = iAccountingYear.getAccounts();
@@ -411,12 +407,10 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 iAccountingYear.getAccountPlan().getAccount(3740)).orElse(null);
 
         String voucherName = String.format(bundle.getString("vatbasis.vouchername"),
-                format.format(localFrom), format.format(localTo));
+                format.format(SSDateUtil.toDate(localFrom)), format.format(SSDateUtil.toDate(localTo)));
 
-        final LocalDate localDateFrom = SSDateUtil.toLocalDate(localFrom);
-        final LocalDate localDateTo = SSDateUtil.toLocalDate(localTo);
-        final SSVoucher iVoucher = SSVATUtil.generateVATVoucher(voucherName, localDateFrom,
-                localDateTo, accountR1, accountR2, accountA);
+        final SSVoucher iVoucher = SSVATUtil.generateVATVoucher(voucherName, localFrom,
+                localTo, accountR1, accountR2, accountA);
 
         // This runs the report generations with a progress iDialog
         SSProgressDialog.runProgress(iMainFrame,
@@ -424,9 +418,9 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
 
 
                         SSVATReportPrinter  iPrinter1 = new SSVATReportPrinter(iAccountingYear,
-                                localDateFrom, localDateTo);
+                                localFrom, localTo);
                         SSVATControlPrinter iPrinter2 = new SSVATControlPrinter(iAccountingYear,
-                                localDateFrom, localDateTo);
+                                localFrom, localTo);
                         SSVoucherPrinter iPrinter3 = new SSVoucherPrinter(iVoucher,
                                 bundle.getString("vatbasisreport.title"), accountR1, accountR2,
                                 accountA);
@@ -446,8 +440,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                             @Override
                             public void internalFrameClosed(InternalFrameEvent e) {
                                 // Ask the user if he wants to generate a vatVoucher
-                                dialogVATVoucher(iMainFrame, iVoucher, iAccountingYear, localFrom,
-                                        localTo);
+                                dialogVATVoucher(iMainFrame, iVoucher, iAccountingYear,
+                                        SSDateUtil.toDate(localFrom), SSDateUtil.toDate(localTo));
 
                                 // For some reason this event get called over and over, this is a "hack" to avoid it
                                 e.getInternalFrame().removeInternalFrameListener(this);
@@ -619,21 +613,20 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         SSPeriodSelectionDialog iDialog = new SSPeriodSelectionDialog(iMainFrame,
                 SSBundle.getBundle().getString("simplestatement.dialog.title"));
 
-        iDialog.setFrom(SSDateUtil.toDate(SSDB.getInstance().getCurrentYear().getLocalFrom()));
-        iDialog.setTo(SSDateUtil.toDate(SSDB.getInstance().getCurrentYear().getLocalTo()));
+        iDialog.setFrom(SSDB.getInstance().getCurrentYear().getLocalFrom());
+        iDialog.setTo(SSDB.getInstance().getCurrentYear().getLocalTo());
         iDialog.setLocationRelativeTo(iMainFrame);
         if (iDialog.showDialog() != JOptionPane.YES_NO_OPTION) {
             return;
         }
 
-        final Date iFrom = iDialog.getFrom();
-        final Date iTo = iDialog.getTo();
+        final LocalDate iFrom = iDialog.getFrom();
+        final LocalDate iTo = iDialog.getTo();
 
         SSProgressDialog.runProgress(iMainFrame,
                 () -> {
 
-                        SSSimpleStatementPrinter iPrinter = new SSSimpleStatementPrinter(
-                                SSDateUtil.toLocalDate(iFrom), SSDateUtil.toLocalDate(iTo));
+                        SSSimpleStatementPrinter iPrinter = new SSSimpleStatementPrinter(iFrom, iTo);
 
                         iPrinter.preview(iMainFrame);
 
@@ -1290,25 +1283,24 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 bundle.getString("salevalues.perioddialog.title"));
 
         if (iAccountingYear != null) {
-            iDialog.setFrom(SSDateUtil.toDate(iAccountingYear.getLocalFrom()));
-            iDialog.setTo(SSDateUtil.toDate(iAccountingYear.getLocalTo()));
+            iDialog.setFrom(iAccountingYear.getLocalFrom());
+            iDialog.setTo(iAccountingYear.getLocalTo());
         } else {
             LocalDate now = LocalDate.now();
-            iDialog.setFrom(SSDateUtil.toDate(now));
-            iDialog.setTo(SSDateUtil.toDate(now.plusMonths(1)));
+            iDialog.setFrom(now);
+            iDialog.setTo(now.plusMonths(1));
         }
         iDialog.setLocationRelativeTo(iMainFrame);
         if (iDialog.showDialog() != JOptionPane.OK_OPTION) {
             return;
         }
 
-        final Date iFrom = iDialog.getFrom();
-        final Date iTo = iDialog.getTo();
+        final LocalDate iFrom = iDialog.getFrom();
+        final LocalDate iTo = iDialog.getTo();
 
         SSProgressDialog.runProgress(iMainFrame, () -> {
 
-                SSSalevaluesPrinter iPrinter = new SSSalevaluesPrinter(SSDateUtil.toLocalDate(iFrom),
-                        SSDateUtil.toLocalDate(iTo));
+                SSSalevaluesPrinter iPrinter = new SSSalevaluesPrinter(iFrom, iTo);
 
                 iPrinter.preview(iMainFrame);
 
@@ -1326,25 +1318,24 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 bundle.getString("purchasevalues.perioddialog.title"));
 
         if (iAccountingYear != null) {
-            iDialog.setFrom(SSDateUtil.toDate(iAccountingYear.getLocalFrom()));
-            iDialog.setTo(SSDateUtil.toDate(iAccountingYear.getLocalTo()));
+            iDialog.setFrom(iAccountingYear.getLocalFrom());
+            iDialog.setTo(iAccountingYear.getLocalTo());
         } else {
             LocalDate now = LocalDate.now();
-            iDialog.setFrom(SSDateUtil.toDate(now));
-            iDialog.setTo(SSDateUtil.toDate(now.plusMonths(1)));
+            iDialog.setFrom(now);
+            iDialog.setTo(now.plusMonths(1));
         }
         iDialog.setLocationRelativeTo(iMainFrame);
         if (iDialog.showDialog() != JOptionPane.OK_OPTION) {
             return;
         }
 
-        final Date iFrom = iDialog.getFrom();
-        final Date iTo = iDialog.getTo();
+        final LocalDate iFrom = iDialog.getFrom();
+        final LocalDate iTo = iDialog.getTo();
 
         SSProgressDialog.runProgress(iMainFrame, () -> {
 
-                SSPurchasevaluePrinter iPrinter = new SSPurchasevaluePrinter(SSDateUtil.toLocalDate(iFrom),
-                        SSDateUtil.toLocalDate(iTo));
+                SSPurchasevaluePrinter iPrinter = new SSPurchasevaluePrinter(iFrom, iTo);
 
                 iPrinter.preview(iMainFrame);
 
@@ -2126,10 +2117,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         SSPeriodSelectionDialog iDialog = new SSPeriodSelectionDialog(iMainFrame,
                 SSBundle.getBundle().getString("invoicejournal.dialog.title"));
         java.time.LocalDate prevMonth = java.time.LocalDate.now().minusMonths(1);
-        Date iFirstDayOfMonth = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
-                prevMonth.withDayOfMonth(1));
-        Date iLastDayOfMonth = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
-                prevMonth.withDayOfMonth(prevMonth.lengthOfMonth()));
+        LocalDate iFirstDayOfMonth = prevMonth.withDayOfMonth(1);
+        LocalDate iLastDayOfMonth = prevMonth.withDayOfMonth(prevMonth.lengthOfMonth());
 
         iDialog.setFrom(iFirstDayOfMonth);
         iDialog.setTo(iLastDayOfMonth);
@@ -2140,10 +2129,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         }
         List<SSInvoice> iInvoices = SSDB.getInstance().getInvoices();
 
-        final Date iFrom = iDialog.getFrom();
-        final Date iTo = iDialog.getTo();
-        final LocalDate localFrom = SSDateUtil.toLocalDate(iFrom);
-        final LocalDate localTo = SSDateUtil.toLocalDate(iTo);
+        final LocalDate localFrom = iDialog.getFrom();
+        final LocalDate localTo = iDialog.getTo();
 
         final List<SSInvoice> iFiltered = iInvoices.stream()
                 .filter(iInvoice -> !iInvoice.isEntered() && SSInvoiceMath.inPeriod(iInvoice, localFrom, localTo))
@@ -2231,10 +2218,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 SSBundle.getBundle().getString("creditinvoicejournal.dialog.title"));
 
         java.time.LocalDate prevMonth = java.time.LocalDate.now().minusMonths(1);
-        Date iFirstDayOfMonth = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
-                prevMonth.withDayOfMonth(1));
-        Date iLastDayOfMonth = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
-                prevMonth.withDayOfMonth(prevMonth.lengthOfMonth()));
+        LocalDate iFirstDayOfMonth = prevMonth.withDayOfMonth(1);
+        LocalDate iLastDayOfMonth = prevMonth.withDayOfMonth(prevMonth.lengthOfMonth());
 
         iDialog.setFrom(iFirstDayOfMonth);
         iDialog.setTo(iLastDayOfMonth);
@@ -2246,10 +2231,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         }
         List<SSCreditInvoice> iCreditInvoices = SSDB.getInstance().getCreditInvoices();
 
-        final Date iFrom = iDialog.getFrom();
-        final Date iTo = iDialog.getTo();
-        final LocalDate localFrom = SSDateUtil.toLocalDate(iFrom);
-        final LocalDate localTo = SSDateUtil.toLocalDate(iTo);
+        final LocalDate localFrom = iDialog.getFrom();
+        final LocalDate localTo = iDialog.getTo();
 
         final List<SSCreditInvoice> iFiltered = iCreditInvoices.stream()
                 .filter(iCreditInvoice -> !iCreditInvoice.isEntered()
@@ -2340,10 +2323,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 SSBundle.getBundle().getString("inpaymentjournal.dialog.title"));
 
         java.time.LocalDate prevMonth = java.time.LocalDate.now().minusMonths(1);
-        Date iFirstDayOfMonth = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
-                prevMonth.withDayOfMonth(1));
-        Date iLastDayOfMonth = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
-                prevMonth.withDayOfMonth(prevMonth.lengthOfMonth()));
+        LocalDate iFirstDayOfMonth = prevMonth.withDayOfMonth(1);
+        LocalDate iLastDayOfMonth = prevMonth.withDayOfMonth(prevMonth.lengthOfMonth());
 
         iDialog.setFrom(iFirstDayOfMonth);
         iDialog.setTo(iLastDayOfMonth);
@@ -2358,10 +2339,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         }
         List<SSInpayment> iInpayments = SSDB.getInstance().getInpayments();
 
-        final Date iFrom = iDialog.getFrom();
-        final Date iTo = iDialog.getTo();
-        final LocalDate localFrom = SSDateUtil.toLocalDate(iFrom);
-        final LocalDate localTo = SSDateUtil.toLocalDate(iTo);
+        final LocalDate localFrom = iDialog.getFrom();
+        final LocalDate localTo = iDialog.getTo();
 
         final List<SSInpayment> iFiltered = iInpayments.stream()
                 .filter(iInpayment -> !iInpayment.isEntered()
@@ -2451,10 +2430,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 SSBundle.getBundle().getString("supplierinvoicejournal.dialog.title"));
 
         java.time.LocalDate prevMonth = java.time.LocalDate.now().minusMonths(1);
-        Date iFirstDayOfMonth = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
-                prevMonth.withDayOfMonth(1));
-        Date iLastDayOfMonth = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
-                prevMonth.withDayOfMonth(prevMonth.lengthOfMonth()));
+        LocalDate iFirstDayOfMonth = prevMonth.withDayOfMonth(1);
+        LocalDate iLastDayOfMonth = prevMonth.withDayOfMonth(prevMonth.lengthOfMonth());
 
         iDialog.setFrom(iFirstDayOfMonth);
         iDialog.setTo(iLastDayOfMonth);
@@ -2468,10 +2445,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         }
         List<SSSupplierInvoice> iInvoices = SSDB.getInstance().getSupplierInvoices();
 
-        final Date iFrom = iDialog.getFrom();
-        final Date iTo = iDialog.getTo();
-        final LocalDate localFrom = SSDateUtil.toLocalDate(iFrom);
-        final LocalDate localTo = SSDateUtil.toLocalDate(iTo);
+        final LocalDate localFrom = iDialog.getFrom();
+        final LocalDate localTo = iDialog.getTo();
 
         final List<SSSupplierInvoice> iFiltered = iInvoices.stream()
                 .filter(iInvoice -> !iInvoice.isEntered()
@@ -2562,10 +2537,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 SSBundle.getBundle().getString("suppliercreditinvoicejournal.dialog.title"));
 
         java.time.LocalDate prevMonth = java.time.LocalDate.now().minusMonths(1);
-        Date iFirstDayOfMonth = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
-                prevMonth.withDayOfMonth(1));
-        Date iLastDayOfMonth = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
-                prevMonth.withDayOfMonth(prevMonth.lengthOfMonth()));
+        LocalDate iFirstDayOfMonth = prevMonth.withDayOfMonth(1);
+        LocalDate iLastDayOfMonth = prevMonth.withDayOfMonth(prevMonth.lengthOfMonth());
 
         iDialog.setFrom(iFirstDayOfMonth);
         iDialog.setTo(iLastDayOfMonth);
@@ -2579,10 +2552,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         }
         List<SSSupplierCreditInvoice> iInvoices = SSDB.getInstance().getSupplierCreditInvoices();
 
-        final Date iFrom = iDialog.getFrom();
-        final Date iTo = iDialog.getTo();
-        final LocalDate localFrom = SSDateUtil.toLocalDate(iFrom);
-        final LocalDate localTo = SSDateUtil.toLocalDate(iTo);
+        final LocalDate localFrom = iDialog.getFrom();
+        final LocalDate localTo = iDialog.getTo();
 
         final List<SSSupplierCreditInvoice> iFiltered = iInvoices.stream()
                 .filter(iInvoice -> !iInvoice.isEntered()
@@ -2675,10 +2646,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 SSBundle.getBundle().getString("outpaymentjournal.dialog.title"));
 
         java.time.LocalDate prevMonth = java.time.LocalDate.now().minusMonths(1);
-        Date iFirstDayOfMonth = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
-                prevMonth.withDayOfMonth(1));
-        Date iLastDayOfMonth = se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
-                prevMonth.withDayOfMonth(prevMonth.lengthOfMonth()));
+        LocalDate iFirstDayOfMonth = prevMonth.withDayOfMonth(1);
+        LocalDate iLastDayOfMonth = prevMonth.withDayOfMonth(prevMonth.lengthOfMonth());
 
         iDialog.setFrom(iFirstDayOfMonth);
         iDialog.setTo(iLastDayOfMonth);
@@ -2691,10 +2660,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         }
         List<SSOutpayment> iOutpayments = SSDB.getInstance().getOutpayments();
 
-        final Date iFrom = iDialog.getFrom();
-        final Date iTo = iDialog.getTo();
-        final LocalDate localFrom = SSDateUtil.toLocalDate(iFrom);
-        final LocalDate localTo = SSDateUtil.toLocalDate(iTo);
+        final LocalDate localFrom = iDialog.getFrom();
+        final LocalDate localTo = iDialog.getTo();
 
         final List<SSOutpayment> iFiltered = iOutpayments.stream()
                 .filter(iOutpayment -> !iOutpayment.isEntered()
