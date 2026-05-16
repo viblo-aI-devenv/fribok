@@ -10,7 +10,7 @@ import se.swedsoft.bookkeeping.gui.util.dialogs.SSDialog;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
+import java.time.LocalDate;
 
 
 /**
@@ -43,8 +43,8 @@ public class SSCustomerclaimDialog extends SSDialog {
      *
      * @return
      */
-    public Date getDate() {
-        return iDate.getDate();
+    public LocalDate getLocalDate() {
+        return iDate.getLocalDate();
     }
 
     @Override

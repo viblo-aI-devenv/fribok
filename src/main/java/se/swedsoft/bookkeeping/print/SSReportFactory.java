@@ -1160,13 +1160,12 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         if (iDialog.showDialog() != JOptionPane.OK_OPTION) {
             return;
         }
-        final Date iDate = iDialog.getDate();
+        final LocalDate iDate = iDialog.getLocalDate();
 
         SSProgressDialog.runProgress(iMainFrame,
                 () -> {
 
-                        SSAccountsRecievablePrinter iPrinter = new SSAccountsRecievablePrinter(
-                                SSDateUtil.toLocalDate(iDate));
+                        SSAccountsRecievablePrinter iPrinter = new SSAccountsRecievablePrinter(iDate);
 
                         iPrinter.preview(iMainFrame);
 
@@ -1187,13 +1186,12 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
             return;
         }
 
-        final Date iDate = iDialog.getDate();
+        final LocalDate iDate = iDialog.getLocalDate();
 
         SSProgressDialog.runProgress(iMainFrame,
                 () -> {
 
-                        SSCustomerclaimPrinter iPrinter = new SSCustomerclaimPrinter(
-                                SSDateUtil.toLocalDate(iDate));
+                        SSCustomerclaimPrinter iPrinter = new SSCustomerclaimPrinter(iDate);
 
                         iPrinter.preview(iMainFrame);
 
@@ -1214,12 +1212,11 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
             return;
         }
 
-        final Date iDate = iDialog.getDate();
+        final LocalDate iDate = iDialog.getLocalDate();
 
         SSProgressDialog.runProgress(iMainFrame, () -> {
 
-                SSAccountsPayablePrinter iPrinter = new SSAccountsPayablePrinter(
-                        SSDateUtil.toLocalDate(iDate));
+                SSAccountsPayablePrinter iPrinter = new SSAccountsPayablePrinter(iDate);
 
                 iPrinter.preview(iMainFrame);
 
@@ -1239,12 +1236,11 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         if (iDialog.showDialog() != JOptionPane.OK_OPTION) {
             return;
         }
-        final Date iDate = iDialog.getDate();
+        final LocalDate iDate = iDialog.getLocalDate();
 
         SSProgressDialog.runProgress(iMainFrame, () -> {
 
-                SSSupplierdebtPrinter iPrinter = new SSSupplierdebtPrinter(
-                        SSDateUtil.toLocalDate(iDate));
+                SSSupplierdebtPrinter iPrinter = new SSSupplierdebtPrinter(iDate);
 
                 iPrinter.preview(iMainFrame);
 

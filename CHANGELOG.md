@@ -161,6 +161,8 @@ diverging from upstream version 2.2-SNAPSHOT.
   chooser `LocalDate` values directly.
 - Removed obsolete stock report dialog `Date` accessors after callers moved to
   `LocalDate` accessors.
+- Continued the date migration in cutoff report dialogs by returning selected
+  dates as `LocalDate` for receivable, payable, claim, and supplier debt reports.
 - Dropped the legacy pre-HSQL `bookkeeper.db` import path and its archived
   `db/databas_v1.zip` handoff, requiring very old installations to migrate via
   historical Bokfri releases before using this fork.
