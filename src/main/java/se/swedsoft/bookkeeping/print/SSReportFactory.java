@@ -319,7 +319,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
 
         SSProgressDialog.runProgress(iMainFrame, () -> {
 
-                SSBalancePrinter iPrinter = new SSBalancePrinter(iFrom, iTo);
+                SSBalancePrinter iPrinter = new SSBalancePrinter(SSDateUtil.toLocalDate(iFrom),
+                        SSDateUtil.toLocalDate(iTo));
 
                 iPrinter.preview(iMainFrame);
 
@@ -627,8 +628,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         SSProgressDialog.runProgress(iMainFrame,
                 () -> {
 
-                        SSSimpleStatementPrinter iPrinter = new SSSimpleStatementPrinter(iFrom,
-                                iTo);
+                        SSSimpleStatementPrinter iPrinter = new SSSimpleStatementPrinter(
+                                SSDateUtil.toLocalDate(iFrom), SSDateUtil.toLocalDate(iTo));
 
                         iPrinter.preview(iMainFrame);
 

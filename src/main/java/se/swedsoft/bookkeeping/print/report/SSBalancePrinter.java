@@ -10,7 +10,6 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -27,16 +26,16 @@ public class SSBalancePrinter extends SSPrinter {
 
     SSAccountSchema iAccountSchema;
 
-    Date iDateFrom;
+    LocalDate iDateFrom;
 
-    Date iDateTo;
+    LocalDate iDateTo;
 
     /**
      *
      * @param pFrom
      * @param pTo
      */
-    public SSBalancePrinter(Date pFrom, Date pTo) {
+    public SSBalancePrinter(LocalDate pFrom, LocalDate pTo) {
         this(SSDB.getInstance().getCurrentYear(), pFrom, pTo);
     }
 
@@ -46,7 +45,7 @@ public class SSBalancePrinter extends SSPrinter {
      * @param pFrom
      * @param pTo
      */
-    public SSBalancePrinter(SSNewAccountingYear pYearData, Date pFrom, Date pTo) {
+    public SSBalancePrinter(SSNewAccountingYear pYearData, LocalDate pFrom, LocalDate pTo) {
         iYearData = pYearData;
         iDateFrom = pFrom;
         iDateTo = pTo;
@@ -79,10 +78,7 @@ public class SSBalancePrinter extends SSPrinter {
 
         SSBalanceCalculator iCalculator = new SSBalanceCalculator(iYearData);
 
-        LocalDate iLocalDateFrom = SSDateUtil.toLocalDate(iDateFrom);
-        LocalDate iLocalDateTo = SSDateUtil.toLocalDate(iDateTo);
-
-        iCalculator.calculate(iLocalDateFrom, iLocalDateTo);
+        iCalculator.calculate(iDateFrom, iDateTo);
 
         final Map<SSAccount, BigDecimal> iInBalance = iCalculator.getInBalance();
         final Map<SSAccount, BigDecimal> iInSaldo = iCalculator.getInSaldo();
