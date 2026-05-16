@@ -218,14 +218,13 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
             return;
         }
 
-        final Date iFrom = iDateDialog.getFrom();
-        final Date iTo = iDateDialog.getTo();
+        final LocalDate iFrom = SSDateUtil.toLocalDate(iDateDialog.getFrom());
+        final LocalDate iTo = SSDateUtil.toLocalDate(iDateDialog.getTo());
 
         SSProgressDialog.runProgress(iMainFrame,
                 () -> {
 
-                        SSOwnReportPrinter iPrinter = new SSOwnReportPrinter(iFrom, iTo,
-                                iOwnReport);
+                        SSOwnReportPrinter iPrinter = new SSOwnReportPrinter(iFrom, iTo, iOwnReport);
 
                         iPrinter.preview(iMainFrame);
 
