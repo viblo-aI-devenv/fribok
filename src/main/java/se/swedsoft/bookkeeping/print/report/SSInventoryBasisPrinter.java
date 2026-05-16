@@ -11,9 +11,9 @@ import se.swedsoft.bookkeeping.gui.util.graphics.SSImage;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 
@@ -46,7 +46,7 @@ public class SSInventoryBasisPrinter extends SSPrinter {
      *
      * @param iDate
      */
-    public SSInventoryBasisPrinter(Date iDate) {
+    public SSInventoryBasisPrinter(LocalDate iDate) {
         // Get all stock products
         iProducts = SSProductMath.getStockProducts(SSDB.getInstance().getProducts());
         iStock = new SSStock();

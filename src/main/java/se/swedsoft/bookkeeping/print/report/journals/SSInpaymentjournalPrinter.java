@@ -9,10 +9,10 @@ import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
 import se.swedsoft.bookkeeping.print.util.SSDefaultJasperDataSource;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 
@@ -36,7 +36,7 @@ public class SSInpaymentjournalPrinter extends SSPrinter {
      * @param iNumber
      * @param iDate
      */
-    public SSInpaymentjournalPrinter(List<SSInpayment> iInpayments, Integer iNumber, Date iDate) {
+    public SSInpaymentjournalPrinter(List<SSInpayment> iInpayments, Integer iNumber, LocalDate iDate) {
         this.iInpayments = iInpayments;
         this.iNumber = iNumber;
 

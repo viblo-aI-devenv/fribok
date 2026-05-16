@@ -186,7 +186,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 SSProgressDialog.runProgress(iMainFrame,
                         () -> {
 
-                                SSResultPrinter iPrinter = new SSResultPrinter(lFrom, lTo,
+                                SSResultPrinter iPrinter = new SSResultPrinter(
+                                        SSDateUtil.toLocalDate(lFrom), SSDateUtil.toLocalDate(lTo),
                                         lPrintBudget, lPrintLastyear);
 
                                 iPrinter.preview(iMainFrame);
@@ -217,14 +218,13 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
             return;
         }
 
-        final Date iFrom = iDateDialog.getFrom();
-        final Date iTo = iDateDialog.getTo();
+        final LocalDate iFrom = SSDateUtil.toLocalDate(iDateDialog.getFrom());
+        final LocalDate iTo = SSDateUtil.toLocalDate(iDateDialog.getTo());
 
         SSProgressDialog.runProgress(iMainFrame,
                 () -> {
 
-                        SSOwnReportPrinter iPrinter = new SSOwnReportPrinter(iFrom, iTo,
-                                iOwnReport);
+                        SSOwnReportPrinter iPrinter = new SSOwnReportPrinter(iFrom, iTo, iOwnReport);
 
                         iPrinter.preview(iMainFrame);
 
@@ -255,8 +255,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         SSProgressDialog.runProgress(iMainFrame,
                 () -> {
 
-                        SSProjectResultPrinter iPrinter = new SSProjectResultPrinter(iFrom, iTo,
-                                iProject);
+                        SSProjectResultPrinter iPrinter = new SSProjectResultPrinter(
+                                SSDateUtil.toLocalDate(iFrom), SSDateUtil.toLocalDate(iTo), iProject);
 
                         iPrinter.preview(iMainFrame);
 
@@ -288,8 +288,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         SSProgressDialog.runProgress(iMainFrame,
                 () -> {
 
-                        SSResultUnitResultPrinter iPrinter = new SSResultUnitResultPrinter(iFrom,
-                                iTo, iResultUnit);
+                        SSResultUnitResultPrinter iPrinter = new SSResultUnitResultPrinter(
+                                SSDateUtil.toLocalDate(iFrom), SSDateUtil.toLocalDate(iTo), iResultUnit);
 
                         iPrinter.preview(iMainFrame);
 
@@ -1139,7 +1139,7 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 SSStockAccountPrinter iPrinter;
 
                 if (iDateSelected) {
-                    iPrinter = new SSStockAccountPrinter(iDate);
+                    iPrinter = new SSStockAccountPrinter(SSDateUtil.toLocalDate(iDate));
                 } else {
                     iPrinter = new SSStockAccountPrinter();
                 }
@@ -2104,8 +2104,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
             return;
         }
 
-        final Date iDate = iDialog.getDate();
-        final Date iEndDate = iDialog.getEndDate();
+        final LocalDate iDate = SSDateUtil.toLocalDate(iDialog.getDate());
+        final LocalDate iEndDate = SSDateUtil.toLocalDate(iDialog.getEndDate());
 
         SSProgressDialog.runProgress(iMainFrame,
                 () -> {
@@ -2166,7 +2166,7 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                         SSBundle.getBundle().getString(
                                 "invoicejournal.voucher.description"),
                                 iNumber));
-        iVoucher.setLocalDate(SSDateUtil.toLocalDate(iTo));
+        iVoucher.setLocalDate(localTo);
 
         for (SSInvoice iInvoice : iFiltered) {
             SSVoucher iCurrent = iInvoice.generateVoucher();
@@ -2209,7 +2209,7 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 () -> {
 
                         SSInvoicejournalPrinter iPrinter1 = new SSInvoicejournalPrinter(iFiltered,
-                                iNumber, iTo);
+                                iNumber, localTo);
 
                         SSVoucherPrinter iPrinter2 = new SSVoucherPrinter(iVoucher1,
                                 iPrinter1.getTitle());
@@ -2273,7 +2273,7 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                         SSBundle.getBundle().getString(
                                 "creditinvoicejournal.voucher.description"),
                                 iNumber));
-        iVoucher.setLocalDate(SSDateUtil.toLocalDate(iTo));
+        iVoucher.setLocalDate(localTo);
 
         for (SSCreditInvoice iCreditInvoice : iFiltered) {
             SSVoucher iCurrent = iCreditInvoice.generateVoucher();
@@ -2317,7 +2317,7 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 () -> {
 
                         SSCreditinvoicejournalPrinter iPrinter1 = new SSCreditinvoicejournalPrinter(
-                                iFiltered, iNumber, iTo);
+                                iFiltered, iNumber, localTo);
 
                         SSVoucherPrinter            iPrinter2 = new SSVoucherPrinter(iVoucher1,
                                 iPrinter1.getTitle());
@@ -2385,7 +2385,7 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                         SSBundle.getBundle().getString(
                                 "inpaymentjournal.voucher.description"),
                                 iNumber));
-        iVoucher.setLocalDate(SSDateUtil.toLocalDate(iTo));
+        iVoucher.setLocalDate(localTo);
 
         for (SSInpayment iInpayment : iFiltered) {
             SSVoucher iCurrent = iInpayment.generateVoucher();
@@ -2428,7 +2428,7 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 () -> {
 
                         SSInpaymentjournalPrinter iPrinter1 = new SSInpaymentjournalPrinter(
-                                iFiltered, iNumber, iTo);
+                                iFiltered, iNumber, localTo);
 
                         SSVoucherPrinter            iPrinter2 = new SSVoucherPrinter(iVoucher1,
                                 iPrinter1.getTitle());
@@ -2495,7 +2495,7 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                         SSBundle.getBundle().getString(
                                 "supplierinvoicejournal.voucher.description"),
                                 iNumber));
-        iVoucher.setLocalDate(SSDateUtil.toLocalDate(iTo));
+        iVoucher.setLocalDate(localTo);
 
         for (SSSupplierInvoice iInvoice : iFiltered) {
             SSVoucher iCurrent = iInvoice.generateVoucher();
@@ -2540,7 +2540,7 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 () -> {
 
                         SSSupplierInvoicejournalPrinter iPrinter1 = new SSSupplierInvoicejournalPrinter(
-                                iFiltered, iNumber, iTo);
+                                iFiltered, iNumber, localTo);
 
                         SSVoucherPrinter     iPrinter2 = new SSVoucherPrinter(iVoucher1,
                                 iPrinter1.getTitle());
@@ -2608,7 +2608,7 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                         SSBundle.getBundle().getString(
                                 "suppliercreditinvoicejournal.voucher.description"),
                                 iNumber));
-        iVoucher.setLocalDate(SSDateUtil.toLocalDate(iTo));
+        iVoucher.setLocalDate(localTo);
 
         for (SSSupplierCreditInvoice iInvoice : iFiltered) {
             SSVoucher iCurrent = iInvoice.generateVoucher();
@@ -2653,7 +2653,7 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 () -> {
 
                         SSSuppliercreditinvoicejournalPrinter iPrinter1 = new SSSuppliercreditinvoicejournalPrinter(
-                                iFiltered, iNumber, iTo);
+                                iFiltered, iNumber, localTo);
 
                         SSVoucherPrinter     iPrinter2 = new SSVoucherPrinter(iVoucher1,
                                 iPrinter1.getTitle());
@@ -2718,7 +2718,7 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                         SSBundle.getBundle().getString(
                                 "outpaymentjournal.voucher.description"),
                                 iNumber));
-        iVoucher.setLocalDate(SSDateUtil.toLocalDate(iTo));
+        iVoucher.setLocalDate(localTo);
 
         for (SSOutpayment iOutpayment : iFiltered) {
             SSVoucher iCurrent = iOutpayment.generateVoucher();
@@ -2763,7 +2763,7 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 () -> {
 
                         SSOutpaymentjournalPrinter iPrinter1 = new SSOutpaymentjournalPrinter(
-                                iFiltered, iNumber, iTo);
+                                iFiltered, iNumber, localTo);
 
                         SSVoucherPrinter            iPrinter2 = new SSVoucherPrinter(iVoucher1,
                                 iPrinter1.getTitle());

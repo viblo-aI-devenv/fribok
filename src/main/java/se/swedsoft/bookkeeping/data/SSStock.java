@@ -5,7 +5,6 @@ import se.swedsoft.bookkeeping.calc.math.*;
 import se.swedsoft.bookkeeping.calc.util.SSFilter;
 import se.swedsoft.bookkeeping.calc.util.SSFilterFactory;
 import se.swedsoft.bookkeeping.data.system.SSDB;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -99,14 +98,6 @@ public class SSStock {
 
         calculate(iOrders, iInvoices, iCreditInvoices, iPurchaseOrders, iSupplierInvoices,
                 iSupplierCreditInvoices, iInventories, iIndeliveries, iOutdeliveries);
-    }
-
-    /**
-     *
-     * @param iDate
-     */
-    public void update(final Date iDate) {
-        update(SSDateUtil.toLocalDate(iDate));
     }
 
     public void update(final LocalDate iDate) {

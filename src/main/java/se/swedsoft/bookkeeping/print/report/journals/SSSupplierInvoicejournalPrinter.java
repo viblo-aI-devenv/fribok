@@ -10,11 +10,11 @@ import se.swedsoft.bookkeeping.print.SSPrinter;
 import se.swedsoft.bookkeeping.print.util.SSDefaultJasperDataSource;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 
@@ -38,7 +38,7 @@ public class SSSupplierInvoicejournalPrinter extends SSPrinter {
      * @param iNumber
      * @param iDate
      */
-    public SSSupplierInvoicejournalPrinter(List<SSSupplierInvoice> iInvoices, Integer iNumber, Date iDate) {
+    public SSSupplierInvoicejournalPrinter(List<SSSupplierInvoice> iInvoices, Integer iNumber, LocalDate iDate) {
         this.iInvoices = iInvoices;
         this.iNumber = iNumber;
 

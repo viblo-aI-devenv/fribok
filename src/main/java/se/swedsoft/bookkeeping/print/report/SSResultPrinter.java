@@ -10,7 +10,6 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -29,9 +28,9 @@ public class SSResultPrinter extends SSPrinter {
 
     SSAccountSchema iAccountSchema;
 
-    Date iDateFrom;
+    LocalDate iDateFrom;
 
-    Date iDateTo;
+    LocalDate iDateTo;
 
     boolean iShowBudget;
 
@@ -44,7 +43,7 @@ public class SSResultPrinter extends SSPrinter {
      * @param pShowBudget
      * @param pShowPrevYear
      */
-    public SSResultPrinter(Date pFrom, Date pTo, boolean pShowBudget, boolean pShowPrevYear) {
+    public SSResultPrinter(LocalDate pFrom, LocalDate pTo, boolean pShowBudget, boolean pShowPrevYear) {
         this(SSDB.getInstance().getCurrentYear(), pFrom, pTo, pShowBudget, pShowPrevYear);
     }
 
@@ -56,7 +55,7 @@ public class SSResultPrinter extends SSPrinter {
      * @param pShowBudget
      * @param pShowPrevYear
      */
-    public SSResultPrinter(SSNewAccountingYear pYearData, Date pFrom, Date pTo, boolean pShowBudget, boolean pShowPrevYear) {
+    public SSResultPrinter(SSNewAccountingYear pYearData, LocalDate pFrom, LocalDate pTo, boolean pShowBudget, boolean pShowPrevYear) {
         iYearData = pYearData;
         iDateFrom = pFrom;
         iDateTo = pTo;
@@ -302,11 +301,11 @@ public class SSResultPrinter extends SSPrinter {
     }
 
     protected LocalDate getLocalDateFrom() {
-        return SSDateUtil.toLocalDate(iDateFrom);
+        return iDateFrom;
     }
 
     protected LocalDate getLocalDateTo() {
-        return SSDateUtil.toLocalDate(iDateTo);
+        return iDateTo;
     }
 
     protected Map<SSAccount, BigDecimal> iColumn1;

@@ -494,7 +494,7 @@ public class SSMainMenu {    private static final Logger LOG = LoggerFactory.get
 
                         SSInventoryBasisPrinter iPrinter;
                         if(iDateSelected){
-                            iPrinter = new SSInventoryBasisPrinter(iDate);
+                            iPrinter = new SSInventoryBasisPrinter(SSDateUtil.toLocalDate(iDate));
                         } else {
                             iPrinter = new SSInventoryBasisPrinter();
                         }

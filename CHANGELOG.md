@@ -131,6 +131,20 @@ diverging from upstream version 2.2-SNAPSHOT.
   value printers by keeping report cutoff dates as `LocalDate` internally.
 - Continued the date migration in main-book, balance, simple-statement, and VAT
   printers by keeping report periods as `LocalDate` through calculation.
+- Continued the date migration in journal printers by passing `LocalDate` period
+  values through report construction.
+- Continued the date migration in stock account and inventory-basis printers by
+  keeping selected report dates as `LocalDate` until stock calculation boundaries.
+- Continued the date migration in result printers by storing report periods as
+  `LocalDate` through result calculation.
+- Continued the date migration in revenue printers by storing report periods as
+  `LocalDate` through monthly distribution calculations.
+- Continued the date migration in own-report printing by storing selected report
+  periods as `LocalDate` through calculation.
+- Continued the date migration in the quarter report by storing selected report
+  periods as `LocalDate` through calculation and formatting.
+- Removed the legacy stock update `Date` adapter after stock reports moved to
+  `LocalDate` cutoffs.
 - Dropped the legacy pre-HSQL `bookkeeper.db` import path and its archived
   `db/databas_v1.zip` handoff, requiring very old installations to migrate via
   historical Bokfri releases before using this fork.
