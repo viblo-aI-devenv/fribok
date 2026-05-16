@@ -10,7 +10,6 @@ import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
 import se.swedsoft.bookkeeping.print.util.SSDefaultJasperDataSource;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -31,7 +30,7 @@ public class SSAccountsPayablePrinter extends SSPrinter {
 
     private List<SSSupplier> iSuppliers;
 
-    private Date iDate;
+    private LocalDate iDate;
 
     Map<String, List<SSSupplierInvoice>> iSupplierInvoicesMap;
 
@@ -43,7 +42,7 @@ public class SSAccountsPayablePrinter extends SSPrinter {
      *
      * @param iDate
      */
-    public SSAccountsPayablePrinter(Date iDate) {
+    public SSAccountsPayablePrinter(LocalDate iDate) {
         this(iDate, SSDB.getInstance().getSuppliers());
     }
 
@@ -52,17 +51,15 @@ public class SSAccountsPayablePrinter extends SSPrinter {
      * @param iDate
      * @param iSuppliers
      */
-    public SSAccountsPayablePrinter(Date iDate, List<SSSupplier> iSuppliers) {
+    public SSAccountsPayablePrinter(LocalDate iDate, List<SSSupplier> iSuppliers) {
         // Get all customers
         this.iSuppliers = iSuppliers;
         this.iDate = iDate;
 
-        LocalDate iCeiledDate = SSDateUtil.toLocalDate(this.iDate);
-
-        iOutpaymentSum = SSOutpaymentMath.getSumsForSupplierInvoices(iCeiledDate);
+        iOutpaymentSum = SSOutpaymentMath.getSumsForSupplierInvoices(iDate);
 
         iSupplierCreditInvoiceSum = SSSupplierCreditInvoiceMath.getSumsForSupplierInvoices(
-                iCeiledDate);
+                iDate);
 
         iSupplierInvoicesMap = new HashMap<>();
 
@@ -71,7 +68,7 @@ public class SSAccountsPayablePrinter extends SSPrinter {
 
             for (SSSupplierInvoice iInvoice : SSSupplierMath.iInvoicesForSuppliers.get(
                     iSupplierNumber)) {
-                if (iInvoice.getLocalDate() != null && !iInvoice.getLocalDate().isAfter(iCeiledDate)) {
+                if (iInvoice.getLocalDate() != null && !iInvoice.getLocalDate().isAfter(iDate)) {
                     iInvoicesForCustomer.add(iInvoice);
                 }
             }

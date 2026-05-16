@@ -1100,7 +1100,7 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 SSStockValuePrinter iPrinter;
 
                 if (isDateSelected) {
-                    iPrinter = new SSStockValuePrinter(iDate);
+                    iPrinter = new SSStockValuePrinter(SSDateUtil.toLocalDate(iDate));
                 } else {
                     iPrinter = new SSStockValuePrinter();
                 }
@@ -1161,7 +1161,7 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 () -> {
 
                         SSAccountsRecievablePrinter iPrinter = new SSAccountsRecievablePrinter(
-                                iDate);
+                                SSDateUtil.toLocalDate(iDate));
 
                         iPrinter.preview(iMainFrame);
 
@@ -1188,8 +1188,7 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 () -> {
 
                         SSCustomerclaimPrinter iPrinter = new SSCustomerclaimPrinter(
-                                SSDateUtil.toDate(SSDateUtil.toLocalDate(iDate)
-                                        .atTime(23, 59, 59, 999_000_000)));
+                                SSDateUtil.toLocalDate(iDate));
 
                         iPrinter.preview(iMainFrame);
 
@@ -1214,7 +1213,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
 
         SSProgressDialog.runProgress(iMainFrame, () -> {
 
-                SSAccountsPayablePrinter iPrinter = new SSAccountsPayablePrinter(iDate);
+                SSAccountsPayablePrinter iPrinter = new SSAccountsPayablePrinter(
+                        SSDateUtil.toLocalDate(iDate));
 
                 iPrinter.preview(iMainFrame);
 
@@ -1238,7 +1238,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
 
         SSProgressDialog.runProgress(iMainFrame, () -> {
 
-                SSSupplierdebtPrinter iPrinter = new SSSupplierdebtPrinter(iDate);
+                SSSupplierdebtPrinter iPrinter = new SSSupplierdebtPrinter(
+                        SSDateUtil.toLocalDate(iDate));
 
                 iPrinter.preview(iMainFrame);
 
