@@ -129,6 +129,8 @@ diverging from upstream version 2.2-SNAPSHOT.
   `LocalDate`/`LocalDateTime` values until final dialog or Jasper boundaries.
 - Continued the date migration in receivable, payable, debt, claim, and stock
   value printers by keeping report cutoff dates as `LocalDate` internally.
+- Continued the date migration in main-book, balance, simple-statement, and VAT
+  printers by keeping report periods as `LocalDate` through calculation.
 - Dropped the legacy pre-HSQL `bookkeeper.db` import path and its archived
   `db/databas_v1.zip` handoff, requiring very old installations to migrate via
   historical Bokfri releases before using this fork.
