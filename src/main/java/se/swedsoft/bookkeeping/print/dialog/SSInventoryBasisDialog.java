@@ -13,7 +13,6 @@ import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
-import java.util.Date;
 
 
 /**
@@ -73,14 +72,6 @@ public class SSInventoryBasisDialog extends SSDialog {
      */
     public boolean isDateSelected() {
         return iRadioDate.isSelected();
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Date getDate() {
-        return iDate.getDate();
     }
 
     /**

@@ -13,7 +13,6 @@ import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
-import java.util.Date;
 
 
 /**
@@ -54,14 +53,6 @@ public class SSStockValueDialog extends SSDialog {
         iGroup.add(iRadioDate);
 
         iChangeListener.stateChanged(null);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Date getDate() {
-        return iDate.getDate();
     }
 
     /**
