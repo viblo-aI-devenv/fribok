@@ -11,7 +11,7 @@ import se.swedsoft.bookkeeping.gui.util.dialogs.SSDialog;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
+import java.time.LocalDate;
 
 
 /**
@@ -48,16 +48,16 @@ public class SSQuarterReportDialog extends SSDialog {
      *
      * @return
      */
-    public Date getDate() {
-        return iQuarterChooser.getDate();
+    public LocalDate getDate() {
+        return iQuarterChooser.getLocalDate();
     }
 
     /**
      *
      * @return
      */
-    public Date getEndDate() {
-        return iQuarterChooser.getEndDate();
+    public LocalDate getEndDate() {
+        return iQuarterChooser.getLocalEndDate();
     }
 
     @Override
