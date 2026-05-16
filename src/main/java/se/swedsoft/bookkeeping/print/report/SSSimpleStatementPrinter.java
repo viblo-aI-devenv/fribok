@@ -11,7 +11,6 @@ import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
 import se.swedsoft.bookkeeping.print.util.SSDefaultJasperDataSource;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -26,9 +25,9 @@ import java.util.*;
  */
 public class SSSimpleStatementPrinter extends SSPrinter {
 
-    private Date iDateFrom;
+    private LocalDate iDateFrom;
 
-    private Date iDateTo;
+    private LocalDate iDateTo;
 
     private GroupPrinter iPrinter;
 
@@ -47,7 +46,7 @@ public class SSSimpleStatementPrinter extends SSPrinter {
      * @param iDateFrom
      * @param iDateTo
      */
-    public SSSimpleStatementPrinter(Date iDateFrom, Date iDateTo) {
+    public SSSimpleStatementPrinter(LocalDate iDateFrom, LocalDate iDateTo) {
         this(SSDB.getInstance().getAccounts(), iDateFrom, iDateTo);
     }
 
@@ -57,7 +56,7 @@ public class SSSimpleStatementPrinter extends SSPrinter {
      * @param iDateFrom
      * @param iDateTo
      */
-    public SSSimpleStatementPrinter(List<SSAccount> iAccounts, Date iDateFrom, Date iDateTo) {
+    public SSSimpleStatementPrinter(List<SSAccount> iAccounts, LocalDate iDateFrom, LocalDate iDateTo) {
         this.iDateFrom = iDateFrom;
         this.iDateTo = iDateTo;
         this.iAccounts = iAccounts;
@@ -88,10 +87,8 @@ public class SSSimpleStatementPrinter extends SSPrinter {
      */
     private void calculate() {
         // Get all vouchers
-        LocalDate iLocalDateFrom = SSDateUtil.toLocalDate(iDateFrom);
-        LocalDate iLocalDateTo = SSDateUtil.toLocalDate(iDateTo);
         List<SSVoucher> iVouchers = SSVoucherMath.getVouchers(
-                SSDB.getInstance().getVouchers(), iLocalDateFrom, iLocalDateTo);
+                SSDB.getInstance().getVouchers(), iDateFrom, iDateTo);
 
         iCreditMinusDebetSum = SSVoucherMath.getCreditMinusDebetSum(iVouchers);
         iDebetMinusCreditSum = SSVoucherMath.getDebetMinusCreditSum(iVouchers);

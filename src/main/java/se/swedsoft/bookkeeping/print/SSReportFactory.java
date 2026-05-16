@@ -132,8 +132,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                         () -> {
 
                                 SSMainBookPrinter iPrinter = new SSMainBookPrinter(pYearData,
-                                        lAccountFrom, lAccountTo, lDateFrom, lDateTo, iProject,
-                                        iResultUnit);
+                                        lAccountFrom, lAccountTo, SSDateUtil.toLocalDate(lDateFrom),
+                                        SSDateUtil.toLocalDate(lDateTo), iProject, iResultUnit);
 
                                 if (isProjectSelected) {}
                                 if (isResultUnitSelected) {}
@@ -319,7 +319,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
 
         SSProgressDialog.runProgress(iMainFrame, () -> {
 
-                SSBalancePrinter iPrinter = new SSBalancePrinter(iFrom, iTo);
+                SSBalancePrinter iPrinter = new SSBalancePrinter(SSDateUtil.toLocalDate(iFrom),
+                        SSDateUtil.toLocalDate(iTo));
 
                 iPrinter.preview(iMainFrame);
 
@@ -423,9 +424,9 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
 
 
                         SSVATReportPrinter  iPrinter1 = new SSVATReportPrinter(iAccountingYear,
-                                localFrom, localTo);
+                                localDateFrom, localDateTo);
                         SSVATControlPrinter iPrinter2 = new SSVATControlPrinter(iAccountingYear,
-                                localFrom, localTo);
+                                localDateFrom, localDateTo);
                         SSVoucherPrinter iPrinter3 = new SSVoucherPrinter(iVoucher,
                                 bundle.getString("vatbasisreport.title"), accountR1, accountR2,
                                 accountA);
@@ -491,9 +492,11 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                         SSMultiPrinter iPrinter = new SSMultiPrinter();
 
                         SSVATReport2007Printer   iPrinter1 = new SSVATReport2007Printer(
-                                iAccountingYear, iFrom, iTo);
+                                iAccountingYear, SSDateUtil.toLocalDate(iFrom),
+                                SSDateUtil.toLocalDate(iTo));
                         SSVATControl2007Printer  iPrinter2 = new SSVATControl2007Printer(
-                                iAccountingYear, iFrom, iTo);
+                                iAccountingYear, SSDateUtil.toLocalDate(iFrom),
+                                SSDateUtil.toLocalDate(iTo));
 
                         final SSVoucher iVoucher = iPrinter2.getVoucher(iAccountR1, iAccountR2,
                                 iAccountA);
@@ -566,9 +569,11 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                         SSMultiPrinter iPrinter = new SSMultiPrinter();
 
                         SSVATReport2015Printer   iPrinter1 = new SSVATReport2015Printer(
-                                iAccountingYear, iFrom, iTo, iStartVoucher);
+                                iAccountingYear, SSDateUtil.toLocalDate(iFrom),
+                                SSDateUtil.toLocalDate(iTo), iStartVoucher);
                         SSVATControl2015Printer  iPrinter2 = new SSVATControl2015Printer(
-                                iAccountingYear, iFrom, iTo, iStartVoucher);
+                                iAccountingYear, SSDateUtil.toLocalDate(iFrom),
+                                SSDateUtil.toLocalDate(iTo), iStartVoucher);
 
                         final SSVoucher iVoucher = iPrinter2.getVoucher(iAccountR1, iAccountR2,
                                 iAccountA);
@@ -627,8 +632,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         SSProgressDialog.runProgress(iMainFrame,
                 () -> {
 
-                        SSSimpleStatementPrinter iPrinter = new SSSimpleStatementPrinter(iFrom,
-                                iTo);
+                        SSSimpleStatementPrinter iPrinter = new SSSimpleStatementPrinter(
+                                SSDateUtil.toLocalDate(iFrom), SSDateUtil.toLocalDate(iTo));
 
                         iPrinter.preview(iMainFrame);
 
