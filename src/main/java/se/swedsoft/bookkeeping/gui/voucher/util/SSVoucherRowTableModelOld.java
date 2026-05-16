@@ -12,7 +12,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.LinkedList;
 
 
@@ -369,8 +368,6 @@ public class SSVoucherRowTableModelOld extends SSDefaultTableModel<SSVoucherRow>
         iTable.setDefaultRenderer(SSNewResultUnit.class, new SSResultUnitCellRenderer());
         iTable.setDefaultEditor(SSNewResultUnit.class, new SSResultUnitCellEditor());
 
-        // Set the default renderer for the date cells.
-        iTable.setDefaultRenderer(Date.class, new SSDateCellRenderer());
         iTable.setDefaultRenderer(LocalDateTime.class, new SSDateTimeCellRenderer());
 
         iTable.setDefaultRenderer(BigDecimal.class, new SSBigDecimalCellRenderer(2));

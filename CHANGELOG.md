@@ -147,6 +147,8 @@ diverging from upstream version 2.2-SNAPSHOT.
   `LocalDate` cutoffs.
 - Continued the date migration in accounting-year tables by exposing year
   boundaries as `LocalDate` values instead of SQL `Date` display adapters.
+- Removed a leftover voucher-row `Date` renderer registration now that edited
+  timestamps use the `LocalDateTime` renderer.
 - Dropped the legacy pre-HSQL `bookkeeper.db` import path and its archived
   `db/databas_v1.zip` handoff, requiring very old installations to migrate via
   historical Bokfri releases before using this fork.
