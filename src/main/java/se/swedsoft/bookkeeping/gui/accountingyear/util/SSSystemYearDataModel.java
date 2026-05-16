@@ -7,7 +7,6 @@ import se.swedsoft.bookkeeping.data.system.SSSystemYear;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 
-import java.util.Date;
 import java.util.ResourceBundle;
 
 
@@ -46,11 +45,11 @@ public class SSSystemYearDataModel extends SSDefaultTableModel<SSNewAccountingYe
             break;
 
         case 1:
-            value = year.getLocalFrom() != null ? java.sql.Date.valueOf(year.getLocalFrom()) : null;
+            value = year.getLocalFrom();
             break;
 
         case 2:
-            value = year.getLocalTo() != null ? java.sql.Date.valueOf(year.getLocalTo()) : null;
+            value = year.getLocalTo();
             break;
 
         case 3:
@@ -69,10 +68,10 @@ public class SSSystemYearDataModel extends SSDefaultTableModel<SSNewAccountingYe
             return Boolean.class;
 
         case 1:
-            return Date.class;
+            return java.time.LocalDate.class;
 
         case 2:
-            return Date.class;
+            return java.time.LocalDate.class;
         }
 
         return super.getColumnClass(columnIndex);

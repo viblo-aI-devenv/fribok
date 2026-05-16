@@ -145,6 +145,8 @@ diverging from upstream version 2.2-SNAPSHOT.
   periods as `LocalDate` through calculation and formatting.
 - Removed the legacy stock update `Date` adapter after stock reports moved to
   `LocalDate` cutoffs.
+- Continued the date migration in accounting-year tables by exposing year
+  boundaries as `LocalDate` values instead of SQL `Date` display adapters.
 - Dropped the legacy pre-HSQL `bookkeeper.db` import path and its archived
   `db/databas_v1.zip` handoff, requiring very old installations to migrate via
   historical Bokfri releases before using this fork.

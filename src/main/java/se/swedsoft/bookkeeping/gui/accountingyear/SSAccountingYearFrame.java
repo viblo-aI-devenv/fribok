@@ -28,9 +28,9 @@ import javax.swing.event.InternalFrameEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 
@@ -172,7 +172,7 @@ public class SSAccountingYearFrame extends SSDefaultTableFrame {
         iModel.setObjects(iYears);
 
         iTable = new SSTable();
-        iTable.setDefaultRenderer(Date.class, new SSDateCellRenderer());
+        iTable.setDefaultRenderer(LocalDate.class, new SSDateCellRenderer());
 
         iTable.setSingleSelect();
         iTable.setColumnSortingEnabled(false);
