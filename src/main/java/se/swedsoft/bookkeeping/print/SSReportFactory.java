@@ -1161,7 +1161,7 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 () -> {
 
                         SSAccountsRecievablePrinter iPrinter = new SSAccountsRecievablePrinter(
-                                iDate);
+                                SSDateUtil.toLocalDate(iDate));
 
                         iPrinter.preview(iMainFrame);
 
@@ -1213,7 +1213,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
 
         SSProgressDialog.runProgress(iMainFrame, () -> {
 
-                SSAccountsPayablePrinter iPrinter = new SSAccountsPayablePrinter(iDate);
+                SSAccountsPayablePrinter iPrinter = new SSAccountsPayablePrinter(
+                        SSDateUtil.toLocalDate(iDate));
 
                 iPrinter.preview(iMainFrame);
 
