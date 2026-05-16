@@ -132,8 +132,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                         () -> {
 
                                 SSMainBookPrinter iPrinter = new SSMainBookPrinter(pYearData,
-                                        lAccountFrom, lAccountTo, lDateFrom, lDateTo, iProject,
-                                        iResultUnit);
+                                        lAccountFrom, lAccountTo, SSDateUtil.toLocalDate(lDateFrom),
+                                        SSDateUtil.toLocalDate(lDateTo), iProject, iResultUnit);
 
                                 if (isProjectSelected) {}
                                 if (isResultUnitSelected) {}

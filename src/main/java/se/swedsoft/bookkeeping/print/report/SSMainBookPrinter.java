@@ -10,9 +10,9 @@ import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.*;
@@ -31,8 +31,8 @@ public class SSMainBookPrinter extends SSPrinter {
     SSAccount iAccountFrom;
     SSAccount iAccountTo;
 
-    Date iDateFrom;
-    Date iDateTo;
+    LocalDate iDateFrom;
+    LocalDate iDateTo;
     private SSNewProject iProject;
     private SSNewResultUnit iResultUnit;
 
@@ -45,7 +45,7 @@ public class SSMainBookPrinter extends SSPrinter {
      * @param iProject
      * @param iResultUnit
      */
-    public SSMainBookPrinter(SSAccount pAccountFrom, SSAccount pAccountTo, Date pDateFrom, Date pDateTo, SSNewProject iProject, SSNewResultUnit iResultUnit) {
+    public SSMainBookPrinter(SSAccount pAccountFrom, SSAccount pAccountTo, LocalDate pDateFrom, LocalDate pDateTo, SSNewProject iProject, SSNewResultUnit iResultUnit) {
         this(SSDB.getInstance().getCurrentYear(), pAccountFrom, pAccountTo, pDateFrom,
                 pDateTo, iProject, iResultUnit);
     }
@@ -60,7 +60,7 @@ public class SSMainBookPrinter extends SSPrinter {
      * @param iProject
      * @param iResultUnit
      */
-    public SSMainBookPrinter(SSNewAccountingYear pYearData, SSAccount pAccountFrom, SSAccount pAccountTo, Date pDateFrom, Date pDateTo, SSNewProject iProject, SSNewResultUnit iResultUnit) {
+    public SSMainBookPrinter(SSNewAccountingYear pYearData, SSAccount pAccountFrom, SSAccount pAccountTo, LocalDate pDateFrom, LocalDate pDateTo, SSNewProject iProject, SSNewResultUnit iResultUnit) {
         iYearData = pYearData;
         iAccountFrom = pAccountFrom;
         iAccountTo = pAccountTo;
@@ -116,8 +116,7 @@ public class SSMainBookPrinter extends SSPrinter {
         addParameter("periodText", "");
 
         SSMainBookCalculator iCalculator = new SSMainBookCalculator(iYearData,
-                iAccountFrom, iAccountTo, SSDateUtil.toLocalDate(iDateFrom),
-                SSDateUtil.toLocalDate(iDateTo), iProject, iResultUnit);
+                iAccountFrom, iAccountTo, iDateFrom, iDateTo, iProject, iResultUnit);
 
         // Calculate all fields
         iCalculator.calculate();
