@@ -186,7 +186,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 SSProgressDialog.runProgress(iMainFrame,
                         () -> {
 
-                                SSResultPrinter iPrinter = new SSResultPrinter(lFrom, lTo,
+                                SSResultPrinter iPrinter = new SSResultPrinter(
+                                        SSDateUtil.toLocalDate(lFrom), SSDateUtil.toLocalDate(lTo),
                                         lPrintBudget, lPrintLastyear);
 
                                 iPrinter.preview(iMainFrame);
@@ -255,8 +256,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         SSProgressDialog.runProgress(iMainFrame,
                 () -> {
 
-                        SSProjectResultPrinter iPrinter = new SSProjectResultPrinter(iFrom, iTo,
-                                iProject);
+                        SSProjectResultPrinter iPrinter = new SSProjectResultPrinter(
+                                SSDateUtil.toLocalDate(iFrom), SSDateUtil.toLocalDate(iTo), iProject);
 
                         iPrinter.preview(iMainFrame);
 
@@ -288,8 +289,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
         SSProgressDialog.runProgress(iMainFrame,
                 () -> {
 
-                        SSResultUnitResultPrinter iPrinter = new SSResultUnitResultPrinter(iFrom,
-                                iTo, iResultUnit);
+                        SSResultUnitResultPrinter iPrinter = new SSResultUnitResultPrinter(
+                                SSDateUtil.toLocalDate(iFrom), SSDateUtil.toLocalDate(iTo), iResultUnit);
 
                         iPrinter.preview(iMainFrame);
 
