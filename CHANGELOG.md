@@ -157,6 +157,8 @@ diverging from upstream version 2.2-SNAPSHOT.
   table date columns use `LocalDate` or `LocalDateTime` column classes.
 - Continued the date migration in stock report dialogs by exposing selected
   cutoff dates as `LocalDate` and removing immediate report-caller adapters.
+- Removed stale `Date` imports from list report dialogs that already filter on
+  chooser `LocalDate` values directly.
 - Dropped the legacy pre-HSQL `bookkeeper.db` import path and its archived
   `db/databas_v1.zip` handoff, requiring very old installations to migrate via
   historical Bokfri releases before using this fork.
