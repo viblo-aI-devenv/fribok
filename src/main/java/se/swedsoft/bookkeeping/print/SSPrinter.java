@@ -20,6 +20,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -79,6 +82,18 @@ public abstract class SSPrinter {
         DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
         iReport.addParameter(pName, pDate == null ? pDate : iFormat.format(pDate));
+    }
+
+    /**
+     * Adds a formatted date parameter.
+     *
+     * @param pName parameter name
+     * @param pDate parameter date
+     */
+    public void addParameter(String pName, LocalDate pDate) {
+        DateTimeFormatter iFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
+
+        iReport.addParameter(pName, pDate == null ? null : pDate.format(iFormat));
     }
 
     /**

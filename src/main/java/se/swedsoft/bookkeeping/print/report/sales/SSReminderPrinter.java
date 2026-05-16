@@ -80,7 +80,7 @@ public class SSReminderPrinter extends SSPrinter {
         SSSalePrinterUtils.addParametersForCompany(iCompany, this);
 
         // Sale parameters
-        addParameter("date", SSDateUtil.toDate(SSDateUtil.today()));
+        addParameter("date", SSDateUtil.today());
         addParameter("text", iCompany.getStandardText(SSStandardText.Reminder));
 
         if (iCustomer != null) {

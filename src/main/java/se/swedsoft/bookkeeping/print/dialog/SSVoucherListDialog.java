@@ -21,7 +21,6 @@ import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 
@@ -129,16 +128,16 @@ public class SSVoucherListDialog extends SSDialog {
      *
      * @param pDateFrom
      */
-    public void setDateFrom(Date pDateFrom) {
-        iFromDate.setDate(pDateFrom);
+    public void setDateFrom(LocalDate pDateFrom) {
+        iFromDate.setLocalDate(pDateFrom);
     }
 
     /**
      *
      * @param pDateTo
      */
-    public void setDateTo(Date pDateTo) {
-        iToDate.setDate(pDateTo);
+    public void setDateTo(LocalDate pDateTo) {
+        iToDate.setLocalDate(pDateTo);
     }
 
     /**
@@ -165,16 +164,16 @@ public class SSVoucherListDialog extends SSDialog {
      *
      * @return
      */
-    public Date getDateFrom() {
-        return iFromDate.getDate();
+    public LocalDate getLocalDateFrom() {
+        return iFromDate.getLocalDate();
     }
 
     /**
      *
      * @return
      */
-    public Date getDateTo() {
-        return iToDate.getDate();
+    public LocalDate getLocalDateTo() {
+        return iToDate.getLocalDate();
     }
 
     /**
@@ -218,8 +217,8 @@ public class SSVoucherListDialog extends SSDialog {
         }
         // Filter by date
         if (iRadioDate.isSelected()) {
-            final LocalDate iDateFrom = SSDateUtil.toLocalDate(iFromDate.getDate());
-            final LocalDate iDateTo = SSDateUtil.toLocalDate(iToDate.getDate());
+            final LocalDate iDateFrom = iFromDate.getLocalDate();
+            final LocalDate iDateTo = iToDate.getLocalDate();
 
             iVouchers = SSFilterFactory.doFilter(iVouchers, new SSFilter<>() {
                 public boolean applyFilter(SSVoucher iInvoice) {

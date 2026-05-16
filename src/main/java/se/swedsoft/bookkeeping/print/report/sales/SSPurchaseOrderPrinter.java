@@ -8,7 +8,6 @@ import se.swedsoft.bookkeeping.data.SSSupplier;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -78,7 +77,7 @@ public class SSPurchaseOrderPrinter extends SSPrinter {
 
         // Sale parameters
         addParameter("number", iPurchaseOrder.getNumber());
-        addParameter("date", SSDateUtil.toDate(iPurchaseOrder.getLocalDate()));
+        addParameter("date", iPurchaseOrder.getLocalDate());
         addParameter("text", iPurchaseOrder.getText());
 
         addParameter("purchaseorder.deliveryadress.name",
