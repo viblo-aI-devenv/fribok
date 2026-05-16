@@ -159,15 +159,12 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
      * @param lastYearData
      */
     public static void buildResultReport(final SSMainFrame iMainFrame, final ResourceBundle bundle, final SSNewAccountingYear yearData, final SSNewAccountingYear lastYearData) {
-        Date from = SSDateUtil.toDate(yearData.getLocalFrom());
-        Date to = SSDateUtil.toDate(yearData.getLocalTo());
-
         final SSDialog iDialog = new SSDialog(iMainFrame,
                 bundle.getString("resultreport.perioddialog.title"));
         final SSResultPrinterSetupPanel iPanel = new SSResultPrinterSetupPanel();
 
-        iPanel.setFrom(from);
-        iPanel.setTo(to);
+        iPanel.setFrom(yearData.getLocalFrom());
+        iPanel.setTo(yearData.getLocalTo());
         iPanel.setPrintBudget(false);
         iPanel.setPrintLastyear(false);
         iPanel.setPrintLastyearEnabled(lastYearData != null);
@@ -176,8 +173,8 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
 
         iPanel.addOkActionListener(e -> {
 
-                final Date    lFrom = iPanel.getFrom();
-                final Date    lTo = iPanel.getTo();
+                final LocalDate lFrom = iPanel.getFrom();
+                final LocalDate lTo = iPanel.getTo();
                 final boolean lPrintBudget = iPanel.getPrintBudget();
                 final boolean lPrintLastyear = iPanel.getPrintLastyear();
 
@@ -186,8 +183,7 @@ public class SSReportFactory {    private static final Logger LOG = LoggerFactor
                 SSProgressDialog.runProgress(iMainFrame,
                         () -> {
 
-                                SSResultPrinter iPrinter = new SSResultPrinter(
-                                        SSDateUtil.toLocalDate(lFrom), SSDateUtil.toLocalDate(lTo),
+                                SSResultPrinter iPrinter = new SSResultPrinter(lFrom, lTo,
                                         lPrintBudget, lPrintLastyear);
 
                                 iPrinter.preview(iMainFrame);
