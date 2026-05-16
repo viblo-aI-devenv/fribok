@@ -10,10 +10,11 @@ import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.graphics.SSImage;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 
@@ -46,12 +47,12 @@ public class SSInventoryBasisPrinter extends SSPrinter {
      *
      * @param iDate
      */
-    public SSInventoryBasisPrinter(Date iDate) {
+    public SSInventoryBasisPrinter(LocalDate iDate) {
         // Get all stock products
         iProducts = SSProductMath.getStockProducts(SSDB.getInstance().getProducts());
         iStock = new SSStock();
 
-        iStock.update(iDate);
+        iStock.update(SSDateUtil.toDate(iDate));
 
         addParameter("periodTitle",
                 SSBundle.getBundle().getString("inventorybasisreport.periodtitle"));

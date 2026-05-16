@@ -10,10 +10,11 @@ import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.SSPrinter;
 import se.swedsoft.bookkeeping.print.util.SSDefaultJasperDataSource;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 
@@ -29,7 +30,7 @@ public class SSStockAccountPrinter extends SSPrinter {
 
     private SSStock iStock;
 
-    private Date iDate;
+    private LocalDate iDate;
 
     /**
      *
@@ -51,13 +52,13 @@ public class SSStockAccountPrinter extends SSPrinter {
      *
      * @param iDate
      */
-    public SSStockAccountPrinter(Date iDate) {
+    public SSStockAccountPrinter(LocalDate iDate) {
         // Get all orders
         iProducts = SSProductMath.getStockProducts(SSDB.getInstance().getProducts());
         iStock = new SSStock();
         this.iDate = iDate;
 
-        iStock.update(iDate);
+        iStock.update(SSDateUtil.toDate(iDate));
 
         addParameter("periodTitle",
                 SSBundle.getBundle().getString("stockvaluereport.periodtitle"));
