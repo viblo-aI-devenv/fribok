@@ -145,6 +145,40 @@ diverging from upstream version 2.2-SNAPSHOT.
   periods as `LocalDate` through calculation and formatting.
 - Removed the legacy stock update `Date` adapter after stock reports moved to
   `LocalDate` cutoffs.
+- Continued the date migration in accounting-year tables by exposing year
+  boundaries as `LocalDate` values instead of SQL `Date` display adapters.
+- Removed a leftover voucher-row `Date` renderer registration now that edited
+  timestamps use the `LocalDateTime` renderer.
+- Removed the unused voucher editor `Date` renderer helper after voucher row
+  setup moved to `LocalDateTime` rendering.
+- Removed stale supplier and periodic invoice panel `Date` imports after those
+  panels moved to local date chooser accessors.
+- Removed the global table editor `Date` renderer/editor registration now that
+  table date columns use `LocalDate` or `LocalDateTime` column classes.
+- Continued the date migration in stock report dialogs by exposing selected
+  cutoff dates as `LocalDate` and removing immediate report-caller adapters.
+- Removed stale `Date` imports from list report dialogs that already filter on
+  chooser `LocalDate` values directly.
+- Removed obsolete stock report dialog `Date` accessors after callers moved to
+  `LocalDate` accessors.
+- Continued the date migration in cutoff report dialogs by returning selected
+  dates as `LocalDate` for receivable, payable, claim, and supplier debt reports.
+- Continued the date migration in project and result-unit result setup dialogs
+  by passing report periods as `LocalDate` values directly.
+- Continued the date migration in period-selection dialogs by exposing selected
+  periods as `LocalDate` for balance, budget, VAT, statement, and value reports.
+- Continued the date migration in the quarter report dialog by returning the
+  selected quarter bounds as `LocalDate` values directly.
+- Continued the date migration in the sale report dialog by exposing the
+  selected report period as `LocalDate` values directly.
+- Continued the date migration in the main book dialog by passing the selected
+  report period as `LocalDate` values directly.
+- Continued the date migration in the result report setup panel by passing the
+  selected report period as `LocalDate` values directly.
+- Continued the date migration in the legacy VAT report dialog by passing the
+  selected report period as `LocalDate` values directly.
+- Continued the date migration in the outpayment list dialog by exposing the
+  selected report period as `LocalDate` values directly.
 - Dropped the legacy pre-HSQL `bookkeeper.db` import path and its archived
   `db/databas_v1.zip` handoff, requiring very old installations to migrate via
   historical Bokfri releases before using this fork.

@@ -12,7 +12,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
+import java.time.LocalDate;
 
 
 /**
@@ -56,11 +56,10 @@ public class SSStockValueDialog extends SSDialog {
     }
 
     /**
-     *
-     * @return
+     * @return selected stock cutoff date.
      */
-    public Date getDate() {
-        return iDate.getDate();
+    public LocalDate getLocalDate() {
+        return iDate.getLocalDate();
     }
 
     /**

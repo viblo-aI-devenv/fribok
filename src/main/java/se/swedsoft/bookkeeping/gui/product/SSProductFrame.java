@@ -469,14 +469,12 @@ public class SSProductFrame extends SSDefaultTableFrame {
                 SSBundle.getBundle().getString("productrevenue.perioddialog.title"));
 
         if (SSDB.getInstance().getCurrentYear() != null) {
-            iDialog.setFrom(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
-                    SSDB.getInstance().getCurrentYear().getLocalFrom()));
-            iDialog.setTo(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(
-                    SSDB.getInstance().getCurrentYear().getLocalTo()));
+            iDialog.setFrom(SSDB.getInstance().getCurrentYear().getLocalFrom());
+            iDialog.setTo(SSDB.getInstance().getCurrentYear().getLocalTo());
         } else {
             java.time.LocalDate now = java.time.LocalDate.now();
-            iDialog.setFrom(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(now));
-            iDialog.setTo(se.swedsoft.bookkeeping.util.SSDateUtil.toDate(now.plusMonths(1)));
+            iDialog.setFrom(now);
+            iDialog.setTo(now.plusMonths(1));
         }
         iDialog.setLocationRelativeTo(getMainFrame());
 
@@ -484,8 +482,8 @@ public class SSProductFrame extends SSDefaultTableFrame {
             return;
         }
 
-        final java.time.LocalDate iFrom = se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(iDialog.getFrom());
-        final java.time.LocalDate iTo = se.swedsoft.bookkeeping.util.SSDateUtil.toLocalDate(iDialog.getTo());
+        final java.time.LocalDate iFrom = iDialog.getFrom();
+        final java.time.LocalDate iTo = iDialog.getTo();
 
         final SSProductRevenuePrinter iPrinter = new SSProductRevenuePrinter(iProducts,
                 iFrom, iTo);
