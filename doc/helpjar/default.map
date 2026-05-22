@@ -179,7 +179,6 @@
   <mapID target="SalesTaxReport_html" url="html/SalesTaxReport.html"/>
   <mapID target="BackupAllCompany_html" url="html/BackupAllCompany.html"/>
   <mapID target="AutoOrderFromQuote_html" url="html/AutoOrderFromQuote.html"/>
-  <mapID target="CleanTransactions_html" url="html/CleanTransactions.html"/>
   <mapID target="readme_html" url="readme.html"/>
   <mapID target="BeginningBalanceReport_html" url="html/BeginningBalanceReport.html"/>
   <mapID target="ImportBgMax_html" url="html/ImportBgMax.html"/>
