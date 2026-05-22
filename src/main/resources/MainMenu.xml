@@ -165,7 +165,6 @@
             <MenuItem Action="helpmenu.updates"          Bundle="helpmenu.updates"   />
             <Separator/>
 		<MenuItem Action="helpmenu.compress"       Bundle="helpmenu.compress"   />
-		<MenuItem Action="helpmenu.cleartransactions"       Bundle="helpmenu.cleartransactions"   Dependent="Year"/>
 	      <Separator/>
             <MenuItem Action="helpmenu.about"            Bundle="helpmenu.about"   />
         </Menu>

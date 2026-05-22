@@ -301,6 +301,5 @@
     <tocitem target="support_html" text="Support online"/>
     <tocitem target="DeletePostlocks_html" text="Ta bort postlås"/>
     <tocitem target="CompressDatabase_html" text="Komprimera databasen"/>
-    <tocitem target="CleanTransactions_html" text="Rensa transaktioner"/>
   </tocitem>
 </toc>
