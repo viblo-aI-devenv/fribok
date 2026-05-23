@@ -105,7 +105,54 @@ Done when:
 - obsolete libraries are removed from `pom.xml`
 - code paths using them have been migrated and verified
 
-### 4. Tighten Build and Quality Gates
+### 4. Add a Headless Developer/Test CLI
+
+Status: not started
+
+Current repo state:
+- Bokfri is primarily a Swing application
+- many important workflows are only easy to exercise through the GUI
+- report and print bugs are difficult to reproduce in CI because preview/print flows assume UI entry points
+- existing code has reusable lower-level pieces (`SSDB`, report printers, backup helpers), but they are not exposed through a stable command-line entry point
+
+Goal:
+- add a small CLI for automation, diagnostics, and agent/developer testing without creating a second user-facing product
+- keep the Swing app as the primary application
+- use the CLI to make database, backup, and report behavior reproducible in CI and local debugging
+
+Suggested CLI shape:
+- add a new entry point such as `org.fribok.bookkeeping.cli.BokfriCli`
+- keep commands thin and call existing services/printers directly
+- avoid creating Swing frames/dialogs from CLI commands
+- support Maven/fat-jar execution first; packaged launchers can come later
+
+Initial command candidates:
+- `version` — print app version/build metadata
+- `paths` — print resolved app/user/config/data paths
+- `db status` — open a configured database and report basic health/counts
+- `company list` and `year list` — inspect available company/year IDs for scripting
+- `invoice list --company-id ... --year-id ...` — inspect invoice IDs and status
+- `invoice print --company-id ... --year-id ... --invoice ... --lang sv --out invoice.pdf` — generate an invoice PDF headlessly
+- `invoice sample-pdf --out target/invoice-sample.pdf` — create a deterministic sample invoice PDF for CI smoke tests
+- `backup create --out backup.zip` — smoke-test backup creation without navigating the UI
+
+Testing opportunities:
+- add CI smoke tests that generate a sample invoice PDF and assert it exists, is non-empty, and contains expected text/metadata where practical
+- use CLI commands to reproduce report/printing bugs on Linux, Windows, and macOS runners
+- use CLI commands for agent-driven verification before opening PRs
+
+Packaging opportunities:
+- eventually ship two launchers from the same codebase:
+  - `Bokfri` for the Swing application
+  - `bokfri-cli` for command-line diagnostics/automation
+- keep official user workflows in Swing unless a CLI command is explicitly promoted to supported user-facing behavior
+
+Done when:
+- a CLI entry point exists and can run from Maven or the assembled jar
+- at least one headless report/PDF smoke test runs in CI
+- common diagnostic commands can inspect version, paths, database state, companies, years, and invoices without opening Swing UI
+
+### 5. Tighten Build and Quality Gates
 
 Status: partially complete
 
@@ -127,7 +174,7 @@ Done when:
 - style and static analysis checks can block regressions in CI
 - coverage policy is explicit and enforced if desired
 
-### 5. Optional API Cleanup After Core Modernization
+### 6. Optional API Cleanup After Core Modernization
 
 Status: partially complete
 
@@ -146,10 +193,11 @@ Done when:
 ## Suggested Order
 
 1. Finish the remaining date/time cleanup
-2. Remove clearly unused dependencies such as Spring, if confirmed safe
-3. Tackle library migrations with the smallest blast radius first (`javax.mail`, `jxl`, `javahelp`)
-4. Decide the persistence migration strategy before changing storage-related models
-5. Tighten CI quality gates after the dependency and persistence work stops moving the baseline
+2. Add the first small headless CLI commands (`version`, `paths`, and an invoice sample PDF smoke test) so future modernization work is easier to verify
+3. Remove clearly unused dependencies such as Spring, if confirmed safe
+4. Tackle library migrations with the smallest blast radius first (`javax.mail`, `jxl`, `javahelp`)
+5. Decide the persistence migration strategy before changing storage-related models
+6. Tighten CI quality gates after the dependency and persistence work stops moving the baseline
 
 ## Out of Scope for This File
 
