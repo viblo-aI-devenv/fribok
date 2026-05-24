@@ -10,7 +10,6 @@ import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.util.SSDefaultJasperDataSource;
-import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import javax.swing.event.InternalFrameAdapter;
@@ -19,11 +18,9 @@ import javax.swing.event.InternalFrameListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -48,7 +45,7 @@ public abstract class SSPrinter {
         iReport = new SSReport();
 
         iReport.addParameter("company", SSDB.getInstance().getCurrentCompany().getName());
-        iReport.addParameter("reportdate", SSDateUtil.toDate(SSDateUtil.today()));
+        addParameter("reportdate", LocalDate.now());
 
         iReport.addParameter("lastvoucher", SSVoucherMath.getMaxNumber());
 
@@ -71,17 +68,6 @@ public abstract class SSPrinter {
      */
     public void addParameter(String pName, Object pValue, boolean toString) {
         iReport.addParameter(pName, pValue == null ? null : pValue.toString());
-    }
-
-    /**
-     *
-     * @param pName
-     * @param pDate
-     */
-    public void addParameter(String pName, Date pDate) {
-        DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
-
-        iReport.addParameter(pName, pDate == null ? pDate : iFormat.format(pDate));
     }
 
     /**

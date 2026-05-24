@@ -114,6 +114,33 @@ public final class SSDateUtil {
                 "Cannot convert " + raw.getClass().getName() + " to LocalDate");
     }
 
+    /**
+     * Converts an object read from a serialized stream to {@link LocalDateTime}.
+     *
+     * <p>During deserialization, a date-time field may arrive as either a
+     * {@link LocalDateTime} (new format) or a {@link Date} (old format).
+     * This keeps the compatibility boundary in one utility instead of leaking
+     * legacy date types into migrated model classes.
+     *
+     * @param raw the value read via {@code ObjectInputStream.GetField.get()}, may be {@code null}
+     * @return the equivalent {@link LocalDateTime}, or {@code null} if {@code raw} is {@code null}
+     * @throws IllegalArgumentException if {@code raw} is neither {@code null},
+     *         {@code LocalDateTime}, nor {@code Date}
+     */
+    public static LocalDateTime readLocalDateTime(Object raw) {
+        if (raw == null) {
+            return null;
+        }
+        if (raw instanceof LocalDateTime) {
+            return (LocalDateTime) raw;
+        }
+        if (raw instanceof Date) {
+            return toLocalDateTime((Date) raw);
+        }
+        throw new IllegalArgumentException(
+                "Cannot convert " + raw.getClass().getName() + " to LocalDateTime");
+    }
+
     // -------------------------------------------------------------------------
     // Convenience factories
     // -------------------------------------------------------------------------

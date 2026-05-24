@@ -9,46 +9,51 @@ import se.swedsoft.bookkeeping.util.SSDateUtil;
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.text.DateFormat;
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.FormatStyle;
 import java.util.EventObject;
 
 
 /**
- *
+ * Table cell editor for {@link LocalDate} values.
  */
 public class SSDateCellEditor extends AbstractCellEditor implements TableCellEditor {
 
     private JPanel iPanel;
 
-    private JFormattedTextField iTextField;
+    private JTextField iTextField;
 
     private JButton iButton;
 
     private SSDateChooser iDateChooser;
 
-    private Date iDate;
+    private LocalDate iDate;
 
-    private boolean iReturnLocalDate;
+    private final DateTimeFormatter iFormatter;
 
     /**
      * Default constructor.
      */
     public SSDateCellEditor() {
-        DateFormat iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+        iFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 
         iDateChooser = new SSDateChooser();
-        iDateChooser.addChangeListener(e -> setDate(iDateChooser.getDate()));
+        iDateChooser.addChangeListener(e -> setLocalDate(iDateChooser.getLocalDate()));
 
-        iTextField = new JFormattedTextField(iFormat);
+        iTextField = new JTextField();
         iTextField.setHorizontalAlignment(JTextField.TRAILING);
-        iTextField.addPropertyChangeListener("value", evt -> setDate((Date) iTextField.getValue()));
+        iTextField.addActionListener(e -> updateDateFromTextField());
+        iTextField.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                updateDateFromTextField();
+            }
+        });
 
         iButton = new SSButton("ICON_CALENDAR16");
         iButton.setToolTipText(SSBundle.getBundle().getString("date.tooltip"));
@@ -58,7 +63,7 @@ public class SSDateCellEditor extends AbstractCellEditor implements TableCellEdi
 
         iButton.addActionListener(e -> {
 
-                iDateChooser.setDate(iDate);
+                iDateChooser.setLocalDate(iDate);
                 iDateChooser.show(iButton, 0, iButton.getHeight());
 
             });
@@ -75,19 +80,16 @@ public class SSDateCellEditor extends AbstractCellEditor implements TableCellEdi
      * @return the value contained in the editor
      */
     public Object getCellEditorValue() {
-        return iReturnLocalDate ? SSDateUtil.toLocalDate(iDate) : iDate;
+        updateDateFromTextField();
+        return iDate;
     }
 
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-        iReturnLocalDate = LocalDate.class.equals(table.getColumnClass(column)) || value instanceof LocalDate;
-
         if (value instanceof LocalDate) {
-            setDate(SSDateUtil.toDate((LocalDate) value));
-        } else if (value instanceof Date) {
-            setDate((Date) value);
+            setLocalDate((LocalDate) value);
         } else {
-            setDate(SSDateUtil.toDate(SSDateUtil.today()));
+            setLocalDate(SSDateUtil.today());
         }
 
         return iPanel;
@@ -104,22 +106,40 @@ public class SSDateCellEditor extends AbstractCellEditor implements TableCellEdi
     }
 
     /**
-     *
-     * @return
+     * @return the selected date
      */
-    public Date getDate() {
+    public LocalDate getLocalDate() {
         return iDate;
     }
 
     /**
-     *
-     * @param iDate
+     * @param iDate the selected date
      */
-    public void setDate(Date iDate) {
+    public void setLocalDate(LocalDate iDate) {
         this.iDate = iDate;
 
-        iTextField.setValue(iDate);
-        iDateChooser.setDate(iDate);
+        iTextField.setText(iDate == null ? "" : iDate.format(iFormatter));
+        iDateChooser.setLocalDate(iDate);
+    }
+
+    private void updateDateFromTextField() {
+        String iText = iTextField.getText();
+
+        if (iText == null || iText.trim().isEmpty()) {
+            iDate = null;
+            return;
+        }
+
+        try {
+            iDate = LocalDate.parse(iText.trim(), iFormatter);
+        } catch (DateTimeParseException e) {
+            try {
+                iDate = LocalDate.parse(iText.trim());
+            } catch (DateTimeParseException ignored) {
+                Toolkit.getDefaultToolkit().beep();
+                iTextField.setText(iDate == null ? "" : iDate.format(iFormatter));
+            }
+        }
     }
 
     @Override

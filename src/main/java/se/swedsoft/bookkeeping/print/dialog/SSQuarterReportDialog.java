@@ -41,7 +41,7 @@ public class SSQuarterReportDialog extends SSDialog {
 
 	getRootPane().setDefaultButton(iButtonPanel.getOkButton());
 
-        iYearChooser.addChangeListener(e -> iQuarterChooser.setDate(iYearChooser.getDate()));
+        iYearChooser.addChangeListener(e -> iQuarterChooser.setLocalDate(iYearChooser.getLocalDate()));
     }
 
     /**
