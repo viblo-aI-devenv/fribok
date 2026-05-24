@@ -2,10 +2,20 @@ package se.swedsoft.bookkeeping.print;
 
 
 import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRPrintPage;
+import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.util.SSDefaultJasperDataSource;
+import se.swedsoft.bookkeeping.print.view.SSJasperPreviewFrame;
 
+import javax.swing.JDialog;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +40,8 @@ public class SSMultiPrinter extends SSPrinter {
 
         private ResourceBundle iBundle;
 
+        private JasperPrint iPrinter;
+
         @Override
         public String toString() {
             final StringBuilder sb = new StringBuilder();
@@ -40,12 +52,15 @@ public class SSMultiPrinter extends SSPrinter {
             sb.append(", iName='").append(iName).append('\'');
             sb.append(", iParameters=").append(iParameters);
             sb.append(", iReport=").append(iReport);
+            sb.append(", iPrinter=").append(iPrinter);
             sb.append('}');
             return sb.toString();
         }
     }
 
     private List<SSSubReport> iSubReports;
+
+    private JasperPrint iPrinter;
 
     /**
      *
@@ -143,8 +158,103 @@ public class SSMultiPrinter extends SSPrinter {
         iSubReport.iDataSource = new SSDefaultJasperDataSource(pReport.getModel());
         iSubReport.iParameters = pReport.getParameters();
         iSubReport.iBundle = pReport.getBundle();
+        iSubReport.iPrinter = pReport.getPrinter();
 
         iSubReports.add(iSubReport);
+    }
+
+    /**
+     * Generates a combined print by appending the already generated pages from
+     * each child report.  Older Bokfri versions nested each report as a
+     * subreport in {@code multireport.jrxml}; with newer JasperReports this can
+     * drop page/column bands for sales documents and produce blank previews.
+     */
+    @Override
+    public void generateReport() {
+        iPrinter = new JasperPrint();
+        iPrinter.setName("MultiReport");
+
+        boolean firstReport = true;
+
+        for (SSSubReport iSubReport : iSubReports) {
+            JasperPrint iSubPrinter = iSubReport.iPrinter;
+
+            if (iSubPrinter == null) {
+                continue;
+            }
+            if (firstReport) {
+                iPrinter.setPageWidth(iSubPrinter.getPageWidth());
+                iPrinter.setPageHeight(iSubPrinter.getPageHeight());
+                iPrinter.setTopMargin(iSubPrinter.getTopMargin());
+                iPrinter.setLeftMargin(iSubPrinter.getLeftMargin());
+                iPrinter.setBottomMargin(iSubPrinter.getBottomMargin());
+                iPrinter.setRightMargin(iSubPrinter.getRightMargin());
+                iPrinter.setOrientation(iSubPrinter.getOrientationValue());
+                firstReport = false;
+            }
+            for (JRPrintPage iPage : iSubPrinter.getPages()) {
+                iPrinter.addPage(iPage);
+            }
+        }
+    }
+
+    @Override
+    public JasperPrint getPrinter() {
+        return iPrinter;
+    }
+
+    @Override
+    public void preview() {
+        generateReport();
+        net.sf.jasperreports.view.JasperViewer.viewReport(iPrinter, false);
+    }
+
+    @Override
+    public void preview(SSMainFrame iMainFrame) {
+        generateReport();
+        showPreview(iMainFrame, null);
+    }
+
+    @Override
+    public void preview(JDialog iDialog) {
+        generateReport();
+        SSJasperPreviewFrame iJasperPreviewFrame = new SSJasperPreviewFrame(
+                SSMainFrame.getInstance(), 800, 600);
+
+        iJasperPreviewFrame.setInCenter(iDialog);
+        iJasperPreviewFrame.setPrinter(iPrinter);
+        iJasperPreviewFrame.setVisible(true);
+    }
+
+    @Override
+    public void preview(SSMainFrame iMainFrame, InternalFrameListener listener) {
+        generateReport();
+        showPreview(iMainFrame, listener);
+    }
+
+    @Override
+    public void preview(SSMainFrame iMainFrame, final ActionListener iCloseListener) {
+        preview(iMainFrame, new InternalFrameAdapter() {
+            @Override
+            public void internalFrameClosed(InternalFrameEvent e) {
+                ActionEvent iEvent = new ActionEvent(e.getSource(), e.getID(), "close");
+
+                iCloseListener.actionPerformed(iEvent);
+                e.getInternalFrame().removeInternalFrameListener(this);
+            }
+        });
+    }
+
+    private void showPreview(SSMainFrame iMainFrame, InternalFrameListener iListener) {
+        SSJasperPreviewFrame iJasperPreviewFrame = new SSJasperPreviewFrame(iMainFrame,
+                800, 600);
+
+        if (iListener != null) {
+            iJasperPreviewFrame.addInternalFrameListener(iListener);
+        }
+        iJasperPreviewFrame.setInCenter(iMainFrame);
+        iJasperPreviewFrame.setPrinter(iPrinter);
+        iJasperPreviewFrame.setVisible(true);
     }
 
     @Override
