@@ -6,26 +6,17 @@ package se.swedsoft.bookkeeping.gui.util.table.editors;
 
 
 import javax.swing.table.DefaultTableCellRenderer;
-import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
 
-// Trade Extensions specific imports
-
-// Java specific imports
-
 /**
- * This class implements a cell renderer that renders a Date using a DateFormat
- * with format DateFormat.SHORT. This will only display year-month-day.
+ * This class implements a cell renderer that renders a {@link LocalDate}.
  *
  * @author Roger Björnstedt
  */
 public class SSDateCellRenderer extends DefaultTableCellRenderer {
-
-    // The formatter to use for java.util.Date values.
-    private DateFormat iFormat;
 
     // The formatter to use for java.time.LocalDate values.
     private DateTimeFormatter iLocalDateFormat;
@@ -38,8 +29,7 @@ public class SSDateCellRenderer extends DefaultTableCellRenderer {
     }
 
     /**
-     * Sets the value for the cell. Accepts both {@link java.util.Date} and
-     * {@link java.time.LocalDate} values.
+     * Sets the value for the cell.
      *
      * @param value The value to format.
      */
@@ -53,10 +43,7 @@ public class SSDateCellRenderer extends DefaultTableCellRenderer {
             }
             setText(iLocalDateFormat.format((LocalDate) value));
         } else {
-            if (iFormat == null) {
-                iFormat = DateFormat.getDateInstance(DateFormat.SHORT);
-            }
-            setText(iFormat.format(value));
+            setText(value.toString());
         }
     }
 
@@ -65,7 +52,7 @@ public class SSDateCellRenderer extends DefaultTableCellRenderer {
         final StringBuilder sb = new StringBuilder();
 
         sb.append("se.swedsoft.bookkeeping.gui.util.table.editors.SSDateCellRenderer");
-        sb.append("{iFormat=").append(iFormat);
+        sb.append("{iLocalDateFormat=").append(iLocalDateFormat);
         sb.append('}');
         return sb.toString();
     }

@@ -1,17 +1,13 @@
 package se.swedsoft.bookkeeping.gui.util.datechooser.panel;
 
 
-import se.swedsoft.bookkeeping.util.SSDateUtil;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.text.DateFormatSymbols;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -52,8 +48,6 @@ public class SSQuarterChooser extends JPanel implements ItemListener {
      *
      */
     private void updateQuarterNames() {
-        String[] iMonths = new DateFormatSymbols().getMonths();
-
         iComboBox.removeAllItems();
         iComboBox.addItem("1");
         iComboBox.addItem("2");
@@ -90,17 +84,6 @@ public class SSQuarterChooser extends JPanel implements ItemListener {
     }
 
     /**
-     * Returns the start date of the selected quarter as a legacy Date.
-     *
-     * @return the start date of the selected quarter
-     * @deprecated Use {@link #getLocalDate()} instead.
-     */
-    @Deprecated
-    public Date getDate() {
-        return SSDateUtil.toDate(getLocalDate());
-    }
-
-    /**
      * Returns the start date of the selected quarter.
      *
      * @return the first day of the selected quarter
@@ -110,17 +93,6 @@ public class SSQuarterChooser extends JPanel implements ItemListener {
         int quarterStartMonth = iIndex * 3 + 1; // 1-based month
 
         return LocalDate.of(iLocalDate.getYear(), quarterStartMonth, 1);
-    }
-
-    /**
-     * Returns the end date of the selected quarter as a legacy Date.
-     *
-     * @return the end date of the selected quarter
-     * @deprecated Use {@link #getLocalEndDate()} instead.
-     */
-    @Deprecated
-    public Date getEndDate() {
-        return SSDateUtil.toDate(getLocalEndDate().atTime(23, 59, 59));
     }
 
     /**
@@ -134,15 +106,6 @@ public class SSQuarterChooser extends JPanel implements ItemListener {
 
         LocalDate lastDay = LocalDate.of(iLocalDate.getYear(), quarterEndMonth, 1);
         return lastDay.withDayOfMonth(lastDay.lengthOfMonth());
-    }
-
-    /**
-     * @param iDate the date
-     * @deprecated Use {@link #setLocalDate(LocalDate)} instead.
-     */
-    @Deprecated
-    public void setDate(Date iDate) {
-        setLocalDate(SSDateUtil.toLocalDate(iDate));
     }
 
     /**

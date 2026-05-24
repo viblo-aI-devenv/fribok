@@ -475,13 +475,12 @@ public class SSVoucherRow implements Serializable, Cloneable {
         iCredit = (BigDecimal) fields.get("iCredit", null);
 
         Object rawEditedDate = fields.get("iEditedDate", null);
-        if (rawEditedDate instanceof LocalDateTime) {
-            iEditedDate = (LocalDateTime) rawEditedDate;
-        } else if (rawEditedDate == null || rawEditedDate instanceof java.util.Date) {
-            iEditedDate = SSDateUtil.toLocalDateTime((java.util.Date) rawEditedDate);
-        } else {
-            throw new InvalidObjectException(
-                    "Unsupported voucher row edited date type: " + rawEditedDate.getClass().getName());
+        try {
+            iEditedDate = SSDateUtil.readLocalDateTime(rawEditedDate);
+        } catch (IllegalArgumentException e) {
+            InvalidObjectException invalidObjectException = new InvalidObjectException(e.getMessage());
+            invalidObjectException.initCause(e);
+            throw invalidObjectException;
         }
 
         iEditedSignature = (String) fields.get("iEditedSignature", null);

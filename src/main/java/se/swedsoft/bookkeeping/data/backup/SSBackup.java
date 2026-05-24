@@ -8,7 +8,6 @@ import java.io.*;
 import java.io.ObjectInputStream.GetField;
 import java.io.ObjectOutputStream.PutField;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 
 /**
@@ -155,12 +154,12 @@ public class SSBackup implements Serializable {
         iType = (SSBackupType) fields.get("iType", null);
 
         Object rawDate = fields.get("iDate", null);
-        if (rawDate instanceof LocalDateTime) {
-            iDate = (LocalDateTime) rawDate;
-        } else if (rawDate == null || rawDate instanceof Date) {
-            iDate = SSDateUtil.toLocalDateTime((Date) rawDate);
-        } else {
-            throw new InvalidObjectException("Unsupported backup date type: " + rawDate.getClass().getName());
+        try {
+            iDate = SSDateUtil.readLocalDateTime(rawDate);
+        } catch (IllegalArgumentException e) {
+            InvalidObjectException invalidObjectException = new InvalidObjectException(e.getMessage());
+            invalidObjectException.initCause(e);
+            throw invalidObjectException;
         }
     }
 

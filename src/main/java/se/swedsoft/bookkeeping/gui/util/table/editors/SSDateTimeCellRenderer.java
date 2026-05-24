@@ -6,7 +6,6 @@ package se.swedsoft.bookkeeping.gui.util.table.editors;
 
 
 import javax.swing.table.DefaultTableCellRenderer;
-import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -14,26 +13,21 @@ import java.time.format.FormatStyle;
 
 
 /**
- * This class implements a cell renderer that renders a Date and time
- *
+ * This class implements a cell renderer for date and time values.
  */
 public class SSDateTimeCellRenderer extends DefaultTableCellRenderer {
 
-    // The formatter to use.
-    private DateFormat iDateFormat;
-    private DateFormat iTimeFormat;
+    private DateTimeFormatter iDateTimeFormat;
+    private DateTimeFormatter iDateFormat;
 
     /**
      * Default constructor.
      */
-    public SSDateTimeCellRenderer() {
-        iDateFormat = DateFormat.getDateInstance(DateFormat.SHORT);
-        iTimeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
-    }
+    public SSDateTimeCellRenderer() {}
 
     /**
-     * Sets the value for the cell. Accepts {@link java.util.Date},
-     * {@link java.time.LocalDate}, and {@link java.time.LocalDateTime} values.
+     * Sets the value for the cell. Accepts {@link java.time.LocalDate} and
+     * {@link java.time.LocalDateTime} values.
      *
      * @param value The value to format.
      */
@@ -42,13 +36,17 @@ public class SSDateTimeCellRenderer extends DefaultTableCellRenderer {
         if (value == null) {
             setText("");
         } else if (value instanceof LocalDateTime) {
-            DateTimeFormatter dtf = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
-            setText(dtf.format((LocalDateTime) value));
+            if (iDateTimeFormat == null) {
+                iDateTimeFormat = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
+            }
+            setText(iDateTimeFormat.format((LocalDateTime) value));
         } else if (value instanceof LocalDate) {
-            DateTimeFormatter df = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
-            setText(df.format((LocalDate) value));
+            if (iDateFormat == null) {
+                iDateFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
+            }
+            setText(iDateFormat.format((LocalDate) value));
         } else {
-            setText(iDateFormat.format(value) + ' ' + iTimeFormat.format(value));
+            setText(value.toString());
         }
     }
 
@@ -57,8 +55,8 @@ public class SSDateTimeCellRenderer extends DefaultTableCellRenderer {
         final StringBuilder sb = new StringBuilder();
 
         sb.append("se.swedsoft.bookkeeping.gui.util.table.editors.SSDateTimeCellRenderer");
-        sb.append("{iDateFormat=").append(iDateFormat);
-        sb.append(", iTimeFormat=").append(iTimeFormat);
+        sb.append("{iDateTimeFormat=").append(iDateTimeFormat);
+        sb.append(", iDateFormat=").append(iDateFormat);
         sb.append('}');
         return sb.toString();
     }

@@ -1,14 +1,11 @@
 package se.swedsoft.bookkeeping.gui.util.datechooser.panel;
 
 
-import se.swedsoft.bookkeeping.util.SSDateUtil;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -71,28 +68,10 @@ public class SSCalendar implements ActionListener {
     }
 
     /**
-     * @return the selected date as a legacy Date
-     * @deprecated Use {@link #getLocalDate()} instead.
-     */
-    @Deprecated
-    public Date getDate() {
-        return SSDateUtil.toDate(iLocalDate);
-    }
-
-    /**
      * @return the selected date
      */
     public LocalDate getLocalDate() {
         return iLocalDate;
-    }
-
-    /**
-     * @param iDate the date
-     * @deprecated Use {@link #setLocalDate(LocalDate)} instead.
-     */
-    @Deprecated
-    public void setDate(Date iDate) {
-        setLocalDate(SSDateUtil.toLocalDate(iDate));
     }
 
     /**

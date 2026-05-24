@@ -13,7 +13,6 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,9 +21,9 @@ import java.util.List;
  * Date chooser widget combining a {@link JSpinner} (for keyboard editing)
  * with a popup {@link SSCalendar} panel.
  *
- * <p>Internally the Swing spinner model still uses {@link Date} because
- * {@link SpinnerDateModel} requires it.  The public API exposes both
- * {@link Date} (deprecated) and {@link LocalDate} accessors.
+ * <p>Internally the Swing spinner model still uses legacy date objects because
+ * {@link SpinnerDateModel} requires them.  The application-facing API uses
+ * {@link LocalDate}.
  */
 public class SSDateChooser extends JPanel implements ActionListener, ChangeListener {
 
@@ -111,7 +110,7 @@ public class SSDateChooser extends JPanel implements ActionListener, ChangeListe
 
                 isDateSelected = false;
 
-                iCalendar.setDate(getDate());
+                iCalendar.setLocalDate(getLocalDate());
 
                 // iPopup
                 show(iCalendarButton, x, y);
@@ -194,30 +193,10 @@ public class SSDateChooser extends JPanel implements ActionListener, ChangeListe
     }
 
     /**
-     * @return the selected date
-     */
-    public Date getDate() {
-        return iModel.getDate();
-    }
-
-    /**
      * @return the selected date as a {@link LocalDate}
      */
     public LocalDate getLocalDate() {
         return SSDateUtil.toLocalDate(iModel.getDate());
-    }
-
-    /**
-     * Set the selected date, if the date is null, the current date is selected.
-     *
-     * @param iDate the date
-     */
-    public void setDate(Date iDate) {
-        if (iDate != null) {
-            iModel.setValue(iDate);
-        } else {
-            iModel.setValue(SSDateUtil.toDate(SSDateUtil.today()));
-        }
     }
 
     /**
@@ -302,9 +281,7 @@ public class SSDateChooser extends JPanel implements ActionListener, ChangeListe
      * Invoked when an action occurs.
      */
     public void actionPerformed(ActionEvent e) {
-        Date iDate = iCalendar.getDate();
-
-        iModel.setValue(iDate);
+        iModel.setValue(SSDateUtil.toDate(iCalendar.getLocalDate()));
 
         if (e.getActionCommand().equals("day")) {
             isDateSelected = true;

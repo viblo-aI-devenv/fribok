@@ -1,8 +1,6 @@
 package se.swedsoft.bookkeeping.gui.util.datechooser.panel;
 
 
-import se.swedsoft.bookkeeping.util.SSDateUtil;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,7 +9,6 @@ import java.text.DateFormatSymbols;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -20,9 +17,7 @@ import java.util.Locale;
 /**
  * Day picker panel that displays a 6x7 grid of day buttons for a given month.
  *
- * <p>Internally uses {@link LocalDate} for all date arithmetic.  The legacy
- * {@link Date} API is retained on the public surface for compatibility with
- * {@link SSCalendar} and {@link se.swedsoft.bookkeeping.gui.util.datechooser.SSDateChooser}.
+ * <p>Internally uses {@link LocalDate} for all date arithmetic.
  */
 public class SSDayChooser implements ActionListener {
 
@@ -119,30 +114,10 @@ public class SSDayChooser implements ActionListener {
     }
 
     /**
-     * @return the selected date as a legacy Date
-     * @deprecated Use {@link #getLocalDate()} instead.
-     */
-    @Deprecated
-    public Date getDate() {
-        return SSDateUtil.toDate(iLocalDate);
-    }
-
-    /**
      * @return the selected date
      */
     public LocalDate getLocalDate() {
         return iLocalDate;
-    }
-
-    /**
-     * Set the selected date.
-     *
-     * @param iDate the date
-     * @deprecated Use {@link #setLocalDate(LocalDate)} instead.
-     */
-    @Deprecated
-    public void setDate(Date iDate) {
-        setLocalDate(SSDateUtil.toLocalDate(iDate));
     }
 
     /**
@@ -354,28 +329,10 @@ public class SSDayChooser implements ActionListener {
         }
 
         /**
-         * @return the date as a legacy Date
-         * @deprecated Use {@link #getLocalDate()} instead.
-         */
-        @Deprecated
-        public Date getDate() {
-            return SSDateUtil.toDate(iDate);
-        }
-
-        /**
          * @return the date
          */
         public LocalDate getLocalDate() {
             return iDate;
-        }
-
-        /**
-         * @param iDate the date
-         * @deprecated Use {@link #setLocalDate(LocalDate)} instead.
-         */
-        @Deprecated
-        public void setDate(Date iDate) {
-            this.iDate = SSDateUtil.toLocalDate(iDate);
         }
 
         /**
