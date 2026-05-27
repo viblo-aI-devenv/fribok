@@ -66,8 +66,8 @@ jobs:
       shell: bash
       run: |
         # Sanitize version for jpackage: strip -SNAPSHOT, ensure 3 numeric components.
-        # Windows master builds are packaged as a separate "Bokfri Dev" app so testers
-        # can install them side-by-side with official Bokfri releases.
+        # Master builds are packaged as a separate "Bokfri Dev" app so testers
+        # can install or keep them side-by-side with official Bokfri releases.
         RAW=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
         BASE="${RAW%-SNAPSHOT}"
         IFS=. read -r MAJOR MINOR PATCH <<< "$BASE"
@@ -75,16 +75,26 @@ jobs:
         MINOR="${MINOR:-0}"
         PATCH="${PATCH:-0}"
         APP_NAME="Bokfri"
+        APP_BASENAME="Bokfri"
+        MAC_PACKAGE_IDENTIFIER="org.fribok.bookkeeping"
         VERSION="${MAJOR}.${MINOR}.${PATCH}"
 
-        if [[ "$RUNNER_OS" == "Windows" && "$GITHUB_REF" == "refs/heads/master" ]]; then
+        if [[ "$GITHUB_REF" == "refs/heads/master" ]]; then
           APP_NAME="Bokfri Dev"
+          APP_BASENAME="Bokfri-Dev"
+          MAC_PACKAGE_IDENTIFIER="org.fribok.bookkeeping.dev"
           VERSION="${MAJOR}.${MINOR}.${GITHUB_RUN_NUMBER}"
         fi
 
+        {
+          echo "APP_NAME=$APP_NAME"
+          echo "APP_BASENAME=$APP_BASENAME"
+        } >> "$GITHUB_ENV"
+
         mvn clean package -DskipTests -Djpackage.profile=true \
           -Djpackage.name="$APP_NAME" \
-          -Djpackage.appVersion="$VERSION"
+          -Djpackage.appVersion="$VERSION" \
+          -Djpackage.macPackageIdentifier="$MAC_PACKAGE_IDENTIFIER"
 
     - name: List dist contents
       shell: bash
@@ -101,31 +111,44 @@ jobs:
       if: runner.os == 'Linux'
       working-directory: dist
       run: |
-        # Create AppDir structure from jpackage app-image
-        mkdir -p Bokfri.AppDir/usr
-        cp -r Bokfri/* Bokfri.AppDir/usr/
+        # Create AppDir structure from jpackage app-image.
+        APPDIR="${APP_BASENAME}.AppDir"
+        mkdir -p "$APPDIR/usr"
+        cp -r "$APP_NAME"/* "$APPDIR/usr/"
 
-        # Create AppRun script
-        printf '#!/bin/bash\nSELF=$(readlink -f "$0")\nHERE=${SELF%%/*}\nexec "${HERE}/usr/bin/Bokfri" "$@"\n' > Bokfri.AppDir/AppRun
-        chmod +x Bokfri.AppDir/AppRun
+        # Create AppRun script.
+        cat > "$APPDIR/AppRun" <<EOF
+        #!/bin/bash
+        SELF=\$(readlink -f "\$0")
+        HERE=\${SELF%/*}
+        exec "\${HERE}/usr/bin/${APP_NAME}" "\$@"
+        EOF
+        chmod +x "$APPDIR/AppRun"
 
-        # Create .desktop file
-        printf '[Desktop Entry]\nName=Bokfri\nExec=Bokfri\nIcon=bokfri\nType=Application\nCategories=Office;Finance;\n' > Bokfri.AppDir/Bokfri.desktop
+        # Create .desktop file.
+        cat > "$APPDIR/${APP_BASENAME}.desktop" <<EOF
+        [Desktop Entry]
+        Name=${APP_NAME}
+        Exec=${APP_BASENAME}
+        Icon=bokfri
+        Type=Application
+        Categories=Office;Finance;
+        EOF
 
-        # Copy icon
-        cp ../design/favicons/desktop/icon-512x512.png Bokfri.AppDir/bokfri.png
+        # Copy icon.
+        cp ../design/favicons/desktop/icon-512x512.png "$APPDIR/bokfri.png"
 
-        # Download and run appimagetool
+        # Download and run appimagetool.
         wget -q https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
         chmod +x appimagetool-x86_64.AppImage
-        ARCH=x86_64 ./appimagetool-x86_64.AppImage Bokfri.AppDir Bokfri-x86_64.AppImage
+        ARCH=x86_64 ./appimagetool-x86_64.AppImage "$APPDIR" "${APP_BASENAME}-x86_64.AppImage"
 
     - name: Upload Linux artifact
       if: runner.os == 'Linux'
       uses: actions/upload-artifact@v4
       with:
-        name: bokfri-linux
-        path: dist/Bokfri-x86_64.AppImage
+        name: ${{ github.ref == 'refs/heads/master' && 'bokfri-linux-dev' || 'bokfri-linux' }}
+        path: ${{ github.ref == 'refs/heads/master' && 'dist/Bokfri-Dev-x86_64.AppImage' || 'dist/Bokfri-x86_64.AppImage' }}
 
     # --- Windows steps ---
     - name: Upload Windows artifact
@@ -140,5 +163,5 @@ jobs:
       if: runner.os == 'macOS'
       uses: actions/upload-artifact@v4
       with:
-        name: bokfri-macos
+        name: ${{ github.ref == 'refs/heads/master' && 'bokfri-macos-dev' || 'bokfri-macos' }}
         path: dist/*.dmg
