@@ -40,6 +40,8 @@ diverging from upstream version 2.2-SNAPSHOT.
   (Phase 3 Step 15) (PR #9).
 
 ### Changed
+- Package master-branch Linux AppImage and macOS DMG builds as `Bokfri Dev`,
+  matching the Windows MSI dev-channel naming for side-by-side tester installs.
 - Restored backup create/restore compatibility after the `SSBackup` metadata
   date migration by making serialized `backup.info` and `backup.history`
   files readable across both legacy `Date` and `LocalDateTime` formats.
