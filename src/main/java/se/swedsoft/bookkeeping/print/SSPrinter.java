@@ -10,6 +10,7 @@ import se.swedsoft.bookkeeping.gui.SSMainFrame;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.model.SSDefaultTableModel;
 import se.swedsoft.bookkeeping.print.util.SSDefaultJasperDataSource;
+import se.swedsoft.bookkeeping.util.SSDateUtil;
 
 import javax.swing.*;
 import javax.swing.event.InternalFrameAdapter;
@@ -45,7 +46,7 @@ public abstract class SSPrinter {
         iReport = new SSReport();
 
         iReport.addParameter("company", SSDB.getInstance().getCurrentCompany().getName());
-        addParameter("reportdate", LocalDate.now());
+        iReport.addParameter("reportdate", SSDateUtil.toDate(SSDateUtil.today()));
 
         iReport.addParameter("lastvoucher", SSVoucherMath.getMaxNumber());
 
