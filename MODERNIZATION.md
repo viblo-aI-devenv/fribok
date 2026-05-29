@@ -89,7 +89,6 @@ Current repo state:
 - `jxl` still powers Excel import/export code
 - IntelliJ GUI Designer runtime/plugin is still required
 - `javax.help:javahelp` is still present and actively referenced
-- Spring dependencies remain in `pom.xml`, but there are `0` `org.springframework` references in `src/main/java`
 - there are `111` IntelliJ `.form` files under `src/main`
 
 Remaining tasks:
@@ -97,7 +96,6 @@ Remaining tasks:
 - Replace `jxl` with Apache POI or another maintained Excel library
 - Decide whether to keep or eliminate IntelliJ GUI Designer as a build dependency
 - Replace or remove JavaHelp
-- Remove unused Spring dependencies after confirming nothing depends on them indirectly
 
 Done when:
 - obsolete libraries are removed from `pom.xml`
@@ -192,10 +190,9 @@ Done when:
 
 1. Finish the remaining date/time cleanup
 2. Add the first small headless CLI commands (`version`, `paths`, and an invoice sample PDF smoke test) so future modernization work is easier to verify
-3. Remove clearly unused dependencies such as Spring, if confirmed safe
-4. Tackle library migrations with the smallest blast radius first (`javax.mail`, `jxl`, `javahelp`)
-5. Decide the persistence migration strategy before changing storage-related models
-6. Tighten CI quality gates after the dependency and persistence work stops moving the baseline
+3. Tackle library migrations with the smallest blast radius first (`javax.mail`, `jxl`, `javahelp`)
+4. Decide the persistence migration strategy before changing storage-related models
+5. Tighten CI quality gates after the dependency and persistence work stops moving the baseline
 
 ## Out of Scope for This File
 
