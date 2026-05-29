@@ -8,15 +8,20 @@ import org.fribok.bookkeeping.app.Path;
 import org.fribok.bookkeeping.app.Version;
 import se.swedsoft.bookkeeping.util.SSException;
 
-import java.io.*;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.PropertyResourceBundle;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +37,7 @@ public class SSReportCache {    private static final Logger LOG = LoggerFactory.
     private static final File REPORT_DIR = new File(Path.get(Path.APP_DATA), "report");
     private static final File COMPILED_DIR = new File(REPORT_DIR, "compiled");
     private static final String REPORT_RESOURCE = "/reports/report/";
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    private static final String CACHE_BUILD_SUFFIX = ".build";
 
     // The report cache with compiled report definitions.
     private Map<String, JasperReport> iReportCache;
@@ -89,39 +94,31 @@ public class SSReportCache {    private static final Logger LOG = LoggerFactory.
      * @throws FileNotFoundException
      */
     private JasperReport loadReport(String pReportName) throws FileNotFoundException {
-        File iReportFile = new File(REPORT_DIR, pReportName);
         File iCompiledFile = new File(COMPILED_DIR,
                 pReportName.replace(".jrxml", ".jasperreport"));
-	String iReportResource = REPORT_RESOURCE + pReportName;
+        String iReportResource = REPORT_RESOURCE + pReportName;
 
         try {
-            // If the report exists on disk, load it...
+            // If the report exists on disk for this exact application build, load it.
+            if (isCompiledReportCurrent(iCompiledFile)) {
+                LOG.info("Loading precompiled report {} from disk...", iCompiledFile);
+                return loadCompiledReport(iCompiledFile);
+            }
             if (iCompiledFile.exists()) {
-		try {
-		    LocalDateTime iReportDate = LocalDateTime.parse(Version.APP_BUILD, DATE_TIME_FORMATTER);
-		    LocalDateTime iCompiledDate = LocalDateTime.ofInstant(
-		            Instant.ofEpochMilli(iCompiledFile.lastModified()),
-		            ZoneId.systemDefault());
-		    // if the report file hasn't been changes since the last compile,
-		    // load the compiled file, else fall through to the compile code
-		    if (iReportDate.compareTo(iCompiledDate) <= 0) {
-			LOG.info("Loading precompiled report {} from disk...", iCompiledFile);
-			return loadCompiledReport(iCompiledFile);
-		    }
-		} catch (DateTimeParseException ex)  {
-		    // ta bort den kompilerade versionen?
-		    LOG.info(ex.getMessage());
-		}
-		
-                LOG.info("Precompiled report exists, but report is changed ...");
+                LOG.info("Precompiled report {} is stale; recompiling {}", iCompiledFile,
+                        iReportResource);
             }
 
             // .. we need to recompile the report
-	    LOG.info("Compiling and saving report {} to disk...", iReportResource);
+            LOG.info("Compiling and saving report {} to disk...", iReportResource);
 
-	    InputStream is = getClass().getResourceAsStream(iReportResource);
+            InputStream is = getClass().getResourceAsStream(iReportResource);
 
-	    JasperReport iReport = JasperCompileManager.compileReport(is);
+            if (is == null) {
+                throw new FileNotFoundException(iReportResource);
+            }
+
+            JasperReport iReport = JasperCompileManager.compileReport(is);
             // Make the output directory
             iCompiledFile.getParentFile().mkdirs();
 
@@ -130,6 +127,26 @@ public class SSReportCache {    private static final Logger LOG = LoggerFactory.
             LOG.error("Unexpected error", ex);
         }
         return null;
+    }
+
+    private boolean isCompiledReportCurrent(File compiledFile) {
+        if (!compiledFile.exists()) {
+            return false;
+        }
+
+        File buildMarkerFile = getBuildMarkerFile(compiledFile);
+
+        if (!buildMarkerFile.exists()) {
+            return false;
+        }
+        try {
+            String cachedBuild = Files.readString(buildMarkerFile.toPath(), StandardCharsets.UTF_8).trim();
+
+            return Version.APP_BUILD.equals(cachedBuild);
+        } catch (IOException e) {
+            LOG.error("Unexpected error", e);
+        }
+        return false;
     }
 
     /**
@@ -171,12 +188,18 @@ public class SSReportCache {    private static final Logger LOG = LoggerFactory.
 
             iObjectOutputStream.writeObject(pReport);
             iObjectOutputStream.flush();
+            Files.writeString(getBuildMarkerFile(pCompiledFile).toPath(), Version.APP_BUILD,
+                    StandardCharsets.UTF_8);
 
             return pReport;
         } catch (IOException e) {
             LOG.error("Unexpected error", e);
         }
         return null;
+    }
+
+    private File getBuildMarkerFile(File compiledFile) {
+        return new File(compiledFile.getParentFile(), compiledFile.getName() + CACHE_BUILD_SUFFIX);
     }
 
     @Override
