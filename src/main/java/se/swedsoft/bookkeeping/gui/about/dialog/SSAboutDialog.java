@@ -33,11 +33,12 @@ public class SSAboutDialog {
         final SSAboutPanel   iPanel = new SSAboutPanel();
 
         iDialog.add(iPanel.getPanel(), BorderLayout.CENTER);
-        iDialog.setResizable(false);
+        iDialog.setResizable(true);
 
         iPanel.addCloseButtonListener(e -> iDialog.closeDialog());
 
         iDialog.pack();
+        iDialog.setMinimumSize(iDialog.getPreferredSize());
         iDialog.setLocationRelativeTo(iMainFrame);
         iDialog.setVisible();
     }

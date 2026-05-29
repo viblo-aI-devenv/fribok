@@ -6,6 +6,7 @@ import se.swedsoft.bookkeeping.gui.help.panel.SSHelpPanel;
 import se.swedsoft.bookkeeping.gui.help.util.SSHelpHistory;
 import se.swedsoft.bookkeeping.gui.util.SSBundle;
 import se.swedsoft.bookkeeping.gui.util.components.SSButton;
+import se.swedsoft.bookkeeping.gui.util.graphics.SSImage;
 
 import javax.help.HelpSet;
 import javax.help.HelpSetException;
@@ -80,6 +81,7 @@ public class SSHelpFrame extends JFrame {    private static final Logger LOG = L
     private SSHelpFrame(SSMainFrame iMainFrame, int pWidth, int pHeight) {
         super(SSBundle.getBundle().getString("helpframe.title"));
 
+        setIconImages(SSImage.getApplicationIcons());
         createHelpSet();
 
         setLayout(new BorderLayout());
