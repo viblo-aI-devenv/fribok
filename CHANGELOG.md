@@ -193,6 +193,8 @@ diverging from upstream version 2.2-SNAPSHOT.
   reduced `return null` sites from ~419 to ~212 (Phase 4 Step 20).
 
 ### Fixed
+- Fixed sales and quarter report previews on systems without Arial installed by
+  switching report title fonts to the JVM-portable `SansSerif` family.
 - Fixed report previews rendering as blank after date modernization by keeping
   the shared Jasper `reportdate` parameter as a `java.util.Date` at the report boundary.
 - Fixed combined Jasper report rendering by preserving print metadata when
