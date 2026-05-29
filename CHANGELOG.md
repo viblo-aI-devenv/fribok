@@ -226,6 +226,8 @@ diverging from upstream version 2.2-SNAPSHOT.
   in `SSVoucherMath` and `SSBudget`.
 
 ### Removed
+- Unused Spring dependencies by converting JasperReports custom OCR font
+  registration from Spring bean XML to SimpleFontExtensionsRegistryFactory.
 - Unused direct dependencies: legacy iText, JasperReports bundled fonts,
   Mockito, and direct `xml-apis`; PDF export now relies on JasperReports'
   OpenPDF dependency and XML APIs continue through Xerces/JDK boundaries.

@@ -30,7 +30,6 @@
 
     <!-- Third-party noise reduction -->
     <logger name="net.sf.jasperreports" level="WARN"/>
-    <logger name="org.springframework" level="WARN"/>
     <logger name="hsqldb" level="WARN"/>
 
     <root level="INFO">
