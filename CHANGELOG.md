@@ -40,6 +40,8 @@ diverging from upstream version 2.2-SNAPSHOT.
   (Phase 3 Step 15) (PR #9).
 
 ### Changed
+- Polished Help menu wording: `Rapportera problem...` and
+  `Hämta senaste version...` better describe the linked GitHub pages.
 - Isolated `Bokfri Dev` packaged builds to a separate `bokfri-dev` user
   data/config directory so dev builds no longer share storage with release builds.
 - Package master-branch Linux AppImage and macOS DMG builds as `Bokfri Dev`,
@@ -193,6 +195,8 @@ diverging from upstream version 2.2-SNAPSHOT.
   reduced `return null` sites from ~419 to ~212 (Phase 4 Step 20).
 
 ### Fixed
+- Increased the About dialog text area and gave the Help window the normal
+  Bokfri application icon set.
 - Fixed packaged report previews using unwritable installation/current-working
   directories for generated report caches, QR images, and email PDFs.
 - Fixed stale compiled Jasper report caches surviving app upgrades by tying
