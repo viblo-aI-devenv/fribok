@@ -2,7 +2,10 @@ package se.swedsoft.bookkeeping.print;
 
 
 import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.JRPrintPage;
+import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import se.swedsoft.bookkeeping.gui.SSMainFrame;
@@ -168,13 +171,16 @@ public class SSMultiPrinter extends SSPrinter {
      * each child report.  Older Bokfri versions nested each report as a
      * subreport in {@code multireport.jrxml}; with newer JasperReports this can
      * drop page/column bands for sales documents and produce blank previews.
+     *
+     * <p>The combined {@link JasperPrint} must also carry print metadata such
+     * as styles, origins, locale, and format factories.  Copying only the pages
+     * can leave rendered page elements referring to styles/origins that are not
+     * present on the parent print, which makes previews/printing appear blank
+     * in some Jasper renderers.</p>
      */
     @Override
     public void generateReport() {
-        iPrinter = new JasperPrint();
-        iPrinter.setName("MultiReport");
-
-        boolean firstReport = true;
+        iPrinter = null;
 
         for (SSSubReport iSubReport : iSubReports) {
             JasperPrint iSubPrinter = iSubReport.iPrinter;
@@ -182,20 +188,43 @@ public class SSMultiPrinter extends SSPrinter {
             if (iSubPrinter == null) {
                 continue;
             }
-            if (firstReport) {
-                iPrinter.setPageWidth(iSubPrinter.getPageWidth());
-                iPrinter.setPageHeight(iSubPrinter.getPageHeight());
-                iPrinter.setTopMargin(iSubPrinter.getTopMargin());
-                iPrinter.setLeftMargin(iSubPrinter.getLeftMargin());
-                iPrinter.setBottomMargin(iSubPrinter.getBottomMargin());
-                iPrinter.setRightMargin(iSubPrinter.getRightMargin());
-                iPrinter.setOrientation(iSubPrinter.getOrientationValue());
-                firstReport = false;
+            if (iPrinter == null) {
+                iPrinter = new JasperPrint();
+                iPrinter.copyFrom(iSubPrinter);
+                iPrinter.getPages().clear();
+                iPrinter.setBookmarks(new LinkedList<>());
+                iPrinter.setName("MultiReport");
+            } else {
+                mergePrintMetadata(iSubPrinter);
             }
             for (JRPrintPage iPage : iSubPrinter.getPages()) {
                 iPrinter.addPage(iPage);
             }
         }
+
+        if (iPrinter == null) {
+            iPrinter = new JasperPrint();
+            iPrinter.setName("MultiReport");
+        }
+    }
+
+    private void mergePrintMetadata(JasperPrint iSubPrinter) {
+        if (iPrinter.getDefaultStyle() == null && iSubPrinter.getDefaultStyle() != null) {
+            iPrinter.setDefaultStyle(iSubPrinter.getDefaultStyle());
+        }
+        for (JRStyle iStyle : iSubPrinter.getStylesList()) {
+            if (!iPrinter.getStylesMap().containsKey(iStyle.getName())) {
+                try {
+                    iPrinter.addStyle(iStyle);
+                } catch (JRException ignored) {}
+            }
+        }
+        for (JROrigin iOrigin : iSubPrinter.getOriginsList()) {
+            if (!iPrinter.getOriginsMap().containsKey(iOrigin)) {
+                iPrinter.addOrigin(iOrigin);
+            }
+        }
+        iPrinter.getPropertiesMap().copyOwnProperties(iSubPrinter.getPropertiesMap());
     }
 
     @Override
