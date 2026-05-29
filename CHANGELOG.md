@@ -193,6 +193,8 @@ diverging from upstream version 2.2-SNAPSHOT.
   reduced `return null` sites from ~419 to ~212 (Phase 4 Step 20).
 
 ### Fixed
+- Fixed report previews rendering as blank after date modernization by keeping
+  the shared Jasper `reportdate` parameter as a `java.util.Date` at the report boundary.
 - Fixed combined Jasper report rendering by preserving print metadata when
   joining child reports, preventing blank preview/print/export pages.
 - CI: use `target/dist` for AppImage build output.
