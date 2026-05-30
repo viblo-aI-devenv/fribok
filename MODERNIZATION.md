@@ -82,9 +82,10 @@ Done when:
 
 ### 3. Replace or Remove Obsolete Dependencies
 
-Status: not started
+Status: partially complete
 
 Current repo state:
+- direct Xerces usage has been removed in favor of JDK XML APIs
 - `javax.mail` still present in `pom.xml` and referenced from mail/report code
 - `jxl` still powers Excel import/export code
 - IntelliJ GUI Designer runtime/plugin is still required

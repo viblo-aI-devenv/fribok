@@ -1,19 +1,17 @@
 package se.swedsoft.bookkeeping.importexport.xml;
 
 
-import org.apache.xerces.dom.DocumentImpl;
-import org.apache.xml.serialize.OutputFormat;
-import org.apache.xml.serialize.XMLSerializer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import se.swedsoft.bookkeeping.util.SSXmlUtil;
 import se.swedsoft.bookkeeping.data.SSOrder;
 import se.swedsoft.bookkeeping.data.base.SSSaleRow;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -43,7 +41,7 @@ public class SSOrderExporter {    private static final Logger LOG = LoggerFactor
 
     public void doExport() {
 
-        Document iXmlDoc = new DocumentImpl();
+        Document iXmlDoc = createDocument();
         Element iRoot = iXmlDoc.createElement("Orders");
 
         for (SSOrder iOrder : iItems) {
@@ -360,21 +358,17 @@ public class SSOrderExporter {    private static final Logger LOG = LoggerFactor
         }
         iXmlDoc.appendChild(iRoot);
         try {
-            FileOutputStream fos = new FileOutputStream(iFile.getAbsolutePath());
-            OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
-            OutputFormat of = new OutputFormat("XML", "UTF-8", true);
-
-            of.setIndent(1);
-            of.setIndenting(true);
-            XMLSerializer serializer = new XMLSerializer(osw, of);
-
-            serializer.asDOMSerializer();
-            serializer.serialize(iXmlDoc.getDocumentElement());
-
-            fos.close();
-            osw.close();
-        } catch (IOException e) {
+            SSXmlUtil.write(iXmlDoc, iFile);
+        } catch (IOException | TransformerException e) {
             LOG.error("Unexpected error", e);
+        }
+    }
+
+    private Document createDocument() {
+        try {
+            return SSXmlUtil.newDocument();
+        } catch (ParserConfigurationException e) {
+            throw new IllegalStateException("Could not create XML document", e);
         }
     }
 
