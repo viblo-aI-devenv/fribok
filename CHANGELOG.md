@@ -40,6 +40,9 @@ diverging from upstream version 2.2-SNAPSHOT.
   (Phase 3 Step 15) (PR #9).
 
 ### Changed
+- Cleaned up Maven dependency analysis by declaring the activation API used by
+  mail attachments, splitting JUnit 5 test API/runtime dependencies, and
+  documenting runtime-only analyzer ignores for Logback and the JUnit engine.
 - Polished Help menu wording: `Rapportera problem...` and
   `Hämta senaste version...` better describe the linked GitHub pages.
 - Isolated `Bokfri Dev` packaged builds to a separate `bokfri-dev` user
