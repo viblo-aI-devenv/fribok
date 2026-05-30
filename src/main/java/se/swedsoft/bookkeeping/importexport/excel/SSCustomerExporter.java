@@ -8,12 +8,10 @@ import jxl.write.WritableCellFormat;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
-import org.apache.xerces.dom.DocumentImpl;
-import org.apache.xml.serialize.OutputFormat;
-import org.apache.xml.serialize.XMLSerializer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import se.swedsoft.bookkeeping.util.SSXmlUtil;
 import se.swedsoft.bookkeeping.data.SSCustomer;
 import se.swedsoft.bookkeeping.data.system.SSDB;
 import se.swedsoft.bookkeeping.importexport.excel.util.SSWritableExcelRow;
@@ -21,10 +19,10 @@ import se.swedsoft.bookkeeping.importexport.excel.util.SSWritableExcelSheet;
 import se.swedsoft.bookkeeping.importexport.util.SSExportException;
 import se.swedsoft.bookkeeping.importexport.util.SSImportException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.List;
 import java.util.Locale;
 import org.slf4j.Logger;
@@ -192,7 +190,7 @@ public class SSCustomerExporter {    private static final Logger LOG = LoggerFac
 
     public void doXMLExport() {
 
-        Document iXmlDoc = new DocumentImpl();
+        Document iXmlDoc = createDocument();
         Element iRoot = iXmlDoc.createElement("Customers");
 
         for (SSCustomer iCustomer : iCustomers) {
@@ -449,21 +447,17 @@ public class SSCustomerExporter {    private static final Logger LOG = LoggerFac
         }
         iXmlDoc.appendChild(iRoot);
         try {
-            FileOutputStream fos = new FileOutputStream(iFile.getAbsolutePath());
-            OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
-            OutputFormat of = new OutputFormat("XML", "UTF-8", true);
-
-            of.setIndent(1);
-            of.setIndenting(true);
-            XMLSerializer serializer = new XMLSerializer(osw, of);
-
-            serializer.asDOMSerializer();
-            serializer.serialize(iXmlDoc.getDocumentElement());
-
-            fos.close();
-            osw.close();
-        } catch (IOException e) {
+            SSXmlUtil.write(iXmlDoc, iFile);
+        } catch (IOException | TransformerException e) {
             LOG.error("Unexpected error", e);
+        }
+    }
+
+    private Document createDocument() {
+        try {
+            return SSXmlUtil.newDocument();
+        } catch (ParserConfigurationException e) {
+            throw new IllegalStateException("Could not create XML document", e);
         }
     }
 

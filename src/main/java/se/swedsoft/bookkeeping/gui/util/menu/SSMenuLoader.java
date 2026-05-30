@@ -26,8 +26,6 @@ import org.slf4j.LoggerFactory;
 public class SSMenuLoader {    private static final Logger LOG = LoggerFactory.getLogger(SSMenuLoader.class);
 
 
-    private static String cParserClass = "org.apache.xerces.parsers.SAXParser";
-
     private Map<String, JMenuBar > iMenuBars;
     private Map<String, JMenu    > iMenus;
     private Map<String, JMenuItem> iMenuItems;
@@ -60,7 +58,7 @@ public class SSMenuLoader {    private static final Logger LOG = LoggerFactory.g
         XMLReader iReader;
 
         try {
-            iReader = XMLReaderFactory.createXMLReader(cParserClass);
+            iReader = XMLReaderFactory.createXMLReader();
         } catch (SAXException e) {
             LOG.error("Unexpected error", e);
             return;

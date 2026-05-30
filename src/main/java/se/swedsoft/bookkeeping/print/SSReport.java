@@ -67,10 +67,6 @@ public class SSReport {    private static final Logger LOG = LoggerFactory.getLo
     protected Map<ReportField, String> iFields;
 
     public SSReport() {
-        // Set the default SAX parser for the system.
-        System.setProperty("javax.xml.parsers.SAXParserFactory",
-                "org.apache.xerces.jaxp.SAXParserFactoryImpl");
-
         iDesign = null;
         iPrinter = null;
         iReport = null;

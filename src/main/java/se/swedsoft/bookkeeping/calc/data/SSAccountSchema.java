@@ -26,8 +26,6 @@ import org.slf4j.LoggerFactory;
 public class SSAccountSchema implements Serializable {    private static final Logger LOG = LoggerFactory.getLogger(SSAccountSchema.class);
 
 
-    private static String cParserClass = "org.apache.xerces.parsers.SAXParser";
-
     private List<SSAccountGroup> iResultGroups;
 
     private List<SSAccountGroup> iBalanceGroups;
@@ -119,7 +117,7 @@ public class SSAccountSchema implements Serializable {    private static final L
         XMLReader iReader;
 
         try {
-            iReader = XMLReaderFactory.createXMLReader(cParserClass);
+            iReader = XMLReaderFactory.createXMLReader();
         } catch (SAXException e) {
             LOG.error("Unexpected error", e);
             return iSchema;
